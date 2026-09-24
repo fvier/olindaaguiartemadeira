@@ -17,7 +17,9 @@
 </script>
 <!-- Custom Glassmorphism & Hero Styles -->
 <style>
-    .landing-page { --landing-accent:#2563eb;--landing-accent-rgb:37,99,235;--landing-accent-soft:#dbeafe; }
+    .landing-page { --landing-accent:#c85a17;--landing-accent-rgb:200,90,23;--landing-accent-soft:#ffedd5; }
+    .hover-terracotta { transition: color 0.15s ease; }
+    .hover-terracotta:hover { color: #c85a17 !important; }
     html[data-landing-accent="gold"] .landing-page { --landing-accent:#d97706;--landing-accent-rgb:217,119,6;--landing-accent-soft:#fef3c7; }
     html[data-landing-accent="green"] .landing-page { --landing-accent:#15803d;--landing-accent-rgb:21,128,61;--landing-accent-soft:#dcfce7; }
     html[data-landing-accent="purple"] .landing-page { --landing-accent:#7c3aed;--landing-accent-rgb:124,58,237;--landing-accent-soft:#ede9fe; }
@@ -273,10 +275,13 @@
 <!-- Header Navigation (Navbar Enxuto) -->
 <nav class="navbar navbar-expand-lg navbar-light bg-white py-2 sticky-top border-bottom border-light-subtle shadow-sm z-3">
     <div class="container">
-        <!-- Logo Image Compact -->
-        <a class="navbar-brand landing-navbar-brand d-flex align-items-center py-0" href="/">
-            <img src="{{ config.ASSETS_ROOT }}/images/logo-gps-profissional-v1.png?v=20260802a" alt="GPS Paraíba Logo" style="height:42px;width:auto" class="landing-brand-mark">
-            <span class="landing-brand-name">GPS Paraíba<small>Rastreamento veicular</small></span>
+        <!-- Logo Image & Brand Name -->
+        <a class="navbar-brand landing-navbar-brand d-flex align-items-center py-0 text-decoration-none" href="/">
+            <img src="{{ config.ASSETS_ROOT }}/images/logo-icon-wood.png" alt="Olinda Aguiar" style="height:44px;width:auto;object-fit:contain" class="landing-brand-mark me-2">
+            <span class="landing-brand-name d-flex flex-column justify-content-center">
+                <strong style="color: #1e293b; font-size: 1.25rem; font-weight: 800; letter-spacing: -0.01em; line-height: 1.1;">Olinda Aguiar</strong>
+                <small style="color: #64748b; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; margin-top: 2px;">ARTES EM MADEIRA</small>
+            </span>
         </a>
 
         <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -284,16 +289,37 @@
         </button>
 
         <div class="collapse navbar-collapse" id="navbarContent">
-            <ul class="navbar-nav me-auto ms-lg-4 mb-2 mb-lg-0 fw-semibold text-secondary fs-15">
-                <li class="nav-item"><a class="nav-link active text-primary" href="#inicio">Início</a></li>
-                <li class="nav-item"><a class="nav-link text-dark hover-primary" href="#planos">Planos</a></li>
-                <li class="nav-item"><a class="nav-link text-dark hover-primary" href="#quemsomos">Quem Somos</a></li>
-                <li class="nav-item"><a class="nav-link text-dark hover-primary" href="#avaliacoes">Avaliações</a></li>
-                <li class="nav-item"><a class="nav-link text-dark hover-primary" href="#faq">Dúvidas</a></li>
-                <li class="nav-item"><a class="nav-link text-dark hover-primary" href="#rodape">Contato</a></li>
+            <ul class="navbar-nav me-auto ms-lg-4 mb-2 mb-lg-0 fw-semibold fs-15 d-flex align-items-center gap-lg-3">
+                <li class="nav-item">
+                    <a class="nav-link active fw-bold px-2" href="#inicio" style="color: #c85a17 !important;">Início</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark d-inline-flex align-items-center gap-1 px-2 hover-terracotta" href="#loja">
+                        <i class="ri-store-2-line" style="color: #c85a17; font-size: 1.15rem;"></i>
+                        <span class="fw-semibold">Loja</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark d-inline-flex align-items-center gap-1 px-2 hover-terracotta" href="#pedido" data-bs-toggle="modal" data-bs-target="#pedidoModal">
+                        <i class="ri-search-line" style="color: #c85a17; font-size: 1.15rem;"></i>
+                        <span class="fw-semibold">Pedido</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link text-dark d-inline-flex align-items-center gap-1 px-2 hover-terracotta" href="#blog">
+                        <i class="ri-newspaper-line" style="color: #c85a17; font-size: 1.15rem;"></i>
+                        <span class="fw-semibold">Blog</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link d-inline-flex align-items-center gap-1 px-2 fw-bold" href="#byll" style="color: #c85a17 !important;">
+                        <i class="ri-heart-fill" style="color: #c85a17; font-size: 1.1rem;"></i>
+                        <span>Byll</span>
+                    </a>
+                </li>
             </ul>
 
-            <!-- Header Right: Social Icons Only & Dual Login Buttons -->
+            <!-- Header Right: Social Icons & Theme Toggles (Sem botões de login) -->
             <div class="d-flex align-items-center gap-2">
                 <button id="landing-theme-toggle" type="button" class="btn btn-light btn-sm rounded-circle p-0 d-inline-flex align-items-center justify-content-center border shadow-sm" style="width:36px;height:36px" title="Ativar tema escuro" aria-label="Alternar tema claro e escuro">
                     <i id="landing-theme-moon" class="ri-moon-line fs-18"></i>
@@ -303,8 +329,8 @@
                     <button id="landing-palette-toggle" type="button" class="btn btn-light btn-sm rounded-circle p-0 d-inline-flex align-items-center justify-content-center border shadow-sm" style="width:36px;height:36px" data-bs-toggle="dropdown" aria-expanded="false" title="Escolher cor do tema" aria-label="Escolher cor do tema"><i class="ri-palette-line fs-18"></i></button>
                     <div class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-3 p-2" style="min-width:190px">
                         <small class="text-secondary text-uppercase fw-bold px-2 d-block mb-1" style="font-size:9px;letter-spacing:.1em">Cor do tema</small>
-                        <button type="button" class="dropdown-item rounded-2 landing-palette-option d-flex align-items-center gap-2" data-accent="blue"><span class="landing-palette-swatch" style="background:#2563eb"></span>Azul</button>
-                        <button type="button" class="dropdown-item rounded-2 landing-palette-option d-flex align-items-center gap-2" data-accent="gold"><span class="landing-palette-swatch" style="background:#d97706"></span>Dourado</button>
+                        <button type="button" class="dropdown-item rounded-2 landing-palette-option d-flex align-items-center gap-2" data-accent="gold"><span class="landing-palette-swatch" style="background:#d97706"></span>Terracota / Dourado</button>
+                        <button type="button" class="dropdown-item rounded-2 landing-palette-option d-flex align-items-center gap-2" data-accent="blue"><span class="landing-palette-swatch" style="background:#2563eb"></span>Azul Colonial</button>
                         <button type="button" class="dropdown-item rounded-2 landing-palette-option d-flex align-items-center gap-2" data-accent="green"><span class="landing-palette-swatch" style="background:#15803d"></span>Verde</button>
                         <button type="button" class="dropdown-item rounded-2 landing-palette-option d-flex align-items-center gap-2" data-accent="purple"><span class="landing-palette-swatch" style="background:#7c3aed"></span>Roxo</button>
                         <button type="button" class="dropdown-item rounded-2 landing-palette-option d-flex align-items-center gap-2" data-accent="graphite"><span class="landing-palette-swatch" style="background:#475569"></span>Grafite</button>
@@ -339,16 +365,6 @@
                    title="WhatsApp (81) 9 9452-2504">
                     <i class="ri-whatsapp-line fs-18"></i>
                 </a>
-
-                <div class="d-inline-flex align-items-center position-relative shadow-sm rounded-pill border border-secondary border-opacity-20 bg-light p-1 ms-1">
-                    <a href="https://lionras.rastrosystem.com.br/acl/login/?next=/pessoa/" target="_blank" rel="noopener noreferrer" class="btn btn-primary rounded-pill px-3 py-1-5 fw-bold text-white d-inline-flex align-items-center gap-1 border-0 shadow-sm" style="font-size:13px" title="Abrir Portal do Cliente">
-                        <i class="ri-user-shared-line fs-15"></i><span>Login</span>
-                    </a>
-                    <span class="badge bg-white text-secondary border rounded-circle z-2 p-1.5 fs-11 fw-bold shadow-xs" style="margin-left:-7px;margin-right:-7px;min-width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center">ou</span>
-                    <a href="/auth-signin.html" class="btn btn-dark erp-access-button rounded-pill px-3 py-1-5 fw-bold text-white d-inline-flex align-items-center gap-1 border-0 shadow-sm" style="font-size:13px" title="Acessar sistema interno">
-                        <i class="ri-dashboard-line fs-15"></i><span>ERP</span>
-                    </a>
-                </div>
             </div>
         </div>
     </div>
@@ -461,8 +477,8 @@
     </div>
 </section>
 
-<!-- Seção: Planos e Preços (#vaiderastrek) -->
-<section id="planos" class="py-5 bg-white border-top border-light-subtle">
+<!-- Seção: Loja & Catálogo de Obras -->
+<section id="loja" class="py-5 bg-white border-top border-light-subtle"><a id="planos"></a>
     <div class="container py-lg-4">
         <div class="text-center max-w-700 mx-auto mb-5">
             <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold text-uppercase mb-2">#gpsparaiba</span>
@@ -640,8 +656,8 @@
     </div>
 </section>
 
-<!-- Seção: Quem Somos, Missão, Visão e Valores -->
-<section id="quemsomos" class="py-5 bg-light border-top border-light-subtle">
+<!-- Seção: Por Byll — O Ateliê, História e Filosofia -->
+<section id="byll" class="py-5 bg-light border-top border-light-subtle"><a id="quemsomos"></a>
     <div class="container py-lg-4">
         <div class="row align-items-center gy-4 mb-5">
             <div class="col-lg-6">
@@ -873,7 +889,95 @@
             </div>
         </div>
     </div>
+<!-- Seção: Blog & Histórias do Ateliê -->
+<section id="blog" class="py-5 bg-white border-top border-light-subtle">
+    <div class="container py-lg-4">
+        <div class="text-center max-w-700 mx-auto mb-5">
+            <span class="badge px-3 py-2 rounded-pill fw-bold text-uppercase mb-2" style="background:#ffedd5;color:#c85a17;">#blog</span>
+            <h2 class="display-6 fw-bold text-dark">Histórias do Ateliê & A Arte em Madeira</h2>
+            <p class="text-secondary fs-16">Técnicas ancestrais, matérias-primas nobres e o processo criativo no casarão histórico de Olinda.</p>
+        </div>
+
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 rounded-4 border-0 shadow-sm bg-light overflow-hidden hover-top transition">
+                    <div style="height:210px;background:url('{{ config.ASSETS_ROOT }}/images/hero-fachada-luz-dourada.png') center/cover no-repeat;"></div>
+                    <div class="p-4 d-flex flex-column flex-grow-1">
+                        <small class="text-uppercase fw-bold mb-2" style="color:#c85a17;font-size:11px;letter-spacing:.08em">Patrimônio & Arte</small>
+                        <h5 class="fw-bold text-dark mb-2">O Casarão Histórico do Carmo</h5>
+                        <p class="text-secondary fs-14 flex-grow-1">Conheça o espaço onde a marcenaria de autor ganha vida entre as ladeiras e a luz dourada de Olinda.</p>
+                        <a href="https://www.instagram.com/olindaaguiartemadeira/" target="_blank" rel="noopener noreferrer" class="fw-bold text-decoration-none d-inline-flex align-items-center gap-1" style="color:#c85a17;">Ler mais <i class="ri-arrow-right-line"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 rounded-4 border-0 shadow-sm bg-light overflow-hidden hover-top transition">
+                    <div style="height:210px;background:url('{{ config.ASSETS_ROOT }}/images/hero-fachada-noite-azul.png') center/cover no-repeat;"></div>
+                    <div class="p-4 d-flex flex-column flex-grow-1">
+                        <small class="text-uppercase fw-bold mb-2" style="color:#c85a17;font-size:11px;letter-spacing:.08em">Matérias-Primas</small>
+                        <h5 class="fw-bold text-dark mb-2">Madeiras Nobres & Sustentabilidade</h5>
+                        <p class="text-secondary fs-14 flex-grow-1">Como selecionamos cada tora com certificação de origem para criar peças únicas e perpétuas.</p>
+                        <a href="https://www.instagram.com/olindaaguiartemadeira/" target="_blank" rel="noopener noreferrer" class="fw-bold text-decoration-none d-inline-flex align-items-center gap-1" style="color:#c85a17;">Ler mais <i class="ri-arrow-right-line"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 rounded-4 border-0 shadow-sm bg-light overflow-hidden hover-top transition">
+                    <div style="height:210px;background:url('{{ config.ASSETS_ROOT }}/images/hero-fachada-coral-entardecer.png') center/cover no-repeat;"></div>
+                    <div class="p-4 d-flex flex-column flex-grow-1">
+                        <small class="text-uppercase fw-bold mb-2" style="color:#c85a17;font-size:11px;letter-spacing:.08em">Processo Criativo</small>
+                        <h5 class="fw-bold text-dark mb-2">O Entalhe Manual de Byll</h5>
+                        <p class="text-secondary fs-14 flex-grow-1">Do tronco bruto ao polimento fino com ceras naturais: a jornada de esculpir alma na madeira.</p>
+                        <a href="https://www.facebook.com/BylleOlinda" target="_blank" rel="noopener noreferrer" class="fw-bold text-decoration-none d-inline-flex align-items-center gap-1" style="color:#c85a17;">Ler mais <i class="ri-arrow-right-line"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
+
+<!-- Modal: Consultar Pedido / Encomenda Personalizada -->
+<div class="modal fade" id="pedidoModal" tabindex="-1" aria-labelledby="pedidoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 border-0 shadow-lg">
+            <div class="modal-header border-0 pb-0">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="rounded-circle d-flex align-items-center justify-content-center" style="width:42px;height:42px;background:#ffedd5;color:#c85a17;">
+                        <i class="ri-search-line fs-20"></i>
+                    </span>
+                    <div>
+                        <h5 class="modal-title fw-bold text-dark mb-0" id="pedidoModalLabel">Consultar Pedido / Encomenda</h5>
+                        <small class="text-secondary">Olinda Aguiar — Artes em Madeira</small>
+                    </div>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <p class="text-secondary fs-14 mb-3">
+                    Acompanhe o andamento de sua peça autoral em produção ou solicite informações sobre envio diretamente com a nossa equipe no ateliê.
+                </p>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold text-dark fs-14">Número da Encomenda ou Seu Nome</label>
+                    <input id="pedidoInput" type="text" class="form-control rounded-3" placeholder="Ex: ENCOMENDA-104 ou Seu Nome Completo">
+                </div>
+                <button type="button" class="btn w-100 rounded-pill fw-bold py-2.5 text-white d-flex align-items-center justify-content-center gap-2 shadow-sm" style="background:#25d366;border:0" onclick="consultarPedidoWhatsApp()">
+                    <i class="ri-whatsapp-line fs-19"></i> Consultar no WhatsApp Direto
+                </button>
+            </div>
+            <div class="modal-footer border-0 pt-0 text-center justify-content-center">
+                <small class="text-muted">Atendimento: Seg à Sáb · Casarão Histórico de Olinda</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function consultarPedidoWhatsApp() {
+    const input = document.getElementById('pedidoInput');
+    const valor = encodeURIComponent((input && input.value.trim()) || 'minha encomenda');
+    window.open(`https://api.whatsapp.com/send?phone=5581994522504&text=Ol%C3%A1!%20Gostaria%20de%20consultar%20o%20status%20do%20meu%20pedido:%20${valor}`, '_blank');
+}
+</script>
 
 <footer id="rodape" class="site-footer py-5 border-top">
     <div class="container">
