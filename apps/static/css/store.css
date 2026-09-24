@@ -1247,11 +1247,70 @@ html[data-bs-theme="dark"] .launch-banner-content p {
   .store-metrics { grid-template-columns: repeat(2, 1fr); }
   .store-metrics div:nth-child(2) { border-right: 0; }
   .store-product-grid { grid-template-columns: 1fr; }
-  .store-launch-banner { flex-direction: column; align-items: flex-start; }
+  .store-launch-banner { flex-direction: column; align-items: flex-start; gap: 12px; }
   #storeMobileFilterToggle { display: inline-block; }
   .store-filter-panel.filters-collapsed .store-search,
   .store-filter-panel.filters-collapsed .store-filter-group {
     display: none;
+  }
+  .store-modal-container {
+    width: 95%;
+    max-height: 92vh;
+    overflow-y: auto;
+    padding: 22px 18px;
+    border-radius: 18px;
+    margin: 16px auto;
+  }
+  .store-modal-main-view {
+    height: 260px;
+  }
+  .store-carousel-btn {
+    opacity: 0.95 !important;
+    width: 36px;
+    height: 36px;
+  }
+  .store-tag-sea-card {
+    padding: 18px 16px !important;
+    border-radius: 16px !important;
+  }
+  .store-tag-sea-header {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+  }
+  .store-tag-sea-actions {
+    width: 100% !important;
+    justify-content: space-between !important;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .store-hero {
+    padding: 28px 0 20px;
+  }
+  .store-hero h1 {
+    font-size: 1.85rem !important;
+  }
+  .store-hero p {
+    font-size: 0.95rem !important;
+    line-height: 1.5 !important;
+  }
+  .store-tag-cloud {
+    gap: 8px 6px !important;
+  }
+  .store-tag-pill {
+    padding: 6px 11px !important;
+    font-size: 0.78rem !important;
+  }
+  .modal-actions-row {
+    flex-direction: column !important;
+    gap: 10px !important;
+  }
+  .modal-actions-row .modal-interest-btn,
+  .modal-actions-row .store-zap-btn,
+  .modal-actions-row .store-share-btn {
+    width: 100% !important;
+    justify-content: center !important;
   }
 }
 
@@ -1376,9 +1435,14 @@ html[data-bs-theme="dark"] .launch-banner-content p {
   align-items: center;
   gap: 8px;
   overflow-x: auto;
-  padding-bottom: 12px;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 10px;
   margin-bottom: 16px;
-  scrollbar-width: thin;
+  scrollbar-width: none;
+  flex-wrap: nowrap;
+}
+.store-tag-groups-nav::-webkit-scrollbar {
+  display: none;
 }
 
 .store-tag-group-btn {

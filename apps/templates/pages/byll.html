@@ -99,6 +99,36 @@
     }
     .gallery-img:hover { transform: scale(1.02); }
 
+    /* Responsive Mobile First */
+    @media (max-width: 767.98px) {
+        .manifesto-box {
+            padding: 1.5rem 1.25rem;
+            border-left-width: 4px;
+        }
+        .pillar-card {
+            padding: 1.5rem 1.25rem;
+        }
+    }
+    @media (max-width: 575.98px) {
+        .tribute-hero h1 {
+            font-size: 1.85rem !important;
+        }
+        .tribute-hero p.fs-18 {
+            font-size: 1rem !important;
+            line-height: 1.55 !important;
+        }
+        .floating-whatsapp-btn {
+            width: 48px !important;
+            height: 48px !important;
+            bottom: 16px !important;
+            right: 16px !important;
+            padding: 0 !important;
+        }
+        .floating-whatsapp-btn i {
+            font-size: 24px !important;
+        }
+    }
+
     /* Dark Mode */
     html[data-bs-theme="dark"] body.landing-page { background: #080e1a !important; color: #e5edf8 !important; }
     html[data-bs-theme="dark"] .landing-page .tribute-hero { background: #0b1325 !important; border-color: #263449 !important; }
@@ -113,9 +143,9 @@
 <!-- Floating WhatsApp Button -->
 <a href="https://api.whatsapp.com/send?phone=5581994522504&text=Ol%C3%A1!%20Li%20a%20homenagem%20ao%20Mestre%20Byll%20e%20a%20hist%C3%B3ria%20da%20oficina.%20Gostaria%20de%20conversar."
    target="_blank" rel="noopener noreferrer"
-   class="position-fixed bottom-0 end-0 m-4 z-3 btn btn-success rounded-circle shadow-lg p-3 d-flex align-items-center justify-content-center border-0 hover-lift"
-   style="width: 58px; height: 58px; background-color: #25d366;" title="Falar no WhatsApp com Olinda Aguiar">
-    <i class="ri-whatsapp-fill fs-30 text-white"></i>
+   class="position-fixed floating-whatsapp-btn z-3 btn btn-success rounded-circle shadow-lg d-flex align-items-center justify-content-center border-0 hover-lift"
+   style="bottom: 24px; right: 24px; width: 56px; height: 56px; background-color: #25d366;" title="Falar no WhatsApp com Olinda Aguiar">
+    <i class="ri-whatsapp-fill fs-28 text-white"></i>
 </a>
 
 {% include 'partials/public-reviews-bar.html' %}

@@ -363,16 +363,41 @@
         border-color: #334155 !important;
         color: #f1f5f9 !important;
     }
+
+    /* Mobile First Adjustments */
+    @media (max-width: 767.98px) {
+        #reviewsCarousel .carousel-control-prev,
+        #reviewsCarousel .carousel-control-next {
+            width: 38px;
+        }
+        #reviewsCarousel .carousel-control-prev span,
+        #reviewsCarousel .carousel-control-next span {
+            width: 36px !important;
+            height: 36px !important;
+        }
+    }
+    @media (max-width: 575.98px) {
+        .floating-whatsapp-btn {
+            width: 48px !important;
+            height: 48px !important;
+            bottom: 16px !important;
+            right: 16px !important;
+            padding: 0 !important;
+        }
+        .floating-whatsapp-btn i {
+            font-size: 24px !important;
+        }
+    }
 </style>
 
 <!-- Floating WhatsApp Button -->
 <a href="https://api.whatsapp.com/send?phone=5581994522504&text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20Olinda%20Arte%20em%20Madeira%20e%20gostaria%20de%20solicitar%20uma%20encomenda%20personalizada."
    target="_blank"
    rel="noopener noreferrer"
-   class="position-fixed bottom-0 end-0 m-4 z-3 btn btn-success rounded-circle shadow-lg p-3 d-flex align-items-center justify-content-center border-0 hover-lift"
-   style="width: 58px; height: 58px; background-color: #25d366;"
+   class="position-fixed floating-whatsapp-btn z-3 btn btn-success rounded-circle shadow-lg d-flex align-items-center justify-content-center border-0 hover-lift"
+   style="bottom: 24px; right: 24px; width: 56px; height: 56px; background-color: #25d366;"
    title="Falar no WhatsApp com Olinda Aguiar">
-    <i class="ri-whatsapp-fill fs-30 text-white"></i>
+    <i class="ri-whatsapp-fill fs-28 text-white"></i>
 </a>
 
 {% include 'partials/public-reviews-bar.html' %}

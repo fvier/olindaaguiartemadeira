@@ -17,6 +17,26 @@
     .hover-lift { transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease; }
     .hover-lift:hover { transform: translateY(-4px); box-shadow: 0 16px 36px rgba(15, 23, 42, 0.14) !important; }
     .blog-cover-img { height: 230px; object-fit: cover; width: 100%; }
+
+    /* Mobile First Adjustments */
+    @media (max-width: 767.98px) {
+        .blog-cover-img { height: 190px; }
+        header h1 { font-size: 1.85rem !important; }
+    }
+    @media (max-width: 575.98px) {
+        header p.fs-17 { font-size: 0.95rem !important; }
+        .floating-whatsapp-btn {
+            width: 48px !important;
+            height: 48px !important;
+            bottom: 16px !important;
+            right: 16px !important;
+            padding: 0 !important;
+        }
+        .floating-whatsapp-btn i {
+            font-size: 24px !important;
+        }
+    }
+
     .site-footer { background:#f8fafc;color:#475569; }
     .site-footer h5,.site-footer h6 { color:#0f172a;font-weight:800; }
     .site-footer a { color:#475569;transition:color .2s ease; }
@@ -35,9 +55,9 @@
 <!-- Floating WhatsApp Button -->
 <a href="https://api.whatsapp.com/send?phone=5581994522504&text=Ol%C3%A1!%20Li%20o%20blog%20da%20Olinda%20Arte%20em%20Madeira%20e%20gostaria%20de%20conversar%20sobre%20as%20pe%C3%A7as."
    target="_blank" rel="noopener noreferrer"
-   class="position-fixed bottom-0 end-0 m-4 z-3 btn btn-success rounded-circle shadow-lg p-3 d-flex align-items-center justify-content-center border-0 hover-lift"
-   style="width: 58px; height: 58px; background-color: #25d366;" title="Falar no WhatsApp com Olinda Aguiar">
-    <i class="ri-whatsapp-fill fs-30 text-white"></i>
+   class="position-fixed floating-whatsapp-btn z-3 btn btn-success rounded-circle shadow-lg d-flex align-items-center justify-content-center border-0 hover-lift"
+   style="bottom: 24px; right: 24px; width: 56px; height: 56px; background-color: #25d366;" title="Falar no WhatsApp com Olinda Aguiar">
+    <i class="ri-whatsapp-fill fs-28 text-white"></i>
 </a>
 
 {% include 'partials/public-reviews-bar.html' %}

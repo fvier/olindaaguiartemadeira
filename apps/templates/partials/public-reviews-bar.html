@@ -53,22 +53,35 @@
         display: inline-block !important;
         flex: 0 0 18px !important;
     }
-    .stars-color {
-        color: #f59e0b; /* Golden Yellow */
-        font-size: 12px;
+    @media (max-width: 575.98px) {
+        .google-reviews-bar {
+            font-size: 11px;
+            padding: 4px 0;
+        }
+        .reviews-carousel {
+            max-width: 160px !important;
+            font-size: 11px;
+        }
+        .review-item {
+            font-size: 11px;
+            gap: 5px;
+        }
+        .google-reviews-badge-text {
+            display: none !important;
+        }
     }
 </style>
 
-<div class="google-reviews-bar d-none d-sm-block">
+<div class="google-reviews-bar">
     <div class="container d-flex justify-content-between align-items-center">
-        <div class="d-flex align-items-center gap-2 fw-semibold">
+        <div class="d-flex align-items-center gap-1 gap-sm-2 fw-semibold">
             <i class="ri-google-fill fs-16" style="color: #c85a17;"></i>
-            <span>Google</span>
+            <span class="google-reviews-badge-text">Google</span>
             <span class="text-dark fw-bold dark-text-light ms-1">4.9/5</span>
             <span class="stars-color"><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i></span>
             <span class="text-muted fs-11 ms-1 d-none d-md-inline">(140+ avaliações)</span>
         </div>
-        <div class="reviews-carousel flex-grow-1 ms-4 text-center text-md-start" style="max-width: 500px; height: 20px; overflow: hidden; position: relative;">
+        <div class="reviews-carousel flex-grow-1 ms-2 ms-sm-4 text-center text-md-start" style="max-width: 500px; height: 20px; overflow: hidden; position: relative;">
             <div class="reviews-track" id="reviewsTrack" style="display: flex; flex-direction: column; transition: transform 0.5s ease-in-out;">
                 <div class="review-item" style="height: 20px; display: flex; align-items: center; gap: 8px; white-space: nowrap; overflow: hidden;">
                     <img src="{{ config.ASSETS_ROOT }}/images/users/avatar-2.jpg" class="review-avatar" width="18" height="18" style="width:18px;height:18px;min-width:18px;min-height:18px;max-width:18px;max-height:18px;border-radius:50%;object-fit:cover;flex-shrink:0;" alt="Mariana A.">
