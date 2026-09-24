@@ -600,6 +600,12 @@ def pedido():
             order = WoodworkOrder.query.filter_by(cpf=formatted).first()
         if order:
             order_data = order.to_dict()
+    else:
+        first_order = WoodworkOrder.query.order_by(WoodworkOrder.id.asc()).first()
+        if first_order:
+            order_data = first_order.to_dict()
+            cpf_query = first_order.cpf
+
     return render_template('pages/pedido.html', segment='pedido', initial_order=order_data, search_cpf=cpf_query)
 
 
