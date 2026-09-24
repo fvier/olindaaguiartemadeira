@@ -87,6 +87,14 @@ class WoodworkOrderTimelineTests(unittest.TestCase):
         self.assertIn('Lambri de Jatobá', bar['name'])
         self.assertIn('bar todo em lambri de jatobá', bar['description'].lower())
 
+        # Verifica a cadeira com encosto empalhado à mão OLA-C18
+        chair = next((p for p in data['products'] if p['id'] == 'OLA-C18'), None)
+        self.assertIsNotNone(chair)
+        self.assertEqual(chair['wood_type'], 'peroba-rosa')
+        self.assertEqual(chair['category'], 'Bancos & Banquetas')
+        self.assertIn('Encosto Empalhado', chair['name'])
+        self.assertIn('encosto empalhado à mão', chair['description'].lower())
+
     def test_consultar_order_by_formatted_cpf(self):
         response = self.client.get('/api/pedido/consultar?cpf=123.456.789-00')
         self.assertEqual(response.status_code, 200)

@@ -201,6 +201,51 @@ WOODWORK_PRODUCTS = [
         ]
     },
     {
+        'id': 'OLA-C18',
+        'wood_type': 'peroba-rosa',
+        'category': 'Bancos & Banquetas',
+        'name': 'Cadeira em Madeira de Demolição com Encosto Empalhado à Mão',
+        'price': 790.00,
+        'old_price': 920.00,
+        'icon': '🪑',
+        'image': 'cadeiras-encosto-empalhado-madeira-demolicao.png',
+        'images': ['cadeiras-encosto-empalhado-madeira-demolicao.png'],
+        'badge': 'Empalhado à Mão • Autoral',
+        'sizes': [
+            'Avulsa: 0,46m larg x 0,50m prof x 0,90m alt',
+            'Jogo com 4 Cadeiras',
+            'Jogo com 6 Cadeiras',
+            'Conjunto Completo: Mesa Maciça 1,80m + 6 Cadeiras Empalhadas'
+        ],
+        'description': 'Cadeiras, delicadamente aprimoradas com encosto empalhado à mão, exibem a beleza autêntica da madeira de demolição. Estrutura maciça em peroba rosa resgatada, travamento tradicional com encaixes de respiga e cavilhas em madeira, e tela de palhinha natural entrelaçada à mão que garante conforto térmico, leveza visual e durabilidade para salas de jantar, varandas e restaurantes de alta gastronomia.',
+        'colors': [
+            {
+                'id': 'peroba-natural-cera',
+                'name': 'Peroba Rosa Natural com Cera Botânica',
+                'hex': '#9e5828',
+                'price': 790.00,
+                'old_price': 920.00,
+                'badge': 'Acabamento Clássico'
+            },
+            {
+                'id': 'carnauba-dourada',
+                'name': 'Cera de Carnaúba & Óleo Botânico',
+                'hex': '#b86d29',
+                'price': 790.00,
+                'old_price': 920.00,
+                'badge': '100% Artesanal'
+            },
+            {
+                'id': 'patina-colonial',
+                'name': 'Pátina Colonial Envelhecida',
+                'hex': '#472813',
+                'price': 840.00,
+                'old_price': 980.00,
+                'badge': 'Rústico Nobre'
+            }
+        ]
+    },
+    {
         'id': 'OLA-B10',
         'wood_type': 'peroba-rosa',
         'category': 'Linha Gourmet & Utilitários',
