@@ -255,6 +255,90 @@
         background-color: #ef4444;
         color: #ffffff;
     }
+    .faq-compact {
+        padding: 34px 0;
+        border-top: 1px solid #eef2f6;
+        background: #fff;
+    }
+    .faq-compact-intro {
+        padding-right: 26px;
+    }
+    .faq-compact-label {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-bottom: 8px;
+        color: var(--landing-accent);
+        font-size: .7rem;
+        font-weight: 800;
+        letter-spacing: .06em;
+        text-transform: uppercase;
+    }
+    .faq-compact-intro h2 {
+        max-width: 340px;
+        margin: 0 0 8px;
+        color: #172033;
+        font-size: 1.55rem;
+        line-height: 1.15;
+    }
+    .faq-compact-intro p {
+        max-width: 330px;
+        margin: 0;
+        color: #64748b;
+        font-size: .86rem;
+        line-height: 1.55;
+    }
+    .faq-compact-list {
+        display: grid;
+        gap: 6px;
+    }
+    .faq-compact .accordion-item {
+        overflow: hidden;
+        border: 1px solid #e5eaf0;
+        border-radius: 10px;
+        background: #fff;
+    }
+    .faq-compact .accordion-button {
+        min-height: 46px;
+        padding: 9px 14px;
+        background: #fff;
+        color: #243047;
+        box-shadow: none;
+        font-size: .86rem;
+        font-weight: 700;
+        line-height: 1.3;
+    }
+    .faq-compact .accordion-button:not(.collapsed) {
+        background: #fffaf5;
+        color: #8f3f11;
+    }
+    .faq-compact .accordion-button i {
+        flex: 0 0 auto;
+        font-size: 1rem;
+    }
+    .faq-compact .accordion-button::after {
+        width: .85rem;
+        height: .85rem;
+        background-size: .85rem;
+    }
+    .faq-compact .accordion-body {
+        padding: 2px 42px 13px;
+        background: #fffaf5;
+        color: #64748b;
+        font-size: .82rem;
+        line-height: 1.55;
+    }
+    @media (max-width: 991.98px) {
+        .faq-compact { padding: 26px 0; }
+        .faq-compact-intro { margin-bottom: 16px; padding-right: 0; }
+        .faq-compact-intro h2,
+        .faq-compact-intro p { max-width: none; }
+    }
+    @media (max-width: 575.98px) {
+        .faq-compact-intro h2 { font-size: 1.3rem; }
+        .faq-compact .accordion-button { padding: 9px 11px; font-size: .82rem; }
+        .faq-compact .accordion-body { padding: 2px 36px 12px; }
+    }
     html[data-bs-theme="dark"] body.landing-page { background:#080e1a!important;color:#e5edf8!important; }
     html[data-bs-theme="dark"] .landing-page .navbar { background:rgba(8,14,26,.94)!important;border-color:#263449!important;backdrop-filter:blur(12px); }
     html[data-bs-theme="dark"] .landing-page .navbar .nav-link { color:#cbd5e1!important; }
@@ -266,6 +350,8 @@
     html[data-bs-theme="dark"] .landing-page .hero-clean-glass { background:rgba(11,18,32,.75);border-color:rgba(71,85,105,.45); }
     html[data-bs-theme="dark"] .landing-page .bg-white { background-color:#111827!important; }
     html[data-bs-theme="dark"] .landing-page .bg-light { background-color:#0f172a!important; }
+    html[data-bs-theme="dark"] .landing-page .faq-compact { background:#111827; border-color:#263449; }
+    html[data-bs-theme="dark"] .landing-page .faq-compact-intro h2 { color:#f1f5f9; }
     html[data-bs-theme="dark"] .landing-page .text-dark { color:#f1f5f9!important; }
     html[data-bs-theme="dark"] .landing-page .text-secondary { color:#aebdd0!important; }
     html[data-bs-theme="dark"] .landing-page .border-light-subtle,
@@ -462,7 +548,7 @@
             <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill fw-bold text-uppercase mb-2">Avaliações</span>
             <h2 class="display-6 fw-bold text-dark mt-2">O que dizem clientes e colecionadores</h2>
             <p class="text-secondary fs-16 mb-0">
-                Depoimentos reais de quem adquiriu peças autorais da Olinda Arte em Madeira e vivenciou a experiência do nosso ateliê colonial.
+                Experiências compartilhadas por mulheres que escolheram peças autorais e conheceram o cuidado do nosso ateliê colonial.
             </p>
         </div>
 
@@ -538,83 +624,83 @@
 </section>
 
 <!-- Seção: Perguntas Frequentes (FAQ Accordion) -->
-<section id="faq" class="py-5 bg-white border-top border-light-subtle">
-    <div class="container py-lg-4">
-        <div class="text-center max-w-700 mx-auto mb-5">
-            <span class="badge px-3 py-2 rounded-pill fw-bold text-uppercase" style="background:#ffedd5;color:#c85a17;">Dúvidas Frequentes</span>
-            <h2 class="display-6 fw-bold text-dark mt-2">Perguntas Frequentes sobre a Olinda Arte em Madeira</h2>
-            <p class="text-secondary fs-16">Tire todas as suas dúvidas sobre a procedência da madeira, cuidados, encomendas e envios.</p>
-        </div>
+<section id="faq" class="faq-compact">
+    <div class="container">
+        <div class="row align-items-start g-3 g-lg-4">
+            <div class="col-lg-4 faq-compact-intro">
+                <span class="faq-compact-label"><i class="ri-question-answer-line" aria-hidden="true"></i> Dúvidas frequentes</span>
+                <h2>Perguntas sobre a Olinda Arte em Madeira</h2>
+                <p>Procedência da madeira, cuidados, encomendas, visitas e envios.</p>
+            </div>
 
-        <div class="row justify-content-center">
             <div class="col-lg-8">
-                <div class="accordion accordion-flush d-grid gap-3" id="faqAccordion">
+                <div class="accordion faq-compact-list" id="faqAccordion">
 
                     <!-- FAQ Item 1 -->
-                    <div class="accordion-item border border-light-subtle rounded-3 overflow-hidden shadow-sm">
-                        <h2 class="accordion-header" id="headingOne">
-                            <button class="accordion-button fw-bold text-dark bg-light shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                                <i class="ri-leaf-line text-primary me-2 fs-18"></i> De onde vem a madeira de demolição utilizada nas peças?
+                    <div class="accordion-item">
+                        <h3 class="accordion-header" id="headingOne">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                <i class="ri-leaf-line text-primary me-2" aria-hidden="true"></i> De onde vem a madeira de demolição utilizada nas peças?
                             </button>
-                        </h2>
-                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body text-secondary fs-15 bg-light">
+                        </h3>
+                        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body">
                                 Nossas madeiras provêm do resgate sustentável de antigos casarões, estruturas coloniais desativadas e dormentes históricos. Cada lote passa por minuciosa triagem, tratamento e imunização ecológica contra pragas, garantindo impacto ambiental nulo e preservando a memória viva da nossa história.
                             </div>
                         </div>
                     </div>
 
                     <!-- FAQ Item 2 -->
-                    <div class="accordion-item border border-light-subtle rounded-3 overflow-hidden shadow-sm">
-                        <h2 class="accordion-header" id="headingTwo">
-                            <button class="accordion-button collapsed fw-bold text-dark bg-light shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                <i class="ri-women-line text-primary me-2 fs-18"></i> A Olinda Aguiar realiza projetos sob medida com arquitetos e clientes?
+                    <div class="accordion-item">
+                        <h3 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                <i class="ri-women-line text-primary me-2" aria-hidden="true"></i> A Olinda Aguiar realiza projetos sob medida com arquitetos e clientes?
                             </button>
-                        </h2>
+                        </h3>
                         <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body text-secondary fs-15 bg-light">
+                            <div class="accordion-body">
                                 Sim! Nossa proprietária e líder, Olinda Aguiar, atua diretamente ao lado de arquitetos, designers de interiores e clientes particulares para desenhar e executar mesas orgânicas, painéis esculturais e mobiliário sob medida perfeitamente integrados ao seu ambiente.
                             </div>
                         </div>
                     </div>
 
                     <!-- FAQ Item 3 -->
-                    <div class="accordion-item border border-light-subtle rounded-3 overflow-hidden shadow-sm">
-                        <h2 class="accordion-header" id="headingThree">
-                            <button class="accordion-button collapsed fw-bold text-dark bg-light shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                <i class="ri-shield-star-line text-primary me-2 fs-18"></i> Quais são os cuidados necessários com as peças de madeira?
+                    <div class="accordion-item">
+                        <h3 class="accordion-header" id="headingThree">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                <i class="ri-shield-star-line text-primary me-2" aria-hidden="true"></i> Quais são os cuidados necessários com as peças de madeira?
                             </button>
-                        </h2>
+                        </h3>
                         <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body text-secondary fs-15 bg-light">
+                            <div class="accordion-body">
                                 As peças são finalizadas com ceras naturais de abelha/carnaúba e óleos botânicos atóxicos. No dia a dia, basta higienizar com uma flanela seca ou ligeiramente úmida. Para manter o brilho e a hidratação acetinada dos veios, recomendamos reaplicar uma fina camada de cera mineral a cada 6 meses.
                             </div>
                         </div>
                     </div>
 
                     <!-- FAQ Item 4 -->
-                    <div class="accordion-item border border-light-subtle rounded-3 overflow-hidden shadow-sm">
-                        <h2 class="accordion-header" id="headingFour">
-                            <button class="accordion-button collapsed fw-bold text-dark bg-light shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                                <i class="ri-truck-line text-primary me-2 fs-18"></i> Como funciona a entrega e o envio para outros estados?
+                    <div class="accordion-item">
+                        <h3 class="accordion-header" id="headingFour">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                <i class="ri-truck-line text-primary me-2" aria-hidden="true"></i> Como funciona a entrega e o envio para outros estados?
                             </button>
-                        </h2>
+                        </h3>
                         <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body text-secondary fs-15 bg-light">
+                            <div class="accordion-body">
                                 Realizamos envios protegidos para todo o território nacional. Cada escultura ou móvel é cuidadosamente acondicionado em engradados estruturados de madeira reforçada e plástico bolha especial, com seguro total de transporte até o seu endereço.
                             </div>
                         </div>
                     </div>
 
                     <!-- FAQ Item 5 -->
-                    <div class="accordion-item border border-light-subtle rounded-3 overflow-hidden shadow-sm">
-                        <h2 class="accordion-header" id="headingFive">
-                            <button class="accordion-button collapsed fw-bold text-dark bg-light shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                                <i class="ri-map-pin-line text-primary me-2 fs-18"></i> Onde fica o ateliê físico e como posso agendar uma visita?
+                    <div class="accordion-item">
+                        <h3 class="accordion-header" id="headingFive">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                <i class="ri-map-pin-line text-primary me-2" aria-hidden="true"></i> Onde fica o ateliê físico e como posso agendar uma visita?
                             </button>
-                        </h2>
+                        </h3>
                         <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#faqAccordion">
-                            <div class="accordion-body text-secondary fs-15 bg-light">
+                            <div class="accordion-body">
                                 Estamos localizados no coração histórico de Olinda: <strong>478 R. Cel. Joaquim Cavalcante, Carmo, Olinda - PE</strong>. O espaço é um casarão colonial aberto para visitação, compras no ateliê e apreciação da galeria. Você pode nos visitar livremente ou avisar via WhatsApp para receber um atendimento personalizado.
                             </div>
                         </div>

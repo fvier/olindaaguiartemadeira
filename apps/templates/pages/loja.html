@@ -5,8 +5,9 @@
 {% block html_attribute %}data-bs-theme="light"{% endblock html_attribute %}
 {% block body_attribute %}class="landing-page bg-light text-dark"{% endblock body_attribute %}
 
+{% block meta_description %}Explore móveis autorais em madeira de demolição. Compare peças, dimensões e acabamentos e solicite seu orçamento diretamente ao ateliê em Olinda.{% endblock %}
 {% block content %}
-<link rel="stylesheet" href="{{ config.ASSETS_ROOT }}/css/store.css?v=20260924_2">
+<link rel="stylesheet" href="{{ config.ASSETS_ROOT }}/css/store.css?v=20260924_3">
 
 <!-- Floating WhatsApp Button -->
 <a href="https://api.whatsapp.com/send?phone=5581994522504&text=Ol%C3%A1!%20Vim%20pela%20Loja%20da%20Olinda%20Arte%20em%20Madeira%20e%20gostaria%20de%20consultar%20uma%20pe%C3%A7a."
@@ -29,13 +30,8 @@
         </span>
         <h1>Peças únicas para seu <span>ambiente</span></h1>
         <p>Mobiliário autoral e peças exclusivas sob medida no Casarão Histórico do Carmo.</p>
-        
-        <div class="store-hero-actions">
-          <button class="store-outline-btn active" data-quick-filter="all">Todas as Madeiras</button>
-          {% for wt in store_wood_types %}
-          <button class="store-outline-btn" data-quick-filter="{{ wt.id }}">{{ wt.name }}</button>
-          {% endfor %}
-        </div>
+
+
       </div>
     </div>
   </section>
@@ -45,27 +41,90 @@
     <div><span>{{ products|length }}</span><small>obras no acervo</small></div>
     <div><span>{{ store_wood_types|length }}</span><small>madeiras de demolição</small></div>
     <div><span>{{ store_categories|length }}</span><small>linhas artesanais</small></div>
-    <div title="Clique para abrir sua lista de peças salvas" id="openWishlistMetric">
+    <button type="button" class="store-interest-metric" title="Abrir lista de interesse" id="openWishlistMetric">
       <span id="interestCount">0</span><small>na lista de interesse <i class="ri-arrow-right-up-line"></i></small>
-    </div>
+    </button>
   </section>
 
   <!-- LAYOUT PRINCIPAL: SIDEBAR DE FILTROS + CATÁLOGO -->
   <section class="container store-layout">
-    <aside class="store-filter-panel">
+    <aside class="store-filter-panel" id="storeFilters">
       <div class="store-filter-title">
         <div><small>CATÁLOGO</small><h2>Filtros</h2></div>
         <div class="store-filter-actions">
-          <button id="storeMobileFilterToggle" type="button">Abrir</button>
-          <button id="clearStoreFilters" type="button">Limpar</button>
+          <button id="storeMobileFilterToggle" type="button" aria-expanded="true" aria-controls="storeFilterFields">Filtrar</button>
+          <button id="clearStoreFilters" type="button" hidden>Limpar</button>
         </div>
       </div>
 
+      <div id="storeFilterFields">
       <label class="store-search">
+        <span class="visually-hidden">Buscar peça, madeira ou medidas</span>
         <i class="ri-search-line"></i>
         <input id="storeSearch" type="search" placeholder="Buscar peça, madeira, medidas..." autocomplete="off">
       </label>
 
+      <!-- Filtro por Categorias -->
+      <fieldset class="store-filter-group">
+        <legend>Categorias</legend>
+        {% for category in store_categories %}
+        <label><input class="category-filter" type="checkbox" value="{{ category }}"> {{ category }}</label>
+        {% endfor %}
+      </fieldset>
+
+      <!-- Faixa de investimento: atalhos simples com ajuste fino opcional pelo slider -->
+      <fieldset class="store-filter-group store-price-filter-group">
+        <legend>Faixa de investimento</legend>
+        <p class="store-filter-hint">Escolha uma faixa ou ajuste o intervalo.</p>
+
+        <div class="store-price-readout" aria-live="polite">
+          <span class="readout-label">Valor selecionado</span>
+          <output class="readout-val" id="priceSliderDisplay" for="storePriceSliderMin storePriceSliderMax">Todos os valores</output>
+        </div>
+
+        <div class="store-dual-slider-container">
+          <div class="store-dual-track-bg"></div>
+          <div class="store-dual-track-range" id="dualSliderRangeBar"></div>
+          <input type="range"
+                 id="storePriceSliderMin"
+                 class="store-dual-range min-range"
+                 min="0"
+                 max="10000"
+                 step="250"
+                 value="0"
+                 aria-label="Preço mínimo de investimento">
+          <input type="range"
+                 id="storePriceSliderMax"
+                 class="store-dual-range max-range"
+                 min="0"
+                 max="10000"
+                 step="250"
+                 value="10000"
+                 aria-label="Preço máximo de investimento">
+        </div>
+
+        <div class="store-price-scale">
+          <span>R$ 0</span>
+          <span>R$ 10.000+</span>
+        </div>
+
+        <div class="store-price-quick-chips" aria-label="Faixas de investimento sugeridas">
+          <button type="button" class="store-chip-btn active" data-chip-min="0" data-chip-max="10000">Todos os valores</button>
+          <button type="button" class="store-chip-btn" data-chip-min="0" data-chip-max="2500">Até R$ 2.500</button>
+          <button type="button" class="store-chip-btn" data-chip-min="2500" data-chip-max="5000">R$ 2.500 a 5.000</button>
+          <button type="button" class="store-chip-btn" data-chip-min="5000" data-chip-max="10000">Acima de R$ 5.000</button>
+        </div>
+      </fieldset>
+
+      <fieldset class="store-filter-group"><legend>Disponibilidade</legend>
+        <label><input type="radio" name="availability" value="all" checked> Todas as peças</label>
+        <label><input type="radio" name="availability" value="ready">Pronta entrega</label>
+        <label><input type="radio" name="availability" value="custom">Sob encomenda</label>
+        <label><input type="radio" name="availability" value="available">Disponíveis para consulta</label>
+      </fieldset>
+      <details class="store-refinements">
+      <summary><span>Mais filtros</span><small>Madeira e características</small></summary>
+      <div class="store-refinements-body">
       <!-- Filtro por Tipo de Madeira de Demolição -->
       <fieldset class="store-filter-group">
         <legend>Madeira de Demolição</legend>
@@ -78,87 +137,29 @@
         {% endfor %}
       </fieldset>
 
-      <!-- Filtro por Categorias -->
-      <fieldset class="store-filter-group">
-        <legend>Categorias</legend>
-        {% for category in store_categories %}
-        <label><input class="category-filter" type="checkbox" value="{{ category }}"> {{ category }}</label>
-        {% endfor %}
-      </fieldset>
-
-      <!-- Filtro por Faixa de Investimento (Slider de Preço com 2 Pontos / Dual-Range) -->
-      <fieldset class="store-filter-group store-price-filter-group">
+      <!-- Características em formato textual, sem ícones decorativos -->
+      <fieldset class="store-filter-group store-tags-filter-group store-tag-sea-card" aria-label="Características">
         <legend class="d-flex align-items-center justify-content-between mb-1">
-          <span>Faixa de Investimento</span>
-          <span class="store-price-slider-badge" id="priceSliderBadge">Todos os valores</span>
-        </legend>
-
-        <div class="store-price-readout">
-          <span class="readout-label">Intervalo de valor:</span>
-          <strong class="readout-val" id="priceSliderDisplay">R$ 0 — R$ 10.000+</strong>
-        </div>
-
-        <div class="store-dual-slider-container">
-          <div class="store-dual-track-bg"></div>
-          <div class="store-dual-track-range" id="dualSliderRangeBar"></div>
-          <input type="range" 
-                 id="storePriceSliderMin" 
-                 class="store-dual-range min-range" 
-                 min="0" 
-                 max="10000" 
-                 step="250" 
-                 value="0" 
-                 aria-label="Preço mínimo de investimento">
-          <input type="range" 
-                 id="storePriceSliderMax" 
-                 class="store-dual-range max-range" 
-                 min="0" 
-                 max="10000" 
-                 step="250" 
-                 value="10000" 
-                 aria-label="Preço máximo de investimento">
-        </div>
-
-        <div class="store-price-scale">
-          <span>R$ 0</span>
-          <span>R$ 5.000</span>
-          <span>R$ 10.000+</span>
-        </div>
-
-        <div class="store-price-quick-chips">
-          <button type="button" class="store-chip-btn" data-chip-min="0" data-chip-max="2500">Até 2.5k</button>
-          <button type="button" class="store-chip-btn" data-chip-min="1500" data-chip-max="4500">1.5k–4.5k</button>
-          <button type="button" class="store-chip-btn" data-chip-min="4500" data-chip-max="10000">4.5k+</button>
-          <button type="button" class="store-chip-btn active" data-chip-min="0" data-chip-max="10000">Todos</button>
-        </div>
-      </fieldset>
-
-      <!-- Mar de Tags (Logo em baixo de Faixa de Investimento) -->
-      <fieldset class="store-filter-group store-tags-filter-group store-tag-sea-card" aria-label="Mar de Tags">
-        <legend class="d-flex align-items-center justify-content-between mb-1">
-          <span class="d-flex align-items-center gap-1.5">
-            <span aria-hidden="true" class="store-tag-sea-wave-icon" style="font-size: 1.15rem;">🌊</span>
-            <span class="store-tag-sea-title" style="font-size: 0.95rem; font-weight: 800;">Mar de Tags</span>
-          </span>
+          <span class="store-tag-sea-title">Características</span>
           <button type="button" id="clearTagSelectionBtn" class="store-tag-reset-link" style="display:none;" title="Limpar tag selecionada">
-            <i class="ri-close-circle-line"></i> Limpar
+            Limpar
           </button>
         </legend>
 
-        <p class="store-tag-sidebar-sub">Inspirações por madeiras, técnicas e ambientes:</p>
+        <p class="store-tag-sidebar-sub">Filtre por técnica, ambiente ou estilo.</p>
 
         <!-- Indicador de tag ativa selecionada -->
         <div id="activeTagPillIndicator" class="store-tag-active-indicator mb-2" style="display:none;"></div>
 
-        <!-- Abas de Grupos do Mar de Tags -->
-        <div class="store-tag-groups-nav store-tag-groups-sidebar" id="storeTagGroupsNav" role="tablist">
+        <!-- Abas de Grupos do Características -->
+        <div class="store-tag-groups-nav store-tag-groups-sidebar" id="storeTagGroupsNav" role="group" aria-label="Grupos de características">
           {% for grp in store_tag_groups %}
-          <button type="button" 
-                  class="store-tag-group-btn {% if loop.first %}active{% endif %}" 
+          <button type="button"
+                  class="store-tag-group-btn {% if loop.first %}active{% endif %}"
                   data-group-filter="{{ grp.id }}"
-                  role="tab"
-                  aria-selected="{% if loop.first %}true{% else %}false{% endif %}">
-            <span>{{ grp.icon }}</span> {{ grp.name }}
+
+                  aria-pressed="{% if loop.first %}true{% else %}false{% endif %}">
+            {{ grp.name }}
           </button>
           {% endfor %}
         </div>
@@ -166,25 +167,28 @@
         <!-- Nuvem de Tags (Pills interativas com contadores) -->
         <div class="store-tag-cloud store-tag-cloud-sidebar" id="storeTagCloud" role="region" aria-label="Nuvem de tags">
           {% for tag in store_tags %}
-          <button type="button" 
-                  class="store-tag-pill" 
-                  data-tag-slug="{{ tag.slug }}" 
+          <button type="button"
+                  class="store-tag-pill"
+                  data-tag-slug="{{ tag.slug }}"
                   data-tag-group="{{ tag.group }}"
                   data-tag-name="{{ tag.name }}"
-                  title="Filtrar por #{{ tag.name }} ({{ tag.count }} peças)">
-            <span class="tag-emoji" aria-hidden="true">{{ tag.icon }}</span>
-            <span class="tag-hash">#</span><span class="tag-text">{{ tag.name }}</span>
+                  title="Filtrar por {{ tag.name }} ({{ tag.count }} peças)"
+                  aria-label="{{ tag.name }}, {{ tag.count }} peças">
+            <span class="tag-text">{{ tag.name }}</span>
             <span class="tag-count-badge">{{ tag.count }}</span>
           </button>
           {% endfor %}
         </div>
       </fieldset>
+      </div>
+      </details>
+      </div>
     </aside>
 
     <div class="store-catalog">
       <div class="store-toolbar">
         <div>
-          <p><span id="visibleProductCount">{{ products|length }}</span> obras encontradas</p>
+          <p role="status" aria-live="polite" aria-atomic="true"><span id="visibleProductCount">{{ products|length }}</span> obras encontradas</p>
           <small>Condições em até 12x ou 50% de sinal na encomenda</small>
         </div>
         <div class="store-toolbar-actions">
@@ -222,15 +226,15 @@
       <div class="store-product-grid" id="storeProductGrid">
         {% for product in products %}
         {% set display = product.colors[0] if product.colors else product %}
-        <article class="store-product-card" 
-                 data-id="{{ product.id }}" 
-                 data-wood="{{ product.wood_type }}" 
-                 data-category="{{ product.category }}" 
+        <article class="store-product-card"
+                 data-id="{{ product.id }}"
+                 data-wood="{{ product.wood_type }}"
+                 data-category="{{ product.category }}"
                  data-price="{{ display.get('price', product.price) }}"
                  data-name="{{ product.name|lower }}"
                  data-tags="{{ (product.tags or [])|join(',') }}"
                  data-json='{{ product|tojson|forceescape }}'>
-          
+
           <div class="store-product-media" data-open-modal="{{ product.id }}">
             {% if is_admin %}
             <button class="store-admin-card-edit-btn" type="button" data-admin-edit="{{ product.id }}" title="Editar informações desta peça (Admin)">
@@ -241,11 +245,11 @@
             <span class="store-product-badge card-badge-element">{{ display.get('badge', product.badge) }}</span>
             {% endif %}
             <span class="store-product-code">{{ product.id }}</span>
-            
+
             {% if product.image %}
-              <img src="{{ config.ASSETS_ROOT }}/images/{{ display.get('image', product.image) }}" 
-                   alt="{{ product.name }}" 
-                   class="store-product-img card-img-element" 
+              <img src="{{ config.ASSETS_ROOT }}/images/{{ display.get('image', product.image) }}"
+                   alt="{{ product.name }}"
+                   class="store-product-img card-img-element" decoding="async" width="640" height="480"
                    loading="lazy">
             {% else %}
               <span class="store-product-icon" aria-hidden="true">{{ product.icon }}</span>
@@ -259,11 +263,11 @@
             </div>
             <div class="store-card-carousel-dots">
               {% for img in product.images %}
-              <span class="store-carousel-dot {% if loop.first %}active{% endif %}" data-img-idx="{{ loop.index0 }}" title="Foto {{ loop.index }} de {{ product.images|length }}"></span>
+              <button type="button" aria-label="Ver foto {{ loop.index }}" class="store-carousel-dot {% if loop.first %}active{% endif %}" data-img-idx="{{ loop.index0 }}" title="Foto {{ loop.index }} de {{ product.images|length }}"></button>
               {% endfor %}
             </div>
             {% endif %}
-            
+
             <button class="store-interest-btn" type="button" aria-label="Adicionar {{ product.name }} à lista de interesse" data-interest="{{ product.id }}">
               <i class="ri-heart-line fs-18"></i>
             </button>
@@ -276,11 +280,12 @@
               <span>{{ product.category }}</span>
             </div>
 
-            <h3 class="card-title-clickable" data-open-modal="{{ product.id }}">{{ product.name }}</h3>
+            <h3><button type="button" class="card-title-clickable" data-open-modal="{{ product.id }}">{{ product.name }}</button></h3>
+            <p class="store-stock-status">{% if product.is_sold_out %}Peça vendida{% elif 'pronta-entrega' in product.tags %}Pronta entrega{% elif 'sob-medida' in product.tags %}Sob encomenda{% else %}Disponibilidade sob consulta{% endif %}</p>
 
             <!-- Indicador Minimalista de Tamanho / Opções da Peça -->
             {% if product.sizes %}
-            <div class="store-card-size-indicator" data-open-modal="{{ product.id }}" title="Clique para ver os {{ product.sizes|length }} tamanhos e detalhes da peça">
+            <div class="store-card-size-indicator" title="Clique para ver os {{ product.sizes|length }} tamanhos e detalhes da peça">
               <i class="ri-ruler-2-line"></i>
               {% if product.sizes|length > 1 %}
                 <span>{{ product.sizes|length }} tamanhos disponíveis</span>
@@ -297,7 +302,7 @@
               <div class="store-swatches-row">
                 {% for col in product.colors %}
                 {% set col_price = col.get('price', product.price) %}
-                <button type="button" 
+                <button type="button"
                         class="store-swatch-dot {% if loop.first %}active{% endif %}"
                         aria-label="{{ col.name }}" aria-pressed="{{ 'true' if loop.first else 'false' }}"
                         style="background-color: {{ col.hex }};"
@@ -321,12 +326,7 @@
                   <i class="ri-edit-2-line"></i>
                 </button>
                 {% endif %}
-                <button class="store-quickview-btn" type="button" data-open-modal="{{ product.id }}" title="Ver detalhes da peça">
-                  <i class="ri-eye-line fs-17"></i>
-                </button>
-                <button class="store-add-btn" type="button" data-interest="{{ product.id }}" title="Adicionar aos favoritos">
-                  <i class="ri-heart-line fs-18"></i>
-                </button>
+                <button class="store-quickview-btn" type="button" data-open-modal="{{ product.id }}" aria-label="Ver peça: {{ product.name }}">Ver peça <i class="ri-arrow-right-line" aria-hidden="true"></i></button>
               </div>
             </div>
 
@@ -344,6 +344,7 @@
         <i class="ri-inbox-line"></i>
         <h3>Nenhuma obra encontrada</h3>
         <p>Tente remover filtros selecionados ou buscar por outro tipo de madeira ou categoria.</p>
+        <button type="button" class="store-outline-btn" id="clearEmptyFilters">Limpar filtros</button>
       </div>
     </div>
   </section>
@@ -369,17 +370,17 @@
 </main>
 
 <!-- MODAL QUICK-VIEW DE DETALHES DA OBRA -->
-<div class="store-modal-backdrop hidden" id="storeProductModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+<div tabindex="-1" class="store-modal-backdrop hidden" id="storeProductModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
   <div class="store-modal-container">
     <button class="store-modal-close" id="closeProductModal" type="button" aria-label="Fechar modal">&times;</button>
     <div class="store-modal-grid">
-      
+
       <!-- Coluna Visual / Imagem & Carrossel -->
       <div class="store-modal-media-col">
         <div class="store-modal-main-view">
           <span class="store-product-badge" id="modalProductBadge">Peça Única</span>
           <img id="modalMainImg" src="" alt="Obra de Arte" class="store-modal-main-img">
-          
+
           <div class="modal-carousel-nav" id="modalCarouselNav" style="display:none;">
             <button type="button" class="modal-carousel-btn prev" id="modalPrevImgBtn" aria-label="Foto anterior">&#10094;</button>
             <button type="button" class="modal-carousel-btn next" id="modalNextImgBtn" aria-label="Próxima foto">&#10095;</button>
@@ -394,7 +395,7 @@
           <span id="modalWoodTag">Peroba Rosa Centenária</span>
           <span id="modalCategoryTag">Mesas & Pranchas</span>
         </div>
-        
+
         <h2 id="modalTitle">Mesa Escultural com Tampo de Vidro</h2>
 
         <div class="store-modal-price-card">
@@ -406,9 +407,10 @@
         </div>
 
         <div class="store-availability-badge">
-          <span class="dot-online"></span> Madeira de Demolição Autêntica • Certificada
+          <span id="modalAvailability">Disponibilidade sob consulta</span>
         </div>
 
+        <p class="store-delivery-note">Informe seu CEP no WhatsApp para consultar frete e prazo de entrega. Para encomendas, confirme também o prazo de produção com o ateliê.</p>
         <!-- Opções de Acabamento -->
         <div class="modal-option-block" id="modalColorBlock">
           <label class="modal-option-label">Acabamento Selecionado: <strong id="modalSelectedColorText">Madeira Natural com Óleo Botânico</strong></label>
@@ -436,13 +438,13 @@
         <!-- Botões de Ação -->
         <div class="modal-actions-row">
           <button class="store-primary-btn modal-interest-btn" id="modalInterestBtn" type="button">
-            <i class="ri-heart-line"></i> <span id="modalInterestLabel">Salvar no Interesse</span>
+            <i class="ri-heart-line"></i> <span id="modalInterestLabel">Salvar na lista de interesse</span>
           </button>
           <a class="store-zap-btn" id="modalZapLink" href="#" target="_blank" rel="noopener">
-            <i class="ri-whatsapp-line fs-20"></i> Encomendar no WhatsApp
+            <i class="ri-whatsapp-line fs-20"></i> Solicitar orçamento no WhatsApp
           </a>
         </div>
-        
+
         <div class="store-share-area mt-3">
           <button class="store-share-btn" id="modalShareBtn" type="button">
             <i class="ri-share-forward-line"></i> Compartilhar esta Obra
@@ -464,10 +466,10 @@
 
 {% if is_admin %}
 <!-- MODAL DE EDIÇÃO DO ADMINISTRADOR -->
-<div class="store-modal-backdrop hidden" id="adminProductEditModal" role="dialog" aria-modal="true" aria-labelledby="adminEditModalTitle">
+<div tabindex="-1" class="store-modal-backdrop hidden" id="adminProductEditModal" role="dialog" aria-modal="true" aria-labelledby="adminEditModalTitle">
   <div class="store-modal-container" style="max-width: 680px;">
     <button class="store-modal-close" id="closeAdminEditModal" type="button" aria-label="Fechar modal de edição">&times;</button>
-    
+
     <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom">
       <span class="rounded-circle d-flex align-items-center justify-content-center text-white" style="width: 36px; height: 36px; background: #c85a17;">
         <i class="ri-edit-box-line fs-18"></i>
@@ -546,9 +548,9 @@
           <small class="text-muted" style="font-size: 11px;">Separe múltiplas medidas por vírgula.</small>
         </div>
 
-        <!-- Tags para o Mar de Tags -->
+        <!-- Tags para o Características -->
         <div class="col-12">
-          <label class="form-label fw-bold small text-secondary" for="adminEditTags">Tags do Mar de Tags</label>
+          <label class="form-label fw-bold small text-secondary" for="adminEditTags">Tags do Características</label>
           <input type="text" class="form-control rounded-3" id="adminEditTags" name="tags" placeholder="Ex: mesas, tampo-de-vidro, peca-unica, sala-de-jantar">
           <small class="text-muted" style="font-size: 11px;">Tags sem espaço, separadas por vírgula (ex: <code>verniz-pu, sob-medida, area-gourmet</code>).</small>
         </div>
@@ -574,7 +576,7 @@
 {% endif %}
 
 <!-- MODAL DA LISTA DE DESEJOS / INTERESSES -->
-<div class="store-modal-backdrop hidden" id="storeWishlistModal" role="dialog" aria-modal="true">
+<div tabindex="-1" class="store-modal-backdrop hidden" id="storeWishlistModal" role="dialog" aria-modal="true" aria-labelledby="wishlistTitle">
   <div class="store-modal-container" style="max-width: 600px;">
     <button class="store-modal-close" id="closeWishlistBtn" type="button" aria-label="Fechar">&times;</button>
     <div class="d-flex align-items-center gap-2 mb-3">
@@ -582,11 +584,11 @@
         <i class="ri-heart-fill fs-22"></i>
       </span>
       <div>
-        <h3 class="fw-bold text-dark mb-0">Minhas Peças Selecionadas</h3>
+        <h3 id="wishlistTitle" class="fw-bold text-dark mb-0">Minha lista de interesse</h3>
         <small class="text-secondary">Lista de interesse salva no seu navegador</small>
       </div>
     </div>
-    
+
     <div id="wishlistContainer" class="py-2" style="max-height: 380px; overflow-y: auto;"></div>
 
     <div class="d-flex flex-wrap gap-2 justify-content-end mt-4 pt-3 border-top border-light-subtle">
@@ -600,5 +602,5 @@
 
 {% include 'partials/public-footer.html' %}
 
-<script src="{{ config.ASSETS_ROOT }}/js/store.js?v=20260924_2"></script>
+<script src="{{ config.ASSETS_ROOT }}/js/store.js?v=20260924_4"></script>
 {% endblock content %}

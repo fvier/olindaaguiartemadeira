@@ -14,6 +14,7 @@
   const activeLabel = document.getElementById('activeStoreFilter');
   const empty = document.getElementById('storeEmpty');
   const interestCount = document.getElementById('interestCount');
+  const clearBtn = document.getElementById('clearStoreFilters');
   const storageKey = 'olinda-woodwork-store-interest';
 
   // Elementos do Slider de Preço com 2 Pontos (Dual-Range)
@@ -21,7 +22,6 @@
   const sliderMax = document.getElementById('storePriceSliderMax');
   const dualRangeBar = document.getElementById('dualSliderRangeBar');
   const priceSliderDisplay = document.getElementById('priceSliderDisplay');
-  const priceSliderBadge = document.getElementById('priceSliderBadge');
   const priceChips = [...document.querySelectorAll('.store-chip-btn')];
   const minPriceCeiling = 0;
   const maxPriceCeiling = 10000;
@@ -40,7 +40,10 @@
   } catch (_) { /* Fallback */ }
 
   const productFor = card => JSON.parse(card.dataset.json);
-  const money = value => `R$ ${Number(value).toFixed(2).replace('.', ',')}`;
+  const money = value => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(Number(value));
+  const normalize = value => String(value ?? '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('pt-BR').replace(/-/g, ' ');
+  const availability = product => product.is_sold_out ? 'sold' : product.tags?.includes('pronta-entrega') ? 'ready' : product.tags?.includes('sob-medida') ? 'custom' : 'consult';
+  const availabilityLabels = {sold:'Peça vendida', ready:'Pronta entrega', custom:'Sob encomenda', consult:'Disponibilidade sob consulta'};
 
   // -------------------------------------------------------------
   // 1. FILTRAGEM & ORDENAÇÃO
@@ -54,22 +57,26 @@
     const minVal = Number(sliderMin.value) || minPriceCeiling;
     const maxVal = Number(sliderMax.value) || maxPriceCeiling;
     if (minVal <= minPriceCeiling && maxVal >= maxPriceCeiling) return true;
-    return price >= minVal && price <= maxVal;
+    return price >= minVal && (maxVal >= maxPriceCeiling || price <= maxVal);
   }
 
-  function applyFilters() {
+  function applyFilters(save = true) {
     const wood = selectedValue('wood');
-    const term = search ? search.value.trim().toLocaleLowerCase('pt-BR') : '';
+    const term = normalize(search?.value.trim());
+    const stock = selectedValue('availability');
     const categories = new Set([...document.querySelectorAll('.category-filter:checked')].map(input => input.value));
 
     const visible = cards.filter(card => {
       const cardTags = (card.dataset.tags || '').split(',').map(t => t.trim().toLowerCase()).filter(Boolean);
-      const searchable = `${card.dataset.name} ${card.dataset.category} ${card.dataset.wood} ${(card.dataset.tags || '').replace(/,/g, ' ')}`.toLocaleLowerCase('pt-BR');
+      const product = productFor(card);
+      const woodLabel = [...document.querySelectorAll('input[name=wood]')].find(input => input.value === product.wood_type)?.closest('label')?.textContent || '';
+      const searchable = normalize(`${product.name} ${product.category} ${product.wood_type} ${woodLabel} ${product.description || ''} ${(product.sizes || []).join(' ')} ${(product.tags || []).join(' ')}`);
       const matchesTag = !activeTag || cardTags.includes(activeTag.toLowerCase());
       const show = (wood === 'all' || card.dataset.wood === wood)
         && (!categories.size || categories.has(card.dataset.category))
         && matchesPrice(Number(card.dataset.price))
         && matchesTag
+        && (stock === 'all' || (stock === 'available' ? !product.is_sold_out : availability(product) === stock))
         && (!term || searchable.includes(term));
       card.classList.toggle('hidden', !show);
       return show;
@@ -80,7 +87,7 @@
       'price-asc': (a, b) => Number(a.dataset.price) - Number(b.dataset.price),
       'price-desc': (a, b) => Number(b.dataset.price) - Number(a.dataset.price),
       featured: (a, b) => cards.indexOf(a) - cards.indexOf(b)
-    }[sort ? sort.value : 'featured'];
+    }[sort ? sort.value : 'featured'] || ((a, b) => cards.indexOf(a) - cards.indexOf(b));
 
     visible.sort(comparator).forEach(card => grid.appendChild(card));
 
@@ -98,7 +105,7 @@
       if (activeTag) {
         const found = tagPills.find(p => p.dataset.tagSlug?.toLowerCase() === activeTag.toLowerCase());
         const tagName = found ? found.dataset.tagName : activeTag.replace(/-/g, ' ');
-        activeTagIndicator.innerHTML = `<span>Tag: #${tagName}</span>`;
+        activeTagIndicator.textContent = `Característica: ${tagName}`;
         activeTagIndicator.style.display = 'inline-flex';
       } else {
         activeTagIndicator.style.display = 'none';
@@ -125,18 +132,100 @@
       const maxVal = Number(sliderMax.value);
       if (minVal > minPriceCeiling || maxVal < maxPriceCeiling) {
         const minStr = minVal <= minPriceCeiling ? 'R$ 0' : money(minVal);
-        const maxStr = maxVal >= maxPriceCeiling ? 'R$ 10k+' : money(maxVal);
+        const maxStr = maxVal >= maxPriceCeiling ? 'sem limite máximo' : money(maxVal);
         labels.push(`faixa de investimento: ${minStr} a ${maxStr}`);
       }
     }
     if (activeTag) {
       const found = tagPills.find(p => p.dataset.tagSlug?.toLowerCase() === activeTag.toLowerCase());
       const tagName = found ? found.dataset.tagName : activeTag.replace(/-/g, ' ');
-      labels.push(`tag: #${tagName}`);
+      labels.push(`característica: ${tagName}`);
     }
+    if (stock !== 'all') labels.push(stock === 'available' ? 'Disponíveis para consulta' : availabilityLabels[stock]);
     if (term) labels.push(`busca: “${search.value.trim()}”`);
-    if (activeLabel) activeLabel.textContent = labels.length ? labels.join(' • ') : 'Todas as madeiras e categorias';
+    if (activeLabel) activeLabel.textContent = labels.length ? labels.join(' • ') : 'Todas as peças';
+    if (clearBtn) clearBtn.hidden = labels.length === 0;
+    if (save === true) saveFilters();
   }
+
+  function saveFilters() {
+    const url = new URL(location.href);
+    const values = {q: search?.value.trim(), madeira: selectedValue('wood'), disponibilidade: selectedValue('availability'), ordem: sort?.value, tag: activeTag, min: sliderMin?.value, max: sliderMax?.value};
+    Object.entries(values).forEach(([key, value]) => {
+      if (!value || value === 'all' || value === 'featured' || (key === 'min' && Number(value) === 0) || (key === 'max' && Number(value) === maxPriceCeiling)) url.searchParams.delete(key);
+      else url.searchParams.set(key, value);
+    });
+    url.searchParams.delete('categoria');
+    document.querySelectorAll('.category-filter:checked').forEach(input => url.searchParams.append('categoria', input.value));
+    history.replaceState(null, '', url);
+  }
+
+  function restoreFilters() {
+    const params = new URLSearchParams(location.search);
+    if (search) search.value = params.get('q') || '';
+    for (const [name, key] of [['wood', 'madeira'], ['availability', 'disponibilidade']]) {
+      const inputs = [...document.querySelectorAll(`input[name="${name}"]`)];
+      const value = inputs.some(input => input.value === params.get(key)) ? params.get(key) : 'all';
+      inputs.forEach(input => { input.checked = input.value === value; });
+    }
+    document.querySelectorAll('.category-filter').forEach(input => { input.checked = params.getAll('categoria').includes(input.value); });
+    if (sort) sort.value = [...sort.options].some(option => option.value === params.get('ordem')) ? params.get('ordem') : 'featured';
+    activeTag = tagPills.some(pill => pill.dataset.tagSlug === params.get('tag')) ? params.get('tag') : null;
+    if (sliderMin && sliderMax) {
+      const parsePrice = (key, fallback) => {
+        const value = params.has(key) ? Number(params.get(key)) : fallback;
+        return Number.isFinite(value) ? Math.max(0, Math.min(maxPriceCeiling, Math.round(value / 250) * 250)) : fallback;
+      };
+      sliderMin.value = Math.min(parsePrice('min', 0), maxPriceCeiling - 250);
+      sliderMax.value = Math.max(parsePrice('max', maxPriceCeiling), Number(sliderMin.value) + 250);
+      updateDualSliderVisuals();
+    }
+    applyFilters(false);
+  }
+
+  // All catalog dialogs share focus containment, Escape and focus restoration.
+  let activeDialog = null;
+  let dialogReturnFocus = null;
+  let previousOverflow = '';
+  let backgroundStates = [];
+  let dismissDialog = null;
+  function showDialog(dialog, close) {
+    if (activeDialog === dialog) return;
+    if (activeDialog) {
+      activeDialog.classList.add('hidden');
+      backgroundStates.forEach(([element, inert]) => { element.inert = inert; });
+    } else {
+      dialogReturnFocus = document.activeElement;
+      previousOverflow = document.body.style.overflow;
+    }
+    activeDialog = dialog;
+    dismissDialog = close;
+    dialog.classList.remove('hidden');
+    backgroundStates = [...document.body.children].filter(element => element !== dialog && !['SCRIPT', 'STYLE', 'LINK'].includes(element.tagName)).map(element => [element, element.inert]);
+    backgroundStates.forEach(([element]) => { element.inert = true; });
+    document.body.style.overflow = 'hidden';
+    (dialog.querySelector('button') || dialog).focus();
+  }
+  function hideDialog(dialog) {
+    dialog.classList.add('hidden');
+    if (activeDialog !== dialog) return;
+    backgroundStates.forEach(([element, inert]) => { element.inert = inert; });
+    document.body.style.overflow = previousOverflow;
+    activeDialog = null;
+    dismissDialog = null;
+    if (dialogReturnFocus?.isConnected) dialogReturnFocus.focus();
+  }
+  document.addEventListener('keydown', event => {
+    if (!activeDialog) return;
+    if (event.key === 'Escape') { event.preventDefault(); dismissDialog?.(); return; }
+    if (event.key !== 'Tab') return;
+    const targets = [...activeDialog.querySelectorAll('button, a[href], input, select, textarea, [tabindex="0"]')].filter(element => !element.disabled && element.getClientRects().length);
+    const first = targets[0];
+    const last = targets[targets.length - 1];
+    if (!first) { event.preventDefault(); activeDialog.focus(); }
+    else if (event.shiftKey && (document.activeElement === first || !targets.includes(document.activeElement))) { event.preventDefault(); last.focus(); }
+    else if (!event.shiftKey && (document.activeElement === last || !targets.includes(document.activeElement))) { event.preventDefault(); first.focus(); }
+  });
 
   function setActiveTag(slug, shouldScroll = false) {
     if (activeTag && slug && activeTag.toLowerCase() === slug.toLowerCase()) {
@@ -156,6 +245,8 @@
       const active = interests.has(button.dataset.interest);
       button.classList.toggle('active', active);
       button.setAttribute('aria-pressed', String(active));
+      const card = cards.find(item => item.dataset.id === button.dataset.interest);
+      if (card) button.setAttribute('aria-label', `${active ? 'Remover' : 'Adicionar'} ${productFor(card).name} ${active ? 'da' : 'à'} lista de interesse`);
     });
     if (interestCount) interestCount.textContent = interests.size;
     try { localStorage.setItem(storageKey, JSON.stringify([...interests])); } catch (_) { /* Fallback */ }
@@ -272,7 +363,6 @@
   let selectedColor = null;
   let selectedSize = null;
   let currentCard = null;
-  let bodyOverflow = '';
   let modalImgIdx = 0;
 
   function updateZapLink() {
@@ -280,7 +370,7 @@
     const phone = '5581994522504'; // WhatsApp oficial Olinda Aguiar
     const finishStr = selectedColor ? ` (Acabamento: ${selectedColor.name})` : '';
     const sizeStr = selectedSize ? ` (Dimensões: ${selectedSize})` : '';
-    const text = encodeURIComponent(`Olá Olinda! Gostaria de consultar detalhes da peça *${currentProduct.name}* [Código: ${currentProduct.id}]${finishStr}${sizeStr} vista na Loja Virtual.`);
+    const text = encodeURIComponent(`Olá Olinda! Gostaria de ${currentProduct.is_sold_out ? 'consultar uma peça semelhante a' : 'solicitar orçamento para'} *${currentProduct.name}* [Código: ${currentProduct.id}]${finishStr}${sizeStr}. Poderia informar disponibilidade, prazo e frete? Meu CEP é: `);
     modalZapLink.href = `https://api.whatsapp.com/send?phone=${phone}&text=${text}`;
   }
 
@@ -436,7 +526,7 @@
     if (modalInterestBtn) {
       modalInterestBtn.dataset.interest = currentProduct.id;
       const isInterested = interests.has(currentProduct.id);
-      if (modalInterestLabel) modalInterestLabel.textContent = isInterested ? 'Salvo na Lista' : 'Salvar no Interesse';
+      if (modalInterestLabel) modalInterestLabel.textContent = isInterested ? 'Salvo na lista de interesse' : 'Salvar na lista de interesse';
       modalInterestBtn.classList.toggle('active', isInterested);
     }
 
@@ -467,24 +557,23 @@
       }
     }
 
+    document.getElementById('modalAvailability').textContent = availabilityLabels[availability(currentProduct)];
+    modalZapLink.innerHTML = '<i class="ri-whatsapp-line" aria-hidden="true"></i> ' + (currentProduct.is_sold_out ? 'Consultar uma peça semelhante' : 'Solicitar orçamento no WhatsApp');
     updateZapLink();
     updateInterestButtons();
-    modal.classList.remove('hidden');
-    bodyOverflow = document.body.style.overflow;
-    document.body.style.overflow = 'hidden';
+    showDialog(modal, closeModal);
     modal.scrollTop = 0;
   }
 
   function closeModal() {
     if (!modal) return;
-    modal.classList.add('hidden');
-    document.body.style.overflow = bodyOverflow;
+    hideDialog(modal);
     applyFilters();
   }
 
   // Delegação de cliques para abrir modal (ignora tags, compartilhamento e carrossel)
   document.addEventListener('click', e => {
-    if (e.target.closest('[data-interest], [data-share-product], .store-card-carousel-nav, .store-card-carousel-dots, [data-card-tag], .store-card-tags')) return;
+    if (e.target.closest('[data-interest], [data-share-product], .store-card-carousel-nav, .store-card-carousel-dots, [data-card-tag], .store-card-tags, [data-admin-edit]')) return;
     const trigger = e.target.closest('[data-open-modal]');
     if (trigger) {
       const card = trigger.closest('.store-product-card');
@@ -507,9 +596,7 @@
     modal.addEventListener('click', e => {
       if (e.target === modal) closeModal();
     });
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape' && !modal.classList.contains('hidden')) closeModal();
-    });
+
   }
 
   if (modalInterestBtn) {
@@ -519,7 +606,7 @@
       interests.has(id) ? interests.delete(id) : interests.add(id);
       updateInterestButtons();
       const isInterested = interests.has(id);
-      if (modalInterestLabel) modalInterestLabel.textContent = isInterested ? 'Salvo na Lista' : 'Salvar no Interesse';
+      if (modalInterestLabel) modalInterestLabel.textContent = isInterested ? 'Salvo na lista de interesse' : 'Salvar na lista de interesse';
       modalInterestBtn.classList.toggle('active', isInterested);
     });
   }
@@ -558,26 +645,19 @@
         priceSliderDisplay.textContent = 'Todos os valores';
       } else {
         const minStr = isAllMin ? 'R$ 0' : money(minVal);
-        const maxStr = isAllMax ? 'R$ 10.000+' : money(maxVal);
+        const maxStr = isAllMax ? 'sem limite máximo' : money(maxVal);
         priceSliderDisplay.textContent = `${minStr} — ${maxStr}`;
       }
     }
 
-    if (priceSliderBadge) {
-      if (isAllMin && isAllMax) {
-        priceSliderBadge.textContent = 'Todos os valores';
-      } else {
-        const minBadgeStr = isAllMin ? 'R$ 0' : money(minVal);
-        const maxBadgeStr = isAllMax ? 'R$ 10k+' : money(maxVal);
-        priceSliderBadge.textContent = `${minBadgeStr} a ${maxBadgeStr}`;
-      }
-    }
-
+    sliderMin.setAttribute('aria-valuetext', money(minVal));
+    sliderMax.setAttribute('aria-valuetext', isAllMax ? 'Sem limite máximo' : money(maxVal));
     priceChips.forEach(btn => {
       const chipMin = Number(btn.dataset.chipMin);
       const chipMax = Number(btn.dataset.chipMax);
       const isCurrent = minVal === chipMin && maxVal === chipMax;
       btn.classList.toggle('active', isCurrent);
+      btn.setAttribute('aria-pressed', String(isCurrent));
     });
   }
 
@@ -605,11 +685,11 @@
     });
   });
 
-  document.querySelectorAll('input[name="wood"], .category-filter').forEach(input => {
-    input.addEventListener('change', applyFilters);
+  document.querySelectorAll('input[name="wood"], input[name="availability"], .category-filter').forEach(input => {
+    input.addEventListener('change', () => applyFilters());
   });
-  if (search) search.addEventListener('input', applyFilters);
-  if (sort) sort.addEventListener('change', applyFilters);
+  if (search) search.addEventListener('input', () => applyFilters());
+  if (sort) sort.addEventListener('change', () => applyFilters());
 
   document.querySelectorAll('[data-quick-filter]').forEach(button => {
     button.addEventListener('click', () => {
@@ -641,7 +721,7 @@
       tagGroupBtns.forEach(b => {
         const isCurrent = b === btn;
         b.classList.toggle('active', isCurrent);
-        b.setAttribute('aria-selected', String(isCurrent));
+        b.setAttribute('aria-pressed', String(isCurrent));
       });
       tagPills.forEach(pill => {
         const matchesGroup = grp === 'all' || pill.dataset.tagGroup === grp;
@@ -663,10 +743,10 @@
     });
   }
 
-  const clearBtn = document.getElementById('clearStoreFilters');
   if (clearBtn) {
     clearBtn.addEventListener('click', () => {
       activeTag = null;
+      document.querySelector('input[name="availability"][value="all"]').checked = true;
       if (sliderMin && sliderMax) {
         sliderMin.value = minPriceCeiling;
         sliderMax.value = maxPriceCeiling;
@@ -683,14 +763,19 @@
     });
   }
 
+  document.getElementById('clearEmptyFilters')?.addEventListener('click', () => { clearBtn?.click(); search?.focus(); });
   const filterPanel = document.querySelector('.store-filter-panel');
   const mobileFilterToggle = document.getElementById('storeMobileFilterToggle');
   if (filterPanel && mobileFilterToggle) {
-    if (window.matchMedia('(max-width: 800px)').matches) filterPanel.classList.add('filters-collapsed');
-    mobileFilterToggle.addEventListener('click', () => {
-      const collapsed = filterPanel.classList.toggle('filters-collapsed');
-      mobileFilterToggle.textContent = collapsed ? 'Abrir' : 'Fechar';
-    });
+    const breakpoint = window.matchMedia('(max-width: 768px)');
+    function setCollapsed(collapsed) {
+      filterPanel.classList.toggle('filters-collapsed', collapsed);
+      mobileFilterToggle.setAttribute('aria-expanded', String(!collapsed));
+      mobileFilterToggle.textContent = collapsed ? 'Filtrar' : 'Fechar filtros';
+    }
+    setCollapsed(breakpoint.matches);
+    breakpoint.addEventListener('change', event => setCollapsed(event.matches));
+    mobileFilterToggle.addEventListener('click', () => setCollapsed(!filterPanel.classList.contains('filters-collapsed')));
   }
 
   // -------------------------------------------------------------
@@ -733,7 +818,7 @@
       await navigator.clipboard.writeText(url.href);
       showShareFeedback(button, '✓ Link Copiado!');
     } catch (_) {
-      showShareFeedback(button, 'Link copiado!');
+      window.prompt('Copie o link desta peça:', url.href);
     }
   }
 
@@ -759,22 +844,6 @@
     shareProduct(currentCard, event.currentTarget);
   });
 
-  // Deep linking: abre produto solicitado na URL ou aplica filtro por tag
-  const requested = new URLSearchParams(window.location.search);
-  const requestedTag = requested.get('tag');
-  if (requestedTag) {
-    setActiveTag(requestedTag, false);
-  }
-  const requestedId = requested.get('produto');
-  if (requestedId) {
-    const linkedCard = cards.find(card => card.dataset.id === requestedId);
-    if (linkedCard) {
-      activateColor(linkedCard, requested.get('acabamento'));
-      linkedCard.scrollIntoView({block: 'center'});
-      openModalForProduct(linkedCard);
-    }
-  }
-
   // -------------------------------------------------------------
   // 6. MODAL DA LISTA DE DESEJOS / INTERESSES
   // -------------------------------------------------------------
@@ -792,7 +861,7 @@
       wishlistContainer.innerHTML = `
         <div class="text-center py-4 text-muted">
           <i class="ri-heart-line fs-32 text-secondary d-block mb-2"></i>
-          <p>Sua lista de interesses está vazia no momento.<br>Clique no coração das peças que você mais gostar!</p>
+          <p>Sua lista de interesse está vazia no momento.<br>Clique no coração das peças que você mais gostar!</p>
         </div>
       `;
       if (sendWishlistZapBtn) sendWishlistZapBtn.style.display = 'none';
@@ -802,14 +871,16 @@
         const card = cards.find(c => c.dataset.id === id);
         if (card) {
           const prod = productFor(card);
-          messageLines.push(`- *${prod.name}* [${prod.id}] - ${money(prod.price)}`);
+          const color = prod.colors?.find(item => item.id === card.dataset.selectedColor);
+          const price = color?.price ?? prod.price;
+          messageLines.push(`- *${prod.name}* [${prod.id}]${color ? ` • ${color.name}` : ''} - ${money(price)}`);
           const item = document.createElement('div');
           item.className = 'wishlist-item';
           item.innerHTML = `
             ${prod.image ? `<img src="/static/images/${prod.image}" alt="${prod.name}">` : `<div class="wishlist-item-icon">${prod.icon || '🪵'}</div>`}
             <div class="flex-grow-1">
               <strong class="d-block text-dark">${prod.name}</strong>
-              <small class="text-secondary">${prod.category} • ${money(prod.price)}</small>
+              <small class="text-secondary">${prod.category} • ${money(price)}</small>
             </div>
             <button type="button" class="btn btn-sm btn-outline-danger rounded-circle p-1" data-remove-wishlist="${prod.id}" title="Remover">
               <i class="ri-delete-bin-line"></i>
@@ -831,22 +902,21 @@
           interests.delete(id);
           updateInterestButtons();
           openWishlist();
+          (wishlistContainer.querySelector('button') || closeWishlistBtn).focus();
         });
       });
     }
 
-    wishlistModal.classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
+    showDialog(wishlistModal, closeWishlist);
   }
 
   function closeWishlist() {
     if (!wishlistModal) return;
-    wishlistModal.classList.add('hidden');
-    document.body.style.overflow = '';
+    hideDialog(wishlistModal);
   }
 
   if (openWishlistBtn) openWishlistBtn.addEventListener('click', openWishlist);
-  if (interestCount) interestCount.closest('div')?.addEventListener('click', openWishlist);
+  document.getElementById('openWishlistMetric')?.addEventListener('click', openWishlist);
   if (closeWishlistBtn) closeWishlistBtn.addEventListener('click', closeWishlist);
   if (wishlistModal) {
     wishlistModal.addEventListener('click', e => {
@@ -905,14 +975,12 @@
       modal.classList.add('hidden');
     }
 
-    adminEditModal.classList.remove('hidden');
-    document.body.style.overflow = 'hidden';
+    showDialog(adminEditModal, closeAdminEditModal);
   }
 
   function closeAdminEditModal() {
     if (!adminEditModal) return;
-    adminEditModal.classList.add('hidden');
-    document.body.style.overflow = '';
+    hideDialog(adminEditModal);
   }
 
   if (closeAdminEditModalBtn) closeAdminEditModalBtn.addEventListener('click', closeAdminEditModal);
@@ -995,6 +1063,7 @@
         card.dataset.category = updated.category || '';
         card.dataset.price = updated.price;
         card.dataset.tags = (updated.tags || []).join(',');
+        card.querySelector('.store-stock-status').textContent = availabilityLabels[availability(updated)];
 
         const titleEl = card.querySelector('.card-title-clickable');
         if (titleEl) titleEl.textContent = updated.name;
@@ -1065,6 +1134,19 @@
     }
   };
 
+  interests = new Set([...interests].filter(id => cards.some(card => card.dataset.id === id)));
   updateInterestButtons();
-  applyFilters();
+  restoreFilters();
+  window.addEventListener('popstate', restoreFilters);
+  const requested = new URLSearchParams(window.location.search);
+  const requestedId = requested.get('produto');
+  if (requestedId) {
+    const linkedCard = cards.find(card => card.dataset.id === requestedId);
+    if (linkedCard) {
+      activateColor(linkedCard, requested.get('acabamento'));
+      linkedCard.scrollIntoView({block: 'center'});
+      openModalForProduct(linkedCard);
+    }
+  }
+
 })();

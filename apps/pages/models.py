@@ -1,6 +1,7 @@
 from apps import db
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import datetime, timezone, date, timedelta
+import json
 
 class User(db.Model):
     __tablename__ = 'users'
@@ -204,6 +205,65 @@ class ClientReview(db.Model):
         return f'<ClientReview {self.client_name}>'
 
 
+class BlogArticle(db.Model):
+    __tablename__ = 'blog_articles'
+
+    id = db.Column(db.Integer, primary_key=True)
+    slug = db.Column(db.String(180), unique=True, nullable=False, index=True)
+    title = db.Column(db.String(200), nullable=False)
+    category = db.Column(db.String(80), nullable=False)
+    author_name = db.Column(db.String(100), nullable=False)
+    author_role = db.Column(db.String(120), nullable=False)
+    author_avatar = db.Column(db.String(200), nullable=False)
+    read_time = db.Column(db.String(40), nullable=False)
+    cover_image = db.Column(db.String(200), nullable=False)
+    excerpt = db.Column(db.Text, nullable=False)
+    quote = db.Column(db.Text, nullable=False, default='')
+    content_json = db.Column(db.Text, nullable=False, default='[]')
+    gallery_json = db.Column(db.Text, nullable=False, default='[]')
+    active = db.Column(db.Boolean, nullable=False, default=True)
+    published_at = db.Column(db.DateTime, nullable=False, default=lambda: datetime.now(timezone.utc))
+    edited_at = db.Column(db.DateTime, nullable=True)
+    created_at = db.Column(db.DateTime, nullable=False, default=lambda: datetime.now(timezone.utc))
+    updated_at = db.Column(db.DateTime, nullable=False, default=lambda: datetime.now(timezone.utc),
+                           onupdate=lambda: datetime.now(timezone.utc))
+
+    @staticmethod
+    def _json_list(value):
+        try:
+            parsed = json.loads(value or '[]')
+        except (TypeError, ValueError):
+            return []
+        return parsed if isinstance(parsed, list) else []
+
+    def to_public_dict(self):
+        months = ('Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+                  'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro')
+        published = self.published_at or self.created_at or datetime.now(timezone.utc)
+        edited = self.edited_at
+        format_date = lambda value: f'{value.day} de {months[value.month - 1]}, {value.year}'
+        return {
+            'id': self.id,
+            'slug': self.slug,
+            'title': self.title,
+            'category': self.category,
+            'author_name': self.author_name,
+            'author_role': self.author_role,
+            'author_avatar': self.author_avatar,
+            'date': format_date(published),
+            'published_date': published.strftime('%Y-%m-%d'),
+            'edited_date': format_date(edited) if edited else '',
+            'is_edited': bool(edited),
+            'display_date': format_date(edited or published),
+            'read_time': self.read_time,
+            'cover_image': self.cover_image,
+            'excerpt': self.excerpt,
+            'quote': self.quote or self.excerpt,
+            'content_paragraphs': self._json_list(self.content_json),
+            'gallery': self._json_list(self.gallery_json),
+        }
+
+
 class WoodworkOrder(db.Model):
     __tablename__ = 'woodwork_orders'
 
@@ -343,5 +403,3 @@ class WoodworkOrder(db.Model):
 
     def __repr__(self):
         return f'<WoodworkOrder {self.order_number} - {self.client_name}>'
-
-

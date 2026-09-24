@@ -5,17 +5,20 @@
     <meta charset="utf-8"/>
     <title>{% block title %}Olinda Arte em Madeira | Peças Únicas em Madeira de Demolição{% endblock title %}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Olinda Arte em Madeira — Peças únicas e sustentáveis em madeira de demolição. Ateliê e galeria colonial liderados por Olinda Aguiar em Olinda - PE."/>
+    <meta name="description" content="{% block meta_description %}Olinda Arte em Madeira — Peças únicas e sustentáveis em madeira de demolição. Ateliê e galeria colonial liderados por Olinda Aguiar em Olinda - PE.{% endblock %}"/>
     <meta name="author" content="Olinda Arte em Madeira"/>
     <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <!-- Open Graph / Social Media Preview -->
-    <meta property="og:type" content="website"/>
-    <meta property="og:title" content="Olinda Arte em Madeira | Peças Únicas em Madeira de Demolição"/>
-    <meta property="og:description" content="Peças únicas, sustentáveis e mobiliário autoral em madeira de demolição. Ateliê colonial no Carmo, Olinda - PE."/>
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}"/>
+    <meta property="og:title" content="{{ self.title()|striptags|trim }}"/>
+    <meta property="og:description" content="{{ self.meta_description()|striptags|trim }}"/>
     <meta property="og:site_name" content="Olinda Arte em Madeira"/>
-    <meta property="og:image" content="{{ config.ASSETS_ROOT }}/images/logo_fundo_preto.png"/>
+    <meta property="og:image" content="{% block og_image %}{{ url_for('static', filename='images/logo_fundo_preto.png', _external=True) }}{% endblock %}"/>
+
+    <meta property="og:url" content="{{ request.base_url }}">
+    <link rel="canonical" href="{{ request.base_url }}">
 
     <!-- Favicon & Icons -->
     <link rel="shortcut icon" href="{{ config.ASSETS_ROOT }}/images/logo-icon-wood.png" type="image/png">

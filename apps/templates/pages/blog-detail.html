@@ -1,10 +1,13 @@
 {% extends 'layouts/base.html' %}
 
-{% block title %}{{ article.title }} | Blog Details | Olinda Arte em Madeira{% endblock title %}
+{% block title %}{{ article.title }} | Blog | Olinda Arte em Madeira{% endblock title %}
 
 {% block html_attribute %}data-bs-theme="light"{% endblock html_attribute %}
 {% block body_attribute %}class="landing-page bg-light text-dark"{% endblock body_attribute %}
 
+{% block meta_description %}{{ article.excerpt }}{% endblock %}
+{% block og_type %}article{% endblock %}
+{% block og_image %}{{ url_for('static', filename='images/' ~ article.cover_image, _external=True) }}{% endblock %}
 {% block content %}
 <style>
     .landing-page { --landing-accent:#c85a17;--landing-accent-rgb:200,90,23;--landing-accent-soft:#ffedd5; }
@@ -29,6 +32,34 @@
     .blog-detail-meta-item strong {
         font-size: 0.92rem;
         color: #1e293b;
+    }
+    .blog-detail-meta-grid {
+        display:grid;
+        grid-template-columns:repeat(3,minmax(0,1fr));
+        gap:10px;
+        margin:18px 0 8px;
+    }
+    .blog-detail-meta-item {
+        min-width:0;
+        padding:12px 14px;
+        border:1px solid #e9edf2;
+        border-radius:11px;
+        background:#fbfcfd;
+        text-align:left;
+    }
+    .blog-detail-edit-btn {
+        min-height:40px;
+        display:inline-flex;
+        align-items:center;
+        gap:7px;
+        border:1px solid rgba(var(--landing-accent-rgb),.35);
+        border-radius:999px;
+        padding:8px 14px;
+        color:var(--landing-accent);
+        background:#fffaf5;
+        font-size:.78rem;
+        font-weight:800;
+        text-decoration:none;
     }
     .blog-detail-quote-box {
         background: #fffaf5;
@@ -59,8 +90,8 @@
         border: 0;
         border-radius: 16px;
         box-shadow: 0 4px 20px rgba(0,0,0,0.04);
-        padding: 24px;
-        margin-bottom: 24px;
+        padding: 20px;
+        margin-bottom: 16px;
     }
     .blog-detail-sidebar-title {
         font-size: 0.95rem;
@@ -93,20 +124,31 @@
         background: var(--landing-accent);
         color: #ffffff;
     }
-    .blog-sidebar-insta-grid {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 8px;
+    .blog-instagram-profile {
+        display:flex;
+        align-items:center;
+        gap:12px;
+        padding:12px;
+        border:1px solid #eadfda;
+        border-radius:12px;
+        background:#fffaf7;
     }
-    .blog-sidebar-insta-img {
-        width: 100%;
-        height: 72px;
-        object-fit: cover;
-        border-radius: 8px;
-        transition: transform 0.2s ease;
+    .blog-instagram-mark {
+        width:44px;
+        height:44px;
+        display:grid;
+        place-items:center;
+        flex:0 0 auto;
+        border-radius:13px;
+        color:#fff;
+        font-size:1.35rem;
+        background:linear-gradient(135deg,#833ab4,#fd1d1d,#fcb045);
     }
-    .blog-sidebar-insta-img:hover {
-        transform: scale(1.05);
+    .blog-instagram-profile strong { display:block;color:#172033;font-size:.82rem; }
+    .blog-instagram-profile span { display:block;color:#6b7280;font-size:.72rem;line-height:1.4; }
+    .blog-instagram-link {
+        display:flex;justify-content:center;margin-top:10px;padding:9px 12px;border-radius:999px;
+        background:#172033;color:#fff;text-decoration:none;font-size:.76rem;font-weight:800;
     }
 
     .site-footer { background:#f8fafc;color:#475569; }
@@ -122,6 +164,13 @@
     html[data-bs-theme="dark"] .blog-detail-sidebar-card { background-color:#111827!important;color:#dbe6f3!important;border-color:#263449!important; }
     html[data-bs-theme="dark"] .blog-detail-quote-box { background:#1e1b18!important; color:#e2e8f0!important; }
     html[data-bs-theme="dark"] .blog-sidebar-tag-pill { background:#1e293b; color:#cbd5e1; }
+    html[data-bs-theme="dark"] .blog-detail-meta-item { background:#0f172a;border-color:#2a394e; }
+    html[data-bs-theme="dark"] .blog-detail-meta-item strong,
+    html[data-bs-theme="dark"] .blog-instagram-profile strong { color:#edf4fc; }
+    html[data-bs-theme="dark"] .blog-instagram-profile { background:#171f2e;border-color:#334155; }
+    @media (max-width:575.98px) {
+        .blog-detail-meta-grid { grid-template-columns:1fr; }
+    }
 </style>
 
 <!-- Floating WhatsApp Button -->
@@ -138,15 +187,21 @@
 <main class="py-4 bg-light">
     <div class="container">
 
-        <!-- CABEÇALHO & BREADCRUMB MINIA -->
-        <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom border-light-subtle">
-            <h1 class="h4 fw-extrabold text-dark m-0">Blog Details</h1>
-            <nav aria-label="breadcrumb">
+        <div class="d-flex justify-content-between align-items-center gap-3 mb-4 pb-2 border-bottom border-light-subtle">
+            <h1 class="h4 fw-extrabold text-dark m-0">Histórias do ateliê</h1>
+            <div class="d-flex align-items-center gap-3">
+            {% if is_admin %}
+            <a href="/blog/{{ article.id }}/editar" class="blog-detail-edit-btn">
+                <i class="ri-edit-line" aria-hidden="true"></i> Editar artigo
+            </a>
+            {% endif %}
+            <nav aria-label="Navegação estrutural">
                 <ol class="breadcrumb m-0 fs-13">
                     <li class="breadcrumb-item"><a href="/blog" class="text-decoration-none text-muted">Blog</a></li>
-                    <li class="breadcrumb-item active text-dark fw-bold" aria-current="page">Blog Details</li>
+                    <li class="breadcrumb-item active text-dark fw-bold" aria-current="page">Artigo</li>
                 </ol>
             </nav>
+            </div>
         </div>
 
         <!-- ESTRUTURA PRINCIPAL DE 2 COLUNAS (MODELO MINIA APPS-BLOG-DETAIL.HTML) -->
@@ -166,18 +221,17 @@
                         <img src="{{ config.ASSETS_ROOT }}/images/{{ article.cover_image }}" class="img-fluid rounded-4 w-100" style="max-height: 480px; object-fit: cover;" alt="{{ article.title }}">
                     </div>
 
-                    <!-- BARRA DE METADADOS (CATEGORIES | DATE | POST BY) -->
-                    <div class="row text-center py-3 my-2 border-top border-bottom border-light-subtle">
-                        <div class="col-4 blog-detail-meta-item">
-                            <small>Categories</small>
+                    <div class="blog-detail-meta-grid" aria-label="Informações do artigo">
+                        <div class="blog-detail-meta-item">
+                            <small>Categoria</small>
                             <strong>{{ article.category }}</strong>
                         </div>
-                        <div class="col-4 blog-detail-meta-item border-start border-end border-light-subtle">
-                            <small>Date</small>
-                            <strong>{{ article.date }}</strong>
+                        <div class="blog-detail-meta-item">
+                            <small>{{ 'Editado em' if article.is_edited else 'Postado em' }}</small>
+                            <strong>{{ article.display_date }}</strong>
                         </div>
-                        <div class="col-4 blog-detail-meta-item">
-                            <small>Post by</small>
+                        <div class="blog-detail-meta-item">
+                            <small>Autoria</small>
                             <strong>{{ article.author_name }}</strong>
                         </div>
                     </div>
@@ -437,6 +491,11 @@
 
         </div>
     </div>
+<section class="container py-4"><div class="card p-4 rounded-4">
+<h2 class="h4">Leve essa inspiração para seu ambiente</h2>
+<p>Explore as peças e os acabamentos disponíveis no catálogo do ateliê.</p>
+<a class="btn btn-primary align-self-start" href="/loja">Conhecer as peças</a>
+</div></section>
 </main>
 
 {% include 'partials/public-footer.html' %}

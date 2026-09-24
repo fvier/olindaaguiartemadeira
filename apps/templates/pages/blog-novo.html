@@ -1,6 +1,6 @@
 {% extends 'layouts/base.html' %}
 
-{% block title %}Criar Novo Post do Blog | Olinda Arte em Madeira{% endblock title %}
+{% block title %}{{ 'Editar artigo' if editing else 'Novo artigo' }} | Olinda Arte em Madeira{% endblock title %}
 
 {% block html_attribute %}data-bs-theme="light"{% endblock html_attribute %}
 {% block body_attribute %}class="landing-page bg-light text-dark"{% endblock body_attribute %}
@@ -8,15 +8,101 @@
 {% block content %}
 <style>
     .landing-page { --landing-accent:#c85a17;--landing-accent-rgb:200,90,23;--landing-accent-soft:#ffedd5; }
-    .hover-terracotta { transition: color 0.15s ease; }
-    .hover-terracotta:hover { color: #c85a17 !important; }
     .landing-page .text-primary { color:var(--landing-accent)!important; }
-    .landing-page .bg-primary { background-color:var(--landing-accent)!important; }
-    .landing-page .bg-primary-subtle { background-color:var(--landing-accent-soft)!important; }
-    .landing-page .btn-primary { --bs-btn-bg:var(--landing-accent);--bs-btn-border-color:var(--landing-accent);--bs-btn-hover-bg:var(--landing-accent);--bs-btn-hover-border-color:var(--landing-accent); }
-    .hover-lift { transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease; }
-    .hover-lift:hover { transform: translateY(-4px); box-shadow: 0 16px 36px rgba(15, 23, 42, 0.14) !important; }
-
+    .landing-page .btn-primary {
+        --bs-btn-bg:var(--landing-accent);
+        --bs-btn-border-color:var(--landing-accent);
+        --bs-btn-hover-bg:#a74713;
+        --bs-btn-hover-border-color:#a74713;
+    }
+    .editor-page { min-height:70vh; padding:22px 0 40px; }
+    .editor-shell { max-width:1180px; }
+    .editor-heading {
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:18px;
+        padding:11px 13px;
+        margin-bottom:16px;
+        border:1px solid #e5eaf0;
+        border-radius:14px;
+        background:#fff;
+        box-shadow:0 4px 16px rgba(15,23,42,.04);
+    }
+    .editor-heading-main { display:flex;align-items:center;gap:12px;min-width:0; }
+    .editor-back {
+        width:38px;height:38px;display:grid;place-items:center;flex:0 0 auto;
+        border:1px solid #dbe3ec;border-radius:50%;background:#fff;color:#475569;
+        text-decoration:none;
+    }
+    .editor-heading h1 { margin:0;color:#172033;font-size:1.35rem;line-height:1.2; }
+    .editor-heading p { margin:3px 0 0;color:#64748b;font-size:.82rem; }
+    .editor-status {
+        display:inline-flex;align-items:center;gap:6px;flex:0 0 auto;
+        padding:6px 10px;border-radius:999px;background:#ecfdf5;color:#087451;
+        font-size:.72rem;font-weight:800;
+    }
+    .editor-grid { display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:18px;align-items:start; }
+    .editor-panel {
+        overflow:hidden;border:1px solid #e5eaf0;border-radius:16px;
+        background:#fff;box-shadow:0 6px 22px rgba(15,23,42,.05);
+    }
+    .editor-section { padding:20px 22px;border-bottom:1px solid #eef2f6; }
+    .editor-section:last-of-type { border-bottom:0; }
+    .editor-section-title { display:flex;align-items:flex-start;gap:10px;margin-bottom:16px; }
+    .editor-section-number {
+        width:25px;height:25px;display:grid;place-items:center;flex:0 0 auto;
+        border-radius:8px;background:var(--landing-accent-soft);color:var(--landing-accent);
+        font-size:.72rem;font-weight:900;
+    }
+    .editor-section-title h2 { margin:0;color:#253047;font-size:.92rem; }
+    .editor-section-title p { margin:2px 0 0;color:#7a889b;font-size:.75rem; }
+    .editor-page .form-label { margin-bottom:6px;color:#344054;font-size:.78rem;font-weight:800; }
+    .editor-page .form-control,
+    .editor-page .form-select {
+        min-height:42px;border-color:#dbe3ec;border-radius:9px;color:#27364d;font-size:.84rem;
+    }
+    .editor-page textarea.form-control { min-height:auto;line-height:1.6;resize:vertical; }
+    .editor-page .form-control:focus,
+    .editor-page .form-select:focus {
+        border-color:var(--landing-accent);
+        box-shadow:0 0 0 3px rgba(var(--landing-accent-rgb),.12);
+    }
+    .editor-page .is-invalid { border-color:#dc3545; }
+    .editor-page .invalid-feedback { display:block;font-size:.72rem; }
+    .field-meta { display:flex;justify-content:space-between;gap:10px;margin-top:5px;color:#8491a3;font-size:.7rem; }
+    .editor-actions {
+        display:flex;align-items:center;justify-content:space-between;gap:12px;
+        padding:16px 22px;background:#fbfcfd;
+    }
+    .editor-actions .btn { min-height:42px; }
+    .editor-preview { position:sticky;top:18px; }
+    .preview-label {
+        display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;
+        color:#64748b;font-size:.72rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em;
+    }
+    .preview-card {
+        overflow:hidden;border:1px solid #e4eaf1;border-radius:15px;background:#fff;
+        box-shadow:0 8px 25px rgba(15,23,42,.07);
+    }
+    .preview-cover { width:100%;height:185px;display:block;object-fit:cover;background:#eef2f7; }
+    .preview-body { padding:16px; }
+    .preview-meta { display:flex;justify-content:space-between;gap:8px;margin-bottom:8px;color:#7a889b;font-size:.68rem; }
+    .preview-category { color:var(--landing-accent);font-weight:900;text-transform:uppercase;letter-spacing:.04em; }
+    .preview-title { margin:0 0 7px;color:#182337;font-size:1.02rem;line-height:1.25; }
+    .preview-excerpt {
+        display:-webkit-box;overflow:hidden;margin:0 0 13px;color:#64748b;font-size:.78rem;line-height:1.5;
+        -webkit-box-orient:vertical;-webkit-line-clamp:3;
+    }
+    .preview-author { display:flex;align-items:center;gap:8px;padding-top:11px;border-top:1px solid #eef2f6; }
+    .preview-author img { width:32px;height:32px;border-radius:50%;object-fit:cover; }
+    .preview-author strong { display:block;color:#253047;font-size:.75rem; }
+    .preview-author small { color:#8491a3;font-size:.67rem; }
+    .editor-note {
+        margin-top:12px;padding:12px 13px;border:1px solid #f3dfce;border-radius:12px;
+        background:#fffaf5;color:#76513d;font-size:.73rem;line-height:1.5;
+    }
+    .editor-note strong { color:#8f3f11; }
     .site-footer { background:#f8fafc;color:#475569; }
     .site-footer h5,.site-footer h6 { color:#0f172a;font-weight:800; }
     .site-footer a { color:#475569;transition:color .2s ease; }
@@ -24,139 +110,255 @@
     .footer-contact-item { display:flex;align-items:flex-start;gap:10px;padding:9px 0; }
     .footer-contact-icon { width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--landing-accent-soft);color:var(--landing-accent);flex:0 0 auto; }
     .footer-app-link { width:38px;height:38px;border-radius:11px;display:inline-grid;place-items:center;background:#fff;border:1px solid #dbe3ef;color:#0f172a!important; }
-
+    .editor-page :focus-visible { outline:3px solid #9b4311;outline-offset:3px; }
     html[data-bs-theme="dark"] body.landing-page { background:#080e1a!important;color:#e5edf8!important; }
-    html[data-bs-theme="dark"] .landing-page .card { background-color:#111827!important;color:#dbe6f3!important;border-color:#263449!important; }
+    html[data-bs-theme="dark"] .editor-panel,
+    html[data-bs-theme="dark"] .preview-card,
+    html[data-bs-theme="dark"] .editor-heading { background:#111827;border-color:#2a394e; }
+    html[data-bs-theme="dark"] .editor-heading h1,
+    html[data-bs-theme="dark"] .editor-section-title h2,
+    html[data-bs-theme="dark"] .preview-title { color:#edf4fc; }
+    html[data-bs-theme="dark"] .editor-page .form-label { color:#dbe6f3; }
+    html[data-bs-theme="dark"] .editor-page .form-control,
+    html[data-bs-theme="dark"] .editor-page .form-select { background:#0f172a;border-color:#334155;color:#e2e8f0; }
+    html[data-bs-theme="dark"] .editor-actions { background:#0d1524; }
+    @media (max-width:991.98px) {
+        .editor-grid { grid-template-columns:1fr; }
+        .editor-preview { position:static;display:grid;grid-template-columns:minmax(0,340px) 1fr;gap:12px;align-items:start; }
+        .preview-label { grid-column:1 / -1;margin:0; }
+        .editor-note { margin-top:0; }
+    }
+    @media (max-width:575.98px) {
+        .editor-page { padding:14px 0 28px; }
+        .editor-heading { align-items:flex-start; }
+        .editor-heading h1 { font-size:1.12rem; }
+        .editor-heading p,.editor-status { display:none; }
+        .editor-section { padding:17px 15px; }
+        .editor-actions { align-items:stretch;flex-direction:column-reverse;padding:14px 15px; }
+        .editor-actions .btn { width:100%;justify-content:center; }
+        .editor-preview { display:block; }
+        .preview-label { margin-bottom:8px; }
+        .editor-note { margin-top:10px; }
+    }
 </style>
 
-<!-- Floating WhatsApp Button -->
-<a href="https://api.whatsapp.com/send?phone=5581994522504&text=Ol%C3%A1!%20Estou%20na%20p%C3%A1gina%20de%20cria%C3%A7%C3%A3o%20de%20post."
-   target="_blank" rel="noopener noreferrer"
-   class="position-fixed floating-whatsapp-btn z-3 btn btn-success rounded-circle shadow-lg d-flex align-items-center justify-content-center border-0 hover-lift"
-   style="bottom: 24px; right: 24px; width: 56px; height: 56px; background-color: #25d366;" title="Falar no WhatsApp com Olinda Aguiar">
-    <i class="ri-whatsapp-fill fs-28 text-white"></i>
-</a>
-
-{% include 'partials/public-reviews-bar.html' %}
 {% include 'partials/public-navbar.html' %}
 
-<main class="py-4 bg-light">
-    <div class="container" style="max-width: 920px;">
-
-        <!-- CABEÇALHO & BREADCRUMB MINIA -->
-        <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom border-light-subtle">
-            <div>
-                <span class="badge px-3 py-1.5 rounded-pill fw-bold text-uppercase mb-1" style="background:#ffedd5;color:#c85a17;font-size:11px;">🛠️ Painel de Conteúdo do Administrador</span>
-                <h1 class="h3 fw-extrabold text-dark m-0">Criar Novo Post no Blog</h1>
-            </div>
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb m-0 fs-13">
-                    <li class="breadcrumb-item"><a href="/blog" class="text-decoration-none text-muted">Blog</a></li>
-                    <li class="breadcrumb-item active text-dark fw-bold" aria-current="page">Novo Post</li>
-                </ol>
-            </nav>
-        </div>
-
-        <!-- CARD PRINCIPAL DO FORMULÁRIO EM PÁGINA DEDICADA -->
-        <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white mb-5">
-            <div class="d-flex align-items-center gap-3 mb-4 pb-3 border-bottom border-light-subtle">
-                <span class="rounded-circle d-flex align-items-center justify-content-center text-white flex-shrink-0" style="width: 44px; height: 44px; background: #c85a17; font-size: 20px;">
-                    <i class="ri-article-line"></i>
-                </span>
+<main class="editor-page bg-light">
+    <div class="container editor-shell">
+        <header class="editor-heading">
+            <div class="editor-heading-main">
+                <a href="{{ '/blog/' ~ article_id if editing else '/blog' }}" class="editor-back" aria-label="Voltar"><i class="ri-arrow-left-line"></i></a>
                 <div>
-                    <h5 class="fw-bold text-dark m-0">Publicação de Artigo Autoral</h5>
-                    <small class="text-muted fs-13">Preencha as informações do novo artigo. Ao publicar, ele se tornará uma página dedicada no catálogo de histórias.</small>
+                    <h1>{{ 'Editar artigo' if editing else 'Novo artigo' }}</h1>
+                    <p>{{ 'Atualize o conteúdo e revise a prévia antes de salvar.' if editing else 'Escreva, revise a prévia e publique no blog do ateliê.' }}</p>
                 </div>
             </div>
+            <span class="editor-status"><i class="ri-database-2-line" aria-hidden="true"></i> {{ 'Edição permanente' if editing else 'Salvo permanentemente' }}</span>
+        </header>
 
-            <form action="/blog/novo" method="post">
-                <input type="hidden" name="csrf_token" value="{{ csrf_token() if csrf_token else '' }}">
-
-                <div class="row g-3.5">
-                    
-                    <!-- Título do Artigo -->
-                    <div class="col-12">
-                        <label class="form-label fw-bold text-dark fs-14">Título Principal da Postagem *</label>
-                        <input type="text" name="title" class="form-control form-control-lg rounded-3 fs-15" placeholder="Ex: O Resgate das Madeiras Centenárias: Vida Nova no Ateliê" required>
-                    </div>
-
-                    <!-- Categoria e Tempo de Leitura -->
-                    <div class="col-md-6">
-                        <label class="form-label fw-bold text-dark fs-14">Categoria / Tema *</label>
-                        <select name="category" class="form-select rounded-3 fs-14" required>
-                            <option value="Sustentabilidade">Sustentabilidade & Madeira</option>
-                            <option value="Técnicas Artesanais">Técnicas Artesanais</option>
-                            <option value="Projetos Autorais">Projetos Autorais</option>
-                            <option value="Marcenaria Colonial">Marcenaria Colonial</option>
-                            <option value="Liderança & Propósito">Liderança & Propósito</option>
-                            <option value="Acabamentos & Ceras">Acabamentos & Ceras</option>
-                        </select>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label class="form-label fw-bold text-dark fs-14">Tempo de Leitura *</label>
-                        <input type="text" name="read_time" class="form-control rounded-3 fs-14" placeholder="Ex: 5 min de leitura" value="5 min de leitura" required>
-                    </div>
-
-                    <!-- Autor e Função -->
-                    <div class="col-md-6">
-                        <label class="form-label fw-bold text-dark fs-14">Autor do Artigo *</label>
-                        <select name="author_name" class="form-select rounded-3 fs-14" required>
-                            <option value="Olinda Aguiar">Olinda Aguiar (Fundadora e Curadora)</option>
-                            <option value="Mestre Byll">Mestre Byll (Mestre Artesão Entalhador)</option>
-                        </select>
-                    </div>
-
-                    <div class="col-md-6">
-                        <label class="form-label fw-bold text-dark fs-14">Imagem de Capa *</label>
-                        <select name="cover_image" class="form-select rounded-3 fs-14" required>
-                            <option value="hero-fachada-luz-dourada.png">Fachada Luz Dourada</option>
-                            <option value="cadeiras-encosto-empalhado-madeira-demolicao.png">Cadeiras Empalhadas</option>
-                            <option value="bar-resort-lambri-jatoba.png">Bar em Lambri de Jatobá</option>
-                            <option value="cristaleira-colonial-portas-vidro-peroba.png">Cristaleira Colonial</option>
-                            <option value="hero-fachada-coral-entardecer.png">Fachada Coral Entardecer</option>
-                            <option value="comoda-balcao-gaveteiro-demolicao.png">CÔmoda Balcão Gaveteiro</option>
-                            <option value="mesa-jantar-peroba-rosa-demolicao-1.png">Mesa Jantar Peroba Rosa</option>
-                        </select>
-                    </div>
-
-                    <!-- Resumo (Excerpt) -->
-                    <div class="col-12">
-                        <label class="form-label fw-bold text-dark fs-14">Resumo em Destaque (Excerpt) *</label>
-                        <textarea name="excerpt" rows="2" class="form-control rounded-3 fs-14" placeholder="Breve resumo atraente que aparecerá no card do grid e no topo da página dedicada..." required></textarea>
-                    </div>
-
-                    <!-- Citação em Destaque (Quote) -->
-                    <div class="col-12">
-                        <label class="form-label fw-bold text-dark fs-14">Frase de Citação em Destaque (Quote)</label>
-                        <input type="text" name="quote" class="form-control rounded-3 fs-14" placeholder="Ex: A madeira de demolição traz a alma dos casarões coloniais para a vida contemporânea.">
-                    </div>
-
-                    <!-- Conteúdo em Parágrafos -->
-                    <div class="col-12">
-                        <label class="form-label fw-bold text-dark fs-14">Conteúdo do Artigo (Parágrafos) *</label>
-                        <textarea name="content" rows="8" class="form-control rounded-3 fs-14" placeholder="Escreva o texto completo do artigo. Separe cada parágrafo com uma quebra de linha..." required></textarea>
-                        <small class="text-muted fs-12">Dica: Cada linha em branco criará um novo parágrafo formatado no artigo final.</small>
-                    </div>
-
-                </div>
-
-                <!-- BOTÕES DE AÇÃO DO FORMULÁRIO -->
-                <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 pt-4 mt-4 border-top border-light-subtle">
-                    <a href="/blog" class="btn btn-outline-secondary rounded-pill px-4 py-2 fw-semibold fs-14">
-                        <i class="ri-arrow-left-line me-1"></i> Cancelar e Voltar
-                    </a>
-                    <button type="submit" class="btn btn-warning rounded-pill px-5 py-2.5 fw-bold text-dark shadow-sm border-0 d-inline-flex align-items-center gap-2 hover-lift" style="background:#c85a17; color:#fff!important;">
-                        <i class="ri-send-plane-fill fs-18"></i>
-                        <span>Publicar Novo Artigo</span>
-                    </button>
-                </div>
-
-            </form>
+        {% if form_errors %}
+        <div class="alert alert-danger py-2 px-3" role="alert">
+            <strong>Revise os campos destacados.</strong> O artigo ainda não foi publicado.
         </div>
+        {% endif %}
 
+        <div class="editor-grid">
+            <form id="articleForm" action="{{ '/blog/' ~ article_id ~ '/editar' if editing else '/blog/novo' }}" method="post" class="editor-panel">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+                <section class="editor-section" aria-labelledby="essentialTitle">
+                    <div class="editor-section-title">
+                        <span class="editor-section-number">1</span>
+                        <div><h2 id="essentialTitle">Informações essenciais</h2><p>Dados usados no card e na página do artigo.</p></div>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label" for="articleTitle">Título do artigo</label>
+                            <input id="articleTitle" type="text" name="title" value="{{ form_data.get('title', '') }}"
+                                   class="form-control form-control-lg {% if form_errors.get('title') %}is-invalid{% endif %}"
+                                   minlength="10" maxlength="200" required autofocus
+                                   placeholder="Ex.: O resgate das madeiras centenárias">
+                            {% if form_errors.get('title') %}<span class="invalid-feedback">{{ form_errors.title }}</span>{% endif %}
+                            <div class="field-meta"><span>Claro e específico para facilitar a leitura.</span><span><b id="titleCount">0</b>/200</span></div>
+                        </div>
+                        <div class="col-md-6 col-xl-3">
+                            <label class="form-label" for="articleCategory">Categoria</label>
+                            <select id="articleCategory" name="category" class="form-select {% if form_errors.get('category') %}is-invalid{% endif %}" required>
+                                {% for category in blog_categories %}
+                                <option value="{{ category }}" {% if form_data.get('category') == category %}selected{% endif %}>{{ category }}</option>
+                                {% endfor %}
+                            </select>
+                            {% if form_errors.get('category') %}<span class="invalid-feedback">{{ form_errors.category }}</span>{% endif %}
+                        </div>
+                        <div class="col-md-6 col-xl-3">
+                            <label class="form-label" for="articleAuthor">Autor</label>
+                            <select id="articleAuthor" name="author_name" class="form-select {% if form_errors.get('author_name') %}is-invalid{% endif %}" required>
+                                {% for name, author in blog_authors.items() %}
+                                <option value="{{ name }}" data-role="{{ author.role }}" data-avatar="{{ author.avatar }}" {% if form_data.get('author_name') == name %}selected{% endif %}>{{ name }}</option>
+                                {% endfor %}
+                            </select>
+                            {% if form_errors.get('author_name') %}<span class="invalid-feedback">{{ form_errors.author_name }}</span>{% endif %}
+                        </div>
+                        <div class="col-md-6 col-xl-3">
+                            <label class="form-label" for="articleCover">Imagem de capa</label>
+                            <select id="articleCover" name="cover_image" class="form-select {% if form_errors.get('cover_image') %}is-invalid{% endif %}" required>
+                                {% for filename, label in blog_cover_images %}
+                                <option value="{{ filename }}" data-src="{{ config.ASSETS_ROOT }}/images/{{ filename }}" {% if form_data.get('cover_image') == filename %}selected{% endif %}>{{ label }}</option>
+                                {% endfor %}
+                            </select>
+                            {% if form_errors.get('cover_image') %}<span class="invalid-feedback">{{ form_errors.cover_image }}</span>{% endif %}
+                        </div>
+                        {% if editing %}
+                        <div class="col-md-6 col-xl-3">
+                            <label class="form-label" for="articlePublishedDate">Data de publicação</label>
+                            <input id="articlePublishedDate" type="date" name="published_date"
+                                   value="{{ form_data.get('published_date', '') }}"
+                                   class="form-control {% if form_errors.get('published_date') %}is-invalid{% endif %}" required>
+                            {% if form_errors.get('published_date') %}<span class="invalid-feedback">{{ form_errors.published_date }}</span>{% endif %}
+                        </div>
+                        {% endif %}
+                        <div class="col-12">
+                            <label class="form-label" for="articleExcerpt">Resumo</label>
+                            <textarea id="articleExcerpt" name="excerpt" rows="3"
+                                      class="form-control {% if form_errors.get('excerpt') %}is-invalid{% endif %}"
+                                      minlength="30" maxlength="600" required
+                                      placeholder="Apresente em poucas linhas por que vale a pena ler este artigo.">{{ form_data.get('excerpt', '') }}</textarea>
+                            {% if form_errors.get('excerpt') %}<span class="invalid-feedback">{{ form_errors.excerpt }}</span>{% endif %}
+                            <div class="field-meta"><span>Aparece no catálogo e nas prévias de compartilhamento.</span><span><b id="excerptCount">0</b>/600</span></div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="editor-section" aria-labelledby="contentTitle">
+                    <div class="editor-section-title">
+                        <span class="editor-section-number">2</span>
+                        <div><h2 id="contentTitle">Conteúdo</h2><p>Separe os parágrafos com uma linha em branco.</p></div>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <label class="form-label" for="articleContent">Texto do artigo</label>
+                            <textarea id="articleContent" name="content" rows="13"
+                                      class="form-control {% if form_errors.get('content') %}is-invalid{% endif %}"
+                                      minlength="100" maxlength="30000" required
+                                      placeholder="Comece contextualizando o tema...&#10;&#10;Use uma linha em branco para iniciar um novo parágrafo.">{{ form_data.get('content', '') }}</textarea>
+                            {% if form_errors.get('content') %}<span class="invalid-feedback">{{ form_errors.content }}</span>{% endif %}
+                            <div class="field-meta"><span><b id="wordCount">0</b> palavras</span><span id="readTimeLabel">1 min de leitura</span></div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label" for="articleQuote">Citação em destaque <span class="fw-normal text-muted">(opcional)</span></label>
+                            <textarea id="articleQuote" name="quote" rows="2"
+                                      class="form-control {% if form_errors.get('quote') %}is-invalid{% endif %}"
+                                      maxlength="500" placeholder="Uma frase marcante retirada do artigo.">{{ form_data.get('quote', '') }}</textarea>
+                            {% if form_errors.get('quote') %}<span class="invalid-feedback">{{ form_errors.quote }}</span>{% endif %}
+                        </div>
+                    </div>
+                </section>
+
+                <section class="editor-section" aria-labelledby="galleryTitle">
+                    <div class="editor-section-title">
+                        <span class="editor-section-number">3</span>
+                        <div><h2 id="galleryTitle">Galeria complementar</h2><p>Opcional. Escolha até duas imagens diferentes da capa.</p></div>
+                    </div>
+                    <div class="row g-3">
+                        {% for field, label in [('gallery_image_1', 'Primeira imagem'), ('gallery_image_2', 'Segunda imagem')] %}
+                        <div class="col-md-6">
+                            <label class="form-label" for="{{ field }}">{{ label }}</label>
+                            <select id="{{ field }}" name="{{ field }}" class="form-select {% if form_errors.get(field) %}is-invalid{% endif %}">
+                                <option value="">Nenhuma</option>
+                                {% for filename, image_label in blog_cover_images %}
+                                <option value="{{ filename }}" {% if form_data.get(field) == filename %}selected{% endif %}>{{ image_label }}</option>
+                                {% endfor %}
+                            </select>
+                            {% if form_errors.get(field) %}<span class="invalid-feedback">{{ form_errors.get(field) }}</span>{% endif %}
+                        </div>
+                        {% endfor %}
+                    </div>
+                </section>
+
+                <footer class="editor-actions">
+                    <a href="{{ '/blog/' ~ article_id if editing else '/blog' }}" class="btn btn-outline-secondary rounded-pill px-4">Cancelar</a>
+                    <button id="publishButton" type="submit" class="btn btn-primary rounded-pill px-4 fw-bold d-inline-flex align-items-center gap-2">
+                        <i class="{{ 'ri-check-line' if editing else 'ri-send-plane-fill' }}" aria-hidden="true"></i><span>{{ 'Salvar alterações' if editing else 'Publicar artigo' }}</span>
+                    </button>
+                </footer>
+            </form>
+
+            <aside class="editor-preview" aria-label="Prévia do artigo">
+                <div class="preview-label"><span>Prévia do card</span><i class="ri-eye-line" aria-hidden="true"></i></div>
+                <article class="preview-card">
+                    <img id="previewCover" class="preview-cover" src="{{ config.ASSETS_ROOT }}/images/{{ form_data.get('cover_image', blog_cover_images[0][0]) }}" alt="Prévia da imagem de capa">
+                    <div class="preview-body">
+                        <div class="preview-meta"><span id="previewCategory" class="preview-category">{{ form_data.get('category', blog_categories[0]) }}</span><span id="previewReadTime">1 min de leitura</span></div>
+                        <h2 id="previewTitle" class="preview-title">O título do artigo aparecerá aqui</h2>
+                        <p id="previewExcerpt" class="preview-excerpt">O resumo será exibido aqui para você revisar a apresentação do artigo no catálogo.</p>
+                        <div class="preview-author">
+                            <img id="previewAuthorAvatar" src="{{ config.ASSETS_ROOT }}/images/{{ blog_authors[form_data.get('author_name', 'Olinda Aguiar')].avatar }}" alt="">
+                            <div><strong id="previewAuthorName">{{ form_data.get('author_name', 'Olinda Aguiar') }}</strong><small id="previewAuthorRole">{{ blog_authors[form_data.get('author_name', 'Olinda Aguiar')].role }}</small></div>
+                        </div>
+                    </div>
+                </article>
+                <div class="editor-note"><strong>{{ 'Registro da edição:' if editing else 'Publicação permanente:' }}</strong> {{ 'ao salvar, a página passará a mostrar a data desta atualização.' if editing else 'após publicar, o artigo fica salvo no banco de dados e continuará disponível mesmo depois de reiniciar o servidor.' }}</div>
+            </aside>
+        </div>
     </div>
 </main>
 
 {% include 'partials/public-footer.html' %}
+
+<script>
+(() => {
+    const form = document.getElementById('articleForm');
+    if (!form) return;
+    const title = document.getElementById('articleTitle');
+    const excerpt = document.getElementById('articleExcerpt');
+    const content = document.getElementById('articleContent');
+    const category = document.getElementById('articleCategory');
+    const author = document.getElementById('articleAuthor');
+    const cover = document.getElementById('articleCover');
+    const publishButton = document.getElementById('publishButton');
+    const trackedFields = [title, excerpt, content, category, author, cover,
+        document.getElementById('articleQuote'), document.getElementById('gallery_image_1'),
+        document.getElementById('gallery_image_2'), document.getElementById('articlePublishedDate')].filter(Boolean);
+    const initialState = trackedFields.map(field => field.value).join('\u0000');
+    let submitted = false;
+
+    function updatePreview() {
+        const words = content.value.trim().match(/[\p{L}\p{N}]+/gu) || [];
+        const minutes = Math.max(1, Math.ceil(words.length / 180));
+        const authorOption = author.selectedOptions[0];
+        const coverOption = cover.selectedOptions[0];
+        document.getElementById('titleCount').textContent = title.value.length;
+        document.getElementById('excerptCount').textContent = excerpt.value.length;
+        document.getElementById('wordCount').textContent = words.length;
+        document.getElementById('readTimeLabel').textContent = `${minutes} min de leitura`;
+        document.getElementById('previewReadTime').textContent = `${minutes} min de leitura`;
+        document.getElementById('previewTitle').textContent = title.value.trim() || 'O título do artigo aparecerá aqui';
+        document.getElementById('previewExcerpt').textContent = excerpt.value.trim() || 'O resumo será exibido aqui para você revisar a apresentação do artigo no catálogo.';
+        document.getElementById('previewCategory').textContent = category.value;
+        document.getElementById('previewAuthorName').textContent = author.value;
+        document.getElementById('previewAuthorRole').textContent = authorOption.dataset.role;
+        document.getElementById('previewAuthorAvatar').src = `{{ config.ASSETS_ROOT }}/images/${authorOption.dataset.avatar}`;
+        document.getElementById('previewCover').src = coverOption.dataset.src;
+    }
+
+    [title, excerpt, content].forEach(field => field.addEventListener('input', updatePreview));
+    [category, author, cover].forEach(field => field.addEventListener('change', updatePreview));
+    form.addEventListener('submit', event => {
+        if (!form.checkValidity()) return;
+        submitted = true;
+        publishButton.disabled = true;
+        publishButton.querySelector('span').textContent = "{{ 'Salvando...' if editing else 'Publicando...' }}";
+        publishButton.querySelector('i').className = 'ri-loader-4-line';
+    });
+    window.addEventListener('beforeunload', event => {
+        const currentState = trackedFields.map(field => field.value).join('\u0000');
+        if (submitted || currentState === initialState) return;
+        event.preventDefault();
+        event.returnValue = '';
+    });
+    document.querySelector('.is-invalid')?.focus();
+    updatePreview();
+})();
+</script>
 {% endblock content %}
