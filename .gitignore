@@ -1,0 +1,51 @@
+# ==========================================
+# OLINDA AGUIAR — ARTES EM MADEIRA
+# GITIGNORE PADRÃO
+# ==========================================
+
+# Ambientes Virtuais (Python)
+venv/
+.venv/
+env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Banco de Dados & Arquivos Temporários
+instance/
+*.db
+*.sqlite
+*.sqlite3
+
+# Variáveis de Ambiente & Segredos
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.cert
+*.p12
+
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+*.log
+
+# Testes e Cobertura
+.coverage
+.pytest_cache/
+htmlcov/
+
+# Sistema Operacional & Arquivos de Cache
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDEs e Ferramentas de Desenvolvimento
+.vscode/
+.idea/
+*.swp
+*.swo
