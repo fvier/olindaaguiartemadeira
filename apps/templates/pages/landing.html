@@ -455,10 +455,10 @@
     </a>
 </section>
 
-<!-- Seção: Avaliações de Clientes (Google Reviews Style Carousel) -->
-<section id="avaliacoes" class="py-3 py-md-4 bg-white border-top border-light-subtle">
+<!-- Seção: Avaliações de Clientes (3 Depoimentos no Desktop + Carrossel no Mobile) -->
+<section id="avaliacoes" class="py-4 py-md-5 bg-white border-top border-light-subtle">
     <div class="container py-0">
-        <div class="text-center max-w-700 mx-auto mb-3 mb-md-4">
+        <div class="text-center max-w-700 mx-auto mb-4">
             <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill fw-bold text-uppercase mb-2">Avaliações</span>
             <h2 class="display-6 fw-bold text-dark mt-2">O que dizem clientes e colecionadores</h2>
             <p class="text-secondary fs-16 mb-0">
@@ -466,59 +466,74 @@
             </p>
         </div>
 
-        <div id="reviewsCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="6000">
-            <!-- Carousel Indicators -->
-            <div class="carousel-indicators" style="bottom: -25px;">
+        <!-- Grade com os 3 Depoimentos Visíveis no Desktop (d-none d-md-block) -->
+        <div class="d-none d-md-block">
+            <div class="row g-4 justify-content-center">
                 {% for review in reviews[:3] %}
-                <button type="button" data-bs-target="#reviewsCarousel" data-bs-slide-to="{{ loop.index0 }}" class="{% if loop.first %}active{% endif %} bg-primary" aria-current="{% if loop.first %}true{% endif %}" aria-label="Avaliação {{ loop.index }}" style="width: 24px; height: 4px; border-radius: 2px;"></button>
-                {% endfor %}
-            </div>
-
-            <!-- Carousel Items -->
-            <div class="carousel-inner px-lg-5 mb-2">
-                {% for review in reviews[:3] %}
-                <div class="carousel-item {% if loop.first %}active{% endif %}">
-                    <div class="row justify-content-center">
-                        <div class="col-11 col-md-9 col-lg-7">
-                            <div class="card border-0 shadow-sm rounded-4 p-3 p-md-4 bg-light position-relative hover-lift border-top border-primary border-3 text-center">
-                                <div class="position-absolute top-0 end-0 m-3 text-muted opacity-25">
-                                    <i class="ri-google-fill fs-30"></i>
-                                </div>
-                                <div class="d-flex flex-column align-items-center mb-3">
-                                    <img src="{{ config.ASSETS_ROOT }}/images/users/{{ review.avatar_filename or 'dummy-avatar.jpg' }}" class="rounded-circle mb-3" style="width: 64px; height: 64px; object-fit: cover;" alt="Foto {{ review.client_name }}">
-                                    <div>
-                                        <h5 class="fw-bold text-dark mb-0">{{ review.client_name }}</h5>
-                                        <small class="text-muted fs-13">{{ review.client_role }}</small>
-                                    </div>
-                                </div>
-                                <div class="stars-color mb-3 fs-18">
-                                    {% for _ in range(review.rating) %}<i class="ri-star-fill"></i>{% endfor %}
-                                    {% for _ in range(5 - review.rating) %}<i class="ri-star-line"></i>{% endfor %}
-                                </div>
-                                <p class="text-secondary fs-15 mb-0 italic px-md-3">
-                                    "{{ review.review_text }}"
-                                </p>
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm rounded-4 p-4 bg-light position-relative hover-lift border-top border-primary border-3 h-100 text-center">
+                        <div class="position-absolute top-0 end-0 m-3 text-muted opacity-25">
+                            <i class="ri-google-fill fs-24"></i>
+                        </div>
+                        <div class="d-flex flex-column align-items-center mb-3">
+                            <img src="{{ config.ASSETS_ROOT }}/images/users/{{ review.avatar_filename or 'dummy-avatar.jpg' }}" class="rounded-circle mb-2" style="width: 58px; height: 58px; object-fit: cover;" alt="Foto {{ review.client_name }}">
+                            <div>
+                                <h6 class="fw-bold text-dark mb-0">{{ review.client_name }}</h6>
+                                <small class="text-muted fs-12">{{ review.client_role }}</small>
                             </div>
                         </div>
+                        <div class="stars-color mb-3 fs-16">
+                            {% for _ in range(review.rating) %}<i class="ri-star-fill"></i>{% endfor %}
+                            {% for _ in range(5 - review.rating) %}<i class="ri-star-line"></i>{% endfor %}
+                        </div>
+                        <p class="text-secondary fs-14 mb-0 italic">
+                            "{{ review.review_text }}"
+                        </p>
                     </div>
                 </div>
                 {% endfor %}
             </div>
-
-            <!-- Controls -->
-            <button class="carousel-control-prev" type="button" data-bs-target="#reviewsCarousel" data-bs-slide="prev" style="width: 60px;">
-                <span class="d-inline-flex align-items-center justify-content-center bg-white border border-light-subtle shadow-sm rounded-circle text-primary" style="width: 44px; height: 44px; transition: all 0.2s;">
-                    <i class="ri-arrow-left-s-line fs-22"></i>
-                </span>
-                <span class="visually-hidden">Anterior</span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#reviewsCarousel" data-bs-slide="next" style="width: 60px;">
-                <span class="d-inline-flex align-items-center justify-content-center bg-white border border-light-subtle shadow-sm rounded-circle text-primary" style="width: 44px; height: 44px; transition: all 0.2s;">
-                    <i class="ri-arrow-right-s-line fs-22"></i>
-                </span>
-                <span class="visually-hidden">Próximo</span>
-            </button>
         </div>
+
+        <!-- Carrossel no Mobile (d-md-none) -->
+        <div class="d-md-none">
+            <div id="reviewsCarouselMobile" class="carousel slide" data-bs-ride="carousel" data-bs-interval="6000">
+                <!-- Carousel Indicators -->
+                <div class="carousel-indicators" style="bottom: -25px;">
+                    {% for review in reviews[:3] %}
+                    <button type="button" data-bs-target="#reviewsCarouselMobile" data-bs-slide-to="{{ loop.index0 }}" class="{% if loop.first %}active{% endif %} bg-primary" aria-current="{% if loop.first %}true{% endif %}" aria-label="Avaliação {{ loop.index }}" style="width: 24px; height: 4px; border-radius: 2px;"></button>
+                    {% endfor %}
+                </div>
+
+                <!-- Carousel Items -->
+                <div class="carousel-inner mb-2">
+                    {% for review in reviews[:3] %}
+                    <div class="carousel-item {% if loop.first %}active{% endif %}">
+                        <div class="card border-0 shadow-sm rounded-4 p-4 bg-light position-relative hover-lift border-top border-primary border-3 text-center">
+                            <div class="position-absolute top-0 end-0 m-3 text-muted opacity-25">
+                                <i class="ri-google-fill fs-24"></i>
+                            </div>
+                            <div class="d-flex flex-column align-items-center mb-3">
+                                <img src="{{ config.ASSETS_ROOT }}/images/users/{{ review.avatar_filename or 'dummy-avatar.jpg' }}" class="rounded-circle mb-2" style="width: 58px; height: 58px; object-fit: cover;" alt="Foto {{ review.client_name }}">
+                                <div>
+                                    <h6 class="fw-bold text-dark mb-0">{{ review.client_name }}</h6>
+                                    <small class="text-muted fs-12">{{ review.client_role }}</small>
+                                </div>
+                            </div>
+                            <div class="stars-color mb-3 fs-16">
+                                {% for _ in range(review.rating) %}<i class="ri-star-fill"></i>{% endfor %}
+                                {% for _ in range(5 - review.rating) %}<i class="ri-star-line"></i>{% endfor %}
+                            </div>
+                            <p class="text-secondary fs-14 mb-0 italic">
+                                "{{ review.review_text }}"
+                            </p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+
     </div>
 </section>
 
