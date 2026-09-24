@@ -790,7 +790,7 @@ def blog_detail(article_id=1):
         article = articles[0]
     
     related_articles = [a for a in articles if a['id'] != article['id']][:3]
-    return render_template('pages/blog-detail.html', segment='blog', article=article, related_articles=related_articles)
+    return render_template('pages/blog-detail.html', segment='blog', article=article, related_articles=related_articles, articles=articles)
 
 
 @blueprint.route('/byll')
