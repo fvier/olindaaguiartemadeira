@@ -740,6 +740,217 @@
     });
   }
 
+  // -------------------------------------------------------------
+  // ADMIN CARD EDITING MODAL & ACTIONS
+  // -------------------------------------------------------------
+  const adminEditModal = document.getElementById('adminProductEditModal');
+  const closeAdminEditModalBtn = document.getElementById('closeAdminEditModal');
+  const adminCancelEditBtn = document.getElementById('adminCancelEditBtn');
+  const adminEditForm = document.getElementById('adminProductEditForm');
+  const modalAdminEditTriggerBtn = document.getElementById('modalAdminEditTriggerBtn');
+
+  function openAdminEditModal(productId) {
+    if (!adminEditModal) return;
+    const card = cards.find(c => c.dataset.id === productId);
+    if (!card) return;
+    const prod = productFor(card);
+
+    const idInput = document.getElementById('adminEditProductId');
+    const codeBadge = document.getElementById('adminEditProductCodeBadge');
+    const nameInput = document.getElementById('adminEditName');
+    const woodSelect = document.getElementById('adminEditWood');
+    const catSelect = document.getElementById('adminEditCategory');
+    const priceInput = document.getElementById('adminEditPrice');
+    const oldPriceInput = document.getElementById('adminEditOldPrice');
+    const badgeInput = document.getElementById('adminEditBadge');
+    const soldSelect = document.getElementById('adminEditSoldOut');
+    const sizesInput = document.getElementById('adminEditSizes');
+    const tagsInput = document.getElementById('adminEditTags');
+    const descInput = document.getElementById('adminEditDescription');
+    const alertBox = document.getElementById('adminEditAlert');
+
+    if (idInput) idInput.value = prod.id || '';
+    if (codeBadge) codeBadge.textContent = prod.id || '';
+    if (nameInput) nameInput.value = prod.name || '';
+    if (woodSelect) woodSelect.value = prod.wood_type || '';
+    if (catSelect) catSelect.value = prod.category || '';
+    if (priceInput) priceInput.value = prod.price != null ? prod.price : '';
+    if (oldPriceInput) oldPriceInput.value = prod.old_price != null ? prod.old_price : '';
+    if (badgeInput) badgeInput.value = prod.badge || '';
+    if (soldSelect) soldSelect.value = String(Boolean(prod.is_sold_out));
+    if (sizesInput) sizesInput.value = (prod.sizes || []).join(', ');
+    if (tagsInput) tagsInput.value = (prod.tags || []).join(', ');
+    if (descInput) descInput.value = prod.description || '';
+
+    if (alertBox) {
+      alertBox.classList.add('d-none');
+      alertBox.textContent = '';
+    }
+
+    if (modal && !modal.classList.contains('hidden')) {
+      modal.classList.add('hidden');
+    }
+
+    adminEditModal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeAdminEditModal() {
+    if (!adminEditModal) return;
+    adminEditModal.classList.add('hidden');
+    document.body.style.overflow = '';
+  }
+
+  if (closeAdminEditModalBtn) closeAdminEditModalBtn.addEventListener('click', closeAdminEditModal);
+  if (adminCancelEditBtn) adminCancelEditBtn.addEventListener('click', closeAdminEditModal);
+
+  document.addEventListener('click', e => {
+    const editBtn = e.target.closest('[data-admin-edit]');
+    if (editBtn) {
+      e.stopPropagation();
+      e.preventDefault();
+      const pId = editBtn.dataset.adminEdit;
+      openAdminEditModal(pId);
+      return;
+    }
+
+    if (adminEditModal && e.target === adminEditModal) {
+      closeAdminEditModal();
+    }
+  });
+
+  if (modalAdminEditTriggerBtn) {
+    modalAdminEditTriggerBtn.addEventListener('click', () => {
+      if (currentProduct) {
+        openAdminEditModal(currentProduct.id);
+      }
+    });
+  }
+
+  window.salvarEdicaoProduto = async function(event) {
+    if (event) event.preventDefault();
+    if (!adminEditForm) return;
+
+    const alertBox = document.getElementById('adminEditAlert');
+    const saveBtn = document.getElementById('adminSaveBtn');
+    const saveBtnText = document.getElementById('adminSaveBtnText');
+    const originalText = saveBtnText ? saveBtnText.textContent : 'Salvar Alterações';
+
+    const pId = document.getElementById('adminEditProductId').value;
+    const payload = {
+      id: pId,
+      name: document.getElementById('adminEditName').value,
+      wood_type: document.getElementById('adminEditWood').value,
+      category: document.getElementById('adminEditCategory').value,
+      price: document.getElementById('adminEditPrice').value,
+      old_price: document.getElementById('adminEditOldPrice').value,
+      badge: document.getElementById('adminEditBadge').value,
+      is_sold_out: document.getElementById('adminEditSoldOut').value === 'true',
+      sizes: document.getElementById('adminEditSizes').value,
+      tags: document.getElementById('adminEditTags').value,
+      description: document.getElementById('adminEditDescription').value
+    };
+
+    const csrfToken = document.getElementById('adminEditCsrfToken')?.value || '';
+
+    try {
+      if (saveBtn) saveBtn.disabled = true;
+      if (saveBtnText) saveBtnText.textContent = 'Salvando...';
+
+      const res = await fetch('/api/loja/produto/salvar', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': csrfToken
+        },
+        body: JSON.stringify(payload)
+      });
+
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.message || 'Erro ao salvar alterações da peça.');
+      }
+
+      // Atualiza o Card no DOM diretamente
+      const updated = data.product;
+      const card = cards.find(c => c.dataset.id === pId);
+      if (card && updated) {
+        card.dataset.json = JSON.stringify(updated);
+        card.dataset.name = (updated.name || '').toLowerCase();
+        card.dataset.wood = updated.wood_type || '';
+        card.dataset.category = updated.category || '';
+        card.dataset.price = updated.price;
+        card.dataset.tags = (updated.tags || []).join(',');
+
+        const titleEl = card.querySelector('.card-title-clickable');
+        if (titleEl) titleEl.textContent = updated.name;
+
+        const badgeEl = card.querySelector('.card-badge-element');
+        if (badgeEl) {
+          badgeEl.textContent = updated.badge || '';
+          badgeEl.style.display = updated.badge ? 'inline-block' : 'none';
+        }
+
+        const priceEl = card.querySelector('.card-price');
+        if (priceEl) priceEl.textContent = money(updated.price);
+
+        const oldPriceEl = card.querySelector('.card-old-price');
+        if (oldPriceEl) {
+          oldPriceEl.textContent = updated.old_price ? money(updated.old_price) : '';
+        }
+
+        const metaSpans = card.querySelectorAll('.store-product-meta span');
+        if (metaSpans.length >= 2) {
+          const woodNames = {
+            'peroba-rosa': 'Peroba Rosa',
+            'jacaranda': 'Jacarandá',
+            'cumaru': 'Cumaru',
+            'brauna': 'Braúna',
+            'canela-preta': 'Canela Preta',
+            'jatoba': 'Jatobá'
+          };
+          metaSpans[0].textContent = woodNames[updated.wood_type] || updated.wood_type;
+          metaSpans[1].textContent = updated.category;
+        }
+
+        const sizesContainer = card.querySelector('.store-size-pills-row');
+        if (sizesContainer && updated.sizes) {
+          sizesContainer.innerHTML = updated.sizes.map(s => `<span class="store-size-pill">${s}</span>`).join('');
+        }
+
+        const tagsContainer = card.querySelector('.store-card-tags');
+        if (tagsContainer && updated.tags) {
+          tagsContainer.innerHTML = updated.tags.slice(0, 3).map(t => `
+            <button type="button" class="store-card-tag-pill" data-card-tag="${t}" title="Filtrar por #${t}">
+              #${t.replace(/-/g, ' ')}
+            </button>
+          `).join('') + (updated.tags.length > 3 ? `<span class="store-card-tag-more" title="${updated.tags.slice(3).join(', ')}">+${updated.tags.length - 3}</span>` : '');
+        }
+      }
+
+      if (alertBox) {
+        alertBox.className = 'alert alert-success mt-3 py-2 small';
+        alertBox.textContent = 'Card atualizado com sucesso no catálogo!';
+        alertBox.classList.remove('d-none');
+      }
+
+      setTimeout(() => {
+        closeAdminEditModal();
+        applyFilters();
+      }, 600);
+
+    } catch (err) {
+      if (alertBox) {
+        alertBox.className = 'alert alert-danger mt-3 py-2 small';
+        alertBox.textContent = err.message || 'Erro ao comunicar com o servidor.';
+        alertBox.classList.remove('d-none');
+      }
+    } finally {
+      if (saveBtn) saveBtn.disabled = false;
+      if (saveBtnText) saveBtnText.textContent = originalText;
+    }
+  };
+
   updateInterestButtons();
   applyFilters();
 })();

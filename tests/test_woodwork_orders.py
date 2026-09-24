@@ -30,6 +30,8 @@ class WoodworkOrderTimelineTests(unittest.TestCase):
     def tearDown(self):
         with self.app.app_context():
             db.drop_all()
+        from apps.pages.store_catalog import reset_catalog_to_defaults
+        reset_catalog_to_defaults()
 
     def test_pedido_page_renders_ok(self):
         response = self.client.get('/pedido')
@@ -228,6 +230,99 @@ class WoodworkOrderTimelineTests(unittest.TestCase):
         self.assertIn(b'admin@olindaaguiar.com', res_logged.data)
         self.assertIn(b'/logout', res_logged.data)
 
+    def test_loja_page_renders_admin_edit_controls_only_for_admin(self):
+        # 1. Usuário anônimo não vê botões ou modal de edição admin na loja
+        res_anon = self.client.get('/loja')
+        self.assertEqual(res_anon.status_code, 200)
+        self.assertNotIn(b'store-admin-banner', res_anon.data)
+        self.assertNotIn(b'adminProductEditModal', res_anon.data)
+        self.assertNotIn(b'store-admin-card-edit-btn', res_anon.data)
+
+        # 2. Usuário comum (role 'usuario') não vê controles admin
+        with self.client.session_transaction() as sess:
+            sess['logged_in'] = True
+            sess['user_email'] = 'cliente@exemplo.com'
+            sess['user_role'] = 'usuario'
+
+        res_user = self.client.get('/loja')
+        self.assertEqual(res_user.status_code, 200)
+        self.assertNotIn(b'store-admin-banner', res_user.data)
+        self.assertNotIn(b'adminProductEditModal', res_user.data)
+
+        # 3. Administrador autenticado vê os controles de edição
+        with self.client.session_transaction() as sess:
+            sess['logged_in'] = True
+            sess['user_email'] = 'admin@olindaaguiar.com'
+            sess['user_role'] = 'admin'
+
+        res_admin = self.client.get('/loja')
+        self.assertEqual(res_admin.status_code, 200)
+        self.assertIn(b'store-admin-banner', res_admin.data)
+        self.assertIn(b'adminProductEditModal', res_admin.data)
+        self.assertIn(b'store-admin-card-edit-btn', res_admin.data)
+        self.assertIn('Modo de Edição do Administrador Ativo'.encode('utf-8'), res_admin.data)
+
+    def test_admin_card_edit_permissions_and_save(self):
+        from apps.pages.store_catalog import get_product_by_id
+
+        # 1. Tentativa anônima deve ser barrada com 403 Forbidden
+        payload = {
+            'id': 'OLA-B15',
+            'name': 'Tentativa Hacker',
+            'price': 999.00
+        }
+        res_anon = self.client.post('/api/loja/produto/salvar', json=payload)
+        self.assertEqual(res_anon.status_code, 403)
+        self.assertFalse(res_anon.get_json()['success'])
+
+        # 2. Tentativa por usuário comum ('usuario') também deve receber 403
+        with self.client.session_transaction() as sess:
+            sess['logged_in'] = True
+            sess['user_email'] = 'cliente@exemplo.com'
+            sess['user_role'] = 'usuario'
+
+        res_user = self.client.post('/api/loja/produto/salvar', json=payload)
+        self.assertEqual(res_user.status_code, 403)
+
+        # 3. Tentativa como admin com ID inválido retorna 404
+        with self.client.session_transaction() as sess:
+            sess['logged_in'] = True
+            sess['user_email'] = 'admin@olindaaguiar.com'
+            sess['user_role'] = 'admin'
+
+        res_not_found = self.client.post('/api/loja/produto/salvar', json={'id': 'NAO-EXISTE', 'name': 'Teste'})
+        self.assertEqual(res_not_found.status_code, 404)
+
+        # 4. Edição válida com admin para a bancada OLA-B15
+        valid_update = {
+            'id': 'OLA-B15',
+            'name': 'Bancada Rústica Nobre de Demolição em Verniz PU',
+            'price': 4200.0,
+            'old_price': 4800.0,
+            'badge': 'Edição Especial de Ateliê',
+            'tags': ['verniz-pu', 'demolicao', 'bancada', 'edicao-especial'],
+            'sizes': ['2,20m x 0,60m x 0,90m', 'Sob medida'],
+            'wood_type': 'peroba-rosa',
+            'is_sold_out': False,
+            'description': 'Bancada artesanal em prancha única de madeira de demolição, impermeabilizada com verniz PU marítimo.'
+        }
+        res_save = self.client.post('/api/loja/produto/salvar', json=valid_update)
+        self.assertEqual(res_save.status_code, 200)
+        data = res_save.get_json()
+        self.assertTrue(data['success'])
+        self.assertEqual(data['product']['name'], 'Bancada Rústica Nobre de Demolição em Verniz PU')
+        self.assertEqual(data['product']['price'], 4200.0)
+        self.assertEqual(data['product']['old_price'], 4800.0)
+        self.assertEqual(data['product']['badge'], 'Edição Especial de Ateliê')
+        self.assertIn('edicao-especial', data['product']['tags'])
+
+        # 5. Verifica se o catálogo reflete a alteração imediatamente
+        prod = get_product_by_id('OLA-B15')
+        self.assertIsNotNone(prod)
+        self.assertEqual(prod['name'], 'Bancada Rústica Nobre de Demolição em Verniz PU')
+        self.assertEqual(prod['price'], 4200.0)
+
 
 if __name__ == '__main__':
     unittest.main()
+

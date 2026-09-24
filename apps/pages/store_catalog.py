@@ -3,6 +3,9 @@
 Inspirado na arquitetura e estrutura interativa do catálogo do cliente, adaptado para
 o ecossistema de marcenaria artística, peças únicas e móveis sob medida de Olinda Aguiar.
 """
+import os
+import json
+import copy
 
 STORE_WOOD_TYPES = [
     {'id': 'peroba-rosa', 'name': 'Peroba Rosa', 'origin': 'Casarões Coloniais Século XIX'},
@@ -463,10 +466,50 @@ WOODWORK_PRODUCTS = [
 ]
 
 
+CATALOG_DATA_PATH = os.path.join(os.path.dirname(__file__), 'store_catalog_data.json')
+_catalog_cache = None
+
+
+def _load_catalog():
+    global _catalog_cache
+    if _catalog_cache is not None:
+        return _catalog_cache
+    
+    if os.path.exists(CATALOG_DATA_PATH):
+        try:
+            with open(CATALOG_DATA_PATH, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                if isinstance(data, list) and len(data) > 0:
+                    _catalog_cache = data
+                    return _catalog_cache
+        except Exception:
+            pass
+
+    _catalog_cache = copy.deepcopy(WOODWORK_PRODUCTS)
+    _save_catalog(_catalog_cache)
+    return _catalog_cache
+
+
+def _save_catalog(products_list):
+    try:
+        with open(CATALOG_DATA_PATH, 'w', encoding='utf-8') as f:
+            json.dump(products_list, f, ensure_ascii=False, indent=2)
+    except Exception as e:
+        print(f"Erro ao salvar catalogo: {e}")
+
+
+def reset_catalog_to_defaults():
+    """Reset the catalog JSON file and memory cache back to the base WOODWORK_PRODUCTS list."""
+    global _catalog_cache
+    _catalog_cache = copy.deepcopy(WOODWORK_PRODUCTS)
+    _save_catalog(_catalog_cache)
+    return _catalog_cache
+
+
 def get_woodwork_products(include_hidden=True):
     """Return all catalog products with default attributes initialized."""
-    import copy
-    products = copy.deepcopy(WOODWORK_PRODUCTS)
+    products = copy.deepcopy(_load_catalog())
+    results = []
     for p in products:
         p.setdefault('is_sold_out', False)
         p.setdefault('is_hidden', False)
@@ -474,7 +517,51 @@ def get_woodwork_products(include_hidden=True):
         p.setdefault('stock_quantity', 1)
         if 'images' not in p or not p['images']:
             p['images'] = [p['image']] if p.get('image') else []
-    return products
+        if include_hidden or not p.get('is_hidden'):
+            results.append(p)
+    return results
+
+
+def get_product_by_id(product_id):
+    """Return a single product by ID."""
+    products = _load_catalog()
+    for p in products:
+        if p.get('id') == product_id:
+            return copy.deepcopy(p)
+    return None
+
+
+def update_woodwork_product(product_id, updates):
+    """Update an existing woodwork product by id and persist changes."""
+    products = _load_catalog()
+    target = None
+    for p in products:
+        if p.get('id') == product_id:
+            target = p
+            break
+    
+    if not target:
+        return None
+
+    allowed_keys = [
+        'name', 'price', 'old_price', 'wood_type', 'category',
+        'badge', 'description', 'sizes', 'tags', 'is_sold_out', 'is_hidden'
+    ]
+    for key in allowed_keys:
+        if key in updates:
+            target[key] = updates[key]
+
+    # Preço base sincronizado nas variações se houver
+    if 'price' in updates and 'colors' in target and target['colors']:
+        try:
+            new_p = float(updates['price'])
+            if target['colors']:
+                target['colors'][0]['price'] = new_p
+        except Exception:
+            pass
+
+    _save_catalog(products)
+    return copy.deepcopy(target)
 
 
 def get_store_categories():
@@ -556,7 +643,7 @@ def get_store_tags():
     """Return all active catalog tags with icons, counts, and groups."""
     from collections import Counter
     counts = Counter()
-    for p in WOODWORK_PRODUCTS:
+    for p in _load_catalog():
         for t in p.get('tags', []):
             counts[t] += 1
 

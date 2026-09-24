@@ -1700,3 +1700,62 @@ html[data-bs-theme="dark"] .modal-tag-pill {
   border-color: #263449 !important;
   color: #cbd5e1 !important;
 }
+
+/* ==========================================================================
+   ADMIN CARD EDITING (MODO ADMINISTRADOR)
+   ========================================================================== */
+.store-admin-banner {
+  border-radius: 14px;
+}
+.store-admin-card-edit-btn {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 6;
+  background: #c85a17;
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-size: 0.74rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  box-shadow: 0 4px 14px rgba(200, 90, 23, 0.45);
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.store-admin-card-edit-btn:hover {
+  background: #9e460f;
+  color: #ffffff;
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 0 6px 18px rgba(200, 90, 23, 0.6);
+}
+.store-admin-quick-edit-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  border: 1px solid rgba(200, 90, 23, 0.4);
+  background: rgba(200, 90, 23, 0.08);
+  color: #c85a17;
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.store-admin-quick-edit-btn:hover {
+  background: #c85a17;
+  color: #ffffff;
+  transform: scale(1.08);
+}
+html[data-bs-theme="dark"] .store-admin-card-edit-btn {
+  background: #d97706;
+  border-color: rgba(255, 255, 255, 0.2);
+}
+html[data-bs-theme="dark"] .store-admin-quick-edit-btn {
+  background: rgba(217, 119, 6, 0.15);
+  border-color: rgba(217, 119, 6, 0.4);
+  color: #fbbf24;
+}

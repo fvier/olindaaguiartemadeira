@@ -166,6 +166,23 @@
         </div>
       </div>
 
+      {% set is_admin = session.get('logged_in') and (session.get('user_role') in ['admin', 'gerente']) %}
+
+      {% if is_admin %}
+      <div class="store-admin-banner mb-4 p-3 rounded-4 shadow-sm d-flex align-items-center justify-content-between flex-wrap gap-2" style="background: linear-gradient(135deg, #1e1b18 0%, #2e2620 100%); color: #fff; border: 1px solid rgba(200, 90, 23, 0.4);">
+        <div class="d-flex align-items-center gap-3">
+          <span class="rounded-circle d-flex align-items-center justify-content-center text-white flex-shrink-0" style="width: 38px; height: 38px; background: #c85a17; font-size: 19px;">
+            <i class="ri-shield-user-fill"></i>
+          </span>
+          <div>
+            <strong class="d-block text-white" style="font-size: 0.95rem;">Modo de Edição do Administrador Ativo</strong>
+            <small class="text-white-50" style="font-size: 0.8rem;">Você tem permissão para editar títulos, preços, dimensões e informações de qualquer card diretamente.</small>
+          </div>
+        </div>
+        <span class="badge bg-warning text-dark px-3 py-1.5 rounded-pill fw-bold" style="font-size: 0.75rem;">Admin: {{ session.get('user_email') }}</span>
+      </div>
+      {% endif %}
+
       <div class="store-active-filter" id="activeStoreFilter">Todas as madeiras e categorias</div>
 
       <!-- Grid de Obras -->
@@ -182,6 +199,11 @@
                  data-json='{{ product|tojson|forceescape }}'>
           
           <div class="store-product-media" data-open-modal="{{ product.id }}">
+            {% if is_admin %}
+            <button class="store-admin-card-edit-btn" type="button" data-admin-edit="{{ product.id }}" title="Editar informações desta peça (Admin)">
+              <i class="ri-edit-2-fill"></i> <span>Editar Card</span>
+            </button>
+            {% endif %}
             {% if product.badge %}
             <span class="store-product-badge card-badge-element">{{ display.get('badge', product.badge) }}</span>
             {% endif %}
@@ -274,6 +296,11 @@
                 <small>À vista ou 12x no cartão</small>
               </div>
               <div class="store-card-actions">
+                {% if is_admin %}
+                <button class="store-admin-quick-edit-btn" type="button" data-admin-edit="{{ product.id }}" title="Editar informações da peça (Admin)">
+                  <i class="ri-edit-2-line"></i>
+                </button>
+                {% endif %}
                 <button class="store-quickview-btn" type="button" data-open-modal="{{ product.id }}" title="Ver detalhes da peça">
                   <i class="ri-eye-line fs-17"></i>
                 </button>
@@ -405,11 +432,130 @@
             <i class="ri-share-forward-line"></i> Compartilhar esta Obra
           </button>
         </div>
+
+        {% if is_admin %}
+        <div class="mt-3 pt-3 border-top">
+          <button class="btn btn-warning w-100 fw-bold py-2 rounded-pill d-flex align-items-center justify-content-center gap-2 shadow-sm" id="modalAdminEditTriggerBtn" type="button" style="background:#f59e0b; border:0; color:#1e1b18;">
+            <i class="ri-edit-2-fill fs-18"></i> Editar Informações Desta Peça (Admin)
+          </button>
+        </div>
+        {% endif %}
       </div>
 
     </div>
   </div>
 </div>
+
+{% if is_admin %}
+<!-- MODAL DE EDIÇÃO DO ADMINISTRADOR -->
+<div class="store-modal-backdrop hidden" id="adminProductEditModal" role="dialog" aria-modal="true" aria-labelledby="adminEditModalTitle">
+  <div class="store-modal-container" style="max-width: 680px;">
+    <button class="store-modal-close" id="closeAdminEditModal" type="button" aria-label="Fechar modal de edição">&times;</button>
+    
+    <div class="d-flex align-items-center gap-2 mb-3 pb-2 border-bottom">
+      <span class="rounded-circle d-flex align-items-center justify-content-center text-white" style="width: 36px; height: 36px; background: #c85a17;">
+        <i class="ri-edit-box-line fs-18"></i>
+      </span>
+      <div>
+        <h3 id="adminEditModalTitle" class="m-0 fs-18 fw-bold text-dark">Editar Informações da Peça</h3>
+        <small class="text-muted">Código do Acervo: <strong id="adminEditProductCodeBadge" class="text-primary font-monospace">OLA-00</strong></small>
+      </div>
+    </div>
+
+    <form id="adminProductEditForm" onsubmit="salvarEdicaoProduto(event)">
+      <input type="hidden" id="adminEditProductId" name="id">
+      <input type="hidden" name="csrf_token" id="adminEditCsrfToken" value="{{ csrf_token() }}">
+
+      <div class="row g-3">
+        <!-- Nome / Título -->
+        <div class="col-12">
+          <label class="form-label fw-bold small text-secondary" for="adminEditName">Nome / Título da Peça *</label>
+          <input type="text" class="form-control rounded-3" id="adminEditName" name="name" required placeholder="Ex: Mesa Escultural com Tampo de Vidro">
+        </div>
+
+        <!-- Madeira & Categoria -->
+        <div class="col-md-6">
+          <label class="form-label fw-bold small text-secondary" for="adminEditWood">Madeira de Demolição *</label>
+          <select class="form-select rounded-3" id="adminEditWood" name="wood_type" required>
+            {% for wt in store_wood_types %}
+            <option value="{{ wt.id }}">{{ wt.name }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label fw-bold small text-secondary" for="adminEditCategory">Categoria / Linha *</label>
+          <select class="form-select rounded-3" id="adminEditCategory" name="category" required>
+            {% for cat in store_categories %}
+            <option value="{{ cat }}">{{ cat }}</option>
+            {% endfor %}
+          </select>
+        </div>
+
+        <!-- Preço e Preço Antigo -->
+        <div class="col-md-6">
+          <label class="form-label fw-bold small text-secondary" for="adminEditPrice">Preço Atual (R$) *</label>
+          <div class="input-group">
+            <span class="input-group-text bg-light text-muted">R$</span>
+            <input type="number" step="0.01" class="form-control" id="adminEditPrice" name="price" required placeholder="0.00">
+          </div>
+        </div>
+
+        <div class="col-md-6">
+          <label class="form-label fw-bold small text-secondary" for="adminEditOldPrice">Preço Anterior / "De" (R$)</label>
+          <div class="input-group">
+            <span class="input-group-text bg-light text-muted">R$</span>
+            <input type="number" step="0.01" class="form-control" id="adminEditOldPrice" name="old_price" placeholder="Opcional">
+          </div>
+        </div>
+
+        <!-- Selo / Badge e Disponibilidade -->
+        <div class="col-md-8">
+          <label class="form-label fw-bold small text-secondary" for="adminEditBadge">Selo de Destaque (Badge)</label>
+          <input type="text" class="form-control rounded-3" id="adminEditBadge" name="badge" placeholder="Ex: Peça Única, Sob Medida, Destaque Ateliê">
+        </div>
+
+        <div class="col-md-4">
+          <label class="form-label fw-bold small text-secondary" for="adminEditSoldOut">Disponibilidade</label>
+          <select class="form-select rounded-3" id="adminEditSoldOut" name="is_sold_out">
+            <option value="false">Disponível</option>
+            <option value="true">Esgotado / Vendido</option>
+          </select>
+        </div>
+
+        <!-- Dimensões / Medidas -->
+        <div class="col-12">
+          <label class="form-label fw-bold small text-secondary" for="adminEditSizes">Dimensões / Medidas Disponíveis</label>
+          <input type="text" class="form-control rounded-3" id="adminEditSizes" name="sizes" placeholder="Ex: 2,20m x 1,10m x 0,76m, 2,60m x 1,20m">
+          <small class="text-muted" style="font-size: 11px;">Separe múltiplas medidas por vírgula.</small>
+        </div>
+
+        <!-- Tags para o Mar de Tags -->
+        <div class="col-12">
+          <label class="form-label fw-bold small text-secondary" for="adminEditTags">Tags do Mar de Tags</label>
+          <input type="text" class="form-control rounded-3" id="adminEditTags" name="tags" placeholder="Ex: mesas, tampo-de-vidro, peca-unica, sala-de-jantar">
+          <small class="text-muted" style="font-size: 11px;">Tags sem espaço, separadas por vírgula (ex: <code>verniz-pu, sob-medida, area-gourmet</code>).</small>
+        </div>
+
+        <!-- Descrição Editorial -->
+        <div class="col-12">
+          <label class="form-label fw-bold small text-secondary" for="adminEditDescription">Descrição da Peça & História da Madeira</label>
+          <textarea class="form-control rounded-3" id="adminEditDescription" name="description" rows="4" placeholder="Detalhes dos veios, origem da madeira, história do casarão e acabamentos..."></textarea>
+        </div>
+      </div>
+
+      <div id="adminEditAlert" class="alert d-none mt-3 py-2 small" role="alert"></div>
+
+      <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top">
+        <button type="button" class="btn btn-light px-4 fw-semibold rounded-pill" id="adminCancelEditBtn">Cancelar</button>
+        <button type="submit" class="btn btn-primary px-4 fw-bold rounded-pill d-inline-flex align-items-center gap-2 shadow-sm" id="adminSaveBtn" style="background:#c85a17; border-color:#c85a17;">
+          <i class="ri-check-line"></i> <span id="adminSaveBtnText">Salvar Alterações</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+{% endif %}
 
 <!-- MODAL DA LISTA DE DESEJOS / INTERESSES -->
 <div class="store-modal-backdrop hidden" id="storeWishlistModal" role="dialog" aria-modal="true">

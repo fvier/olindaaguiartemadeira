@@ -4,7 +4,8 @@ from apps.pages.models import (User, CarouselImage, CommercialPlan, PlanVersion,
                                IntegratedSale, ClientReview, WoodworkOrder)
 from apps.pages.store_catalog import (get_woodwork_products, get_store_categories,
                                       get_store_wood_types, get_store_tags,
-                                      get_store_tag_groups)
+                                      get_store_tag_groups, update_woodwork_product,
+                                      get_product_by_id)
 from apps import db, csrf, limiter
 from flask import render_template, request, redirect, url_for, session, flash, current_app, jsonify, send_from_directory
 from werkzeug.utils import secure_filename
@@ -377,6 +378,111 @@ def api_loja_produtos():
     products = get_woodwork_products()
     store_tags = get_store_tags()
     return jsonify({'success': True, 'products': products, 'tags': store_tags})
+
+
+@blueprint.route('/api/loja/produto/salvar', methods=['POST'])
+@csrf.exempt
+def api_loja_produto_salvar():
+    """Save/update woodwork product details (admin only)."""
+    if not (session.get('logged_in') and session.get('user_role') in {'admin', 'gerente'}):
+        return jsonify({
+            'success': False,
+            'message': 'Acesso negado. Apenas administradores autenticados podem editar os cards da loja.'
+        }), 403
+
+    payload = request.get_json(silent=True) or request.form.to_dict()
+    if not payload:
+        return jsonify({'success': False, 'message': 'Dados de atualização não fornecidos.'}), 400
+
+    product_id = str(payload.get('id', '')).strip()
+    if not product_id:
+        return jsonify({'success': False, 'message': 'O código/ID da peça é obrigatório.'}), 400
+
+    updates = {}
+    if 'name' in payload and str(payload['name']).strip():
+        updates['name'] = str(payload['name']).strip()
+
+    if 'category' in payload and str(payload['category']).strip():
+        updates['category'] = str(payload['category']).strip()
+
+    if 'wood_type' in payload and str(payload['wood_type']).strip():
+        updates['wood_type'] = str(payload['wood_type']).strip()
+
+    if 'badge' in payload:
+        updates['badge'] = str(payload['badge']).strip()
+
+    if 'description' in payload:
+        updates['description'] = str(payload['description']).strip()
+
+    def _parse_num(val):
+        if val is None:
+            return None
+        if isinstance(val, (int, float)):
+            return float(val)
+        s = str(val).replace('R$', '').strip()
+        if not s or s.lower() in ('none', 'null', '0', '0.0'):
+            return None
+        if ',' in s:
+            s = s.replace('.', '').replace(',', '.')
+        return float(s)
+
+    if 'price' in payload:
+        try:
+            parsed_price = _parse_num(payload['price'])
+            if parsed_price is None or parsed_price < 0:
+                return jsonify({'success': False, 'message': 'Valor de preço inválido.'}), 400
+            updates['price'] = parsed_price
+        except (ValueError, TypeError):
+            return jsonify({'success': False, 'message': 'Valor de preço inválido.'}), 400
+
+    if 'old_price' in payload:
+        try:
+            updates['old_price'] = _parse_num(payload['old_price'])
+        except (ValueError, TypeError):
+            pass
+
+    if 'sizes' in payload:
+        raw_sizes = payload['sizes']
+        if isinstance(raw_sizes, list):
+            updates['sizes'] = [str(s).strip() for s in raw_sizes if str(s).strip()]
+        elif isinstance(raw_sizes, str):
+            updates['sizes'] = [s.strip() for s in raw_sizes.replace('\n', ',').split(',') if s.strip()]
+
+    if 'tags' in payload:
+        raw_tags = payload['tags']
+        if isinstance(raw_tags, list):
+            updates['tags'] = [str(t).strip().lstrip('#') for t in raw_tags if str(t).strip()]
+        elif isinstance(raw_tags, str):
+            updates['tags'] = [t.strip().lstrip('#') for t in raw_tags.replace('\n', ',').split(',') if t.strip()]
+
+    if 'is_sold_out' in payload:
+        val = payload['is_sold_out']
+        updates['is_sold_out'] = val is True or str(val).lower() in ('true', '1', 'on', 'sim')
+
+    updated = update_woodwork_product(product_id, updates)
+    if not updated:
+        return jsonify({'success': False, 'message': f"Peça com código '{product_id}' não encontrada no catálogo."}), 404
+
+    # Registrar no log de auditoria
+    try:
+        user_email = session.get('user_email', 'admin@olindaaguiar.com')
+        log = AuditLog(
+            user_email=user_email,
+            user_name=session.get('user_name', 'Administrador'),
+            action='Edição de Card de Produto',
+            details=f"Card '{updated.get('name')}' ({product_id}) atualizado com sucesso. Preço: R$ {updated.get('price'):.2f}",
+            ip_address=request.remote_addr or ''
+        )
+        db.session.add(log)
+        db.session.commit()
+    except Exception:
+        pass
+
+    return jsonify({
+        'success': True,
+        'message': f"Card '{updated.get('name')}' ({product_id}) atualizado com sucesso!",
+        'product': updated
+    })
 
 
 def ensure_woodwork_orders():
