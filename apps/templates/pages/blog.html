@@ -16,15 +16,94 @@
     .landing-page .btn-primary { --bs-btn-bg:var(--landing-accent);--bs-btn-border-color:var(--landing-accent);--bs-btn-hover-bg:var(--landing-accent);--bs-btn-hover-border-color:var(--landing-accent); }
     .hover-lift { transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease; }
     .hover-lift:hover { transform: translateY(-4px); box-shadow: 0 16px 36px rgba(15, 23, 42, 0.14) !important; }
-    .blog-cover-img { height: 230px; object-fit: cover; width: 100%; }
 
-    /* Mobile First Adjustments */
+    /* Minia Blog Grid Styles */
+    .blog-header-hero {
+        background: linear-gradient(180deg, #ffffff 0%, #fdf8f4 100%);
+        border-bottom: 1px solid #f1f5f9;
+        padding: 40px 0 30px 0;
+    }
+    .blog-nav-tab {
+        border: 1px solid #e2e8f0;
+        background: #ffffff;
+        color: #475569;
+        font-weight: 600;
+        font-size: 0.82rem;
+        padding: 6px 16px;
+        border-radius: 999px;
+        transition: all 0.2s ease;
+        cursor: pointer;
+    }
+    .blog-nav-tab:hover, .blog-nav-tab.active {
+        background: var(--landing-accent);
+        border-color: var(--landing-accent);
+        color: #ffffff;
+    }
+    .blog-card-img-wrapper {
+        position: relative;
+        overflow: hidden;
+        height: 220px;
+    }
+    .blog-card-img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+    .blog-card:hover .blog-card-img {
+        transform: scale(1.06);
+    }
+    .blog-card-category-badge {
+        position: absolute;
+        top: 14px;
+        left: 14px;
+        z-index: 2;
+        background: rgba(15, 23, 42, 0.82);
+        backdrop-filter: blur(4px);
+        color: #ffffff;
+        font-size: 0.72rem;
+        font-weight: 700;
+        padding: 4px 12px;
+        border-radius: 20px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+    .blog-author-avatar {
+        width: 38px;
+        height: 38px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #ffffff;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    /* Blog Detail Modal Styles (apps-blog-detail.html) */
+    .blog-detail-modal-dialog {
+        max-width: 860px;
+    }
+    .blog-detail-hero-img {
+        width: 100%;
+        max-height: 420px;
+        object-fit: cover;
+        border-radius: 16px;
+    }
+    .blog-detail-quote {
+        border-left: 4px solid var(--landing-accent);
+        background: var(--landing-accent-soft);
+        padding: 18px 24px;
+        border-radius: 0 12px 12px 0;
+        font-style: italic;
+        color: #1e293b;
+        font-size: 1.05rem;
+        margin: 24px 0;
+    }
+
+    /* Mobile adjustments */
     @media (max-width: 767.98px) {
-        .blog-cover-img { height: 190px; }
-        header h1 { font-size: 1.85rem !important; }
+        .blog-card-img-wrapper { height: 180px; }
+        .blog-header-hero h1 { font-size: 1.75rem !important; }
     }
     @media (max-width: 575.98px) {
-        header p.fs-17 { font-size: 0.95rem !important; }
         .floating-whatsapp-btn {
             width: 48px !important;
             height: 48px !important;
@@ -32,9 +111,7 @@
             right: 16px !important;
             padding: 0 !important;
         }
-        .floating-whatsapp-btn i {
-            font-size: 24px !important;
-        }
+        .floating-whatsapp-btn i { font-size: 24px !important; }
     }
 
     .site-footer { background:#f8fafc;color:#475569; }
@@ -44,16 +121,18 @@
     .footer-contact-item { display:flex;align-items:flex-start;gap:10px;padding:9px 0; }
     .footer-contact-icon { width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--landing-accent-soft);color:var(--landing-accent);flex:0 0 auto; }
     .footer-app-link { width:38px;height:38px;border-radius:11px;display:inline-grid;place-items:center;background:#fff;border:1px solid #dbe3ef;color:#0f172a!important; }
+
     html[data-bs-theme="dark"] body.landing-page { background:#080e1a!important;color:#e5edf8!important; }
-    html[data-bs-theme="dark"] .landing-page .navbar { background:rgba(8,14,26,.94)!important;border-color:#263449!important; }
+    html[data-bs-theme="dark"] .landing-page .card { background-color:#111827!important;color:#dbe6f3!important;border-color:#263449!important; }
     html[data-bs-theme="dark"] .landing-page .bg-white { background-color:#111827!important; }
     html[data-bs-theme="dark"] .landing-page .bg-light { background-color:#0f172a!important; }
-    html[data-bs-theme="dark"] .landing-page .card { background-color:#111827!important;color:#dbe6f3!important;border-color:#263449!important; }
-    html[data-bs-theme="dark"] .landing-page .site-footer { background:#080e1a;color:#aebdd0;border-color:#263449!important; }
+    html[data-bs-theme="dark"] .blog-header-hero { background:#0b1329!important; border-color:#1e293b!important; }
+    html[data-bs-theme="dark"] .blog-nav-tab { background:#1e293b; border-color:#334155; color:#cbd5e1; }
+    html[data-bs-theme="dark"] .site-footer { background:#080e1a;color:#aebdd0;border-color:#263449!important; }
 </style>
 
 <!-- Floating WhatsApp Button -->
-<a href="https://api.whatsapp.com/send?phone=5581994522504&text=Ol%C3%A1!%20Li%20o%20blog%20da%20Olinda%20Arte%20em%20Madeira%20e%20gostaria%20de%20conversar%20sobre%20as%20pe%C3%A7as."
+<a href="https://api.whatsapp.com/send?phone=5581994522504&text=Ol%C3%A1!%20Vim%20pelo%20Blog%20da%20Olinda%20Arte%20em%20Madeira%20e%20gostaria%20de%20tirar%20uma%20d%C3%BAvida."
    target="_blank" rel="noopener noreferrer"
    class="position-fixed floating-whatsapp-btn z-3 btn btn-success rounded-circle shadow-lg d-flex align-items-center justify-content-center border-0 hover-lift"
    style="bottom: 24px; right: 24px; width: 56px; height: 56px; background-color: #25d366;" title="Falar no WhatsApp com Olinda Aguiar">
@@ -63,116 +142,238 @@
 {% include 'partials/public-reviews-bar.html' %}
 {% include 'partials/public-navbar.html' %}
 
-<!-- Header do Blog -->
-<header class="py-5 bg-white border-bottom border-light-subtle">
-    <div class="container text-center py-lg-3">
-        <span class="badge px-3 py-2 rounded-pill fw-bold text-uppercase mb-3" style="background:#ffedd5;color:#c85a17;">Crônicas & Processo Criativo</span>
-        <h1 class="display-5 fw-extrabold text-dark mb-3">Histórias do Ateliê & A Arte em Madeira</h1>
-        <p class="text-secondary fs-17 max-w-700 mx-auto" style="max-width: 680px;">
-            Acompanhe nossas reflexões sobre o resgate da madeira de demolição, a força da liderança feminina, os bastidores do casarão histórico e as técnicas da marcenaria artesanal.
+<!-- HERO DO BLOG (MINIA BLOG HEADER) -->
+<header class="blog-header-hero">
+    <div class="container text-center">
+        <span class="badge px-3 py-1.5 rounded-pill fw-bold text-uppercase mb-2" style="background:#ffedd5;color:#c85a17;font-size:11px;">
+            📜 Crônicas & Processo Criativo
+        </span>
+        <h1 class="h2 fw-extrabold text-dark mb-2">Histórias do Ateliê & A Arte em Madeira</h1>
+        <p class="text-secondary fs-15 max-w-700 mx-auto mb-4" style="max-width: 660px;">
+            Acompanhe nossas reflexões sobre o resgate da madeira de demolição centenária, técnicas artesanais do casarão histórico e o design autoral.
         </p>
+
+        <!-- Barra de Busca & Navegação por Categorias (Grid Navbar) -->
+        <div class="d-flex flex-column align-items-center gap-3">
+            <div class="position-relative w-100" style="max-width: 480px;">
+                <input type="text" id="blogSearchInput" class="form-control rounded-pill ps-4 pe-5 py-2.5 fs-14 border border-2 border-warning-subtle shadow-sm" placeholder="Buscar artigos, madeiras, técnicas..." oninput="filtrarArtigos()">
+                <i class="ri-search-line position-absolute top-50 end-0 translate-middle-y me-3 text-muted fs-18"></i>
+            </div>
+
+            <div class="d-flex flex-wrap justify-content-center gap-2 mt-1" id="blogCategoriesNav">
+                <button type="button" class="blog-nav-tab active" data-category="all" onclick="selecionarCategoria('all', this)">Todos</button>
+                <button type="button" class="blog-nav-tab" data-category="Sustentabilidade" onclick="selecionarCategoria('Sustentabilidade', this)">Sustentabilidade</button>
+                <button type="button" class="blog-nav-tab" data-category="Técnicas Artesanais" onclick="selecionarCategoria('Técnicas Artesanais', this)">Técnicas Artesanais</button>
+                <button type="button" class="blog-nav-tab" data-category="Projetos Autorais" onclick="selecionarCategoria('Projetos Autorais', this)">Projetos Autorais</button>
+                <button type="button" class="blog-nav-tab" data-category="Marcenaria Colonial" onclick="selecionarCategoria('Marcenaria Colonial', this)">Marcenaria Colonial</button>
+                <button type="button" class="blog-nav-tab" data-category="Acabamentos & Ceras" onclick="selecionarCategoria('Acabamentos & Ceras', this)">Acabamentos & Ceras</button>
+            </div>
+        </div>
     </div>
 </header>
 
-<main class="py-5 bg-light">
-    <div class="container py-lg-3">
+<main class="py-4 bg-light">
+    <div class="container">
         
-        <!-- Artigo em Destaque Principal -->
-        <div class="card rounded-4 border-0 shadow-sm overflow-hidden mb-5 bg-white hover-lift">
+        <!-- ARTIGO EM DESTAQUE PRINCIPAL (MINIA FEATURED BANNER) -->
+        <div class="card rounded-4 border-0 shadow-sm overflow-hidden mb-5 bg-white hover-lift blog-article-item" data-id="1" data-category="Sustentabilidade" data-title="O Resgate das Madeiras Centenárias: Vida Nova com Respeito Ecológico">
             <div class="row g-0 align-items-center">
                 <div class="col-lg-7">
-                    <img src="{{ config.ASSETS_ROOT }}/images/hero-fachada-luz-dourada.png" class="img-fluid w-100 h-100" style="min-height: 340px; max-height: 440px; object-fit: cover;" alt="Fachada histórica do ateliê sob luz dourada">
+                    <img src="{{ config.ASSETS_ROOT }}/images/hero-fachada-luz-dourada.png" class="img-fluid w-100 h-100" style="min-height: 320px; max-height: 420px; object-fit: cover;" alt="Fachada histórica do ateliê sob luz dourada">
                 </div>
                 <div class="col-lg-5 p-4 p-md-5">
-                    <div class="d-flex align-items-center gap-2 mb-3">
-                        <span class="badge px-3 py-1 rounded-pill fw-bold fs-12 text-uppercase" style="background:#ffedd5;color:#c85a17;">Destaque Editorial</span>
-                        <small class="text-muted"><i class="ri-calendar-line me-1"></i>Setembro, 2026</small>
+                    <div class="d-flex align-items-center gap-2 mb-2">
+                        <span class="badge px-3 py-1 rounded-pill fw-bold fs-11 text-uppercase" style="background:#ffedd5;color:#c85a17;">Destaque Editorial</span>
+                        <small class="text-muted fs-12"><i class="ri-time-line me-1"></i>6 min de leitura</small>
                     </div>
-                    <h2 class="fw-bold text-dark mb-3 fs-26">O Resgate das Madeiras Centenárias: Vida Nova com Respeito Ecológico</h2>
-                    <p class="text-secondary fs-15 mb-4">
-                        Como casarões antigos e estruturas desativadas fornecem toras com veios raros e densidade que não existem mais em madeiras novas. Entenda nosso processo de triagem, expurgo natural e preservação de memória.
+                    <h2 class="fw-bold text-dark mb-3 fs-24 card-title-clickable" style="cursor:pointer;" onclick="abrirDetalhesArtigo(1)">O Resgate das Madeiras Centenárias: Vida Nova com Respeito Ecológico</h2>
+                    <p class="text-secondary fs-14 mb-4">
+                        Como casarões seculares e estruturas desativadas fornecem toras com veios raros e densidade que não existem em madeiras novas. Entenda nosso processo de triagem e preservação da história de Pernambuco.
                     </p>
                     <div class="d-flex align-items-center justify-content-between pt-3 border-top border-light-subtle">
-                        <span class="small fw-semibold text-dark"><i class="ri-user-line me-1 text-primary"></i>Por Olinda Aguiar</span>
-                        <a href="https://api.whatsapp.com/send?phone=5581994522504&text=Ol%C3%A1!%20Gostaria%20de%20conversar%20sobre%20as%20madeiras%20centen%C3%A1rias%20do%20ateli%C3%AA." target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-bold">
-                            Tirar Dúvidas no WhatsApp <i class="ri-arrow-right-line ms-1"></i>
-                        </a>
+                        <div class="d-flex align-items-center gap-2">
+                            <img src="{{ config.ASSETS_ROOT }}/images/byll-e-olinda-aguiar.png" class="blog-author-avatar" alt="Foto Olinda Aguiar">
+                            <div>
+                                <strong class="d-block text-dark fs-13">Olinda Aguiar</strong>
+                                <small class="text-muted fs-11">24 de Setembro, 2026</small>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-warning btn-sm rounded-pill px-3.5 fw-bold text-dark border-0 shadow-sm" style="background:#c85a17; color:#fff!important;" onclick="abrirDetalhesArtigo(1)">
+                            Ler Artigo Completo <i class="ri-arrow-right-line ms-1"></i>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Grade de Artigos -->
-        <div class="row g-4">
+        <!-- GRADE DE ARTIGOS (MINIA BLOG GRID - APPS-BLOG-GRID.HTML) -->
+        <div class="row g-4" id="blogGridContainer">
             
-            <!-- Card Artigo 1 -->
-            <div class="col-md-6 col-lg-4">
-                <div class="card h-100 rounded-4 border-0 shadow-sm overflow-hidden bg-white hover-lift d-flex flex-column">
-                    <img src="{{ config.ASSETS_ROOT }}/images/hero-fachada-noite-azul.png" class="blog-cover-img" alt="Casarão na noite azul">
+            <!-- Card 2 -->
+            <div class="col-md-6 col-lg-4 blog-article-item" data-id="2" data-category="Técnicas Artesanais" data-title="Cadeiras Empalhadas à Mão: A Tradição da Palhinha Natural no Ateliê">
+                <div class="card h-100 rounded-4 border-0 shadow-sm overflow-hidden bg-white hover-lift blog-card d-flex flex-column">
+                    <div class="blog-card-img-wrapper" style="cursor:pointer;" onclick="abrirDetalhesArtigo(2)">
+                        <span class="blog-card-category-badge">Técnicas Artesanais</span>
+                        <img src="{{ config.ASSETS_ROOT }}/images/cadeiras-encosto-empalhado-madeira-demolicao.png" class="blog-card-img" alt="Cadeiras encosto empalhado à mão">
+                    </div>
                     <div class="p-4 d-flex flex-column flex-grow-1">
-                        <div class="d-flex align-items-center gap-2 mb-2">
-                            <span class="badge bg-primary-subtle text-primary px-2.5 py-1 rounded-pill fw-bold fs-11">Liderança & Propósito</span>
-                            <small class="text-muted fs-12">5 min de leitura</small>
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <small class="text-muted fs-12"><i class="ri-calendar-line me-1"></i>20 Set, 2026</small>
+                            <small class="text-muted fs-12"><i class="ri-time-line me-1"></i>5 min de leitura</small>
                         </div>
-                        <h5 class="fw-bold text-dark mb-2">Liderança Feminina na Marcenaria: A Força de Olinda Aguiar</h5>
+                        <h5 class="fw-bold text-dark mb-2 fs-17 card-title-clickable" style="cursor:pointer;" onclick="abrirDetalhesArtigo(2)">Cadeiras Empalhadas à Mão: A Tradição da Palhinha Natural</h5>
                         <p class="text-secondary fs-14 flex-grow-1">
-                            Como a visão inspiradora de uma mulher liderando uma equipe talentosa de artesãos homens revoluciona o mercado de arte e sustentabilidade em Pernambuco.
+                            O entrelaçamento manual da palhinha indiana combinado com a solidez maciça da Peroba Rosa resgatada de casarões coloniais.
                         </p>
-                        <a href="https://www.instagram.com/olindaaguiartemadeira/" target="_blank" rel="noopener noreferrer" class="fw-bold text-decoration-none d-inline-flex align-items-center gap-1 mt-3" style="color:#c85a17;">
-                            Ver mais no Instagram <i class="ri-instagram-line"></i>
-                        </a>
+                        <div class="d-flex align-items-center justify-content-between pt-3 border-top border-light-subtle mt-3">
+                            <div class="d-flex align-items-center gap-2">
+                                <img src="{{ config.ASSETS_ROOT }}/images/byll-mestre-artesao.png" class="blog-author-avatar" alt="Mestre Byll">
+                                <span class="fs-12 fw-semibold text-dark">Mestre Byll</span>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-outline-dark rounded-pill px-3 fw-bold" onclick="abrirDetalhesArtigo(2)">
+                                Ler Artigo
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Card Artigo 2 -->
-            <div class="col-md-6 col-lg-4">
-                <div class="card h-100 rounded-4 border-0 shadow-sm overflow-hidden bg-white hover-lift d-flex flex-column">
-                    <img src="{{ config.ASSETS_ROOT }}/images/hero-fachada-coral-entardecer.png" class="blog-cover-img" alt="Fachada coral ao entardecer">
+            <!-- Card 3 -->
+            <div class="col-md-6 col-lg-4 blog-article-item" data-id="3" data-category="Projetos Autorais" data-title="Bares em Lambri de Jatobá: Resistência Náutica e Sofisticação Gourmet">
+                <div class="card h-100 rounded-4 border-0 shadow-sm overflow-hidden bg-white hover-lift blog-card d-flex flex-column">
+                    <div class="blog-card-img-wrapper" style="cursor:pointer;" onclick="abrirDetalhesArtigo(3)">
+                        <span class="blog-card-category-badge">Projetos Autorais</span>
+                        <img src="{{ config.ASSETS_ROOT }}/images/bar-resort-lambri-jatoba.png" class="blog-card-img" alt="Bar em lambri de jatobá">
+                    </div>
                     <div class="p-4 d-flex flex-column flex-grow-1">
-                        <div class="d-flex align-items-center gap-2 mb-2">
-                            <span class="badge bg-success bg-opacity-10 text-success px-2.5 py-1 rounded-pill fw-bold fs-11">Técnicas & Acabamentos</span>
-                            <small class="text-muted fs-12">4 min de leitura</small>
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <small class="text-muted fs-12"><i class="ri-calendar-line me-1"></i>15 Set, 2026</small>
+                            <small class="text-muted fs-12"><i class="ri-time-line me-1"></i>4 min de leitura</small>
                         </div>
-                        <h5 class="fw-bold text-dark mb-2">Ceras de Abelha e Óleos Nobres: O Segredo do Toque Aveludado</h5>
+                        <h5 class="fw-bold text-dark mb-2 fs-17 card-title-clickable" style="cursor:pointer;" onclick="abrirDetalhesArtigo(3)">Bares em Lambri de Jatobá: Resistência Náutica & Estilo</h5>
                         <p class="text-secondary fs-14 flex-grow-1">
-                            Por que banimos vernizes sintéticos em favor de fórmulas naturais que deixam a madeira de demolição respirar e revelam seus veios de forma orgânica.
+                            Revestimento integral em réguas maciças de Jatobá de alta densidade com tratamento especial contra sol, umidade e maresia.
                         </p>
-                        <a href="https://www.facebook.com/BylleOlinda" target="_blank" rel="noopener noreferrer" class="fw-bold text-decoration-none d-inline-flex align-items-center gap-1 mt-3" style="color:#c85a17;">
-                            Ver fotos na Galeria <i class="ri-facebook-circle-fill"></i>
-                        </a>
+                        <div class="d-flex align-items-center justify-content-between pt-3 border-top border-light-subtle mt-3">
+                            <div class="d-flex align-items-center gap-2">
+                                <img src="{{ config.ASSETS_ROOT }}/images/byll-e-olinda-aguiar.png" class="blog-author-avatar" alt="Olinda Aguiar">
+                                <span class="fs-12 fw-semibold text-dark">Olinda Aguiar</span>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-outline-dark rounded-pill px-3 fw-bold" onclick="abrirDetalhesArtigo(3)">
+                                Ler Artigo
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Card Artigo 3 -->
-            <div class="col-md-6 col-lg-4">
-                <div class="card h-100 rounded-4 border-0 shadow-sm overflow-hidden bg-white hover-lift d-flex flex-column">
-                    <img src="{{ config.ASSETS_ROOT }}/images/hero-fachada-luz-dourada.png" class="blog-cover-img" alt="Luz dourada no casarão">
+            <!-- Card 4 -->
+            <div class="col-md-6 col-lg-4 blog-article-item" data-id="4" data-category="Marcenaria Colonial" data-title="Cristaleiras Coloniais: Onde a História Guarda Suas Memórias">
+                <div class="card h-100 rounded-4 border-0 shadow-sm overflow-hidden bg-white hover-lift blog-card d-flex flex-column">
+                    <div class="blog-card-img-wrapper" style="cursor:pointer;" onclick="abrirDetalhesArtigo(4)">
+                        <span class="blog-card-category-badge">Marcenaria Colonial</span>
+                        <img src="{{ config.ASSETS_ROOT }}/images/cristaleira-colonial-portas-vidro-peroba.png" class="blog-card-img" alt="Cristaleira colonial">
+                    </div>
                     <div class="p-4 d-flex flex-column flex-grow-1">
-                        <div class="d-flex align-items-center gap-2 mb-2">
-                            <span class="badge bg-warning bg-opacity-15 text-warning px-2.5 py-1 rounded-pill fw-bold fs-11">Patrimônio Colonial</span>
-                            <small class="text-muted fs-12">6 min de leitura</small>
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <small class="text-muted fs-12"><i class="ri-calendar-line me-1"></i>10 Set, 2026</small>
+                            <small class="text-muted fs-12"><i class="ri-time-line me-1"></i>5 min de leitura</small>
                         </div>
-                        <h5 class="fw-bold text-dark mb-2">O Casarão da Rua Cel. Joaquim Cavalcante no Carmo</h5>
+                        <h5 class="fw-bold text-dark mb-2 fs-17 card-title-clickable" style="cursor:pointer;" onclick="abrirDetalhesArtigo(4)">Cristaleiras Coloniais: Onde a História Guarda Suas Memórias</h5>
                         <p class="text-secondary fs-14 flex-grow-1">
-                            Conheça as histórias das paredes centenárias que hoje abrigam os formões, plainas, lixadeiras e o showroom de arte mais aconchegante de Olinda.
+                            Portas envidraçadas duplas, encaixes tradicionais de espiga e acabamento com cera de carnaúba pura para destacar os tons mel.
                         </p>
-                        <a href="https://www.google.com/maps?q=-8.0122,-34.8543&z=17&hl=pt-BR" target="_blank" rel="noopener noreferrer" class="fw-bold text-decoration-none d-inline-flex align-items-center gap-1 mt-3" style="color:#c85a17;">
-                            Como Visitar o Ateliê <i class="ri-map-pin-line"></i>
-                        </a>
+                        <div class="d-flex align-items-center justify-content-between pt-3 border-top border-light-subtle mt-3">
+                            <div class="d-flex align-items-center gap-2">
+                                <img src="{{ config.ASSETS_ROOT }}/images/byll-e-olinda-aguiar.png" class="blog-author-avatar" alt="Olinda Aguiar">
+                                <span class="fs-12 fw-semibold text-dark">Olinda Aguiar</span>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-outline-dark rounded-pill px-3 fw-bold" onclick="abrirDetalhesArtigo(4)">
+                                Ler Artigo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 5 -->
+            <div class="col-md-6 col-lg-4 blog-article-item" data-id="5" data-category="Liderança & Propósito" data-title="Liderança Feminina na Marcenaria: A Visão de Olinda Aguiar">
+                <div class="card h-100 rounded-4 border-0 shadow-sm overflow-hidden bg-white hover-lift blog-card d-flex flex-column">
+                    <div class="blog-card-img-wrapper" style="cursor:pointer;" onclick="abrirDetalhesArtigo(5)">
+                        <span class="blog-card-category-badge">Liderança & Propósito</span>
+                        <img src="{{ config.ASSETS_ROOT }}/images/hero-fachada-coral-entardecer.png" class="blog-card-img" alt="Casarão ao entardecer">
+                    </div>
+                    <div class="p-4 d-flex flex-column flex-grow-1">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <small class="text-muted fs-12"><i class="ri-calendar-line me-1"></i>05 Set, 2026</small>
+                            <small class="text-muted fs-12"><i class="ri-time-line me-1"></i>7 min de leitura</small>
+                        </div>
+                        <h5 class="fw-bold text-dark mb-2 fs-17 card-title-clickable" style="cursor:pointer;" onclick="abrirDetalhesArtigo(5)">Liderança Feminina na Marcenaria: A Visão de Olinda Aguiar</h5>
+                        <p class="text-secondary fs-14 flex-grow-1">
+                            Como a visão inspiradora e o olhar sensível sobre o design revolucionaram a restauração de madeira de lei em Pernambuco.
+                        </p>
+                        <div class="d-flex align-items-center justify-content-between pt-3 border-top border-light-subtle mt-3">
+                            <div class="d-flex align-items-center gap-2">
+                                <img src="{{ config.ASSETS_ROOT }}/images/byll-e-olinda-aguiar.png" class="blog-author-avatar" alt="Olinda Aguiar">
+                                <span class="fs-12 fw-semibold text-dark">Olinda Aguiar</span>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-outline-dark rounded-pill px-3 fw-bold" onclick="abrirDetalhesArtigo(5)">
+                                Ler Artigo
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 6 -->
+            <div class="col-md-6 col-lg-4 blog-article-item" data-id="6" data-category="Acabamentos & Ceras" data-title="Ceras Naturais e Óleos Botânicos: Por Que Abolimos Vernizes Sintéticos">
+                <div class="card h-100 rounded-4 border-0 shadow-sm overflow-hidden bg-white hover-lift blog-card d-flex flex-column">
+                    <div class="blog-card-img-wrapper" style="cursor:pointer;" onclick="abrirDetalhesArtigo(6)">
+                        <span class="blog-card-category-badge">Acabamentos & Ceras</span>
+                        <img src="{{ config.ASSETS_ROOT }}/images/comoda-balcao-gaveteiro-demolicao.png" class="blog-card-img" alt="Móvel balcão encerado">
+                    </div>
+                    <div class="p-4 d-flex flex-column flex-grow-1">
+                        <div class="d-flex align-items-center justify-content-between mb-2">
+                            <small class="text-muted fs-12"><i class="ri-calendar-line me-1"></i>01 Set, 2026</small>
+                            <small class="text-muted fs-12"><i class="ri-time-line me-1"></i>4 min de leitura</small>
+                        </div>
+                        <h5 class="fw-bold text-dark mb-2 fs-17 card-title-clickable" style="cursor:pointer;" onclick="abrirDetalhesArtigo(6)">Ceras Naturais & Óleos: Por Que Abolimos Vernizes Sintéticos</h5>
+                        <p class="text-secondary fs-14 flex-grow-1">
+                            Fórmulas atóxicas e ecológicas que permitem à madeira centenária respirar, garantindo um toque aveludado e brilho acetinado duradouro.
+                        </p>
+                        <div class="d-flex align-items-center justify-content-between pt-3 border-top border-light-subtle mt-3">
+                            <div class="d-flex align-items-center gap-2">
+                                <img src="{{ config.ASSETS_ROOT }}/images/byll-mestre-artesao.png" class="blog-author-avatar" alt="Mestre Byll">
+                                <span class="fs-12 fw-semibold text-dark">Mestre Byll</span>
+                            </div>
+                            <button type="button" class="btn btn-sm btn-outline-dark rounded-pill px-3 fw-bold" onclick="abrirDetalhesArtigo(6)">
+                                Ler Artigo
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
 
         </div>
 
-        <!-- Box de Conexão com Redes Sociais -->
+        <!-- MENSAGEM SE NENHUM ARTIGO FOR ENCONTRADO NA BUSCA -->
+        <div id="blogEmptyMessage" class="text-center py-5 d-none">
+            <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 58px; height: 58px; background: #ffedd5; color: #c85a17;">
+                <i class="ri-article-line fs-28"></i>
+            </div>
+            <h4 class="fw-bold text-dark mb-1">Nenhum artigo encontrado</h4>
+            <p class="text-secondary fs-14 mb-3">Tente buscar por outros termos como "Peroba Rosa", "Demolição", "Palhinha" ou selecione "Todos".</p>
+            <button type="button" class="btn btn-outline-dark rounded-pill px-4 py-2 fw-semibold" onclick="limparFiltrosBlog()">Ver Todos os Artigos</button>
+        </div>
+
+        <!-- CONEXÃO COM REDES SOCIAIS -->
         <div class="card rounded-4 border-0 shadow-sm mt-5 p-4 p-md-5 text-center bg-white">
-            <span class="badge px-3 py-1 rounded-pill fw-bold text-uppercase mb-2 mx-auto" style="background:#ffedd5;color:#c85a17;">Acompanhe o Dia a Dia</span>
-            <h3 class="fw-bold text-dark mb-3">Quer ver o processo de escultura e acabamento ao vivo?</h3>
-            <p class="text-secondary fs-15 max-w-700 mx-auto mb-4" style="max-width: 600px;">
-                Publicamos vídeos da seleção das toras, entalhe de Byll e expedição de peças nos perfis oficiais do ateliê.
+            <span class="badge px-3 py-1.5 rounded-pill fw-bold text-uppercase mb-2 mx-auto" style="background:#ffedd5;color:#c85a17;font-size:11px;">
+                📸 Acompanhe o Dia a Dia do Casarão
+            </span>
+            <h3 class="fw-bold text-dark mb-2 fs-22">Quer ver o processo de escultura e acabamento ao vivo?</h3>
+            <p class="text-secondary fs-14 max-w-700 mx-auto mb-4" style="max-width: 580px;">
+                Publicamos vídeos da seleção das toras, entalhe manual de Mestre Byll e expedição de peças nos perfis oficiais do ateliê.
             </p>
             <div class="d-flex flex-wrap justify-content-center gap-3">
                 <a href="https://www.instagram.com/olindaaguiartemadeira/" target="_blank" rel="noopener noreferrer" class="btn btn-danger rounded-pill px-4 py-2.5 fw-bold d-inline-flex align-items-center gap-2 shadow-sm">
@@ -187,5 +388,252 @@
     </div>
 </main>
 
+<!-- LEITOR DE ARTIGO COMPLETO (MINIA APPS-BLOG-DETAIL.HTML MODAL) -->
+<div class="modal fade" id="blogDetailModal" tabindex="-1" aria-labelledby="blogDetailTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable blog-detail-modal-dialog">
+        <div class="modal-content rounded-4 border-0 shadow-lg">
+            <div class="modal-header border-bottom border-light-subtle pb-3">
+                <div class="d-flex align-items-center gap-2">
+                    <span class="badge bg-primary-subtle text-primary px-3 py-1 rounded-pill fw-bold fs-12" id="modalBlogCategory">Sustentabilidade</span>
+                    <small class="text-muted fs-12"><i class="ri-time-line me-1"></i><span id="modalBlogReadTime">5 min de leitura</span></small>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            
+            <div class="modal-body p-4 p-md-5">
+                <!-- Imagem Principal de Capa -->
+                <img id="modalBlogCoverImg" src="" class="blog-detail-hero-img mb-4" alt="Capa do artigo">
+
+                <!-- Título e Subtítulo -->
+                <h2 id="blogDetailTitle" class="fw-extrabold text-dark mb-3 fs-26">---</h2>
+
+                <!-- Autor e Data -->
+                <div class="d-flex align-items-center justify-content-between pb-3 mb-4 border-bottom border-light-subtle flex-wrap gap-2">
+                    <div class="d-flex align-items-center gap-2.5">
+                        <img id="modalBlogAuthorAvatar" src="" class="blog-author-avatar" style="width: 44px; height: 44px;" alt="Avatar do Autor">
+                        <div>
+                            <strong class="d-block text-dark fs-14" id="modalBlogAuthorName">Olinda Aguiar</strong>
+                            <small class="text-muted fs-12"><i class="ri-calendar-event-line me-1"></i><span id="modalBlogDate">24 de Setembro, 2026</span></small>
+                        </div>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <a id="modalBlogZapShare" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-success rounded-pill px-3 fw-bold d-inline-flex align-items-center gap-1.5" style="background:#25d366; border:0;">
+                            <i class="ri-whatsapp-line fs-16"></i> Compartilhar
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Conteúdo Rico do Artigo (Formatado estilo apps-blog-detail.html) -->
+                <div id="modalBlogBodyContent" class="fs-15 text-secondary lh-lg">
+                    <!-- Preenchido via JavaScript -->
+                </div>
+
+                <!-- Citação em Destaque -->
+                <div class="blog-detail-quote" id="modalBlogQuoteBlock">
+                    <i class="ri-double-quotes-l fs-24 d-block mb-1 text-primary"></i>
+                    <span id="modalBlogQuoteText">"A madeira de demolição não é apenas matéria-prima; é a memória viva dos casarões coloniais que abrigaram gerações em Pernambuco."</span>
+                    <small class="d-block text-muted mt-2 font-monospace fs-12">— Olinda Aguiar & Mestre Byll</small>
+                </div>
+
+                <!-- Card do Autor no Rodapé do Leitor -->
+                <div class="rounded-4 p-3.5 bg-light border border-light-subtle mt-4 d-flex align-items-center gap-3">
+                    <img id="modalBlogAuthorAvatarFooter" src="" class="rounded-circle flex-shrink-0" style="width: 52px; height: 52px; object-fit: cover;" alt="Autor">
+                    <div>
+                        <strong class="d-block text-dark fs-14" id="modalBlogAuthorFooterName">Olinda Aguiar</strong>
+                        <small class="text-muted fs-13">Fundadora & Curadora da Olinda Arte em Madeira. Especialista em resgate de madeira de lei e marcenaria artística colonial.</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer border-top border-light-subtle justify-content-between">
+                <button type="button" class="btn btn-outline-secondary rounded-pill px-4 fw-semibold" data-bs-dismiss="modal">Fechar Leitura</button>
+                <a id="modalBlogWhatsInquiry" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-warning rounded-pill px-4 fw-bold text-dark border-0" style="background:#c85a17; color:#fff!important;">
+                    <i class="ri-whatsapp-line me-1"></i> Falar sobre este Artigo no WhatsApp
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% include 'partials/public-footer.html' %}
+
+<script>
+    // Banco de Dados de Artigos do Blog (Estrutura Minia Blog Detail)
+    const BLOG_ARTICLES = {
+        1: {
+            id: 1,
+            title: "O Resgate das Madeiras Centenárias: Vida Nova com Respeito Ecológico",
+            category: "Sustentabilidade",
+            authorName: "Olinda Aguiar",
+            authorAvatar: "{{ config.ASSETS_ROOT }}/images/byll-e-olinda-aguiar.png",
+            date: "24 de Setembro, 2026",
+            readTime: "6 min de leitura",
+            coverImg: "{{ config.ASSETS_ROOT }}/images/hero-fachada-luz-dourada.png",
+            quote: "A madeira de demolição não é apenas matéria-prima; é a memória viva dos casarões coloniais que abrigaram gerações em Pernambuco.",
+            paragraphs: [
+                "Nas ruas históricas de Recife e Olinda, casarões seculares e engenhos desativados guardam uma riqueza inestimável: toras de Peroba Rosa, Jatobá, Jacarandá e Braúna que enfrentaram mais de cem anos de sol, chuva e maresia.",
+                "Diferente das madeiras jovens de reflorestamento, a madeira de demolição possui uma densidade extraordinária e veios profundamente marcados. Cada racha, marca de prego antigo e tonalidade avermelhada contam uma página da arquitetura nordestina.",
+                "No nosso ateliê, o processo começa na triagem ética: selecionamos apenas vigas de demolição autênticas com documentação. Em seguida, as peças passam por expurgo natural, higienização cuidadosa e estabilização de umidade antes de irem para o cavalete dos mestres entalhadores.",
+                "O resultado são móveis e obras autorais que combinam robustez secular com leveza contemporânea, garantindo durabilidade para passar por gerações na sua família."
+            ]
+        },
+        2: {
+            id: 2,
+            title: "Cadeiras Empalhadas à Mão: A Tradição da Palhinha Natural no Ateliê",
+            category: "Técnicas Artesanais",
+            authorName: "Mestre Byll",
+            authorAvatar: "{{ config.ASSETS_ROOT }}/images/byll-mestre-artesao.png",
+            date: "20 de Setembro, 2026",
+            readTime: "5 min de leitura",
+            coverImg: "{{ config.ASSETS_ROOT }}/images/cadeiras-encosto-empalhado-madeira-demolicao.png",
+            quote: "A tela de palhinha tecida à mão traz conforto térmico, leveza visual e a alma da marcenaria tradicional brasileira.",
+            paragraphs: [
+                "A técnica do encosto empalhado à mão é um dos símbolos mais nobres do mobiliário colonial brasileiro. No Ateliê Olinda Aguiar, resgatamos essa tradição aplicando a trama de palhinha indiana natural em estruturas maciças de Peroba Rosa.",
+                "Cada encosto leva horas de trabalho paciente. O artesão alinha e fixa manualmente cada fibra vegetal através de perfurações precisas na madeira maciça, garantindo tensão uniforme e alta resistência.",
+                "Além do apelo estético aconchegante, as cadeiras empalhadas oferecem conforto térmico superior no clima tropical, permitindo a circulação contínua do ar e adaptando-se perfeitamente a salas de jantar, varandas e espaços gourmet."
+            ]
+        },
+        3: {
+            id: 3,
+            title: "Bares em Lambri de Jatobá: Resistência Náutica e Sofisticação Gourmet",
+            category: "Projetos Autorais",
+            authorName: "Olinda Aguiar",
+            authorAvatar: "{{ config.ASSETS_ROOT }}/images/byll-e-olinda-aguiar.png",
+            date: "15 de Setembro, 2026",
+            readTime: "4 min de leitura",
+            coverImg: "{{ config.ASSETS_ROOT }}/images/bar-resort-lambri-jatoba.png",
+            quote: "Projetar para áreas externas e litorâneas exige madeiras de altíssima densidade como o Jatobá, tratadas com seladores marítimos atóxicos.",
+            paragraphs: [
+                "Ambientes de praia, resorts e varandas gourmet demandam materiais que suportem sol intenso, maresia e variação de umidade sem empenar ou deteriorar.",
+                "O bar em lambri de jatobá foi concebido para atender a essa exigência extrema. As réguas maciças encaixadas com precisão milimétrica formam uma blindagem rústica de alta elegância.",
+                "A estrutura conta com tratamento náutico hidrorrepelente que preserva a tonalidade avermelhada natural do Jatobá de demolição, acompanhada de bancada de atendimento anatômica e compartimentos internos para conservação."
+            ]
+        },
+        4: {
+            id: 4,
+            title: "Cristaleiras Coloniais: Onde a História Guarda Suas Memórias",
+            category: "Marcenaria Colonial",
+            authorName: "Olinda Aguiar",
+            authorAvatar: "{{ config.ASSETS_ROOT }}/images/byll-e-olinda-aguiar.png",
+            date: "10 de Setembro, 2026",
+            readTime: "5 min de leitura",
+            coverImg: "{{ config.ASSETS_ROOT }}/images/cristaleira-colonial-portas-vidro-peroba.png",
+            quote: "Uma cristaleira colonial bem executada é o coração afetivo da sala de jantar, combinando vidro cristalino e Peroba Rosa encerada.",
+            paragraphs: [
+                "Inspiradas nas peças clássicas dos casarões do século XIX, nossas cristaleiras são construídas em pranchas maciças de Peroba Rosa resgatadas.",
+                "As portas duplas envidraçadas possuem divisórias retilíneas elegantes, prateleiras de elevada capacidade de carga para cristais e louçarias nobres, e gavetões inferiores com encaixe rabo-de-andorinha.",
+                "O acabamento final é feito à mão com cera de carnaúba pura e óleo de rícino, conferindo um toque acetinado incomparável e aroma acolhedor de madeira natural."
+            ]
+        },
+        5: {
+            id: 5,
+            title: "Liderança Feminina na Marcenaria: A Visão de Olinda Aguiar",
+            category: "Liderança & Propósito",
+            authorName: "Olinda Aguiar",
+            authorAvatar: "{{ config.ASSETS_ROOT }}/images/byll-e-olinda-aguiar.png",
+            date: "05 de Setembro, 2026",
+            readTime: "7 min de leitura",
+            coverImg: "{{ config.ASSETS_ROOT }}/images/hero-fachada-coral-entardecer.png",
+            quote: "Liderar um ateliê no setor de marcenaria pesada exige unir sensibilidade no design, gestão rigorosa e profundo respeito aos mestres artesãos.",
+            paragraphs: [
+                "Historicamente dominado por homens, o setor da marcenaria e restauração de móveis ganha uma nova atmosfera com a liderança visionária de Olinda Aguiar.",
+                "Com curadoria apurada, Olinda coordena a equipe de mestres entalhadores no casarão do Carmo, trazendo inovação no atendimento, personalização sob medida e transparência nas etapas de encomenda.",
+                "Sua liderança inspira arquitetos, colecionadores e clientes de todo o Brasil que buscam peças exclusivas produzidas com valorização humana e sustentabilidade real."
+            ]
+        },
+        6: {
+            id: 6,
+            title: "Ceras Naturais e Óleos Botânicos: Por Que Abolimos Vernizes Sintéticos",
+            category: "Acabamentos & Ceras",
+            authorName: "Mestre Byll",
+            authorAvatar: "{{ config.ASSETS_ROOT }}/images/byll-mestre-artesao.png",
+            date: "01 de Setembro, 2026",
+            readTime: "4 min de leitura",
+            coverImg: "{{ config.ASSETS_ROOT }}/images/comoda-balcao-gaveteiro-demolicao.png",
+            quote: "Fórmulas de cera de abelha e carnaúba nutrem os veios seculares e deixam a madeira respirar sem criar películas plásticas artificiais.",
+            paragraphs: [
+                "Vernizes sintéticos e resinas plásticas tendem a descascar, amarelar com o tempo e sufocar os veios vivos da madeira de demolição.",
+                "No nosso processo artesanal, priorizamos misturas próprias de cera de abelha silvestre, cera de carnaúba e óleos botânicos atóxicos.",
+                "Esse acabamento nutre profundamente as fibras da madeira, repele umidade com naturalidade e cria uma pátina suave que fica cada vez mais bonita com o passar dos anos."
+            ]
+        }
+    };
+
+    let categoriaAtual = 'all';
+
+    function selecionarCategoria(cat, btn) {
+        categoriaAtual = cat;
+        document.querySelectorAll('.blog-nav-tab').forEach(t => t.classList.remove('active'));
+        if (btn) btn.classList.add('active');
+        filtrarArtigos();
+    }
+
+    function filtrarArtigos() {
+        const termo = document.getElementById('blogSearchInput').value.trim().toLowerCase();
+        const artigos = document.querySelectorAll('.blog-article-item');
+        let visiveis = 0;
+
+        artigos.forEach(item => {
+            const cat = item.dataset.category;
+            const titulo = item.dataset.title.toLowerCase();
+            const bateCategoria = (categoriaAtual === 'all' || cat === categoriaAtual);
+            const bateBusca = (!termo || titulo.includes(termo) || cat.toLowerCase().includes(termo));
+
+            if (bateCategoria && bateBusca) {
+                item.classList.remove('d-none');
+                visiveis++;
+            } else {
+                item.classList.add('d-none');
+            }
+        });
+
+        const msgEmpty = document.getElementById('blogEmptyMessage');
+        if (msgEmpty) {
+            msgEmpty.classList.toggle('d-none', visiveis > 0);
+        }
+    }
+
+    function limparFiltrosBlog() {
+        document.getElementById('blogSearchInput').value = '';
+        selecionarCategoria('all', document.querySelector('.blog-nav-tab[data-category="all"]'));
+    }
+
+    function abrirDetalhesArtigo(articleId) {
+        const article = BLOG_ARTICLES[articleId];
+        if (!article) return;
+
+        document.getElementById('modalBlogCoverImg').src = article.coverImg;
+        document.getElementById('modalBlogCategory').textContent = article.category;
+        document.getElementById('modalBlogReadTime').textContent = article.readTime;
+        document.getElementById('blogDetailTitle').textContent = article.title;
+        document.getElementById('modalBlogAuthorName').textContent = article.authorName;
+        document.getElementById('modalBlogAuthorAvatar').src = article.authorAvatar;
+        document.getElementById('modalBlogAuthorAvatarFooter').src = article.authorAvatar;
+        document.getElementById('modalBlogAuthorFooterName').textContent = article.authorName;
+        document.getElementById('modalBlogDate').textContent = article.date;
+        document.getElementById('modalBlogQuoteText').textContent = `"${article.quote}"`;
+
+        // Renderizar Parágrafos do Artigo
+        const bodyContainer = document.getElementById('modalBlogBodyContent');
+        bodyContainer.innerHTML = '';
+        article.paragraphs.forEach(p => {
+            const pEl = document.createElement('p');
+            pEl.className = 'mb-3';
+            pEl.textContent = p;
+            bodyContainer.appendChild(pEl);
+        });
+
+        // Configurar Links do WhatsApp
+        const shareMsg = `Li este artigo incrível no Blog da Olinda Arte em Madeira: *${article.title}*. Confira no site!`;
+        document.getElementById('modalBlogZapShare').href = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareMsg)}`;
+
+        const inquiryMsg = `Olá Olinda Aguiar! Gostaria de conversar sobre o assunto do artigo: *${article.title}*.`;
+        document.getElementById('modalBlogWhatsInquiry').href = `https://api.whatsapp.com/send?phone=5581994522504&text=${encodeURIComponent(inquiryMsg)}`;
+
+        // Abrir Modal
+        const modalEl = document.getElementById('blogDetailModal');
+        const modal = new bootstrap.Modal(modalEl);
+        modal.show();
+    }
+</script>
 {% endblock content %}
