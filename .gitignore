@@ -17,6 +17,7 @@ instance/
 *.db
 *.sqlite
 *.sqlite3
+apps/static/images/blog/uploads/
 .~*
 ~$*
 

@@ -220,7 +220,9 @@ class BlogArticle(db.Model):
     excerpt = db.Column(db.Text, nullable=False)
     quote = db.Column(db.Text, nullable=False, default='')
     content_json = db.Column(db.Text, nullable=False, default='[]')
+    content_html = db.Column(db.Text, nullable=False, default='')
     gallery_json = db.Column(db.Text, nullable=False, default='[]')
+    status = db.Column(db.String(20), nullable=False, default='published', index=True)
     active = db.Column(db.Boolean, nullable=False, default=True)
     published_at = db.Column(db.DateTime, nullable=False, default=lambda: datetime.now(timezone.utc))
     edited_at = db.Column(db.DateTime, nullable=True)
@@ -260,7 +262,9 @@ class BlogArticle(db.Model):
             'excerpt': self.excerpt,
             'quote': self.quote or self.excerpt,
             'content_paragraphs': self._json_list(self.content_json),
+            'content_html': self.content_html or '',
             'gallery': self._json_list(self.gallery_json),
+            'status': self.status or 'published',
         }
 
 

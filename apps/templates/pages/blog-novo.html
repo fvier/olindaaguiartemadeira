@@ -42,6 +42,7 @@
         padding:6px 10px;border-radius:999px;background:#ecfdf5;color:#087451;
         font-size:.72rem;font-weight:800;
     }
+    .editor-status.is-draft { background:#fff7ed;color:#a74713; }
     .editor-grid { display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:18px;align-items:start; }
     .editor-panel {
         overflow:hidden;border:1px solid #e5eaf0;border-radius:16px;
@@ -70,11 +71,85 @@
     }
     .editor-page .is-invalid { border-color:#dc3545; }
     .editor-page .invalid-feedback { display:block;font-size:.72rem; }
+    #articleCoverFile,#richMediaFile { position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0); }
+    .cover-upload-field {
+        min-height:42px;display:flex;align-items:center;justify-content:center;gap:7px;
+        padding:8px 10px;border:1px dashed #cbd5e1;border-radius:9px;background:#fbfcfd;
+        color:#475569;font-size:.78rem;font-weight:800;cursor:pointer;
+    }
+    .cover-upload-field:hover { border-color:var(--landing-accent);color:var(--landing-accent);background:#fffaf5; }
+    .cover-upload-field.is-invalid { border-color:#dc3545; }
+    .rich-editor-shell { position:relative;overflow:hidden;border:1px solid #dbe3ec;border-radius:11px;background:#fff; }
+    .rich-toolbar {
+        display:flex;align-items:center;flex-wrap:wrap;gap:4px;padding:8px;
+        border-bottom:1px solid #e7ebf0;background:#f8fafc;
+    }
+    .rich-toolbar-group { display:flex;align-items:center;gap:3px;padding-right:6px;margin-right:2px;border-right:1px solid #dbe3ec; }
+    .rich-toolbar-group:last-child { border-right:0;padding-right:0; }
+    .rich-toolbar button,.rich-toolbar select {
+        min-width:34px;height:34px;border:0;border-radius:7px;background:transparent;color:#344054;
+        font-size:.78rem;font-weight:800;
+    }
+    .rich-toolbar button { display:grid;place-items:center;cursor:pointer;font-size:1rem; }
+    .rich-toolbar button:hover,.rich-toolbar button:focus-visible,.rich-toolbar select:hover { background:#e9eef5;color:var(--landing-accent); }
+    .rich-toolbar select { min-width:108px;padding:0 7px; }
+    .media-inspector {
+        display:flex;align-items:center;gap:10px;padding:8px 10px;border-bottom:1px solid #eadfda;
+        background:#fffaf5;color:#5f4638;font-size:.72rem;
+    }
+    .media-inspector[hidden],.media-resize-overlay[hidden] { display:none!important; }
+    .media-inspector-label { display:flex;align-items:center;gap:6px;white-space:nowrap;font-weight:800; }
+    .media-width-control { display:flex;align-items:center;gap:7px;flex:1;min-width:130px; }
+    .media-width-control input { width:100%;accent-color:var(--landing-accent);cursor:ew-resize; }
+    .media-width-value { min-width:34px;color:var(--landing-accent);font-weight:900;text-align:right; }
+    .media-remove-button {
+        min-height:30px;border:1px solid #fecaca;border-radius:7px;padding:4px 9px;
+        background:#fff;color:#b42318;font-size:.7rem;font-weight:800;
+    }
+    .rich-editor {
+        min-height:330px;padding:18px;color:#27364d;font-size:.9rem;line-height:1.75;outline:0;
+    }
+    .rich-editor:empty::before { content:attr(data-placeholder);color:#94a3b8;pointer-events:none; }
+    .rich-editor:focus { box-shadow:inset 0 0 0 2px rgba(var(--landing-accent-rgb),.18); }
+    .rich-editor h2 { margin:1.2em 0 .5em;font-size:1.4rem; }
+    .rich-editor h3 { margin:1em 0 .45em;font-size:1.15rem; }
+    .rich-editor blockquote { margin:1em 0;padding:10px 14px;border-left:3px solid var(--landing-accent);background:#fffaf5; }
+    .rich-editor .text-start { text-align:left; }
+    .rich-editor .text-center { text-align:center; }
+    .rich-editor .text-end { text-align:right; }
+    .rich-editor figure { position:relative;max-width:100%;margin:16px auto;clear:both; }
+    .rich-editor figure img { display:block;width:100%;max-height:520px;object-fit:cover;border-radius:10px; }
+    .rich-editor figcaption { margin-top:6px;color:#7a889b;font-size:.75rem;text-align:center; }
+    .rich-editor .media-left { width:48%;float:left;margin:8px 18px 12px 0;clear:left; }
+    .rich-editor .media-right { width:48%;float:right;margin:8px 0 12px 18px;clear:right; }
+    .rich-editor .media-wide { width:100%; }
+    .rich-editor .video-wrapper { position:relative;width:100%;max-width:100%;padding-top:56.25%;margin:16px auto;clear:both; }
+    .rich-editor .video-wrapper iframe { position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:10px; }
+    .rich-editor .video-wrapper iframe { pointer-events:none; }
+    .rich-editor .video-wrapper.media-left { width:48%;float:left;margin:8px 18px 12px 0;clear:left; }
+    .rich-editor .video-wrapper.media-right { width:48%;float:right;margin:8px 0 12px 18px;clear:right; }
+    .rich-editor .video-wrapper.media-wide { width:100%;float:none; }
+    .rich-editor .media-selected { outline:2px solid var(--landing-accent);outline-offset:3px; }
+    .media-resize-overlay {
+        position:absolute;z-index:8;border:1px dashed var(--landing-accent);pointer-events:none;
+    }
+    .media-resize-handle {
+        position:absolute;width:13px;height:13px;border:2px solid #fff;border-radius:50%;
+        background:var(--landing-accent);box-shadow:0 1px 5px rgba(15,23,42,.3);pointer-events:auto;
+        touch-action:none;cursor:nwse-resize;
+    }
+    .media-resize-handle.nw { top:-7px;left:-7px; }
+    .media-resize-handle.ne { top:-7px;right:-7px;cursor:nesw-resize; }
+    .media-resize-handle.sw { bottom:-7px;left:-7px;cursor:nesw-resize; }
+    .media-resize-handle.se { right:-7px;bottom:-7px; }
+    .rich-editor-status { display:flex;justify-content:space-between;gap:10px;margin-top:6px;color:#8491a3;font-size:.7rem; }
+    .rich-upload-status { color:var(--landing-accent);font-weight:700; }
     .field-meta { display:flex;justify-content:space-between;gap:10px;margin-top:5px;color:#8491a3;font-size:.7rem; }
     .editor-actions {
         display:flex;align-items:center;justify-content:space-between;gap:12px;
         padding:16px 22px;background:#fbfcfd;
     }
+    .editor-actions-group { display:flex;align-items:center;gap:8px; }
     .editor-actions .btn { min-height:42px; }
     .editor-preview { position:sticky;top:18px; }
     .preview-label {
@@ -121,6 +196,13 @@
     html[data-bs-theme="dark"] .editor-page .form-label { color:#dbe6f3; }
     html[data-bs-theme="dark"] .editor-page .form-control,
     html[data-bs-theme="dark"] .editor-page .form-select { background:#0f172a;border-color:#334155;color:#e2e8f0; }
+    html[data-bs-theme="dark"] .cover-upload-field,
+    html[data-bs-theme="dark"] .rich-editor-shell { background:#0f172a;border-color:#334155;color:#e2e8f0; }
+    html[data-bs-theme="dark"] .rich-toolbar { background:#111827;border-color:#334155; }
+    html[data-bs-theme="dark"] .media-inspector { background:#211b18;border-color:#4b3629;color:#eadfd8; }
+    html[data-bs-theme="dark"] .rich-toolbar button,
+    html[data-bs-theme="dark"] .rich-toolbar select,
+    html[data-bs-theme="dark"] .rich-editor { color:#e2e8f0; }
     html[data-bs-theme="dark"] .editor-actions { background:#0d1524; }
     @media (max-width:991.98px) {
         .editor-grid { grid-template-columns:1fr; }
@@ -135,10 +217,20 @@
         .editor-heading p,.editor-status { display:none; }
         .editor-section { padding:17px 15px; }
         .editor-actions { align-items:stretch;flex-direction:column-reverse;padding:14px 15px; }
+        .editor-actions-group { display:grid;grid-template-columns:1fr 1fr; }
+        .editor-actions-group .btn-primary { grid-column:1 / -1; }
         .editor-actions .btn { width:100%;justify-content:center; }
+        .rich-toolbar { gap:3px; }
+        .rich-toolbar-group { border-right:0;padding-right:0; }
+        .rich-toolbar select { min-width:94px; }
+        .rich-editor { min-height:300px;padding:14px; }
+        .rich-editor .media-left,.rich-editor .media-right { width:100%;float:none;margin:14px 0; }
         .editor-preview { display:block; }
         .preview-label { margin-bottom:8px; }
         .editor-note { margin-top:10px; }
+        .media-inspector { flex-wrap:wrap; }
+        .media-width-control { order:3;flex-basis:100%; }
+        .media-resize-handle { width:17px;height:17px; }
     }
 </style>
 
@@ -154,7 +246,7 @@
                     <p>{{ 'Atualize o conteúdo e revise a prévia antes de salvar.' if editing else 'Escreva, revise a prévia e publique no blog do ateliê.' }}</p>
                 </div>
             </div>
-            <span class="editor-status"><i class="ri-database-2-line" aria-hidden="true"></i> {{ 'Edição permanente' if editing else 'Salvo permanentemente' }}</span>
+            <span class="editor-status {% if is_draft %}is-draft{% endif %}"><i class="{{ 'ri-draft-line' if is_draft else 'ri-database-2-line' }}" aria-hidden="true"></i> {{ 'Rascunho salvo' if is_draft else ('Edição permanente' if editing else 'Salvo permanentemente') }}</span>
         </header>
 
         {% if form_errors %}
@@ -164,7 +256,7 @@
         {% endif %}
 
         <div class="editor-grid">
-            <form id="articleForm" action="{{ '/blog/' ~ article_id ~ '/editar' if editing else '/blog/novo' }}" method="post" class="editor-panel">
+            <form id="articleForm" action="{{ '/blog/' ~ article_id ~ '/editar' if editing else '/blog/novo' }}" method="post" enctype="multipart/form-data" class="editor-panel">
                 <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
                 <section class="editor-section" aria-labelledby="essentialTitle">
@@ -201,12 +293,14 @@
                             {% if form_errors.get('author_name') %}<span class="invalid-feedback">{{ form_errors.author_name }}</span>{% endif %}
                         </div>
                         <div class="col-md-6 col-xl-3">
-                            <label class="form-label" for="articleCover">Imagem de capa</label>
-                            <select id="articleCover" name="cover_image" class="form-select {% if form_errors.get('cover_image') %}is-invalid{% endif %}" required>
-                                {% for filename, label in blog_cover_images %}
-                                <option value="{{ filename }}" data-src="{{ config.ASSETS_ROOT }}/images/{{ filename }}" {% if form_data.get('cover_image') == filename %}selected{% endif %}>{{ label }}</option>
-                                {% endfor %}
-                            </select>
+                            <label class="form-label" for="articleCoverFile">Imagem de capa</label>
+                            <input type="hidden" id="articleCover" name="cover_image" value="{{ form_data.get('cover_image', '') }}">
+                            <label class="cover-upload-field {% if form_errors.get('cover_image') %}is-invalid{% endif %}" for="articleCoverFile">
+                                <i class="ri-upload-cloud-2-line" aria-hidden="true"></i>
+                                <span id="coverFileLabel">{{ 'Trocar imagem' if form_data.get('cover_image') else 'Carregar imagem' }}</span>
+                            </label>
+                            <input id="articleCoverFile" type="file" name="cover_image_file"
+                                   accept="image/jpeg,image/png,image/webp,image/gif" {% if not form_data.get('cover_image') and not is_draft %}required{% endif %}>
                             {% if form_errors.get('cover_image') %}<span class="invalid-feedback">{{ form_errors.cover_image }}</span>{% endif %}
                         </div>
                         {% if editing %}
@@ -238,12 +332,64 @@
                     <div class="row g-3">
                         <div class="col-12">
                             <label class="form-label" for="articleContent">Texto do artigo</label>
-                            <textarea id="articleContent" name="content" rows="13"
-                                      class="form-control {% if form_errors.get('content') %}is-invalid{% endif %}"
-                                      minlength="100" maxlength="30000" required
-                                      placeholder="Comece contextualizando o tema...&#10;&#10;Use uma linha em branco para iniciar um novo parágrafo.">{{ form_data.get('content', '') }}</textarea>
+                            <div class="rich-editor-shell {% if form_errors.get('content') %}is-invalid{% endif %}">
+                                <div class="rich-toolbar" role="toolbar" aria-label="Formatação do artigo">
+                                    <div class="rich-toolbar-group">
+                                        <select id="blockFormat" aria-label="Estilo do parágrafo" title="Estilo do parágrafo">
+                                            <option value="p">Parágrafo</option>
+                                            <option value="h2">Título</option>
+                                            <option value="h3">Subtítulo</option>
+                                            <option value="blockquote">Citação</option>
+                                        </select>
+                                    </div>
+                                    <div class="rich-toolbar-group">
+                                        <button type="button" data-command="bold" aria-label="Negrito" title="Negrito"><i class="ri-bold"></i></button>
+                                        <button type="button" data-command="italic" aria-label="Itálico" title="Itálico"><i class="ri-italic"></i></button>
+                                        <button type="button" data-command="underline" aria-label="Sublinhado" title="Sublinhado"><i class="ri-underline"></i></button>
+                                        <button type="button" data-command="strikeThrough" aria-label="Tachado" title="Tachado"><i class="ri-strikethrough"></i></button>
+                                    </div>
+                                    <div class="rich-toolbar-group">
+                                        <button type="button" data-command="insertUnorderedList" aria-label="Lista com marcadores" title="Lista com marcadores"><i class="ri-list-unordered"></i></button>
+                                        <button type="button" data-command="insertOrderedList" aria-label="Lista numerada" title="Lista numerada"><i class="ri-list-ordered-2"></i></button>
+                                        <button type="button" data-text-align="text-start" aria-label="Alinhar à esquerda" title="Alinhar à esquerda"><i class="ri-align-left"></i></button>
+                                        <button type="button" data-text-align="text-center" aria-label="Centralizar" title="Centralizar"><i class="ri-align-center"></i></button>
+                                        <button type="button" data-text-align="text-end" aria-label="Alinhar à direita" title="Alinhar à direita"><i class="ri-align-right"></i></button>
+                                    </div>
+                                    <div class="rich-toolbar-group">
+                                        <button type="button" id="insertLinkButton" aria-label="Inserir link" title="Inserir link"><i class="ri-link"></i></button>
+                                        <button type="button" id="insertImageButton" aria-label="Inserir imagem ou GIF" title="Inserir imagem ou GIF"><i class="ri-image-add-line"></i></button>
+                                        <button type="button" id="insertVideoButton" aria-label="Incorporar vídeo" title="Incorporar vídeo do YouTube ou Vimeo"><i class="ri-video-add-line"></i></button>
+                                        <input id="richMediaFile" type="file" accept="image/jpeg,image/png,image/webp,image/gif">
+                                    </div>
+                                    <div class="rich-toolbar-group">
+                                        <button type="button" data-media-align="media-left" aria-label="Mídia à esquerda" title="Posicionar mídia à esquerda"><i class="ri-align-left"></i></button>
+                                        <button type="button" data-media-align="media-wide" aria-label="Mídia em largura total" title="Mídia em largura total"><i class="ri-expand-horizontal-line"></i></button>
+                                        <button type="button" data-media-align="media-right" aria-label="Mídia à direita" title="Posicionar mídia à direita"><i class="ri-align-right"></i></button>
+                                        <button type="button" data-command="removeFormat" aria-label="Remover formatação" title="Remover formatação"><i class="ri-format-clear"></i></button>
+                                    </div>
+                                </div>
+                                <div id="mediaInspector" class="media-inspector" hidden>
+                                    <span class="media-inspector-label"><i class="ri-drag-move-2-line"></i> Mídia selecionada</span>
+                                    <label class="media-width-control" for="mediaWidthInput">
+                                        <span>Largura</span>
+                                        <input id="mediaWidthInput" type="range" min="20" max="100" step="1" value="100">
+                                        <output id="mediaWidthValue" class="media-width-value" for="mediaWidthInput">100%</output>
+                                    </label>
+                                    <button id="removeMediaButton" class="media-remove-button" type="button"><i class="ri-delete-bin-line"></i> Remover</button>
+                                </div>
+                                <div id="articleContent" class="rich-editor" contenteditable="true" role="textbox" aria-multiline="true"
+                                     data-placeholder="Comece a escrever. Use a barra acima para títulos, listas, links, imagens, GIFs e vídeos.">{{ form_data.get('content_html', '')|safe }}</div>
+                                <div id="mediaResizeOverlay" class="media-resize-overlay" hidden aria-hidden="true">
+                                    <span class="media-resize-handle nw" data-resize-side="left"></span>
+                                    <span class="media-resize-handle ne" data-resize-side="right"></span>
+                                    <span class="media-resize-handle sw" data-resize-side="left"></span>
+                                    <span class="media-resize-handle se" data-resize-side="right"></span>
+                                </div>
+                            </div>
+                            <textarea id="articleContentHtml" name="content_html" hidden>{{ form_data.get('content_html', '') }}</textarea>
+                            <textarea id="articleContentText" name="content" hidden>{{ form_data.get('content', '') }}</textarea>
                             {% if form_errors.get('content') %}<span class="invalid-feedback">{{ form_errors.content }}</span>{% endif %}
-                            <div class="field-meta"><span><b id="wordCount">0</b> palavras</span><span id="readTimeLabel">1 min de leitura</span></div>
+                            <div class="rich-editor-status"><span id="richUploadStatus">Imagens: JPG, PNG, WEBP ou GIF. Vídeos: YouTube ou Vimeo.</span><span><b id="wordCount">0</b> palavras · <span id="readTimeLabel">1 min de leitura</span></span></div>
                         </div>
                         <div class="col-12">
                             <label class="form-label" for="articleQuote">Citação em destaque <span class="fw-normal text-muted">(opcional)</span></label>
@@ -277,17 +423,24 @@
                 </section>
 
                 <footer class="editor-actions">
-                    <a href="{{ '/blog/' ~ article_id if editing else '/blog' }}" class="btn btn-outline-secondary rounded-pill px-4">Cancelar</a>
-                    <button id="publishButton" type="submit" class="btn btn-primary rounded-pill px-4 fw-bold d-inline-flex align-items-center gap-2">
-                        <i class="{{ 'ri-check-line' if editing else 'ri-send-plane-fill' }}" aria-hidden="true"></i><span>{{ 'Salvar alterações' if editing else 'Publicar artigo' }}</span>
+                    <button id="discardButton" type="button" data-cancel-url="{{ '/blog/' ~ article_id if editing and not is_draft else '/blog' }}" data-delete-draft="{{ 'true' if is_draft else 'false' }}" class="btn btn-outline-danger rounded-pill px-4">
+                        <i class="ri-delete-bin-6-line" aria-hidden="true"></i> {{ 'Excluir rascunho' if is_draft else ('Descartar alterações' if editing else 'Descartar postagem') }}
                     </button>
+                    <div class="editor-actions-group">
+                        <button id="draftButton" type="submit" name="submit_action" value="draft" formnovalidate class="btn btn-outline-secondary rounded-pill px-4 fw-bold">
+                            <i class="ri-draft-line" aria-hidden="true"></i> <span>Salvar rascunho</span>
+                        </button>
+                        <button id="publishButton" type="submit" name="submit_action" value="publish" class="btn btn-primary rounded-pill px-4 fw-bold d-inline-flex align-items-center gap-2">
+                            <i class="{{ 'ri-send-plane-fill' if is_draft or not editing else 'ri-check-line' }}" aria-hidden="true"></i><span>{{ 'Publicar artigo' if is_draft or not editing else 'Salvar alterações' }}</span>
+                        </button>
+                    </div>
                 </footer>
             </form>
 
             <aside class="editor-preview" aria-label="Prévia do artigo">
                 <div class="preview-label"><span>Prévia do card</span><i class="ri-eye-line" aria-hidden="true"></i></div>
                 <article class="preview-card">
-                    <img id="previewCover" class="preview-cover" src="{{ config.ASSETS_ROOT }}/images/{{ form_data.get('cover_image', blog_cover_images[0][0]) }}" alt="Prévia da imagem de capa">
+                    <img id="previewCover" class="preview-cover" src="{{ config.ASSETS_ROOT }}/images/{{ form_data.get('cover_image') or blog_cover_images[0][0] }}" alt="Prévia da imagem de capa">
                     <div class="preview-body">
                         <div class="preview-meta"><span id="previewCategory" class="preview-category">{{ form_data.get('category', blog_categories[0]) }}</span><span id="previewReadTime">1 min de leitura</span></div>
                         <h2 id="previewTitle" class="preview-title">O título do artigo aparecerá aqui</h2>
@@ -298,7 +451,7 @@
                         </div>
                     </div>
                 </article>
-                <div class="editor-note"><strong>{{ 'Registro da edição:' if editing else 'Publicação permanente:' }}</strong> {{ 'ao salvar, a página passará a mostrar a data desta atualização.' if editing else 'após publicar, o artigo fica salvo no banco de dados e continuará disponível mesmo depois de reiniciar o servidor.' }}</div>
+                <div class="editor-note"><strong>{{ 'Rascunho:' if is_draft else ('Registro da edição:' if editing else 'Publicação permanente:') }}</strong> {{ 'ele só ficará visível no blog depois que você publicar.' if is_draft else ('ao salvar, a página passará a mostrar a data desta atualização.' if editing else 'após publicar, o artigo fica salvo no banco de dados e continuará disponível mesmo depois de reiniciar o servidor.') }}</div>
             </aside>
         </div>
     </div>
@@ -312,22 +465,96 @@
     if (!form) return;
     const title = document.getElementById('articleTitle');
     const excerpt = document.getElementById('articleExcerpt');
-    const content = document.getElementById('articleContent');
+    const editor = document.getElementById('articleContent');
+    const contentHtml = document.getElementById('articleContentHtml');
+    const contentText = document.getElementById('articleContentText');
     const category = document.getElementById('articleCategory');
     const author = document.getElementById('articleAuthor');
     const cover = document.getElementById('articleCover');
+    const coverFile = document.getElementById('articleCoverFile');
+    const mediaFile = document.getElementById('richMediaFile');
+    const uploadStatus = document.getElementById('richUploadStatus');
     const publishButton = document.getElementById('publishButton');
-    const trackedFields = [title, excerpt, content, category, author, cover,
+    const draftButton = document.getElementById('draftButton');
+    const discardButton = document.getElementById('discardButton');
+    const mediaInspector = document.getElementById('mediaInspector');
+    const mediaWidthInput = document.getElementById('mediaWidthInput');
+    const mediaWidthValue = document.getElementById('mediaWidthValue');
+    const mediaResizeOverlay = document.getElementById('mediaResizeOverlay');
+    const trackedFields = [title, excerpt, category, author, cover, coverFile,
         document.getElementById('articleQuote'), document.getElementById('gallery_image_1'),
         document.getElementById('gallery_image_2'), document.getElementById('articlePublishedDate')].filter(Boolean);
-    const initialState = trackedFields.map(field => field.value).join('\u0000');
+    const state = () => trackedFields.map(field => field.value).concat(editor.innerHTML).join('\u0000');
+    const initialState = state();
     let submitted = false;
+    let savedRange = null;
+    let selectedMedia = null;
+
+    function syncEditor() {
+        const cleanEditor = editor.cloneNode(true);
+        cleanEditor.querySelectorAll('.media-selected').forEach(media => media.classList.remove('media-selected'));
+        contentHtml.value = cleanEditor.innerHTML.trim();
+        contentText.value = editor.innerText.replace(/\n{3,}/g, '\n\n').trim();
+    }
+
+    function selectedMediaWidth() {
+        if (!selectedMedia) return 100;
+        const explicitWidth = Number.parseFloat(selectedMedia.style.width);
+        if (Number.isFinite(explicitWidth)) return explicitWidth;
+        return Math.round((selectedMedia.getBoundingClientRect().width / editor.clientWidth) * 100);
+    }
+
+    function positionResizeOverlay() {
+        if (!selectedMedia || !editor.contains(selectedMedia)) {
+            mediaResizeOverlay.hidden = true;
+            return;
+        }
+        const shellRect = editor.parentElement.getBoundingClientRect();
+        const mediaRect = selectedMedia.getBoundingClientRect();
+        mediaResizeOverlay.style.left = `${mediaRect.left - shellRect.left}px`;
+        mediaResizeOverlay.style.top = `${mediaRect.top - shellRect.top}px`;
+        mediaResizeOverlay.style.width = `${mediaRect.width}px`;
+        mediaResizeOverlay.style.height = `${mediaRect.height}px`;
+        mediaResizeOverlay.hidden = false;
+    }
+
+    function setMediaWidth(width, syncContent = true) {
+        if (!selectedMedia) return;
+        const safeWidth = Math.max(20, Math.min(100, Math.round(width * 10) / 10));
+        selectedMedia.style.width = `${safeWidth}%`;
+        mediaWidthInput.value = Math.round(safeWidth);
+        mediaWidthValue.value = `${Math.round(safeWidth)}%`;
+        mediaWidthValue.textContent = `${Math.round(safeWidth)}%`;
+        positionResizeOverlay();
+        if (syncContent) updatePreview();
+    }
+
+    function selectMedia(media) {
+        if (selectedMedia === media) {
+            positionResizeOverlay();
+            return;
+        }
+        selectedMedia?.classList.remove('media-selected');
+        selectedMedia = media;
+        if (!selectedMedia) {
+            mediaInspector.hidden = true;
+            mediaResizeOverlay.hidden = true;
+            return;
+        }
+        selectedMedia.classList.add('media-selected');
+        const width = selectedMediaWidth();
+        mediaWidthInput.value = Math.round(width);
+        mediaWidthValue.value = `${Math.round(width)}%`;
+        mediaWidthValue.textContent = `${Math.round(width)}%`;
+        mediaInspector.hidden = false;
+        requestAnimationFrame(positionResizeOverlay);
+    }
 
     function updatePreview() {
-        const words = content.value.trim().match(/[\p{L}\p{N}]+/gu) || [];
+        syncEditor();
+        const words = contentText.value.match(/[\p{L}\p{N}]+/gu) || [];
         const minutes = Math.max(1, Math.ceil(words.length / 180));
         const authorOption = author.selectedOptions[0];
-        const coverOption = cover.selectedOptions[0];
         document.getElementById('titleCount').textContent = title.value.length;
         document.getElementById('excerptCount').textContent = excerpt.value.length;
         document.getElementById('wordCount').textContent = words.length;
@@ -339,20 +566,229 @@
         document.getElementById('previewAuthorName').textContent = author.value;
         document.getElementById('previewAuthorRole').textContent = authorOption.dataset.role;
         document.getElementById('previewAuthorAvatar').src = `{{ config.ASSETS_ROOT }}/images/${authorOption.dataset.avatar}`;
-        document.getElementById('previewCover').src = coverOption.dataset.src;
+        requestAnimationFrame(positionResizeOverlay);
     }
 
-    [title, excerpt, content].forEach(field => field.addEventListener('input', updatePreview));
-    [category, author, cover].forEach(field => field.addEventListener('change', updatePreview));
+    function rememberSelection() {
+        const selection = window.getSelection();
+        if (selection.rangeCount && editor.contains(selection.anchorNode)) savedRange = selection.getRangeAt(0).cloneRange();
+    }
+
+    function restoreSelection() {
+        editor.focus();
+        if (!savedRange) return;
+        const selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(savedRange);
+    }
+
+    function insertHtml(html) {
+        restoreSelection();
+        document.execCommand('insertHTML', false, html);
+        rememberSelection();
+        updatePreview();
+    }
+
+    document.querySelectorAll('[data-command]').forEach(button => {
+        button.addEventListener('mousedown', event => event.preventDefault());
+        button.addEventListener('click', () => {
+            restoreSelection();
+            document.execCommand(button.dataset.command, false);
+            updatePreview();
+        });
+    });
+
+    document.querySelectorAll('[data-text-align]').forEach(button => {
+        button.addEventListener('mousedown', event => event.preventDefault());
+        button.addEventListener('click', () => {
+            restoreSelection();
+            const selection = window.getSelection();
+            let node = selection.anchorNode?.nodeType === Node.ELEMENT_NODE
+                ? selection.anchorNode : selection.anchorNode?.parentElement;
+            const block = node?.closest?.('p, h2, h3, blockquote, li, div');
+            if (!block || !editor.contains(block)) {
+                uploadStatus.textContent = 'Posicione o cursor em um parágrafo para alterar o alinhamento.';
+                return;
+            }
+            block.classList.remove('text-start', 'text-center', 'text-end');
+            block.classList.add(button.dataset.textAlign);
+            updatePreview();
+        });
+    });
+
+    document.getElementById('blockFormat').addEventListener('change', event => {
+        restoreSelection();
+        document.execCommand('formatBlock', false, `<${event.target.value}>`);
+        updatePreview();
+    });
+
+    document.getElementById('insertLinkButton').addEventListener('click', () => {
+        const entered = window.prompt('Cole o endereço do link:');
+        if (!entered) return;
+        const href = /^(https?:\/\/|mailto:|\/|#)/i.test(entered.trim()) ? entered.trim() : `https://${entered.trim()}`;
+        restoreSelection();
+        document.execCommand('createLink', false, href);
+        editor.querySelectorAll('a').forEach(link => { link.target = '_blank'; link.rel = 'noopener noreferrer'; });
+        updatePreview();
+    });
+
+    document.getElementById('insertImageButton').addEventListener('click', () => {
+        rememberSelection();
+        mediaFile.click();
+    });
+    mediaFile.addEventListener('change', async () => {
+        const file = mediaFile.files[0];
+        if (!file) return;
+        uploadStatus.textContent = 'Enviando mídia...';
+        uploadStatus.classList.add('rich-upload-status');
+        const payload = new FormData();
+        payload.append('media', file);
+        payload.append('csrf_token', form.querySelector('[name="csrf_token"]').value);
+        try {
+            const response = await fetch('/api/blog/media', {method:'POST', body:payload, credentials:'same-origin'});
+            const result = await response.json();
+            if (!response.ok || !result.success) throw new Error(result.error || 'Não foi possível enviar a mídia.');
+            const alt = file.name.replace(/["<>]/g, '');
+            insertHtml(`<figure class="media-wide"><img src="${result.url}" alt="${alt}" loading="lazy"><figcaption>Adicione uma legenda</figcaption></figure><p><br></p>`);
+            selectMedia(editor.querySelector('figure:last-of-type'));
+            uploadStatus.textContent = 'Mídia inserida. Arraste os pontos nos cantos ou use o controle de largura.';
+        } catch (error) {
+            uploadStatus.textContent = error.message;
+        } finally {
+            mediaFile.value = '';
+        }
+    });
+
+    function videoEmbedUrl(value) {
+        try {
+            const url = new URL(value.trim());
+            if (url.hostname.includes('youtu.be')) return `https://www.youtube-nocookie.com/embed/${url.pathname.split('/').filter(Boolean)[0] || ''}`;
+            if (url.hostname.includes('youtube.com')) {
+                const id = url.searchParams.get('v') || url.pathname.split('/').filter(Boolean).pop();
+                return id ? `https://www.youtube-nocookie.com/embed/${id}` : '';
+            }
+            if (url.hostname.includes('vimeo.com')) {
+                const id = url.pathname.split('/').filter(Boolean).pop();
+                return /^\d+$/.test(id || '') ? `https://player.vimeo.com/video/${id}` : '';
+            }
+        } catch (_) { return ''; }
+        return '';
+    }
+    document.getElementById('insertVideoButton').addEventListener('click', () => {
+        rememberSelection();
+        const source = window.prompt('Cole a URL pública do vídeo no YouTube ou Vimeo:');
+        if (!source) return;
+        const embed = videoEmbedUrl(source);
+        if (!embed) { uploadStatus.textContent = 'Use uma URL válida do YouTube ou Vimeo.'; return; }
+        insertHtml(`<div class="video-wrapper"><iframe src="${embed}" title="Vídeo incorporado" loading="lazy" allowfullscreen></iframe></div><p><br></p>`);
+        selectMedia(editor.querySelector('.video-wrapper:last-of-type'));
+    });
+
+    document.querySelectorAll('[data-media-align]').forEach(button => {
+        button.addEventListener('click', () => {
+            const selection = window.getSelection();
+            let node = selection.anchorNode?.nodeType === Node.ELEMENT_NODE ? selection.anchorNode : selection.anchorNode?.parentElement;
+            let media = selectedMedia || node?.closest?.('figure, .video-wrapper');
+            if (!media || !editor.contains(media)) media = editor.querySelector('figure:last-of-type, .video-wrapper:last-of-type');
+            if (!media) { uploadStatus.textContent = 'Selecione ou insira uma mídia antes de posicioná-la.'; return; }
+            selectMedia(media);
+            media.classList.remove('media-left', 'media-wide', 'media-right');
+            media.classList.add(button.dataset.mediaAlign);
+            updatePreview();
+        });
+    });
+
+    editor.addEventListener('click', event => {
+        const media = event.target.closest?.('figure, .video-wrapper');
+        selectMedia(media && editor.contains(media) ? media : null);
+    });
+    mediaWidthInput.addEventListener('input', () => setMediaWidth(Number(mediaWidthInput.value)));
+    document.getElementById('removeMediaButton').addEventListener('click', () => {
+        if (!selectedMedia) return;
+        const removed = selectedMedia;
+        selectMedia(null);
+        removed.remove();
+        uploadStatus.textContent = 'Mídia removida do corpo da postagem.';
+        updatePreview();
+    });
+    document.querySelectorAll('[data-resize-side]').forEach(handle => {
+        handle.addEventListener('pointerdown', event => {
+            if (!selectedMedia) return;
+            event.preventDefault();
+            const startX = event.clientX;
+            const startWidth = selectedMedia.getBoundingClientRect().width;
+            const editorWidth = editor.clientWidth;
+            const direction = handle.dataset.resizeSide === 'left' ? -1 : 1;
+            const onMove = moveEvent => {
+                const widthPixels = startWidth + ((moveEvent.clientX - startX) * direction);
+                setMediaWidth((widthPixels / editorWidth) * 100, false);
+            };
+            const onEnd = () => {
+                document.removeEventListener('pointermove', onMove);
+                document.removeEventListener('pointerup', onEnd);
+                updatePreview();
+            };
+            document.addEventListener('pointermove', onMove);
+            document.addEventListener('pointerup', onEnd, {once:true});
+        });
+    });
+    window.addEventListener('resize', positionResizeOverlay);
+
+    editor.addEventListener('paste', event => {
+        event.preventDefault();
+        document.execCommand('insertText', false, event.clipboardData.getData('text/plain'));
+    });
+    editor.addEventListener('input', updatePreview);
+    editor.addEventListener('keyup', rememberSelection);
+    editor.addEventListener('mouseup', rememberSelection);
+    [title, excerpt].forEach(field => field.addEventListener('input', updatePreview));
+    [category, author].forEach(field => field.addEventListener('change', updatePreview));
+    coverFile.addEventListener('change', () => {
+        const file = coverFile.files[0];
+        if (!file) return;
+        document.getElementById('coverFileLabel').textContent = file.name;
+        document.getElementById('previewCover').src = URL.createObjectURL(file);
+    });
     form.addEventListener('submit', event => {
+        syncEditor();
+        const action = event.submitter?.value || 'publish';
+        if (action === 'draft') {
+            submitted = true;
+            draftButton.disabled = true;
+            draftButton.querySelector('span').textContent = 'Salvando rascunho...';
+            return;
+        }
+        if (contentText.value.length < 100) {
+            event.preventDefault();
+            editor.setAttribute('aria-invalid', 'true');
+            uploadStatus.textContent = 'O artigo precisa ter pelo menos 100 caracteres.';
+            uploadStatus.classList.add('text-danger');
+            editor.focus();
+            return;
+        }
         if (!form.checkValidity()) return;
         submitted = true;
         publishButton.disabled = true;
         publishButton.querySelector('span').textContent = "{{ 'Salvando...' if editing else 'Publicando...' }}";
         publishButton.querySelector('i').className = 'ri-loader-4-line';
     });
+    discardButton.addEventListener('click', () => {
+        const message = "{{ 'Excluir definitivamente este rascunho?' if is_draft else ('Descartar todas as alterações feitas nesta edição?' if editing else 'Descartar esta postagem sem salvar?') }}";
+        if (!window.confirm(message)) return;
+        submitted = true;
+        if (discardButton.dataset.deleteDraft === 'true') {
+            const action = document.createElement('input');
+            action.type = 'hidden';
+            action.name = 'submit_action';
+            action.value = 'discard';
+            form.appendChild(action);
+            form.submit();
+            return;
+        }
+        window.location.href = discardButton.dataset.cancelUrl;
+    });
     window.addEventListener('beforeunload', event => {
-        const currentState = trackedFields.map(field => field.value).join('\u0000');
+        const currentState = state();
         if (submitted || currentState === initialState) return;
         event.preventDefault();
         event.returnValue = '';

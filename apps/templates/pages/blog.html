@@ -203,6 +203,15 @@
         border-top: 1px solid #eef2f6;
     }
     .blog-featured-cta { white-space: nowrap; }
+    .blog-drafts-bar {
+        display:flex;align-items:center;gap:10px;margin:-4px 0 10px;padding:8px 10px;
+        border:1px solid #fed7aa;border-radius:10px;background:#fffaf5;color:#7c3d12;font-size:.74rem;
+    }
+    .blog-drafts-list { display:flex;align-items:center;gap:6px;overflow-x:auto;scrollbar-width:thin; }
+    .blog-draft-link {
+        flex:0 0 auto;max-width:210px;overflow:hidden;padding:5px 9px;border:1px solid #fed7aa;
+        border-radius:999px;background:#fff;color:#9a4312;font-weight:700;text-decoration:none;text-overflow:ellipsis;white-space:nowrap;
+    }
 
     /* Mobile adjustments */
     @media (max-width: 767.98px) {
@@ -283,6 +292,16 @@
                 <span>Criar Novo Post</span>
             </a>
         </div>
+        {% if drafts %}
+        <div class="blog-drafts-bar" aria-label="Rascunhos salvos">
+            <strong><i class="ri-draft-line" aria-hidden="true"></i> Rascunhos ({{ drafts|length }})</strong>
+            <div class="blog-drafts-list">
+                {% for draft in drafts %}
+                <a class="blog-draft-link" href="/blog/{{ draft.id }}/editar" title="Continuar editando {{ draft.title }}">{{ draft.title }}</a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
         {% endif %}
 
         <div class="blog-header-main">

@@ -19,6 +19,8 @@ import unicodedata
 from collections import Counter
 from datetime import datetime, timezone, date, timedelta
 from decimal import Decimal, InvalidOperation
+from html import escape
+from html.parser import HTMLParser
 from urllib.parse import quote, urljoin, urlparse
 from jinja2 import TemplateNotFound
 
@@ -740,15 +742,208 @@ def blog_read_time(content):
 
 BLOG_FORM_FIELDS = (
     'title', 'category', 'author_name', 'cover_image', 'excerpt', 'quote',
-    'content', 'gallery_image_1', 'gallery_image_2', 'published_date',
+    'content', 'content_html', 'gallery_image_1', 'gallery_image_2', 'published_date',
 )
+
+BLOG_IMAGE_EXTENSIONS = {'jpg', 'jpeg', 'png', 'webp', 'gif'}
+BLOG_RICH_TAGS = {
+    'p', 'br', 'h2', 'h3', 'strong', 'b', 'em', 'i', 'u', 's', 'blockquote',
+    'ul', 'ol', 'li', 'a', 'img', 'figure', 'figcaption', 'div', 'iframe',
+}
+BLOG_RICH_CLASSES = {
+    'media-wide', 'media-left', 'media-right', 'video-wrapper',
+    'text-start', 'text-center', 'text-end',
+}
+
+
+class BlogHTMLSanitizer(HTMLParser):
+    """Small allow-list sanitizer for HTML produced by the article editor."""
+    void_tags = {'br', 'img'}
+
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.parts = []
+
+    @staticmethod
+    def safe_url(value, media=False, iframe=False):
+        value = (value or '').strip()
+        parsed = urlparse(value)
+        if iframe:
+            allowed_hosts = {'www.youtube.com', 'www.youtube-nocookie.com', 'player.vimeo.com'}
+            if parsed.scheme == 'https' and parsed.hostname in allowed_hosts:
+                return value
+            return ''
+        if media:
+            return value if value.startswith('/static/images/blog/uploads/') else ''
+        if value.startswith(('/', '#')) or parsed.scheme in {'http', 'https', 'mailto'}:
+            return value
+        return ''
+
+    def clean_attrs(self, tag, attrs):
+        source = dict(attrs)
+        clean = []
+        class_names = [name for name in source.get('class', '').split() if name in BLOG_RICH_CLASSES]
+        if class_names:
+            clean.append(('class', ' '.join(class_names)))
+        if tag in {'figure', 'div'}:
+            width_match = re.fullmatch(r'\s*width\s*:\s*(\d{1,3}(?:\.\d+)?)%\s*;?\s*',
+                                       source.get('style', ''), re.IGNORECASE)
+            if width_match:
+                width = max(20, min(100, float(width_match.group(1))))
+                clean.append(('style', f'width:{width:g}%'))
+        if tag == 'a':
+            href = self.safe_url(source.get('href'))
+            if href:
+                clean.extend([('href', href), ('rel', 'noopener noreferrer')])
+                if source.get('target') == '_blank':
+                    clean.append(('target', '_blank'))
+        elif tag == 'img':
+            src = self.safe_url(source.get('src'), media=True)
+            if not src:
+                return []
+            clean.extend([('src', src), ('alt', source.get('alt', '')[:200]), ('loading', 'lazy')])
+        elif tag == 'iframe':
+            src = self.safe_url(source.get('src'), iframe=True)
+            if not src:
+                return []
+            clean.extend([
+                ('src', src), ('title', source.get('title', 'Vídeo incorporado')[:200]),
+                ('loading', 'lazy'), ('allowfullscreen', ''),
+            ])
+        return clean
+
+    def handle_starttag(self, tag, attrs):
+        if tag not in BLOG_RICH_TAGS:
+            return
+        clean_attrs = self.clean_attrs(tag, attrs)
+        if tag in {'img', 'iframe'} and not any(name == 'src' for name, _ in clean_attrs):
+            return
+        rendered = ''.join(f' {name}="{escape(value, quote=True)}"' if value else f' {name}'
+                           for name, value in clean_attrs)
+        self.parts.append(f'<{tag}{rendered}>')
+
+    def handle_endtag(self, tag):
+        if tag in BLOG_RICH_TAGS and tag not in self.void_tags:
+            self.parts.append(f'</{tag}>')
+
+    def handle_data(self, data):
+        self.parts.append(escape(data))
+
+
+class BlogPlainTextParser(HTMLParser):
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.parts = []
+
+    def handle_data(self, data):
+        if data.strip():
+            self.parts.append(data.strip())
+
+
+def clean_blog_html(value):
+    sanitizer = BlogHTMLSanitizer()
+    sanitizer.feed(value or '')
+    return ''.join(sanitizer.parts).strip()
+
+
+def blog_html_text(value):
+    parser = BlogPlainTextParser()
+    parser.feed(value or '')
+    return ' '.join(parser.parts)
+
+
+def validate_blog_image(upload):
+    if not upload or not upload.filename:
+        return None
+    filename = secure_filename(upload.filename)
+    extension = filename.rsplit('.', 1)[-1].lower() if '.' in filename else ''
+    if extension not in BLOG_IMAGE_EXTENSIONS:
+        return 'Use uma imagem JPG, PNG, WEBP ou GIF.'
+    header = upload.stream.read(16)
+    upload.stream.seek(0)
+    signatures = {
+        'jpg': header.startswith(b'\xff\xd8\xff'),
+        'jpeg': header.startswith(b'\xff\xd8\xff'),
+        'png': header.startswith(b'\x89PNG\r\n\x1a\n'),
+        'gif': header.startswith((b'GIF87a', b'GIF89a')),
+        'webp': header.startswith(b'RIFF') and header[8:12] == b'WEBP',
+    }
+    return None if signatures.get(extension) else 'O arquivo enviado não é uma imagem válida.'
+
+
+def save_blog_image(upload):
+    extension = secure_filename(upload.filename).rsplit('.', 1)[-1].lower()
+    filename = f'{uuid4().hex}.{extension}'
+    relative_path = f'blog/uploads/{filename}'
+    destination = os.path.join(current_app.static_folder, 'images', relative_path)
+    os.makedirs(os.path.dirname(destination), exist_ok=True)
+    upload.save(destination)
+    return relative_path
 
 
 def blog_form_values(source):
-    return {key: source.get(key, '').strip() for key in BLOG_FORM_FIELDS}
+    values = {key: source.get(key, '').strip() for key in BLOG_FORM_FIELDS}
+    if values['content_html']:
+        values['content_html'] = clean_blog_html(values['content_html'])
+        values['content'] = blog_html_text(values['content_html'])
+    elif values['content']:
+        values['content_html'] = ''.join(f'<p>{escape(paragraph)}</p>'
+                                       for paragraph in blog_paragraphs(values['content']))
+    return values
 
 
-def blog_form_errors(form_data, require_published_date=False):
+def normalize_blog_draft(form_data):
+    """Keep an incomplete draft persistable without weakening publication validation."""
+    form_data['title'] = form_data['title'][:200] or 'Rascunho sem título'
+    form_data['category'] = (form_data['category'] if form_data['category'] in BLOG_CATEGORIES
+                             else BLOG_CATEGORIES[0])
+    form_data['author_name'] = (form_data['author_name'] if form_data['author_name'] in BLOG_AUTHORS
+                                else 'Olinda Aguiar')
+    form_data['excerpt'] = form_data['excerpt'][:600]
+    form_data['quote'] = form_data['quote'][:500]
+    cover_filenames = {filename for filename, _ in BLOG_COVER_IMAGES}
+    for field in ('gallery_image_1', 'gallery_image_2'):
+        if form_data[field] not in cover_filenames:
+            form_data[field] = ''
+    return form_data
+
+
+def blog_unique_slug(title, article_id, articles):
+    base_slug = blog_slug(title) or f'artigo-{article_id}'
+    persisted_slugs = {slug for slug, in db.session.query(BlogArticle.slug)
+                       .filter(BlogArticle.id != article_id).all()}
+    existing_slugs = {item['slug'] for item in articles if item['id'] != article_id} | persisted_slugs
+    slug = base_slug
+    suffix = 2
+    while slug in existing_slugs:
+        slug = f'{base_slug}-{suffix}'
+        suffix += 1
+    return slug
+
+
+def fill_blog_article(article, form_data, cover_upload, status):
+    author = BLOG_AUTHORS[form_data['author_name']]
+    if cover_upload and cover_upload.filename:
+        form_data['cover_image'] = save_blog_image(cover_upload)
+    article.slug = article.slug or blog_slug(form_data['title']) or f'artigo-{article.id}'
+    article.title = form_data['title']
+    article.category = form_data['category']
+    article.author_name = form_data['author_name']
+    article.author_role = author['role']
+    article.author_avatar = author['avatar']
+    article.read_time = blog_read_time(form_data['content'])
+    article.cover_image = form_data['cover_image']
+    article.excerpt = form_data['excerpt']
+    article.quote = form_data['quote'] or form_data['excerpt']
+    article.content_json = json.dumps(blog_paragraphs(form_data['content']), ensure_ascii=False)
+    article.content_html = form_data['content_html']
+    article.gallery_json = json.dumps(blog_gallery(form_data), ensure_ascii=False)
+    article.status = status
+    article.active = status == 'published'
+
+
+def blog_form_errors(form_data, require_published_date=False, has_cover_upload=False,
+                     require_cover_upload=False):
     errors = {}
     title = form_data['title']
     excerpt = form_data['excerpt']
@@ -763,7 +958,10 @@ def blog_form_errors(form_data, require_published_date=False):
         errors['category'] = 'Selecione uma categoria válida.'
     if form_data['author_name'] not in BLOG_AUTHORS:
         errors['author_name'] = 'Selecione um autor válido.'
-    if form_data['cover_image'] not in cover_filenames:
+    saved_upload = form_data['cover_image'].startswith('blog/uploads/')
+    if require_cover_upload and not has_cover_upload:
+        errors['cover_image'] = 'Carregue uma imagem de capa do seu computador.'
+    elif not has_cover_upload and form_data['cover_image'] not in cover_filenames and not saved_upload:
         errors['cover_image'] = 'Selecione uma imagem de capa válida.'
     if len(excerpt) < 30:
         errors['excerpt'] = 'Escreva um resumo com pelo menos 30 caracteres.'
@@ -938,9 +1136,11 @@ def get_blog_articles():
         article['edited_date'] = ''
         article['is_edited'] = False
         article['display_date'] = article['date']
+        article['content_html'] = ''
+        article['status'] = 'published'
 
     custom_articles = [article.to_public_dict() for article in
-                       BlogArticle.query.filter_by(active=True)
+                       BlogArticle.query.filter_by(active=True, status='published')
                        .order_by(BlogArticle.published_at.desc(), BlogArticle.id.desc()).all()]
     defaults_by_id = {article['id']: article for article in defaults}
     custom_by_id = {article['id']: article for article in custom_articles}
@@ -955,7 +1155,11 @@ def blog():
     """Render dedicated blog catalog grid page."""
     ensure_default_user()
     articles = get_blog_articles()
-    return render_template('pages/blog.html', segment='blog', articles=articles)
+    is_admin = session.get('logged_in') and session.get('user_role') in ['admin', 'gerente']
+    drafts = (BlogArticle.query.filter_by(status='draft').order_by(BlogArticle.updated_at.desc()).all()
+              if is_admin else [])
+    return render_template('pages/blog.html', segment='blog', articles=articles,
+                           drafts=drafts, is_admin=is_admin)
 
 
 @blueprint.route('/blog/novo', methods=['GET', 'POST'])
@@ -971,7 +1175,7 @@ def blog_novo():
     form_data = {
         'category': BLOG_CATEGORIES[0],
         'author_name': 'Olinda Aguiar',
-        'cover_image': BLOG_COVER_IMAGES[0][0],
+        'cover_image': '',
         'gallery_image_1': '',
         'gallery_image_2': '',
     }
@@ -979,10 +1183,19 @@ def blog_novo():
 
     if request.method == 'POST':
         form_data = blog_form_values(request.form)
+        save_as_draft = request.form.get('submit_action') == 'draft'
+        if save_as_draft:
+            form_data = normalize_blog_draft(form_data)
         title = form_data['title']
         excerpt = form_data['excerpt']
         content_raw = form_data['content']
-        form_errors = blog_form_errors(form_data)
+        cover_upload = request.files.get('cover_image_file')
+        form_errors = {} if save_as_draft else blog_form_errors(
+            form_data, has_cover_upload=bool(cover_upload and cover_upload.filename),
+            require_cover_upload=True)
+        upload_error = validate_blog_image(cover_upload)
+        if upload_error:
+            form_errors['cover_image'] = upload_error
 
         if form_errors:
             return render_template(
@@ -992,38 +1205,16 @@ def blog_novo():
                 form_errors=form_errors,
             ), 400
 
-        paragraphs = blog_paragraphs(content_raw)
-        all_ids = [article['id'] for article in articles]
-        new_id = (max(all_ids) if all_ids else 0) + 1
-        base_slug = blog_slug(title) or f'artigo-{new_id}'
-        existing_slugs = {article['slug'] for article in articles}
-        slug = base_slug
-        suffix = 2
-        while slug in existing_slugs:
-            slug = f'{base_slug}-{suffix}'
-            suffix += 1
-
-        author = BLOG_AUTHORS[form_data['author_name']]
-        gallery = blog_gallery(form_data)
-
-        article = BlogArticle(
-            id=new_id,
-            slug=slug,
-            title=title,
-            category=form_data['category'],
-            author_name=form_data['author_name'],
-            author_role=author['role'],
-            author_avatar=author['avatar'],
-            read_time=blog_read_time(content_raw),
-            cover_image=form_data['cover_image'],
-            excerpt=excerpt,
-            quote=form_data['quote'] or excerpt,
-            content_json=json.dumps(paragraphs, ensure_ascii=False),
-            gallery_json=json.dumps(gallery, ensure_ascii=False),
-            active=True,
-        )
+        persisted_max = db.session.query(db.func.max(BlogArticle.id)).scalar() or 0
+        new_id = max([persisted_max] + [article['id'] for article in articles]) + 1
+        article = BlogArticle(id=new_id, slug=blog_unique_slug(title, new_id, articles))
+        fill_blog_article(article, form_data, cover_upload,
+                          'draft' if save_as_draft else 'published')
         db.session.add(article)
         db.session.commit()
+        if save_as_draft:
+            flash('Rascunho salvo. Você pode continuar a edição quando quiser.', 'success')
+            return redirect(f'/blog/{new_id}/editar')
         flash('Novo artigo publicado com sucesso!', 'success')
         return redirect(f'/blog/{new_id}')
 
@@ -1044,9 +1235,19 @@ def blog_editar(article_id):
         return redirect(url_for('pages_blueprint.login', next=request.path))
 
     articles = get_blog_articles()
-    current = next((article for article in articles if article['id'] == article_id), None)
+    persisted_article = db.session.get(BlogArticle, article_id)
+    current = (persisted_article.to_public_dict() if persisted_article else
+               next((article for article in articles if article['id'] == article_id), None))
     if not current:
         abort(404)
+    is_draft = current.get('status') == 'draft'
+
+    if (request.method == 'POST' and request.form.get('submit_action') == 'discard'
+            and persisted_article and is_draft):
+        db.session.delete(persisted_article)
+        db.session.commit()
+        flash('Rascunho descartado.', 'success')
+        return redirect('/blog')
 
     form_data = {
         'title': current['title'],
@@ -1056,6 +1257,8 @@ def blog_editar(article_id):
         'excerpt': current['excerpt'],
         'quote': current.get('quote', ''),
         'content': '\n\n'.join(current.get('content_paragraphs', [])),
+        'content_html': current.get('content_html') or ''.join(
+            f'<p>{escape(paragraph)}</p>' for paragraph in current.get('content_paragraphs', [])),
         'gallery_image_1': (current.get('gallery') or [''])[0],
         'gallery_image_2': (current.get('gallery') or ['', ''])[1] if len(current.get('gallery') or []) > 1 else '',
         'published_date': blog_date_input(current),
@@ -1064,46 +1267,50 @@ def blog_editar(article_id):
 
     if request.method == 'POST':
         form_data = blog_form_values(request.form)
-        form_errors = blog_form_errors(form_data, require_published_date=True)
+        save_as_draft = request.form.get('submit_action') == 'draft'
+        if save_as_draft:
+            form_data = normalize_blog_draft(form_data)
+        cover_upload = request.files.get('cover_image_file')
+        form_errors = {} if save_as_draft else blog_form_errors(
+            form_data, require_published_date=True,
+            has_cover_upload=bool(cover_upload and cover_upload.filename),
+            require_cover_upload=not bool(form_data['cover_image']),
+        )
+        upload_error = validate_blog_image(cover_upload)
+        if upload_error:
+            form_errors['cover_image'] = upload_error
         if form_errors:
             return render_template(
                 'pages/blog-novo.html', segment='blog', articles=articles,
                 blog_categories=BLOG_CATEGORIES, blog_authors=BLOG_AUTHORS,
                 blog_cover_images=BLOG_COVER_IMAGES, form_data=form_data,
                 form_errors=form_errors, editing=True, article_id=article_id,
+                is_draft=is_draft,
             ), 400
 
         article = db.session.get(BlogArticle, article_id)
+        is_new_record = article is None
         if article is None:
             article = BlogArticle(id=article_id)
+
+        article.slug = blog_unique_slug(form_data['title'], article_id, articles)
+        fill_blog_article(article, form_data, cover_upload,
+                          'draft' if save_as_draft else 'published')
+        if is_new_record:
             db.session.add(article)
-
-        base_slug = blog_slug(form_data['title']) or f'artigo-{article_id}'
-        existing_slugs = {item['slug'] for item in articles if item['id'] != article_id}
-        slug = base_slug
-        suffix = 2
-        while slug in existing_slugs:
-            slug = f'{base_slug}-{suffix}'
-            suffix += 1
-
-        author = BLOG_AUTHORS[form_data['author_name']]
-        article.slug = slug
-        article.title = form_data['title']
-        article.category = form_data['category']
-        article.author_name = form_data['author_name']
-        article.author_role = author['role']
-        article.author_avatar = author['avatar']
-        article.read_time = blog_read_time(form_data['content'])
-        article.cover_image = form_data['cover_image']
-        article.excerpt = form_data['excerpt']
-        article.quote = form_data['quote'] or form_data['excerpt']
-        article.content_json = json.dumps(blog_paragraphs(form_data['content']), ensure_ascii=False)
-        article.gallery_json = json.dumps(blog_gallery(form_data), ensure_ascii=False)
-        article.active = True
-        article.published_at = datetime.strptime(form_data['published_date'], '%Y-%m-%d').replace(tzinfo=timezone.utc)
-        article.edited_at = datetime.now(timezone.utc)
+        if form_data['published_date']:
+            try:
+                article.published_at = datetime.strptime(
+                    form_data['published_date'], '%Y-%m-%d').replace(tzinfo=timezone.utc)
+            except ValueError:
+                pass
+        if not save_as_draft and not is_draft:
+            article.edited_at = datetime.now(timezone.utc)
         db.session.commit()
 
+        if save_as_draft:
+            flash('Rascunho salvo. Ele ainda não está visível no blog.', 'success')
+            return redirect(f'/blog/{article_id}/editar')
         flash('Artigo atualizado com sucesso!', 'success')
         return redirect(f'/blog/{article_id}')
 
@@ -1112,7 +1319,26 @@ def blog_editar(article_id):
         blog_categories=BLOG_CATEGORIES, blog_authors=BLOG_AUTHORS,
         blog_cover_images=BLOG_COVER_IMAGES, form_data=form_data,
         form_errors=form_errors, editing=True, article_id=article_id,
+        is_draft=is_draft,
     )
+
+
+@blueprint.route('/api/blog/media', methods=['POST'])
+def blog_media_upload():
+    """Upload an image or GIF for insertion inside the rich article body."""
+    if not session.get('logged_in') or session.get('user_role') not in ['admin', 'gerente']:
+        return jsonify({'success': False, 'error': 'Acesso não autorizado.'}), 403
+    upload = request.files.get('media')
+    if not upload or not upload.filename:
+        return jsonify({'success': False, 'error': 'Selecione uma imagem ou GIF para enviar.'}), 400
+    error = validate_blog_image(upload)
+    if error:
+        return jsonify({'success': False, 'error': error}), 400
+    relative_path = save_blog_image(upload)
+    return jsonify({
+        'success': True,
+        'url': url_for('static', filename=f'images/{relative_path}'),
+    })
 
 
 @blueprint.route('/blog/<int:article_id>')
@@ -1126,12 +1352,14 @@ def blog_detail(article_id=1):
     if not article:
         abort(404)
     
-    related_articles = [a for a in articles if a['id'] != article['id']][:3]
+    other_articles = [a for a in articles if a['id'] != article['id']]
+    related_articles = other_articles[:3]
+    more_articles = other_articles[3:6]
     category_counts = Counter(item['category'] for item in articles)
     is_admin = session.get('logged_in') and session.get('user_role') in ['admin', 'gerente']
     return render_template(
         'pages/blog-detail.html', segment='blog', article=article,
-        related_articles=related_articles, articles=articles,
+        related_articles=related_articles, more_articles=more_articles, articles=articles,
         category_counts=category_counts, is_admin=is_admin,
     )
 

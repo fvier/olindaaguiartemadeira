@@ -17,6 +17,14 @@ def upgrade():
     bind = op.get_bind()
     inspector = sa.inspect(bind)
     if 'blog_articles' in inspector.get_table_names():
+        columns = {column['name'] for column in inspector.get_columns('blog_articles')}
+        if 'content_html' not in columns:
+            op.add_column(
+                'blog_articles',
+                sa.Column('content_html', sa.Text(), nullable=False, server_default=''),
+            )
+        if 'edited_at' not in columns:
+            op.add_column('blog_articles', sa.Column('edited_at', sa.DateTime(), nullable=True))
         return
 
     op.create_table(
@@ -33,6 +41,7 @@ def upgrade():
         sa.Column('excerpt', sa.Text(), nullable=False),
         sa.Column('quote', sa.Text(), nullable=False),
         sa.Column('content_json', sa.Text(), nullable=False),
+        sa.Column('content_html', sa.Text(), nullable=False),
         sa.Column('gallery_json', sa.Text(), nullable=False),
         sa.Column('active', sa.Boolean(), nullable=False),
         sa.Column('published_at', sa.DateTime(), nullable=False),

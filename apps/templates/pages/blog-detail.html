@@ -150,6 +150,21 @@
         display:flex;justify-content:center;margin-top:10px;padding:9px 12px;border-radius:999px;
         background:#172033;color:#fff;text-decoration:none;font-size:.76rem;font-weight:800;
     }
+    .article-body-text::after { content:"";display:block;clear:both; }
+    .article-body-text img { display:block;max-width:100%;height:auto;border-radius:12px; }
+    .article-body-text figure { max-width:100%;margin:24px auto;clear:both; }
+    .article-body-text figcaption { margin-top:7px;color:#7a889b;font-size:.78rem;text-align:center; }
+    .article-body-text .text-start { text-align:left; }
+    .article-body-text .text-center { text-align:center; }
+    .article-body-text .text-end { text-align:right; }
+    .article-body-text .media-left { width:48%;float:left;margin:8px 22px 16px 0;clear:left; }
+    .article-body-text .media-right { width:48%;float:right;margin:8px 0 16px 22px;clear:right; }
+    .article-body-text .media-wide { width:100%; }
+    .article-body-text .video-wrapper { position:relative;width:100%;max-width:100%;padding-top:56.25%;margin:24px auto;clear:both; }
+    .article-body-text .video-wrapper iframe { position:absolute;inset:0;width:100%;height:100%;border:0;border-radius:12px; }
+    .article-body-text .video-wrapper.media-left { width:48%;float:left;margin:8px 22px 16px 0;clear:left; }
+    .article-body-text .video-wrapper.media-right { width:48%;float:right;margin:8px 0 16px 22px;clear:right; }
+    .article-body-text .video-wrapper.media-wide { width:100%;float:none; }
 
     .site-footer { background:#f8fafc;color:#475569; }
     .site-footer h5,.site-footer h6 { color:#0f172a;font-weight:800; }
@@ -169,7 +184,11 @@
     html[data-bs-theme="dark"] .blog-instagram-profile strong { color:#edf4fc; }
     html[data-bs-theme="dark"] .blog-instagram-profile { background:#171f2e;border-color:#334155; }
     @media (max-width:575.98px) {
+        .blog-detail-page-heading { align-items:flex-start!important; }
+        .blog-detail-page-actions { flex-direction:column;align-items:flex-end!important;gap:8px!important; }
+        .blog-detail-page-heading .breadcrumb { font-size:.7rem!important; }
         .blog-detail-meta-grid { grid-template-columns:1fr; }
+        .article-body-text .media-left,.article-body-text .media-right { width:100%!important;float:none;margin:20px 0; }
     }
 </style>
 
@@ -187,9 +206,9 @@
 <main class="py-4 bg-light">
     <div class="container">
 
-        <div class="d-flex justify-content-between align-items-center gap-3 mb-4 pb-2 border-bottom border-light-subtle">
+        <div class="blog-detail-page-heading d-flex justify-content-between align-items-center gap-3 mb-4 pb-2 border-bottom border-light-subtle">
             <h1 class="h4 fw-extrabold text-dark m-0">Histórias do ateliê</h1>
-            <div class="d-flex align-items-center gap-3">
+            <div class="blog-detail-page-actions d-flex align-items-center gap-3">
             {% if is_admin %}
             <a href="/blog/{{ article.id }}/editar" class="blog-detail-edit-btn">
                 <i class="ri-edit-line" aria-hidden="true"></i> Editar artigo
@@ -238,9 +257,13 @@
 
                     <!-- TEXTO E PARÁGRAFOS DO ARTIGO -->
                     <div class="article-body-text fs-15 text-secondary lh-lg pt-3">
+                        {% if article.content_html %}
+                        {{ article.content_html|safe }}
+                        {% else %}
                         {% for paragraph in article.content_paragraphs %}
                         <p class="mb-4">{{ paragraph }}</p>
                         {% endfor %}
+                        {% endif %}
                     </div>
 
                     <!-- BLOCO DE CITAÇÃO MINIA -->
@@ -279,7 +302,7 @@
 
                     <!-- SEÇÃO DE COMENTÁRIOS (COMMENTS) -->
                     <div class="comments-section mb-4">
-                        <h5 class="fw-bold text-dark mb-4"><i class="ri-chat-3-line me-2 text-primary"></i> Comments :</h5>
+                        <h5 class="fw-bold text-dark mb-4"><i class="ri-chat-3-line me-2 text-primary"></i> Comentários</h5>
 
                         <!-- Comentário 1 -->
                         <div class="d-flex align-items-start gap-3 mb-4 pb-3 border-bottom border-light-subtle">
@@ -287,12 +310,12 @@
                             <div class="flex-grow-1">
                                 <div class="d-flex justify-content-between align-items-center mb-1">
                                     <h6 class="fw-bold text-dark mb-0 fs-14">Mariana Silva</h6>
-                                    <small class="text-muted fs-12">1 hr Ago</small>
+                                    <small class="text-muted fs-12">há 1 hora</small>
                                 </div>
                                 <p class="text-secondary fs-14 mb-2">
                                     Artigo fascinante! O acabamento em cera natural valorizou demais a Peroba Rosa da minha mesa de jantar. Parabéns ao mestre entalhador!
                                 </p>
-                                <a href="#replyForm" class="blog-detail-reply-link"><i class="ri-reply-fill me-1"></i> Reply</a>
+                                <a href="#replyForm" class="blog-detail-reply-link"><i class="ri-reply-fill me-1"></i> Responder</a>
                             </div>
                         </div>
 
@@ -302,12 +325,12 @@
                             <div class="flex-grow-1">
                                 <div class="d-flex justify-content-between align-items-center mb-1">
                                     <h6 class="fw-bold text-dark mb-0 fs-14">Rodrigo Vasconcelos</h6>
-                                    <small class="text-muted fs-12">2 hrs Ago</small>
+                                    <small class="text-muted fs-12">há 2 horas</small>
                                 </div>
                                 <p class="text-secondary fs-14 mb-2">
                                     Excelente explicação sobre o processo de expurgo e estabilização de umidade. Ver esse cuidado técnico nos dá total segurança ao encomendar.
                                 </p>
-                                <a href="#replyForm" class="blog-detail-reply-link"><i class="ri-reply-fill me-1"></i> Reply</a>
+                                <a href="#replyForm" class="blog-detail-reply-link"><i class="ri-reply-fill me-1"></i> Responder</a>
                             </div>
                         </div>
 
@@ -317,12 +340,12 @@
                             <div class="flex-grow-1">
                                 <div class="d-flex justify-content-between align-items-center mb-1">
                                     <h6 class="fw-bold text-dark mb-0 fs-14">Dra. Cecília Meireles</h6>
-                                    <small class="text-muted fs-12">3 hrs Ago</small>
+                                    <small class="text-muted fs-12">há 3 horas</small>
                                 </div>
                                 <p class="text-secondary fs-14 mb-2">
                                     Trabalho de resgate histórico magnífico em Olinda! Ansiosa para receber o painel de Ipê na minha sala.
                                 </p>
-                                <a href="#replyForm" class="blog-detail-reply-link"><i class="ri-reply-fill me-1"></i> Reply</a>
+                                <a href="#replyForm" class="blog-detail-reply-link"><i class="ri-reply-fill me-1"></i> Responder</a>
                             </div>
                         </div>
 
@@ -332,24 +355,24 @@
 
                     <!-- FORMULÁRIO DE COMENTÁRIO (LEAVE A REPLY) -->
                     <div id="replyForm" class="leave-reply-section">
-                        <h5 class="fw-bold text-dark mb-3">Leave a Reply:</h5>
+                        <h5 class="fw-bold text-dark mb-3">Deixe um comentário</h5>
                         <form onsubmit="alert('Obrigado pelo seu comentário! Ele passará por moderação.'); return false;">
                             <div class="row g-3">
                                 <div class="col-md-6">
-                                    <label class="form-label fs-13 fw-semibold text-secondary">Name</label>
-                                    <input type="text" class="form-control rounded-3 bg-light border-0 py-2 fs-14" placeholder="Enter name" required>
+                                    <label class="form-label fs-13 fw-semibold text-secondary">Nome</label>
+                                    <input type="text" class="form-control rounded-3 bg-light border-0 py-2 fs-14" placeholder="Digite seu nome" required>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label fs-13 fw-semibold text-secondary">Email</label>
-                                    <input type="email" class="form-control rounded-3 bg-light border-0 py-2 fs-14" placeholder="Enter email" required>
+                                    <label class="form-label fs-13 fw-semibold text-secondary">E-mail</label>
+                                    <input type="email" class="form-control rounded-3 bg-light border-0 py-2 fs-14" placeholder="Digite seu e-mail" required>
                                 </div>
                                 <div class="col-12">
-                                    <label class="form-label fs-13 fw-semibold text-secondary">Message</label>
-                                    <textarea class="form-control rounded-3 bg-light border-0 py-2 fs-14" rows="4" placeholder="Your message..." required></textarea>
+                                    <label class="form-label fs-13 fw-semibold text-secondary">Mensagem</label>
+                                    <textarea class="form-control rounded-3 bg-light border-0 py-2 fs-14" rows="4" placeholder="Escreva sua mensagem..." required></textarea>
                                 </div>
                                 <div class="col-12 text-end">
                                     <button type="submit" class="btn btn-warning fw-bold px-4 py-2 text-dark rounded-3 border-0" style="background:#c85a17; color:#fff!important;">
-                                        Submit
+                                        Enviar comentário
                                     </button>
                                 </div>
                             </div>
@@ -362,55 +385,34 @@
             <!-- COLUNA DIREITA: SIDEBAR MINIA COM WIDGETS (COL-LG-4) -->
             <div class="col-lg-4">
                 
-                <!-- WIDGET 1: SEARCH -->
                 <div class="blog-detail-sidebar-card">
-                    <h6 class="blog-detail-sidebar-title">Search</h6>
+                    <h6 class="blog-detail-sidebar-title">Buscar no blog</h6>
                     <form action="/blog" method="get">
                         <div class="input-group">
                             <span class="input-group-text bg-light border-0 text-muted ps-3">
                                 <i class="ri-search-line"></i>
                             </span>
-                            <input type="text" name="search" class="form-control bg-light border-0 fs-14 py-2" placeholder="Search...">
+                            <input type="search" name="q" class="form-control bg-light border-0 fs-14 py-2" placeholder="Título, tema ou madeira">
                         </div>
                     </form>
                 </div>
 
-                <!-- WIDGET 2: CATEGORIES COM BADGES -->
                 <div class="blog-detail-sidebar-card">
-                    <h6 class="blog-detail-sidebar-title">Categories</h6>
+                    <h6 class="blog-detail-sidebar-title">Categorias</h6>
                     <ul class="list-unstyled mb-0 d-grid gap-2 fs-14">
+                        {% for category, total in category_counts.items() %}
                         <li class="d-flex justify-content-between align-items-center py-1 border-bottom border-light-subtle">
-                            <a href="/blog" class="text-decoration-none text-secondary hover-terracotta">Sustentabilidade & Madeira</a>
-                            <span class="badge bg-primary-subtle text-primary rounded-pill px-2.5 py-1 fs-11">02</span>
+                            <a href="/blog?categoria={{ category|urlencode }}" class="text-decoration-none text-secondary hover-terracotta">{{ category }}</a>
+                            <span class="badge bg-primary-subtle text-primary rounded-pill px-2.5 py-1 fs-11">{{ total }}</span>
                         </li>
-                        <li class="d-flex justify-content-between align-items-center py-1 border-bottom border-light-subtle">
-                            <a href="/blog" class="text-decoration-none text-secondary hover-terracotta">Técnicas Artesanais</a>
-                            <span class="badge bg-primary-subtle text-primary rounded-pill px-2.5 py-1 fs-11">04</span>
-                        </li>
-                        <li class="d-flex justify-content-between align-items-center py-1 border-bottom border-light-subtle">
-                            <a href="/blog" class="text-decoration-none text-secondary hover-terracotta">Projetos Autorais</a>
-                            <span class="badge bg-primary-subtle text-primary rounded-pill px-2.5 py-1 fs-11">03</span>
-                        </li>
-                        <li class="d-flex justify-content-between align-items-center py-1 border-bottom border-light-subtle">
-                            <a href="/blog" class="text-decoration-none text-secondary hover-terracotta">Marcenaria Colonial</a>
-                            <span class="badge bg-primary-subtle text-primary rounded-pill px-2.5 py-1 fs-11">02</span>
-                        </li>
-                        <li class="d-flex justify-content-between align-items-center py-1 border-bottom border-light-subtle">
-                            <a href="/blog" class="text-decoration-none text-secondary hover-terracotta">Liderança & Propósito</a>
-                            <span class="badge bg-primary-subtle text-primary rounded-pill px-2.5 py-1 fs-11">01</span>
-                        </li>
-                        <li class="d-flex justify-content-between align-items-center py-1">
-                            <a href="/blog" class="text-decoration-none text-secondary hover-terracotta">Acabamentos & Ceras</a>
-                            <span class="badge bg-primary-subtle text-primary rounded-pill px-2.5 py-1 fs-11">02</span>
-                        </li>
+                        {% endfor %}
                     </ul>
                 </div>
 
-                <!-- WIDGET 3: UPCOMING POST -->
                 <div class="blog-detail-sidebar-card">
-                    <h6 class="blog-detail-sidebar-title">Upcoming Post</h6>
+                    <h6 class="blog-detail-sidebar-title">Artigos recentes</h6>
                     <div class="d-grid gap-3">
-                        {% for up_art in (articles or [])[:3] %}
+                        {% for up_art in related_articles %}
                         <div class="d-flex align-items-center gap-3">
                             <img src="{{ config.ASSETS_ROOT }}/images/{{ up_art.cover_image }}" class="blog-sidebar-post-thumb" alt="{{ up_art.title }}">
                             <div class="flex-grow-1">
@@ -426,11 +428,10 @@
                     </div>
                 </div>
 
-                <!-- WIDGET 4: POPULAR POST -->
                 <div class="blog-detail-sidebar-card">
-                    <h6 class="blog-detail-sidebar-title">Popular Post</h6>
+                    <h6 class="blog-detail-sidebar-title">Outras histórias</h6>
                     <div class="d-grid gap-3">
-                        {% for pop_art in (articles or [])[3:6] %}
+                        {% for pop_art in more_articles %}
                         <div class="d-flex align-items-center gap-3">
                             <img src="{{ config.ASSETS_ROOT }}/images/{{ pop_art.cover_image }}" class="blog-sidebar-post-thumb" alt="{{ pop_art.title }}">
                             <div class="flex-grow-1">
@@ -446,9 +447,8 @@
                     </div>
                 </div>
 
-                <!-- WIDGET 5: TAG CLOUDS -->
                 <div class="blog-detail-sidebar-card">
-                    <h6 class="blog-detail-sidebar-title">Tag Clouds</h6>
+                    <h6 class="blog-detail-sidebar-title">Temas</h6>
                     <div>
                         <a href="/blog" class="blog-sidebar-tag-pill">#PerobaRosa</a>
                         <a href="/blog" class="blog-sidebar-tag-pill">#Demolição</a>
@@ -461,25 +461,23 @@
                     </div>
                 </div>
 
-                <!-- WIDGET 6: INSTAGRAM POST -->
                 <div class="blog-detail-sidebar-card">
-                    <h6 class="blog-detail-sidebar-title">Instagram Post</h6>
-                    <div class="blog-sidebar-insta-grid">
-                        <img src="{{ config.ASSETS_ROOT }}/images/mesa-jantar-peroba-rosa-demolicao-1.png" class="blog-sidebar-insta-img" alt="Insta 1">
-                        <img src="{{ config.ASSETS_ROOT }}/images/cadeiras-encosto-empalhado-madeira-demolicao.png" class="blog-sidebar-insta-img" alt="Insta 2">
-                        <img src="{{ config.ASSETS_ROOT }}/images/bar-resort-lambri-jatoba.png" class="blog-sidebar-insta-img" alt="Insta 3">
-                        <img src="{{ config.ASSETS_ROOT }}/images/cristaleira-colonial-portas-vidro-peroba.png" class="blog-sidebar-insta-img" alt="Insta 4">
-                        <img src="{{ config.ASSETS_ROOT }}/images/comoda-balcao-gaveteiro-demolicao.png" class="blog-sidebar-insta-img" alt="Insta 5">
-                        <img src="{{ config.ASSETS_ROOT }}/images/hero-fachada-coral-entardecer.png" class="blog-sidebar-insta-img" alt="Insta 6">
+                    <h6 class="blog-detail-sidebar-title">No Instagram</h6>
+                    <div class="blog-instagram-profile">
+                        <span class="blog-instagram-mark" aria-hidden="true"><i class="ri-instagram-line"></i></span>
+                        <div>
+                            <strong>@olindaaguiartemadeira</strong>
+                            <span>Perfil oficial com peças, bastidores e novidades do ateliê.</span>
+                        </div>
                     </div>
+                    <a class="blog-instagram-link" href="https://www.instagram.com/olindaaguiartemadeira/" target="_blank" rel="noopener noreferrer">Ver publicações no Instagram</a>
                 </div>
 
-                <!-- WIDGET 7: EMAIL NEWSLETTER -->
                 <div class="blog-detail-sidebar-card">
-                    <h6 class="blog-detail-sidebar-title">Email Newsletter</h6>
+                    <h6 class="blog-detail-sidebar-title">Novidades por e-mail</h6>
                     <form onsubmit="alert('Obrigado por assinar nossa newsletter!'); return false;">
                         <div class="input-group">
-                            <input type="email" class="form-control bg-light border-0 fs-13 py-2" placeholder="Enter Email" required>
+                            <input type="email" class="form-control bg-light border-0 fs-13 py-2" placeholder="Digite seu e-mail" aria-label="Seu e-mail" required>
                             <button class="btn btn-warning px-3 text-dark border-0" type="submit" style="background:#c85a17; color:#fff!important;">
                                 <i class="ri-send-plane-2-fill"></i>
                             </button>

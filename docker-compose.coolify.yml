@@ -1,30 +1,30 @@
 services:
   app:
-    container_name: gpsparaiba-app
+    container_name: olinda-app
     build:
       context: .
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.gpsparaiba-http.rule=Host(`gpsparaiba.com.br`)"
-      - "traefik.http.routers.gpsparaiba-http.entrypoints=http"
-      - "traefik.http.routers.gpsparaiba-http.middlewares=gpsparaiba-https"
-      - "traefik.http.middlewares.gpsparaiba-https.redirectscheme.scheme=https"
-      - "traefik.http.routers.gpsparaiba.rule=Host(`gpsparaiba.com.br`)"
-      - "traefik.http.routers.gpsparaiba.entrypoints=https"
-      - "traefik.http.routers.gpsparaiba.tls=true"
-      - "traefik.http.routers.gpsparaiba.tls.certresolver=letsencrypt"
-      - "traefik.http.services.gpsparaiba.loadbalancer.server.port=5000"
+      - "traefik.http.routers.olinda-http.rule=Host(`olinda.portaprojetos.online`)"
+      - "traefik.http.routers.olinda-http.entrypoints=http"
+      - "traefik.http.routers.olinda-http.middlewares=olinda-https"
+      - "traefik.http.middlewares.olinda-https.redirectscheme.scheme=https"
+      - "traefik.http.routers.olinda.rule=Host(`olinda.portaprojetos.online`)"
+      - "traefik.http.routers.olinda.entrypoints=https"
+      - "traefik.http.routers.olinda.tls=true"
+      - "traefik.http.routers.olinda.tls.certresolver=letsencrypt"
+      - "traefik.http.services.olinda.loadbalancer.server.port=5000"
       - "traefik.docker.network=coolify"
     environment:
       DEBUG: "False"
       FLASK_APP: run.py
       SECRET_KEY: ${SERVICE_HEX_64_RASTREK:?configure SERVICE_HEX_64_RASTREK}
       ASSETS_ROOT: /static
-      DATABASE_URL: postgresql+psycopg2://${POSTGRES_USER:-gps_paraiba}:${SERVICE_PASSWORD_64_POSTGRES:?configure SERVICE_PASSWORD_64_POSTGRES}@postgres:5432/${POSTGRES_DB:-gps_paraiba}
-      INITIAL_ADMIN_EMAIL: ${INITIAL_ADMIN_EMAIL:-}
+      DATABASE_URL: postgresql+psycopg2://${POSTGRES_USER:-olinda_user}:${SERVICE_PASSWORD_64_POSTGRES:?configure SERVICE_PASSWORD_64_POSTGRES}@postgres:5432/${POSTGRES_DB:-olinda_db}
+      INITIAL_ADMIN_EMAIL: ${INITIAL_ADMIN_EMAIL:-admin@olindaaguiar.com}
       INITIAL_ADMIN_PASSWORD: ${INITIAL_ADMIN_PASSWORD:-}
-      API_INTEGRATION_KEY: ${API_INTEGRATION_KEY:?configure API_INTEGRATION_KEY}
+      API_INTEGRATION_KEY: ${API_INTEGRATION_KEY:-olinda_secret_key_2026}
     command:
       - /bin/sh
       - -c
@@ -35,7 +35,7 @@ services:
     expose:
       - "5000"
     ports:
-      - "127.0.0.1:5000:5000"
+      - "127.0.0.1:5002:5000"
     volumes:
       - app_images:/app/apps/static/images
     networks:
@@ -49,12 +49,12 @@ services:
       start_period: 10s
 
   postgres:
-    container_name: gpsparaiba-postgres
+    container_name: olinda-postgres
     image: postgres:16-alpine
     restart: unless-stopped
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-gps_paraiba}
-      POSTGRES_USER: ${POSTGRES_USER:-gps_paraiba}
+      POSTGRES_DB: ${POSTGRES_DB:-olinda_db}
+      POSTGRES_USER: ${POSTGRES_USER:-olinda_user}
       POSTGRES_PASSWORD: ${SERVICE_PASSWORD_64_POSTGRES:?configure SERVICE_PASSWORD_64_POSTGRES}
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -68,11 +68,9 @@ services:
 
 volumes:
   postgres_data:
-    name: gpsparaiba_postgres_data
-    external: true
+    name: olinda_postgres_data
   app_images:
-    name: gpsparaiba_app_images
-    external: true
+    name: olinda_app_images
 
 networks:
   coolify:
