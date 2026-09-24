@@ -205,6 +205,18 @@ class ClientReview(db.Model):
         return f'<ClientReview {self.client_name}>'
 
 
+class NewsletterSubscriber(db.Model):
+    __tablename__ = 'newsletter_subscribers'
+
+    id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(150), unique=True, nullable=False, index=True)
+    active = db.Column(db.Boolean, nullable=False, default=True)
+    created_at = db.Column(db.DateTime, nullable=False, default=lambda: datetime.now(timezone.utc))
+
+    def __repr__(self):
+        return f'<NewsletterSubscriber {self.email}>'
+
+
 class BlogArticle(db.Model):
     __tablename__ = 'blog_articles'
 

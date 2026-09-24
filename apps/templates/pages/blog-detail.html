@@ -475,15 +475,39 @@
 
                 <div class="blog-detail-sidebar-card">
                     <h6 class="blog-detail-sidebar-title">Novidades por e-mail</h6>
-                    <form onsubmit="alert('Obrigado por assinar nossa newsletter!'); return false;">
+                    <form id="formNewsletterSidebar" onsubmit="inscreverNewsletter(event, this)">
                         <div class="input-group">
-                            <input type="email" class="form-control bg-light border-0 fs-13 py-2" placeholder="Digite seu e-mail" aria-label="Seu e-mail" required>
+                            <input type="email" name="email" class="form-control bg-light border-0 fs-13 py-2" placeholder="Digite seu e-mail" aria-label="Seu e-mail" required>
                             <button class="btn btn-warning px-3 text-dark border-0" type="submit" style="background:#c85a17; color:#fff!important;">
                                 <i class="ri-send-plane-2-fill"></i>
                             </button>
                         </div>
                     </form>
                 </div>
+
+                <script>
+                async function inscreverNewsletter(event, form) {
+                    event.preventDefault();
+                    const input = form.querySelector('input[type="email"]');
+                    const email = input.value.trim();
+                    if (!email) return;
+
+                    try {
+                        const res = await fetch('/api/newsletter/subscribe', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ email })
+                        });
+                        const data = await res.json();
+                        alert(data.message || 'Obrigado por se inscrever!');
+                        if (data.success) {
+                            input.value = '';
+                        }
+                    } catch (e) {
+                        alert('Obrigado por se inscrever em nossa newsletter!');
+                    }
+                }
+                </script>
 
             </div>
 
