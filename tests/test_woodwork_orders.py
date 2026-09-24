@@ -95,6 +95,14 @@ class WoodworkOrderTimelineTests(unittest.TestCase):
         self.assertIn('Encosto Empalhado', chair['name'])
         self.assertIn('encosto empalhado à mão', chair['description'].lower())
 
+        # Verifica a cristaleira colonial OLA-C19
+        cristaleira = next((p for p in data['products'] if p['id'] == 'OLA-C19'), None)
+        self.assertIsNotNone(cristaleira)
+        self.assertEqual(cristaleira['wood_type'], 'peroba-rosa')
+        self.assertEqual(cristaleira['category'], 'Cristaleiras & Armários')
+        self.assertIn('Cristaleira Colonial', cristaleira['name'])
+        self.assertIn('divisões envidraçadas', cristaleira['description'].lower())
+
     def test_consultar_order_by_formatted_cpf(self):
         response = self.client.get('/api/pedido/consultar?cpf=123.456.789-00')
         self.assertEqual(response.status_code, 200)

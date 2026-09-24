@@ -246,6 +246,50 @@ WOODWORK_PRODUCTS = [
         ]
     },
     {
+        'id': 'OLA-C19',
+        'wood_type': 'peroba-rosa',
+        'category': 'Cristaleiras & Armários',
+        'name': 'Cristaleira Colonial com Portas Envidraçadas em Peroba Rosa',
+        'price': 5800.00,
+        'old_price': 6600.00,
+        'icon': '🚪',
+        'image': 'cristaleira-colonial-portas-vidro-peroba.png',
+        'images': ['cristaleira-colonial-portas-vidro-peroba.png'],
+        'badge': 'Obra Autoral • Peça Única',
+        'sizes': [
+            '1,15m x 0,45m x 2,05m altura',
+            '1,40m x 0,50m x 2,15m altura',
+            'Sob Medida conforme louçaria e cristais do cliente'
+        ],
+        'description': 'Cristaleira colonial autoral Olinda Aguiar em peroba rosa de demolição. Portas duplas com divisões envidraçadas elegantes, prateleiras internas maciças de alta capacidade de carga, gavetão inferior funcional e cornija moldurada clássica no topo. Acabamento acetinado com cera de carnaúba pura que ressalta os tons mel e a solidez secular da madeira resgatada.',
+        'colors': [
+            {
+                'id': 'peroba-mel-dourado',
+                'name': 'Peroba Rosa Mel Dourado com Cera',
+                'hex': '#c67d34',
+                'price': 5800.00,
+                'old_price': 6600.00,
+                'badge': 'Acabamento Assinado'
+            },
+            {
+                'id': 'patina-colonial-envelhecida',
+                'name': 'Pátina Colonial Envelhecida',
+                'hex': '#7e481c',
+                'price': 6100.00,
+                'old_price': 6950.00,
+                'badge': 'Rústico Nobre'
+            },
+            {
+                'id': 'verniz-pu-acetinado',
+                'name': 'Verniz PU Acetinado Cristalino',
+                'hex': '#9c5526',
+                'price': 6200.00,
+                'old_price': 7100.00,
+                'badge': 'Proteção Total'
+            }
+        ]
+    },
+    {
         'id': 'OLA-B10',
         'wood_type': 'peroba-rosa',
         'category': 'Linha Gourmet & Utilitários',
