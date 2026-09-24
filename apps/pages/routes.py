@@ -721,7 +721,7 @@ BLOG_COVER_IMAGES = (
     ('cristaleira-colonial-portas-vidro-peroba.png', 'Cristaleira colonial'),
     ('hero-fachada-coral-entardecer.png', 'Fachada coral ao entardecer'),
     ('comoda-balcao-gaveteiro-demolicao.png', 'Cômoda e balcão gaveteiro'),
-    ('mesa-jantar-peroba-rosa-demolicao-1.png', 'Mesa de jantar em Peroba Rosa'),
+    ('mesa-base-escultural-vidro-1.png', 'Mesa de jantar em Peroba Rosa'),
 )
 
 

@@ -369,13 +369,13 @@ class WoodworkOrder(db.Model):
         cur_name = step_names[min(max(self.current_step - 1, 0), 4)]
 
         img_map = {
-            'mesa': 'mesa-jantar-peroba-rosa-demolicao-1.png',
+            'mesa': 'mesa-base-escultural-vidro-1.png',
             'escultura': 'carrinho-bar-colonial-madeira.png',
             'painel': 'armarios-cozinha-jatoba-lambri-demolicao-1.png',
             'bancada': 'bancada-madeira-demolicao-verniz-pu-1.png',
             'aparador': 'comoda-balcao-gaveteiro-demolicao.png'
         }
-        item_img = 'mesa-jantar-peroba-rosa-demolicao-1.png'
+        item_img = 'mesa-base-escultural-vidro-1.png'
         t_low = (self.item_title or '').lower()
         for k, v in img_map.items():
             if k in t_low:
