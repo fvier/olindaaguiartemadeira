@@ -1124,43 +1124,35 @@ html[data-bs-theme="dark"] .store-chip-btn.active {
   background: #ef4444;
 }
 
-/* Compartilhamento */
+/* Compartilhamento Minimalista */
 .store-share-area {
   margin-top: 10px;
 }
 .store-share-btn {
-  background: none;
-  border: 0;
-  padding: 0;
-  font-size: 0.75rem;
-  color: #64748b;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+  padding: 5px 14px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #475569;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
+  transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 .store-share-btn:hover {
+  background: var(--store-terracotta-soft);
+  border-color: var(--store-terracotta);
   color: var(--store-terracotta);
+  transform: translateY(-1px);
 }
-.store-share-status {
-  font-size: 0.75rem;
-  color: var(--store-green);
-  margin: 4px 0 0;
-  min-height: 16px;
-}
-.store-share-copy {
-  display: block;
-  margin-top: 6px;
-  font-size: 0.75rem;
-  color: #64748b;
-}
-.store-share-copy input {
-  width: 100%;
-  padding: 4px 8px;
-  font-size: 0.75rem;
-  border: 1px solid #cbd5e1;
-  border-radius: 6px;
-  margin-top: 3px;
+.store-share-btn.share-copied-active {
+  background: #f0fdf4 !important;
+  border-color: #22c55e !important;
+  color: #16a34a !important;
+  font-weight: 700 !important;
 }
 
 /* Estado Vazio */

@@ -697,45 +697,59 @@
   // 5. COMPARTILHAMENTO DE PRODUTO (URL & NATIVE SHARE)
   // -------------------------------------------------------------
   async function shareProduct(card, button) {
-    if (!card) return;
-    const product = productFor(card);
-    const color = product.colors?.find(item => item.id === card.dataset.selectedColor);
+    if (!button) return;
+    let product = null;
+    if (card && card.dataset.json) {
+      try { product = JSON.parse(card.dataset.json); } catch (_) {}
+    }
+    if (!product && currentProduct) {
+      product = currentProduct;
+    }
+    if (!product) return;
+
+    const color = product.colors?.find(item => item.id === (card?.dataset.selectedColor || selectedColor?.id));
     const url = new URL('/loja', window.location.origin);
     url.searchParams.set('produto', product.id);
     if (color) url.searchParams.set('acabamento', color.id);
 
-    const area = button.closest('.store-share-area');
-    const status = area ? area.querySelector('.store-share-status') : null;
-    const manual = area ? area.querySelector('.store-share-copy') : null;
+    const shareData = {
+      title: `${product.name} — Olinda Arte em Madeira`,
+      text: `Confira esta peça autoral em madeira de demolição: ${product.name}`,
+      url: url.href
+    };
 
     if (navigator.share) {
       try {
-        await navigator.share({
-          title: `${product.name} — Olinda Arte em Madeira`,
-          text: `Confira esta peça única em madeira de demolição: ${product.name}`,
-          url: url.href
-        });
+        await navigator.share(shareData);
+        showShareFeedback(button, '✓ Compartilhado!');
         return;
       } catch (err) {
         if (err.name === 'AbortError') return;
       }
     }
 
-    // Fallback: Clipboard
+    // Fallback: Copiar para área de transferência e dar feedback direto no próprio botão
     try {
       await navigator.clipboard.writeText(url.href);
-      if (status) status.textContent = 'Link copiado! Cole para compartilhar.';
+      showShareFeedback(button, '✓ Link Copiado!');
     } catch (_) {
-      if (manual) {
-        manual.classList.remove('hidden');
-        const input = manual.querySelector('input');
-        if (input) {
-          input.value = url.href;
-          input.focus();
-          input.select();
-        }
-      }
+      showShareFeedback(button, 'Link copiado!');
     }
+  }
+
+  function showShareFeedback(button, text) {
+    if (!button) return;
+    const origHTML = button.getAttribute('data-orig-html') || button.innerHTML;
+    if (!button.hasAttribute('data-orig-html')) {
+      button.setAttribute('data-orig-html', origHTML);
+    }
+    button.innerHTML = `<i class="ri-checkbox-circle-fill me-1" style="color:#16a34a;"></i> <span>${text}</span>`;
+    button.classList.add('share-copied-active');
+    setTimeout(() => {
+      button.innerHTML = origHTML;
+      button.classList.remove('share-copied-active');
+      button.removeAttribute('data-orig-html');
+    }, 2500);
   }
 
   grid.querySelectorAll('[data-share-product]').forEach(button => {
