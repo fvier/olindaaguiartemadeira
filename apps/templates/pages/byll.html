@@ -166,7 +166,7 @@
                     Uma homenagem viva e afetuosa ao pai de <strong>Olinda Aguiar</strong>. Foi com ele que nasceu o fascínio pelas vigas centenárias, o respeito pelo trabalho manual e a coragem de transformar a madeira de demolição em arte que resiste ao tempo.
                 </p>
                 <div class="d-flex flex-wrap gap-3">
-                    <a href="#historia" class="btn btn-primary rounded-pill px-4 py-2.5 fw-bold shadow-sm d-inline-flex align-items-center gap-2">
+                    <a href="/byll#historia" id="btnConhecerHistoria" class="btn btn-primary rounded-pill px-4 py-2.5 fw-bold shadow-sm d-inline-flex align-items-center gap-2">
                         <i class="ri-book-read-line fs-18"></i> Conhecer a Nossa História
                     </a>
                     <a href="https://api.whatsapp.com/send?phone=5581994522504&text=Ol%C3%A1!%20Gostaria%20de%20visitar%20o%20ateli%C3%AA%20em%20Olinda%20e%20conhecer%20as%20pe%C3%A7as." 
@@ -193,7 +193,7 @@
     </div>
 </header>
 
-<main class="py-5 bg-light" id="historia">
+<main class="py-5 bg-light" id="historia" style="scroll-margin-top: 90px;">
     <div class="container py-lg-3">
 
         <!-- Seção: A Herança da Vontade e da Administração -->
@@ -350,4 +350,29 @@
 </main>
 
 {% include 'partials/public-footer.html' %}
+
+<script>
+    function scrollToHistoria(e) {
+        if (e) e.preventDefault();
+        const el = document.getElementById('historia');
+        if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            if (window.history && window.history.pushState) {
+                window.history.pushState(null, null, '#historia');
+            }
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const btn = document.getElementById('btnConhecerHistoria');
+        if (btn) {
+            btn.addEventListener('click', scrollToHistoria);
+        }
+        if (window.location.hash === '#historia') {
+            setTimeout(() => {
+                scrollToHistoria();
+            }, 150);
+        }
+    });
+</script>
 {% endblock content %}
