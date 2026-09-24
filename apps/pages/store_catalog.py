@@ -59,6 +59,54 @@ WOODWORK_PRODUCTS = [
         ]
     },
     {
+        'id': 'OLA-B15',
+        'wood_type': 'peroba-rosa',
+        'category': 'Mesas & Pranchas',
+        'name': 'Bancada em Madeira de Demolição com Acabamento em Verniz PU',
+        'price': 2450.00,
+        'old_price': 2800.00,
+        'icon': '🪵',
+        'image': 'bancada-madeira-demolicao-verniz-pu-1.png',
+        'images': [
+            'bancada-madeira-demolicao-verniz-pu-1.png',
+            'bancada-madeira-demolicao-verniz-pu-2.png',
+        ],
+        'badge': 'Sob Medida • Peça Única',
+        'sizes': [
+            '1,60m x 0,35m x 0,05m (espessura maciça)',
+            '1,80m x 0,40m x 0,06m (espessura maciça)',
+            '2,20m x 0,45m x 0,06m (espessura maciça)',
+            'Sob Medida para sua alvenaria ou bancada americana'
+        ],
+        'description': 'Bancada de madeira de demolição com acabamento em verniz PU. Cada racha e marca contam uma história, transformando o que foi descartado em algo cheio de vida e propósito. Prancha maciça centenária com borda orgânica e acabamento em poliuretano de alta resistência contra calor, líquidos e manchas, perfeita para bancadas gourmet, passa-pratos e divisórias de ambientes.',
+        'colors': [
+            {
+                'id': 'verniz-pu-acetinado',
+                'name': 'Verniz PU Acetinado de Alta Resistência',
+                'hex': '#9e5828',
+                'price': 2450.00,
+                'old_price': 2800.00,
+                'badge': 'Acabamento Padrão'
+            },
+            {
+                'id': 'verniz-pu-fosco',
+                'name': 'Verniz PU Fosco Toque Natural',
+                'hex': '#783e18',
+                'price': 2450.00,
+                'old_price': 2800.00,
+                'badge': 'Fosco Toque Seda'
+            },
+            {
+                'id': 'carnauba-botanico',
+                'name': 'Cera de Carnaúba & Óleo Botânico',
+                'hex': '#b86d29',
+                'price': 2300.00,
+                'old_price': 2650.00,
+                'badge': '100% Ecológico'
+            }
+        ]
+    },
+    {
         'id': 'OLA-B10',
         'wood_type': 'peroba-rosa',
         'category': 'Linha Gourmet & Utilitários',

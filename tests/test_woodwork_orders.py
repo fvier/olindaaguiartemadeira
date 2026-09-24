@@ -65,6 +65,13 @@ class WoodworkOrderTimelineTests(unittest.TestCase):
         self.assertIn('wood_type', first_product)
         self.assertIn('price', first_product)
 
+        # Verifica a nova bancada em prancha macica OLA-B15
+        bancada = next((p for p in data['products'] if p['id'] == 'OLA-B15'), None)
+        self.assertIsNotNone(bancada)
+        self.assertEqual(len(bancada['images']), 2)
+        self.assertIn('Verniz PU', bancada['name'])
+        self.assertIn('Cada racha e marca', bancada['description'])
+
     def test_consultar_order_by_formatted_cpf(self):
         response = self.client.get('/api/pedido/consultar?cpf=123.456.789-00')
         self.assertEqual(response.status_code, 200)
