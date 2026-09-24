@@ -5,6 +5,7 @@
 
 | Data | Incidente | Causa Raiz | Ação Corretiva / Prevenção | Status |
 | :--- | :--- | :--- | :--- | :--- |
+| **2026-09-23** | Carrossel Limpo (Design Minimalista) e Remoção de Seções Redundantes | Carrossel da landing com excesso de texto e botões sobrepostos; seções de Loja e Liderança duplicando conteúdo das novas páginas dedicadas | Aplicação do layout limpo com card flutuante em vidro (Amparo/Carmo Olinda - PE), botão 'Ver Loja' flutuante, setas circulares e remoção das seções 'Coleções & Linhas' e 'Liderança Feminina' da landing | Resolvido |
 | **2026-09-23** | Separação das Rotas do Topbar em Páginas Dedicadas | Links de Loja, Pedido, Blog e Byll estavam configurados como âncoras na mesma página | Criação das rotas `/loja`, `/pedido`, `/blog` e `/byll` no Flask, whitelist em `PUBLIC_PAGES`, templates independentes e modularização dos partials `public-navbar`, `public-reviews-bar` e `public-footer` | Resolvido |
 | **2026-09-23** | Repaginação da Identidade — Olinda Arte em Madeira | Alinhamento do produto com o manifesto oficial de madeira de demolição e liderança feminina | Reestruturação completa da landing page, rotas, coleções de arte, depoimentos de clientes e metadados globais | Resolvido |
 | **2026-09-23** | Integração da Base Técnica e Stack Flask/Docker | Necessidade de base sólida para a aplicação web de Olinda Aguiar | Importação estruturada dos módulos `apps/`, `deploy/`, `infra/`, `migrations/`, `scripts/` e `tests/` a partir do GPS Paraíba | Resolvido |

@@ -31,44 +31,191 @@
     .landing-page .btn-outline-primary { --bs-btn-color:var(--landing-accent);--bs-btn-border-color:var(--landing-accent);--bs-btn-hover-bg:var(--landing-accent);--bs-btn-hover-border-color:var(--landing-accent); }
     .hero-full-bg {
         position: relative;
-        background: #eef4fb;
-        min-height: 82vh;
+        background: #0f172a;
+        min-height: 85vh;
+        height: 85vh;
+        max-height: 840px;
         display: flex;
         align-items: center;
+        overflow: hidden;
     }
-    .hero-background-carousel { position:absolute;inset:0;z-index:0; }
+    .hero-background-carousel {
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        width: 100%;
+        height: 100%;
+    }
     .hero-background-carousel .carousel-inner,
-    .hero-background-carousel .carousel-item { height:100%; }
-    .hero-slide-bg { width:100%;height:100%;background-position:center;background-size:cover;background-repeat:no-repeat; }
-    .hero-background-carousel .carousel-indicators { z-index:3;justify-content:flex-end;margin-right:3%;margin-left:60%; }
-    .hero-background-carousel .carousel-indicators button { width:8px;height:8px;border-radius:50%;border:2px solid #fff;background-color:var(--landing-accent);box-shadow:0 2px 8px rgba(15,23,42,.22); }
-    .hero-manual-control { z-index:5;width:46px;height:46px;top:50%;bottom:auto;transform:translateY(-50%);border-radius:50%;background:rgba(15,23,42,.48);border:1px solid rgba(255,255,255,.65);opacity:.82;backdrop-filter:blur(8px);transition:opacity .2s ease,background .2s ease,transform .2s ease; }
-    .hero-manual-control.carousel-control-prev { left:18px; }
-    .hero-manual-control.carousel-control-next { right:18px; }
-    .hero-manual-control:hover { opacity:1;background:rgba(29,78,216,.88);transform:translateY(-50%) scale(1.06); }
-    .hero-manual-control .carousel-control-prev-icon,
-    .hero-manual-control .carousel-control-next-icon { width:18px;height:18px; }
-    @media(max-width:767.98px){.hero-manual-control{width:38px;height:38px}.hero-manual-control.carousel-control-prev{left:8px}.hero-manual-control.carousel-control-next{right:8px}}
+    .hero-background-carousel .carousel-item {
+        height: 100%;
+        width: 100%;
+    }
+    .hero-slide-bg {
+        width: 100%;
+        height: 100%;
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+    }
     .hero-overlay {
         position: absolute;
         inset: 0;
-        background: linear-gradient(90deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.88) 45%, rgba(255, 255, 255, 0.45) 80%, rgba(255, 255, 255, 0.15) 100%);
+        background: linear-gradient(180deg, rgba(15, 23, 42, 0.4) 0%, rgba(15, 23, 42, 0.05) 45%, rgba(15, 23, 42, 0.45) 100%);
         z-index: 1;
         pointer-events: none;
     }
-    .hero-content {
-        position: relative;
+
+    /* Floating Glass Badge (Top-Left) */
+    .hero-clean-badge {
+        position: absolute;
+        top: 36px;
+        left: 36px;
         z-index: 2;
+        max-width: 500px;
+        width: calc(100% - 72px);
     }
-    .glass-badge {
-        background: rgba(255, 255, 255, 0.88);
+    .hero-clean-glass {
+        background: rgba(22, 26, 35, 0.65);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-top: 1px solid rgba(245, 158, 11, 0.5);
+        border-left: 2.5px solid #f59e0b;
+        box-shadow: 0 20px 45px rgba(0, 0, 0, 0.4);
+        border-radius: 18px;
+        padding: 22px 26px;
+    }
+    .hero-badge-title {
+        color: #f59e0b;
+        font-weight: 750;
+        font-size: 11.5px;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
+        font-family: 'Outfit', sans-serif;
+    }
+    .hero-badge-text {
+        font-size: 15px;
+        line-height: 1.55;
+        font-weight: 400;
+        color: #f1f5f9;
+        font-family: 'Outfit', sans-serif;
+    }
+
+    /* Floating Pill Button "Ver Loja" (Bottom-Right) */
+    .hero-shop-pill {
+        position: absolute;
+        bottom: 34px;
+        right: 36px;
+        z-index: 2;
+        background: rgba(30, 41, 59, 0.82);
         backdrop-filter: blur(14px);
         -webkit-backdrop-filter: blur(14px);
-        border: 1px solid rgba(255, 255, 255, 0.8);
-        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+        border: 1px solid rgba(255, 255, 255, 0.22);
+        color: #f8fafc !important;
+        border-radius: 50px;
+        padding: 10px 22px;
+        font-size: 14.5px;
+        font-weight: 600;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.32);
+        transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .hero-brand-lockup { background:transparent;border:0;box-shadow:none; }
-    .hero-brand-logo { width:54px;height:54px;object-fit:contain;border-radius:13px;flex:0 0 auto; }
+    .hero-shop-pill:hover {
+        background: #c85a17;
+        border-color: rgba(255, 255, 255, 0.45);
+        color: #ffffff !important;
+        transform: translateY(-2px);
+        box-shadow: 0 14px 34px rgba(200, 90, 23, 0.4);
+    }
+
+    /* Navigation Arrows */
+    .hero-manual-control {
+        z-index: 5;
+        width: 44px;
+        height: 44px;
+        top: 50%;
+        bottom: auto;
+        transform: translateY(-50%);
+        border-radius: 50%;
+        background: rgba(15, 23, 42, 0.52);
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        opacity: 0.85;
+        backdrop-filter: blur(8px);
+        -webkit-backdrop-filter: blur(8px);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: opacity .2s ease, background .2s ease, transform .2s ease;
+    }
+    .hero-manual-control.carousel-control-prev { left: 24px; }
+    .hero-manual-control.carousel-control-next { right: 24px; }
+    .hero-manual-control:hover {
+        opacity: 1;
+        background: rgba(200, 90, 23, 0.85);
+        border-color: #fff;
+        transform: translateY(-50%) scale(1.08);
+    }
+
+    /* Carousel Indicators (Minimal subtle dots) */
+    .hero-background-carousel .carousel-indicators {
+        z-index: 3;
+        margin-bottom: 24px;
+        justify-content: center;
+        margin-left: 0;
+        margin-right: 0;
+    }
+    .hero-background-carousel .carousel-indicators button {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        border: 1px solid rgba(255, 255, 255, 0.6);
+        background-color: rgba(255, 255, 255, 0.35);
+        margin: 0 4px;
+        transition: all 0.25s ease;
+    }
+    .hero-background-carousel .carousel-indicators button.active {
+        background-color: #f59e0b;
+        border-color: #f59e0b;
+        width: 20px;
+        border-radius: 6px;
+    }
+
+    @media (max-width: 767.98px) {
+        .hero-full-bg {
+            min-height: 75vh;
+            height: 75vh;
+        }
+        .hero-clean-badge {
+            top: 20px;
+            left: 16px;
+            width: calc(100% - 32px);
+        }
+        .hero-clean-glass {
+            padding: 16px 18px;
+        }
+        .hero-badge-title {
+            font-size: 10px;
+        }
+        .hero-badge-text {
+            font-size: 13.5px;
+        }
+        .hero-shop-pill {
+            bottom: 24px;
+            right: 16px;
+            padding: 8px 18px;
+            font-size: 13px;
+        }
+        .hero-manual-control {
+            width: 36px;
+            height: 36px;
+        }
+        .hero-manual-control.carousel-control-prev { left: 10px; }
+        .hero-manual-control.carousel-control-next { right: 10px; }
+    }
     .landing-navbar-brand { gap:10px;padding:4px 8px 4px 2px!important;border:0;background:transparent;box-shadow:none; }
     .landing-brand-mark,.hero-brand-logo,.site-footer img[alt="Olinda Arte em Madeira"] { filter:drop-shadow(0 6px 7px rgba(15,23,42,.2)) drop-shadow(0 0 3px rgba(255,255,255,.72))!important; }
     .landing-brand-name { color:#0f172a;font-size:18px;font-weight:850;letter-spacing:-.025em;line-height:1;white-space:nowrap; }
@@ -114,9 +261,9 @@
     html[data-bs-theme="dark"] .landing-page .navbar .nav-link.active,
     html[data-bs-theme="dark"] .landing-page .navbar .nav-link:hover { color:var(--landing-accent)!important;filter:brightness(1.25); }
     html[data-bs-theme="dark"] .landing-page .navbar-toggler-icon { filter:invert(1) grayscale(1) brightness(1.8); }
-    html[data-bs-theme="dark"] .landing-page .hero-full-bg { background:#0b1220; }
-    html[data-bs-theme="dark"] .landing-page .hero-overlay { background:linear-gradient(90deg,rgba(8,14,26,.97) 0%,rgba(8,14,26,.9) 45%,rgba(8,14,26,.56) 80%,rgba(8,14,26,.28) 100%); }
-    html[data-bs-theme="dark"] .landing-page .glass-badge { background:rgba(15,23,42,.88);border-color:rgba(71,85,105,.72);box-shadow:0 12px 34px rgba(0,0,0,.3); }
+    html[data-bs-theme="dark"] .landing-page .hero-full-bg { background:#080e1a; }
+    html[data-bs-theme="dark"] .landing-page .hero-overlay { background:linear-gradient(180deg,rgba(8,14,26,.55) 0%,rgba(8,14,26,.1) 45%,rgba(8,14,26,.6) 100%); }
+    html[data-bs-theme="dark"] .landing-page .hero-clean-glass { background:rgba(11,18,32,.75);border-color:rgba(71,85,105,.45); }
     html[data-bs-theme="dark"] .landing-page .bg-white { background-color:#111827!important; }
     html[data-bs-theme="dark"] .landing-page .bg-light { background-color:#0f172a!important; }
     html[data-bs-theme="dark"] .landing-page .text-dark { color:#f1f5f9!important; }
@@ -231,238 +378,56 @@
 {% include 'partials/public-reviews-bar.html' %}
 {% include 'partials/public-navbar.html' %}
 
-<!-- HERO SECTION FULL-WIDTH: Imagem ocupando toda a tela com veículo à esquerda e informações sobrepostas -->
-<section id="inicio" class="hero-full-bg py-4 overflow-hidden">
-    <div id="landing-hero-carousel" class="carousel slide carousel-fade hero-background-carousel" data-bs-ride="carousel" data-bs-interval="6500" data-bs-pause="false" aria-label="Demonstração de imagens do destaque principal">
+<!-- HERO SECTION: Carrossel Limpo e Imersivo com Card de Vidro e Botão Ver Loja -->
+<section id="inicio" class="hero-full-bg position-relative overflow-hidden">
+    <div id="landing-hero-carousel" class="carousel slide carousel-fade hero-background-carousel" data-bs-ride="carousel" data-bs-interval="6500" data-bs-pause="false" aria-label="Galeria da Fachada do Casarão Olinda Aguiar">
         <div class="carousel-indicators">
             {% for image in carousel_images %}
             <button type="button" data-bs-target="#landing-hero-carousel" data-bs-slide-to="{{ loop.index0 }}" {% if loop.first %}class="active" aria-current="true"{% endif %} aria-label="{{ image.title }}"></button>
             {% endfor %}
         </div>
-        <div class="carousel-inner">
+        <div class="carousel-inner h-100">
             {% for image in carousel_images %}
-            <div class="carousel-item {% if loop.first %}active{% endif %}"><div class="hero-slide-bg" style="background-image:url('{{ config.ASSETS_ROOT }}/images/{{ image.filename }}?v={{ image.version }}')"></div></div>
+            <div class="carousel-item h-100 {% if loop.first %}active{% endif %}">
+                <div class="hero-slide-bg" style="background-image:url('{{ config.ASSETS_ROOT }}/images/{{ image.filename }}?v={{ image.version }}')"></div>
+            </div>
             {% endfor %}
         </div>
     </div>
-        {% if carousel_images|length > 1 %}
-        <button class="carousel-control-next hero-manual-control" type="button" data-bs-target="#landing-hero-carousel" data-bs-slide="next" aria-label="Próxima imagem">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Próxima imagem</span>
-        </button>
-        {% endif %}
+
+    <!-- Controles Manuais do Carrossel (Setas Redondas) -->
+    {% if carousel_images|length > 1 %}
+    <button class="carousel-control-prev hero-manual-control" type="button" data-bs-target="#landing-hero-carousel" data-bs-slide="prev" aria-label="Imagem anterior">
+        <i class="ri-arrow-left-s-line fs-22 text-white"></i>
+        <span class="visually-hidden">Anterior</span>
+    </button>
+    <button class="carousel-control-next hero-manual-control" type="button" data-bs-target="#landing-hero-carousel" data-bs-slide="next" aria-label="Próxima imagem">
+        <i class="ri-arrow-right-s-line fs-22 text-white"></i>
+        <span class="visually-hidden">Próxima imagem</span>
+    </button>
+    {% endif %}
+
+    <!-- Vignette / Overlay Sutil para Contraste -->
     <div class="hero-overlay"></div>
 
-    <div class="container hero-content py-lg-4">
-        <div class="row align-items-center">
-            <div class="col-lg-7 col-xl-6">
-                <div class="hero-brand-lockup d-inline-flex align-items-center gap-3 rounded-4 p-2 pe-4 mb-4">
-                    <img src="{{ config.ASSETS_ROOT }}/images/logo-icon-wood.png" class="hero-brand-logo" alt="Olinda Arte em Madeira">
-                    <div class="text-start">
-                        <strong class="d-block text-dark fs-17 lh-sm">Olinda Arte em Madeira</strong>
-                        <small class="text-secondary fw-semibold">Ateliê no Casarão Histórico de Olinda - PE</small>
-                    </div>
-                </div>
-
-                <h1 class="display-5 fw-extrabold text-dark tracking-tight lh-sm mb-2">
-                    Arte em Madeira de Demolição: Peças Únicas e Sustentáveis
-                </h1>
-                <div class="hero-price-line mb-3"><span>Peças autorais a partir de</span><strong>R$ 190,00</strong></div>
-
-                <!-- Subheadline -->
-                <p class="text-secondary fs-17 mb-4 lh-base" style="max-width: 550px;">
-                    Empresa liderada por <strong>Olinda Aguiar</strong> com uma equipe talentosa de artesãos. Transformamos madeiras nobres de demolição em peças exclusivas com beleza, inovação e respeito ao meio ambiente.
-                </p>
-
-                <!-- Information Badges sobrepostos -->
-                <div class="row g-2 mb-4" style="max-width: 560px;">
-                    <div class="col-6">
-                        <div class="p-2-5 px-3 glass-badge rounded-3 d-flex align-items-center gap-2 shadow-sm">
-                            <i class="ri-women-fill text-warning fs-18"></i>
-                            <span class="fw-bold text-dark fs-14">Liderança Feminina</span>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="p-2-5 px-3 glass-badge rounded-3 d-flex align-items-center gap-2 shadow-sm">
-                            <i class="ri-leaf-fill text-success fs-18"></i>
-                            <span class="fw-bold text-dark fs-14">100% Demolição Nobre</span>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="p-2-5 px-3 glass-badge rounded-3 d-flex align-items-center gap-2 shadow-sm">
-                            <i class="ri-sparkling-fill fs-18" style="color:#c85a17"></i>
-                            <span class="fw-bold text-dark fs-14">Peças Únicas & Autorais</span>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="p-2-5 px-3 glass-badge rounded-3 d-flex align-items-center gap-2 shadow-sm">
-                            <i class="ri-ancient-gate-fill text-primary fs-18"></i>
-                            <span class="fw-bold text-dark fs-14">Casarão Histórico PE</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Call To Actions -->
-                <div class="d-flex flex-wrap align-items-center gap-3 mb-4">
-                    <a href="https://api.whatsapp.com/send?phone=5581994522504&text=Ol%C3%A1!%20Gostaria%20de%20solicitar%20uma%20encomenda%20em%20madeira%20de%20demoli%C3%A7%C3%A3o%20com%20Olinda%20Aguiar."
-                       target="_blank"
-                       rel="noopener noreferrer"
-                       class="btn btn-success btn-lg rounded-pill px-4 py-3 fw-bold d-inline-flex align-items-center gap-2 shadow border-0 hover-lift"
-                       style="background-color: #25d366; font-size: 16px;">
-                        <i class="ri-whatsapp-line fs-22"></i>
-                        <span>Encomendar no WhatsApp</span>
-                    </a>
-
-                    <a href="#loja" class="btn btn-outline-dark btn-lg rounded-pill px-4 py-3 fw-semibold" style="font-size: 16px;">
-                        Ver Obras & Coleções
-                    </a>
-                </div>
-
-                <!-- Informações institucionais verificáveis -->
-                <div class="row g-3 pt-3 border-top border-light-subtle text-center text-sm-start" style="max-width: 560px;">
-                    <div class="col-4">
-                        <h4 class="fw-extrabold text-primary mb-0 fs-22">100%</h4>
-                        <small class="text-secondary font-medium fs-12">Madeira de Demolição</small>
-                    </div>
-                    <div class="col-4">
-                        <h4 class="fw-extrabold text-warning mb-0 fs-22">Peças Únicas</h4>
-                        <small class="text-secondary font-medium fs-12">Design autoral assinado</small>
-                    </div>
-                    <div class="col-4">
-                        <h4 class="fw-extrabold text-success mb-0 fs-22">Brasil</h4>
-                        <small class="text-secondary font-medium fs-12">Envio protegido</small>
-                    </div>
-                </div>
+    <!-- Card Flutuante de Vidro Superior Esquerdo (Exato conforme referência) -->
+    <div class="hero-clean-badge">
+        <div class="hero-clean-glass">
+            <div class="d-flex align-items-center gap-2 mb-2">
+                <span class="fs-14">📍</span>
+                <span class="hero-badge-title">ATELIER OLINDA AGUIAR · AMPARO, OLINDA - PE</span>
             </div>
+            <p class="hero-badge-text mb-0">
+                Resgatamos madeiras de lei centenárias de casarios de Recife e Olinda para esculpir móveis sob medida, painéis entalhados e peças de acervo de alto padrão.
+            </p>
         </div>
     </div>
-</section>
 
-<!-- Seção: Loja & Catálogo de Obras -->
-<section id="loja" class="py-5 bg-white border-top border-light-subtle"><a id="planos"></a>
-    <div class="container py-lg-4">
-        <div class="text-center max-w-700 mx-auto mb-5">
-            <span class="badge px-3 py-2 rounded-pill fw-bold text-uppercase mb-2" style="background:#ffedd5;color:#c85a17;">#loja</span>
-            <h2 class="display-6 fw-bold text-dark">Coleções & Linhas em Madeira de Demolição</h2>
-            <p class="text-secondary fs-16">Obras exclusivas e sustentáveis criadas com respeito à história de cada tora no centro histórico de Olinda.</p>
-        </div>
-
-        <div class="row g-4 justify-content-center">
-            {% for plan in landing_plans %}
-            <div class="col-md-6 col-lg-4">
-                <div class="card h-100 rounded-4 p-4 hover-top transition d-flex flex-column {{ 'border border-warning shadow-lg bg-white position-relative' if plan.destaque else 'border-0 shadow-sm bg-light' }}">
-                    {% if plan.destaque %}<span class="position-absolute top-0 end-0 m-3 badge bg-warning text-dark fw-bold px-3 py-1 rounded-pill">DESTAQUE ATELIÊ</span>{% endif %}
-                    <div class="badge bg-primary-subtle text-primary align-self-start px-3 py-1 rounded-pill fw-bold fs-12 mb-2">{{ plan.badge or plan.tipoVeiculo|upper }}</div>
-                    <h5 class="fw-bold text-dark mb-1">{{ plan.nome }}</h5>
-                    <p class="small text-secondary mb-2">{{ plan.descricao or plan.cobertura }}</p>
-                    <div class="my-3">
-                        <span class="fs-14 text-secondary">A partir de R$</span>
-                        <span class="display-5 fw-extrabold text-primary">{{ '%.2f'|format(plan.mensalidade)|replace('.', ',') }}</span>
-                    </div>
-                    <ul class="list-unstyled text-secondary fs-14 d-grid gap-2 mb-4">
-                        {% for benefit in plan.beneficios %}<li><i class="ri-check-line text-success fw-bold me-1"></i> {{ benefit }}</li>{% endfor %}
-                    </ul>
-                    <a href="{{ plan.whatsappUrl }}" target="_blank" rel="noopener noreferrer" class="btn {{ 'btn-warning text-dark' if plan.destaque else 'btn-outline-primary' }} rounded-pill fw-bold py-2 mt-auto">
-                        <i class="ri-whatsapp-line me-1"></i> Encomendar esta Linha
-                    </a>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-</section>
-
-<!-- Seção: Por Byll — O Ateliê, História e Filosofia -->
-<section id="byll" class="py-5 bg-light border-top border-light-subtle"><a id="quemsomos"></a>
-    <div class="container py-lg-4">
-        <div class="row align-items-center gy-4 mb-5">
-            <div class="col-lg-6">
-                <span class="badge px-3 py-2 rounded-pill fw-bold text-uppercase mb-2" style="background:#ffedd5;color:#c85a17;">Nossa Essência</span>
-                <h2 class="display-6 fw-bold text-dark mb-3">Liderança Feminina, Arte e Sustentabilidade</h2>
-                <p class="text-secondary fs-16 mb-3 lh-base">
-                    Na <strong>Olinda Arte em Madeira</strong>, estamos orgulhosos de trabalhar com <strong>madeira de demolição</strong> para criar peças únicas e sustentáveis para nossos clientes. Além disso, estamos igualmente orgulhosos de ser uma <strong>empresa liderada por uma mulher</strong>, com uma equipe talentosa de funcionários homens.
-                </p>
-                <p class="text-secondary fs-16 mb-3 lh-base">
-                    Nossa proprietária, <strong>Olinda Aguiar</strong>, é uma líder inspiradora que trabalha incansavelmente para manter nossa empresa em movimento, oferecendo aos nossos clientes produtos que combinam beleza e sustentabilidade. Seu compromisso com a qualidade, a inovação e o respeito ao meio ambiente é a base de tudo que fazemos aqui na Olinda Arte em Madeira.
-                </p>
-                <p class="text-secondary fs-16 mb-4 lh-base">
-                    Trabalhamos duro para criar produtos que são verdadeiramente únicos e estamos comprometidos em fazer a diferença no mundo, através do uso da madeira de demolição e da sustentabilidade.
-                </p>
-                <div class="d-flex flex-wrap gap-2">
-                    <span class="badge bg-white text-primary border border-primary-subtle rounded-pill px-3 py-2"><i class="ri-women-line me-1"></i>Liderança Inspiradora</span>
-                    <span class="badge bg-white text-primary border border-primary-subtle rounded-pill px-3 py-2"><i class="ri-leaf-line me-1"></i>Madeira de Demolição</span>
-                    <span class="badge bg-white text-primary border border-primary-subtle rounded-pill px-3 py-2"><i class="ri-hammer-line me-1"></i>Marcenaria Autoral</span>
-                    <span class="badge bg-white text-primary border border-primary-subtle rounded-pill px-3 py-2"><i class="ri-map-pin-line me-1"></i>Casarão em Olinda - PE</span>
-                </div>
-            </div>
-            <div class="col-lg-6">
-                <div class="card border-0 shadow-sm bg-white p-4 rounded-4 border-start border-warning border-5 position-relative overflow-hidden">
-                    <div class="d-flex align-items-center gap-3 mb-3">
-                        <div class="rounded-circle d-flex align-items-center justify-content-center" style="width: 52px; height: 52px; background: #ffedd5; color: #c85a17;">
-                            <i class="ri-quill-pen-fill fs-24"></i>
-                        </div>
-                        <div>
-                            <h5 class="fw-bold text-dark mb-0">Manifesto Olinda Arte em Madeira</h5>
-                            <small class="text-secondary">Propósito, Arte e Compromisso Ambiental</small>
-                        </div>
-                    </div>
-                    <blockquote class="blockquote fs-15 text-secondary fst-italic mb-3">
-                        "Cada pedaço de madeira de demolição carrega décadas de história. Ao resgatá-lo com respeito ao meio ambiente e moldá-lo com a sensibilidade da nossa equipe, damos vida a peças que transcendem gerações."
-                    </blockquote>
-                    <ul class="list-unstyled mb-0 d-grid gap-2 text-secondary fs-15 border-top pt-3">
-                        <li class="d-flex align-items-center gap-2"><i class="ri-checkbox-circle-fill text-success fs-18"></i> <strong>Sustentabilidade Real</strong>: Preservação de florestas nativas pelo reuso inteligente</li>
-                        <li class="d-flex align-items-center gap-2"><i class="ri-checkbox-circle-fill text-success fs-18"></i> <strong>Liderança Feminina Forte</strong>: Olinda Aguiar à frente da visão estética e negócios</li>
-                        <li class="d-flex align-items-center gap-2"><i class="ri-checkbox-circle-fill text-success fs-18"></i> <strong>Equipe de Artesãos Talentosos</strong>: Marceneiros e entalhadores experientes</li>
-                        <li class="d-flex align-items-center gap-2"><i class="ri-checkbox-circle-fill text-success fs-18"></i> <strong>Acabamentos Atóxicos</strong>: Ceras naturais de abelha/carnaúba e óleos botânicos</li>
-                        <li class="d-flex align-items-center gap-2"><i class="ri-checkbox-circle-fill text-success fs-18"></i> <strong>Casarão Histórico de Olinda</strong>: Espaço cultural, ateliê e galeria viva</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <!-- Missão, Visão e Valores -->
-        <div class="row g-4">
-            <div class="col-md-4">
-                <div class="card h-100 border border-light-subtle shadow-sm rounded-4 p-4 bg-white">
-                    <div class="avatar-lg bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 56px; height: 56px;">
-                        <i class="ri-leaf-fill fs-28"></i>
-                    </div>
-                    <h5 class="fw-bold text-dark">MISSÃO</h5>
-                    <p class="text-secondary fs-14 mb-0">
-                        Transformar madeira de demolição em arte sustentável e mobiliário único, combinando respeito ecológico, beleza atemporal e excelência na marcenaria autoral.
-                    </p>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="card h-100 border border-light-subtle shadow-sm rounded-4 p-4 bg-white">
-                    <div class="avatar-lg bg-success bg-opacity-10 text-success rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 56px; height: 56px;">
-                        <i class="ri-women-line fs-28"></i>
-                    </div>
-                    <h5 class="fw-bold text-dark">VISÃO</h5>
-                    <p class="text-secondary fs-14 mb-0">
-                        Ser a principal referência em arte em madeira de demolição e liderança feminina artesanal no Brasil, inspirando novas formas de criar com consciência e alma.
-                    </p>
-                </div>
-            </div>
-
-            <div class="col-md-4">
-                <div class="card h-100 border border-light-subtle shadow-sm rounded-4 p-4 bg-white">
-                    <div class="avatar-lg bg-warning bg-opacity-10 text-warning rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 56px; height: 56px;">
-                        <i class="ri-heart-pulse-fill fs-28"></i>
-                    </div>
-                    <h5 class="fw-bold text-dark">VALORES</h5>
-                    <ul class="list-unstyled text-secondary fs-14 mb-0 d-grid gap-1">
-                        <li>&bull; Liderança inspiradora e inclusão</li>
-                        <li>&bull; Respeito radical ao meio ambiente</li>
-                        <li>&bull; Autenticidade e singularidade em cada peça</li>
-                        <li>&bull; Valorização dos mestres artesãos</li>
-                        <li>&bull; Amor e preservação da história de Olinda</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- Botão Flutuante Inferior Direito "Ver Loja" -->
+    <a href="/loja" class="hero-shop-pill">
+        <i class="ri-store-2-line fs-17" style="color: #fbbf24;"></i>
+        <span>Ver Loja</span>
+    </a>
 </section>
 
 <!-- Seção: Avaliações de Clientes (Google Reviews Style Carousel) -->
@@ -624,7 +589,7 @@
 <section id="blog" class="py-5 bg-white border-top border-light-subtle">
     <div class="container py-lg-4">
         <div class="text-center max-w-700 mx-auto mb-5">
-            <span class="badge px-3 py-2 rounded-pill fw-bold text-uppercase mb-2" style="background:#ffedd5;color:#c85a17;">#blog</span>
+            <span class="badge px-3 py-2 rounded-pill fw-bold text-uppercase mb-2" style="background:#ffedd5;color:#c85a17;">Blog & Histórias</span>
             <h2 class="display-6 fw-bold text-dark">Histórias do Ateliê & A Arte em Madeira</h2>
             <p class="text-secondary fs-16">Técnicas ancestrais, matérias-primas nobres e o processo criativo no casarão histórico de Olinda.</p>
         </div>
@@ -637,7 +602,7 @@
                         <small class="text-uppercase fw-bold mb-2" style="color:#c85a17;font-size:11px;letter-spacing:.08em">Patrimônio & Arte</small>
                         <h5 class="fw-bold text-dark mb-2">O Casarão Histórico do Carmo</h5>
                         <p class="text-secondary fs-14 flex-grow-1">Conheça o espaço onde a marcenaria de autor ganha vida entre as ladeiras e a luz dourada de Olinda.</p>
-                        <a href="https://www.instagram.com/olindaaguiartemadeira/" target="_blank" rel="noopener noreferrer" class="fw-bold text-decoration-none d-inline-flex align-items-center gap-1" style="color:#c85a17;">Ler mais <i class="ri-arrow-right-line"></i></a>
+                        <a href="/blog" class="fw-bold text-decoration-none d-inline-flex align-items-center gap-1" style="color:#c85a17;">Ler mais no Blog <i class="ri-arrow-right-line"></i></a>
                     </div>
                 </div>
             </div>
@@ -648,7 +613,7 @@
                         <small class="text-uppercase fw-bold mb-2" style="color:#c85a17;font-size:11px;letter-spacing:.08em">Matérias-Primas</small>
                         <h5 class="fw-bold text-dark mb-2">Madeiras Nobres & Sustentabilidade</h5>
                         <p class="text-secondary fs-14 flex-grow-1">Como selecionamos cada tora com certificação de origem para criar peças únicas e perpétuas.</p>
-                        <a href="https://www.instagram.com/olindaaguiartemadeira/" target="_blank" rel="noopener noreferrer" class="fw-bold text-decoration-none d-inline-flex align-items-center gap-1" style="color:#c85a17;">Ler mais <i class="ri-arrow-right-line"></i></a>
+                        <a href="/blog" class="fw-bold text-decoration-none d-inline-flex align-items-center gap-1" style="color:#c85a17;">Ler mais no Blog <i class="ri-arrow-right-line"></i></a>
                     </div>
                 </div>
             </div>
@@ -659,10 +624,16 @@
                         <small class="text-uppercase fw-bold mb-2" style="color:#c85a17;font-size:11px;letter-spacing:.08em">Processo Criativo</small>
                         <h5 class="fw-bold text-dark mb-2">O Entalhe Manual de Byll</h5>
                         <p class="text-secondary fs-14 flex-grow-1">Do tronco bruto ao polimento fino com ceras naturais: a jornada de esculpir alma na madeira.</p>
-                        <a href="https://www.facebook.com/BylleOlinda" target="_blank" rel="noopener noreferrer" class="fw-bold text-decoration-none d-inline-flex align-items-center gap-1" style="color:#c85a17;">Ler mais <i class="ri-arrow-right-line"></i></a>
+                        <a href="/blog" class="fw-bold text-decoration-none d-inline-flex align-items-center gap-1" style="color:#c85a17;">Ler mais no Blog <i class="ri-arrow-right-line"></i></a>
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div class="text-center mt-5">
+            <a href="/blog" class="btn btn-outline-primary rounded-pill px-4 py-2.5 fw-bold d-inline-flex align-items-center gap-2">
+                <i class="ri-newspaper-line fs-18"></i> Acessar Todos os Artigos do Blog
+            </a>
         </div>
     </div>
 </section>
