@@ -38,6 +38,14 @@ class WoodworkOrderTimelineTests(unittest.TestCase):
         self.assertIn(b'Elabora', response.data)
         self.assertIn(b'Sinal financeiro', response.data)
 
+    def test_byll_tribute_page_renders_ok(self):
+        response = self.client.get('/byll')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'Mestre Byll', response.data)
+        self.assertIn(b'byll-e-olinda-aguiar.png', response.data)
+        self.assertIn(b'byll-mestre-artesao.png', response.data)
+        self.assertIn(b'administra', response.data)
+
     def test_consultar_order_by_formatted_cpf(self):
         response = self.client.get('/api/pedido/consultar?cpf=123.456.789-00')
         self.assertEqual(response.status_code, 200)
