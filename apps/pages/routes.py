@@ -1,7 +1,7 @@
 from apps.pages import blueprint
 from apps.pages.models import (User, CarouselImage, CommercialPlan, PlanVersion, LinktreeLink,
                                LandingCard, FinancialCategory, FinancialEntry, AuditLog, FinancialCompany,
-                               IntegratedSale, ClientReview)
+                               IntegratedSale, ClientReview, WoodworkOrder)
 from apps import db, csrf, limiter
 from flask import render_template, request, redirect, url_for, session, flash, current_app, jsonify, send_from_directory
 from werkzeug.utils import secure_filename
@@ -354,12 +354,160 @@ def loja():
     return render_template('pages/loja.html', segment='loja', plans=plans)
 
 
+def ensure_woodwork_orders():
+    """Seed initial realistic custom orders if none exist."""
+    db.create_all()
+    if WoodworkOrder.query.first():
+        return
+
+    sample_orders = [
+        WoodworkOrder(
+            order_number='OLA-1048',
+            cpf='123.456.789-00',
+            client_name='Mariana Albuquerque',
+            client_phone='(81) 99876-5432',
+            item_title='Mesa Orgânica em Peroba Rosa Centenária',
+            wood_type='Peroba Rosa de Casarão Colonial do Século XIX',
+            dimensions='2,40m x 1,10m x 0,78m',
+            current_step=3,
+            step_description='Tampo em prancha maciça nivelado no cavalete do ateliê. Em fase de entalhe manual nas bordas orgânicas e polimento com ceras naturais.',
+            estimated_delivery='10/10/2026',
+            total_amount=Decimal('4800.00'),
+            deposit_amount=Decimal('2400.00'),
+            balance_amount=Decimal('2400.00'),
+            notes='Acabamento fosco acetinado em cera de carnaúba e óleo botânico atóxico.'
+        ),
+        WoodworkOrder(
+            order_number='OLA-1052',
+            cpf='987.654.321-00',
+            client_name='Rodrigo Vasconcelos',
+            client_phone='(11) 98765-1234',
+            item_title='Escultura Pássaro Solar em Jacarandá da Bahia',
+            wood_type='Jacarandá de Demolição Histórica',
+            dimensions='0,85m x 0,45m (Peça de Acervo)',
+            current_step=4,
+            step_description='Escultura finalizada e inspecionada pessoalmente por Olinda Aguiar. Aguardando quitação do saldo restante para expedição.',
+            estimated_delivery='Envio em até 48h após confirmação',
+            total_amount=Decimal('2200.00'),
+            deposit_amount=Decimal('1100.00'),
+            balance_amount=Decimal('1100.00'),
+            notes='Envio para São Paulo - SP com engradado de madeira estruturado e seguro total.'
+        ),
+        WoodworkOrder(
+            order_number='OLA-1060',
+            cpf='111.222.333-44',
+            client_name='Dra. Cecília Meireles',
+            client_phone='(81) 99123-4567',
+            item_title='Painel Escultural de Parede em Vigas de Ipê Colonial',
+            wood_type='Ipê Amarelo de Demolição Centenária',
+            dimensions='2,60m x 1,30m',
+            current_step=2,
+            step_description='Sinal de 50% registrado com sucesso. Seleção e triagem das vigas coloniais iniciada no pátio do ateliê de Olinda.',
+            estimated_delivery='25/10/2026',
+            total_amount=Decimal('3600.00'),
+            deposit_amount=Decimal('1800.00'),
+            balance_amount=Decimal('1800.00'),
+            notes='Instalação inclusa para a Região Metropolitana de Recife/Olinda.'
+        ),
+        WoodworkOrder(
+            order_number='OLA-1035',
+            cpf='555.666.777-88',
+            client_name='Carlos Eduardo Guimarães',
+            client_phone='(21) 98888-7777',
+            item_title='Bancada Gourmet em Madeira Rústica com Borda Natural',
+            wood_type='Angico Preto de Demolição',
+            dimensions='1,80m x 0,65m',
+            current_step=5,
+            step_description='Obra concluída e entregue com sucesso! Certificado de autenticidade da madeira de demolição emitido.',
+            estimated_delivery='Entregue com sucesso',
+            total_amount=Decimal('3100.00'),
+            deposit_amount=Decimal('1550.00'),
+            balance_amount=Decimal('0.00'),
+            notes='Cliente satisfeito e avaliou o ateliê com nota máxima no Google.'
+        ),
+        WoodworkOrder(
+            order_number='OLA-1068',
+            cpf='000.111.222-33',
+            client_name='Beatriz Fontes',
+            client_phone='(81) 97777-6666',
+            item_title='Aparador Suspenso em Carvalho de Demolição',
+            wood_type='Carvalho Colonial Reutilizado',
+            dimensions='1,50m x 0,40m x 0,35m',
+            current_step=1,
+            step_description='Pedido cadastrado no ateliê. Aguardando confirmação do sinal financeiro (50%) para reservar os dormentes e iniciar o corte.',
+            estimated_delivery='30 dias úteis após o sinal',
+            total_amount=Decimal('2800.00'),
+            deposit_amount=Decimal('0.00'),
+            balance_amount=Decimal('2800.00'),
+            notes='Proposta comercial enviada diretamente à cliente.'
+        )
+    ]
+
+    for order in sample_orders:
+        db.session.add(order)
+    db.session.commit()
+
+
 @blueprint.route('/pedido')
 @blueprint.route('/pedido.html')
 def pedido():
-    """Render dedicated order consultation and custom commission page."""
+    """Render dedicated order consultation and custom commission page with timeline."""
     ensure_default_user()
-    return render_template('pages/pedido.html', segment='pedido')
+    ensure_woodwork_orders()
+    cpf_query = request.args.get('cpf', '').strip()
+    order_data = None
+    if cpf_query:
+        import re
+        clean = re.sub(r'\D', '', cpf_query)
+        order = WoodworkOrder.query.filter(
+            (WoodworkOrder.cpf == cpf_query) |
+            (WoodworkOrder.cpf == clean) |
+            (WoodworkOrder.order_number.ilike(cpf_query))
+        ).first()
+        if not order and len(clean) == 11:
+            formatted = f"{clean[:3]}.{clean[3:6]}.{clean[6:9]}-{clean[9:]}"
+            order = WoodworkOrder.query.filter_by(cpf=formatted).first()
+        if order:
+            order_data = order.to_dict()
+    return render_template('pages/pedido.html', segment='pedido', initial_order=order_data, search_cpf=cpf_query)
+
+
+@blueprint.route('/api/pedido/consultar', methods=['GET', 'POST'])
+@csrf.exempt
+def api_consultar_pedido():
+    """JSON API to search order by CPF or order number and return timeline."""
+    ensure_woodwork_orders()
+    data = request.get_json(silent=True) or {}
+    cpf_query = (request.args.get('cpf') or data.get('cpf') or request.form.get('cpf') or '').strip()
+    if not cpf_query:
+        return jsonify({'success': False, 'message': 'Por favor, informe o CPF para consultar o pedido.'}), 400
+
+    import re
+    clean = re.sub(r'\D', '', cpf_query)
+    order = None
+
+    if clean:
+        formatted = f"{clean[:3]}.{clean[3:6]}.{clean[6:9]}-{clean[9:]}" if len(clean) == 11 else ''
+        order = WoodworkOrder.query.filter(
+            (WoodworkOrder.cpf == cpf_query) |
+            (WoodworkOrder.cpf == clean) |
+            (WoodworkOrder.cpf == formatted) |
+            (WoodworkOrder.order_number.ilike(cpf_query))
+        ).first()
+
+    if not order:
+        order = WoodworkOrder.query.filter(WoodworkOrder.order_number.ilike(cpf_query)).first()
+
+    if not order:
+        return jsonify({
+            'success': False,
+            'message': f'Nenhum pedido encontrado para o documento "{cpf_query}". Verifique os números digitados ou entre em contato com o ateliê.'
+        }), 404
+
+    return jsonify({
+        'success': True,
+        'order': order.to_dict()
+    })
 
 
 @blueprint.route('/blog')

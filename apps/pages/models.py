@@ -203,3 +203,130 @@ class ClientReview(db.Model):
     def __repr__(self):
         return f'<ClientReview {self.client_name}>'
 
+
+class WoodworkOrder(db.Model):
+    __tablename__ = 'woodwork_orders'
+
+    id = db.Column(db.Integer, primary_key=True)
+    order_number = db.Column(db.String(32), unique=True, nullable=False, index=True)
+    cpf = db.Column(db.String(18), nullable=False, index=True)
+    client_name = db.Column(db.String(120), nullable=False)
+    client_phone = db.Column(db.String(30), nullable=True)
+    item_title = db.Column(db.String(160), nullable=False)
+    wood_type = db.Column(db.String(120), nullable=False, default='Madeira de Demolição Nobre')
+    dimensions = db.Column(db.String(100), nullable=True)
+    current_step = db.Column(db.Integer, nullable=False, default=1)
+    step_description = db.Column(db.String(240), nullable=True)
+    estimated_delivery = db.Column(db.String(80), nullable=True)
+    total_amount = db.Column(db.Numeric(10, 2), nullable=True, default=0)
+    deposit_amount = db.Column(db.Numeric(10, 2), nullable=True, default=0)
+    balance_amount = db.Column(db.Numeric(10, 2), nullable=True, default=0)
+    notes = db.Column(db.Text, nullable=True)
+    created_at = db.Column(db.DateTime, nullable=False, default=lambda: datetime.now(timezone.utc))
+    updated_at = db.Column(db.DateTime, nullable=False, default=lambda: datetime.now(timezone.utc),
+                           onupdate=lambda: datetime.now(timezone.utc))
+
+    @property
+    def clean_cpf(self):
+        import re
+        return re.sub(r'\D', '', self.cpf or '')
+
+    @property
+    def formatted_cpf(self):
+        c = self.clean_cpf
+        if len(c) == 11:
+            return f"{c[:3]}.{c[3:6]}.{c[6:9]}-{c[9:]}"
+        return self.cpf
+
+    def to_dict(self):
+        step_definitions = [
+            {
+                'number': 1,
+                'name': 'Pedido',
+                'label': 'Pedido',
+                'sublabel': 'Pedido Realizado',
+                'description': 'Briefing e especificações técnicas registrados no ateliê.',
+                'icon': 'ri-file-list-3-line'
+            },
+            {
+                'number': 2,
+                'name': 'Sinal financeiro',
+                'label': 'Sinal financeiro',
+                'sublabel': 'Sinal Confirmado',
+                'description': f"Entrada confirmada de R$ {float(self.deposit_amount or 0):,.2f} para reserva das toras.".replace('.', 'X').replace(',', '.').replace('X', ','),
+                'icon': 'ri-hand-coin-line'
+            },
+            {
+                'number': 3,
+                'name': 'Elaboração da peça',
+                'label': 'Elaboração da peça',
+                'sublabel': 'Em Produção',
+                'description': 'Corte, respigas, entalhe manual e polimento na marcenaria.',
+                'icon': 'ri-hammer-line'
+            },
+            {
+                'number': 4,
+                'name': 'Pagamento',
+                'label': 'Pagamento',
+                'sublabel': 'Saldo Quitado',
+                'description': 'Acabamento aprovado e quitação do saldo final.',
+                'icon': 'ri-bank-card-line'
+            },
+            {
+                'number': 5,
+                'name': 'Entrega',
+                'label': 'Entrega',
+                'sublabel': 'Entrega & Envio',
+                'description': 'Embalagem reforçada e transporte seguro até o destino.',
+                'icon': 'ri-truck-line'
+            }
+        ]
+
+        steps_output = []
+        for s in step_definitions:
+            if s['number'] < self.current_step:
+                status = 'completed'
+            elif s['number'] == self.current_step:
+                status = 'active'
+            else:
+                status = 'pending'
+
+            steps_output.append({
+                'number': s['number'],
+                'name': s['name'],
+                'label': s['label'],
+                'sublabel': s['sublabel'],
+                'description': s['description'],
+                'icon': s['icon'],
+                'status': status
+            })
+
+        step_names = ['Pedido', 'Sinal financeiro', 'Elaboração da peça', 'Pagamento', 'Entrega']
+        cur_name = step_names[min(max(self.current_step - 1, 0), 4)]
+
+        return {
+            'id': self.id,
+            'order_number': self.order_number,
+            'client_name': self.client_name,
+            'client_phone': self.client_phone,
+            'cpf': self.formatted_cpf,
+            'clean_cpf': self.clean_cpf,
+            'item_title': self.item_title,
+            'wood_type': self.wood_type,
+            'dimensions': self.dimensions,
+            'current_step': self.current_step,
+            'current_step_name': cur_name,
+            'step_description': self.step_description or step_definitions[min(max(self.current_step - 1, 0), 4)]['description'],
+            'estimated_delivery': self.estimated_delivery or 'Consulte o ateliê',
+            'total_amount': float(self.total_amount or 0),
+            'deposit_amount': float(self.deposit_amount or 0),
+            'balance_amount': float(self.balance_amount or 0),
+            'notes': self.notes,
+            'created_at': self.created_at.strftime('%d/%m/%Y'),
+            'steps': steps_output
+        }
+
+    def __repr__(self):
+        return f'<WoodworkOrder {self.order_number} - {self.client_name}>'
+
+

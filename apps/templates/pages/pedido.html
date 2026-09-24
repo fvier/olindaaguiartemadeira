@@ -1,6 +1,6 @@
 {% extends 'layouts/base.html' %}
 
-{% block title %}Consulta de Pedidos & Encomendas Sob Medida | Olinda Arte em Madeira{% endblock title %}
+{% block title %}Consulta de Pedido & Timeline de Produção | Olinda Arte em Madeira{% endblock title %}
 
 {% block html_attribute %}data-bs-theme="light"{% endblock html_attribute %}
 {% block body_attribute %}class="landing-page bg-light text-dark"{% endblock body_attribute %}
@@ -16,6 +16,130 @@
     .landing-page .btn-primary { --bs-btn-bg:var(--landing-accent);--bs-btn-border-color:var(--landing-accent);--bs-btn-hover-bg:var(--landing-accent);--bs-btn-hover-border-color:var(--landing-accent); }
     .hover-lift { transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease; }
     .hover-lift:hover { transform: translateY(-4px); box-shadow: 0 16px 36px rgba(15, 23, 42, 0.14) !important; }
+    
+    /* Timeline Component Styles */
+    .timeline-container {
+        position: relative;
+        padding: 30px 10px 20px 10px;
+    }
+    .timeline-bar-bg {
+        position: absolute;
+        top: 60px;
+        left: 8%;
+        right: 8%;
+        height: 6px;
+        background: #e2e8f0;
+        border-radius: 4px;
+        z-index: 1;
+    }
+    .timeline-bar-fill {
+        position: absolute;
+        top: 60px;
+        left: 8%;
+        height: 6px;
+        background: linear-gradient(90deg, #15803d 0%, #c85a17 100%);
+        border-radius: 4px;
+        z-index: 2;
+        transition: width 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .timeline-steps-row {
+        position: relative;
+        z-index: 3;
+        display: flex;
+        justify-content: space-between;
+    }
+    .timeline-step-node {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        flex: 1;
+        position: relative;
+    }
+    .timeline-step-circle {
+        width: 58px;
+        height: 58px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        background: #ffffff;
+        border: 3px solid #cbd5e1;
+        color: #94a3b8;
+        margin-bottom: 12px;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+    /* Completed Step */
+    .timeline-step-node.completed .timeline-step-circle {
+        background: #15803d;
+        border-color: #15803d;
+        color: #ffffff;
+        box-shadow: 0 6px 16px rgba(21, 128, 61, 0.28);
+    }
+    /* Active Step */
+    .timeline-step-node.active .timeline-step-circle {
+        background: #c85a17;
+        border-color: #ffedd5;
+        color: #ffffff;
+        box-shadow: 0 0 0 7px rgba(200, 90, 23, 0.22);
+        animation: pulse-step 2.2s infinite;
+    }
+    @keyframes pulse-step {
+        0% { box-shadow: 0 0 0 3px rgba(200, 90, 23, 0.35); }
+        50% { box-shadow: 0 0 0 10px rgba(200, 90, 23, 0.1); }
+        100% { box-shadow: 0 0 0 3px rgba(200, 90, 23, 0.35); }
+    }
+    .timeline-step-title {
+        font-size: 14.5px;
+        font-weight: 700;
+        color: #1e293b;
+        margin-bottom: 3px;
+        line-height: 1.2;
+    }
+    .timeline-step-node.active .timeline-step-title {
+        color: #c85a17;
+        font-weight: 850;
+    }
+    .timeline-step-node.completed .timeline-step-title {
+        color: #15803d;
+    }
+    .timeline-step-badge {
+        font-size: 11px;
+        font-weight: 700;
+        border-radius: 50px;
+        padding: 2px 10px;
+        display: inline-block;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+
+    /* Mobile Timeline Layout */
+    @media (max-width: 767.98px) {
+        .timeline-bar-bg, .timeline-bar-fill {
+            display: none;
+        }
+        .timeline-steps-row {
+            flex-direction: column;
+            gap: 16px;
+        }
+        .timeline-step-node {
+            flex-direction: row;
+            text-align: start;
+            align-items: center;
+            gap: 14px;
+            width: 100%;
+        }
+        .timeline-step-circle {
+            width: 44px;
+            height: 44px;
+            font-size: 18px;
+            margin-bottom: 0;
+            flex-shrink: 0;
+        }
+    }
+
     .site-footer { background:#f8fafc;color:#475569; }
     .site-footer h5,.site-footer h6 { color:#0f172a;font-weight:800; }
     .site-footer a { color:#475569;transition:color .2s ease; }
@@ -23,16 +147,19 @@
     .footer-contact-item { display:flex;align-items:flex-start;gap:10px;padding:9px 0; }
     .footer-contact-icon { width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--landing-accent-soft);color:var(--landing-accent);flex:0 0 auto; }
     .footer-app-link { width:38px;height:38px;border-radius:11px;display:inline-grid;place-items:center;background:#fff;border:1px solid #dbe3ef;color:#0f172a!important; }
+
     html[data-bs-theme="dark"] body.landing-page { background:#080e1a!important;color:#e5edf8!important; }
-    html[data-bs-theme="dark"] .landing-page .navbar { background:rgba(8,14,26,.94)!important;border-color:#263449!important; }
+    html[data-bs-theme="dark"] .landing-page .card { background-color:#111827!important;color:#dbe6f3!important;border-color:#263449!important; }
     html[data-bs-theme="dark"] .landing-page .bg-white { background-color:#111827!important; }
     html[data-bs-theme="dark"] .landing-page .bg-light { background-color:#0f172a!important; }
-    html[data-bs-theme="dark"] .landing-page .card { background-color:#111827!important;color:#dbe6f3!important;border-color:#263449!important; }
-    html[data-bs-theme="dark"] .landing-page .site-footer { background:#080e1a;color:#aebdd0;border-color:#263449!important; }
+    html[data-bs-theme="dark"] .timeline-step-circle { background-color:#1e293b;border-color:#334155; }
+    html[data-bs-theme="dark"] .timeline-step-title { color:#f1f5f9; }
+    html[data-bs-theme="dark"] .timeline-bar-bg { background-color:#1e293b; }
+    html[data-bs-theme="dark"] .site-footer { background:#080e1a;color:#aebdd0;border-color:#263449!important; }
 </style>
 
 <!-- Floating WhatsApp Button -->
-<a href="https://api.whatsapp.com/send?phone=5581994522504&text=Ol%C3%A1!%20Gostaria%20de%20consultar%20uma%20encomenda%20com%20o%20ateli%C3%AA."
+<a href="https://api.whatsapp.com/send?phone=5581994522504&text=Ol%C3%A1!%20Gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20meu%20pedido%20no%20ateli%C3%AA."
    target="_blank" rel="noopener noreferrer"
    class="position-fixed bottom-0 end-0 m-4 z-3 btn btn-success rounded-circle shadow-lg p-3 d-flex align-items-center justify-content-center border-0 hover-lift"
    style="width: 58px; height: 58px; background-color: #25d366;" title="Falar no WhatsApp com Olinda Aguiar">
@@ -44,118 +171,310 @@
 
 <!-- Header da Página de Pedidos -->
 <header class="py-5 bg-white border-bottom border-light-subtle">
-    <div class="container text-center py-lg-3">
-        <span class="badge px-3 py-2 rounded-pill fw-bold text-uppercase mb-3" style="background:#ffedd5;color:#c85a17;">Atendimento & Produção</span>
-        <h1 class="display-5 fw-extrabold text-dark mb-3">Consulta de Pedidos & Encomendas Sob Medida</h1>
+    <div class="container text-center py-lg-2">
+        <span class="badge px-3 py-2 rounded-pill fw-bold text-uppercase mb-3" style="background:#ffedd5;color:#c85a17;">Ateliê & Marcenaria Colonial</span>
+        <h1 class="display-5 fw-extrabold text-dark mb-3">Acompanhe seu Pedido & Timeline de Produção</h1>
         <p class="text-secondary fs-17 max-w-700 mx-auto" style="max-width: 680px;">
-            Acompanhe a confecção da sua peça autoral ou solicite um projeto exclusivo desenhado sob a coordenação de <strong>Olinda Aguiar</strong> e esculpido por nossa equipe de mestres artesãos.
+            Digite o seu <strong>CPF</strong> para visualizar em tempo real a linha do tempo da sua encomenda artesanal: desde a aprovação do sinal até a entrega final no seu endereço.
         </p>
     </div>
 </header>
 
 <main class="py-5 bg-light">
-    <div class="container py-lg-3">
-        <div class="row g-4 justify-content-center">
-            
-            <!-- Coluna 1: Consultar Pedido Existente -->
-            <div class="col-lg-5">
-                <div class="card h-100 rounded-4 p-4 p-md-5 border-0 shadow-sm bg-white">
-                    <div class="d-flex align-items-center gap-3 mb-4">
-                        <span class="rounded-circle d-flex align-items-center justify-content-center" style="width:52px;height:52px;background:#ffedd5;color:#c85a17;">
-                            <i class="ri-search-eye-line fs-26"></i>
-                        </span>
-                        <div>
-                            <h4 class="fw-bold text-dark mb-0">Consultar Encomenda</h4>
-                            <small class="text-secondary">Peças em produção ou transporte</small>
+    <div class="container py-lg-2">
+
+        <!-- CARD 1: Consulta por CPF -->
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-8 col-xl-7">
+                <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white">
+                    <div class="text-center mb-4">
+                        <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 60px; height: 60px; background: #ffedd5; color: #c85a17;">
+                            <i class="ri-file-search-line fs-28"></i>
                         </div>
+                        <h4 class="fw-bold text-dark mb-1">Consultar Status pelo CPF</h4>
+                        <p class="text-secondary fs-14 mb-0">Insira os 11 dígitos do CPF do titular da encomenda</p>
                     </div>
 
-                    <p class="text-secondary fs-14 mb-4">
-                        Se você já realizou uma encomenda no ateliê ou na galeria em Olinda, digite o número da sua encomenda ou o seu nome para consultar o andamento em tempo real com nossa equipe.
-                    </p>
-
-                    <div class="mb-3">
-                        <label class="form-label fw-semibold text-dark fs-14">Número da Encomenda ou Seu Nome Completo</label>
-                        <input id="consultaInput" type="text" class="form-control form-control-lg rounded-3 fs-15" placeholder="Ex: ENCOMENDA-104 ou Mariana Silva">
-                    </div>
-
-                    <div class="mb-4 p-3 rounded-3 bg-light border border-light-subtle">
-                        <div class="d-flex align-items-start gap-2">
-                            <i class="ri-information-line text-warning fs-18 flex-shrink-0 mt-0.5"></i>
-                            <small class="text-secondary">
-                                As peças em <strong>madeira de demolição</strong> passam por processo minucioso de seleção de veios, cura com óleos vegetais e acabamento com ceras naturais de abelha/carnaúba.
-                            </small>
-                        </div>
-                    </div>
-
-                    <button type="button" class="btn btn-success btn-lg w-100 rounded-pill fw-bold py-3 text-white d-flex align-items-center justify-content-center gap-2 shadow-sm border-0 hover-lift mt-auto" style="background:#25d366;" onclick="consultarPedidoViaWhatsApp()">
-                        <i class="ri-whatsapp-line fs-22"></i>
-                        <span>Consultar Status no WhatsApp</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Coluna 2: Solicitar Projeto Sob Medida -->
-            <div class="col-lg-7">
-                <div class="card h-100 rounded-4 p-4 p-md-5 border-0 shadow-sm bg-white">
-                    <div class="d-flex align-items-center gap-3 mb-4">
-                        <span class="rounded-circle d-flex align-items-center justify-content-center" style="width:52px;height:52px;background:#e0f2fe;color:#0284c7;">
-                            <i class="ri-draft-line fs-26"></i>
-                        </span>
-                        <div>
-                            <h4 class="fw-bold text-dark mb-0">Solicitar Encomenda Sob Medida</h4>
-                            <small class="text-secondary">Mobiliário e obras customizadas</small>
-                        </div>
-                    </div>
-
-                    <form id="encomendaForm" onsubmit="enviarEncomendaCustomizada(event)">
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="form-label fw-semibold text-dark fs-14">Seu Nome Completo *</label>
-                                <input type="text" id="encNome" class="form-control rounded-3" placeholder="Ex: Rodrigo Albuquerque" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-semibold text-dark fs-14">Seu WhatsApp com DDD *</label>
-                                <input type="text" id="encWhatsApp" class="form-control rounded-3" placeholder="Ex: (81) 98765-4321" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-semibold text-dark fs-14">Cidade e Estado de Entrega *</label>
-                                <input type="text" id="encLocal" class="form-control rounded-3" placeholder="Ex: Recife - PE ou São Paulo - SP" required>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-semibold text-dark fs-14">Tipo de Peça Desejada *</label>
-                                <select id="encTipo" class="form-select rounded-3" required>
-                                    <option value="" disabled selected>Selecione a categoria...</option>
-                                    <option value="Mesa Orgânica de Demolição">Mesa Orgânica (Jantar / Centro / Lateral)</option>
-                                    <option value="Escultura Autoral de Casarão">Escultura Autoral em Madeira</option>
-                                    <option value="Painel Decorativo de Parede">Painel Rústico / Revestimento</option>
-                                    <option value="Aparador ou Balcão">Aparador, Bancada ou Balcão Maciço</option>
-                                    <option value="Tábuas Nobres & Gamélas Gourmet">Linha Gourmet & Utilitários</option>
-                                    <option value="Projeto Especial para Arquitetura">Projeto Arquitetônico Sob Medida</option>
-                                </select>
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label fw-semibold text-dark fs-14">Dimensões Aproximadas (Comprimento x Largura x Altura)</label>
-                                <input type="text" id="encMedidas" class="form-control rounded-3" placeholder="Ex: 2,20m x 1,00m x 0,75m de altura">
-                            </div>
-                            <div class="col-12">
-                                <label class="form-label fw-semibold text-dark fs-14">Detalhes e Preferências</label>
-                                <textarea id="encDetalhes" rows="3" class="form-control rounded-3" placeholder="Ex: Gostaria de borda orgânica viva, veios escuros marcados, acabamento fosco acetinado para ambiente interno..."></textarea>
-                            </div>
-                            <div class="col-12 pt-2">
-                                <button type="submit" class="btn btn-warning btn-lg w-100 rounded-pill fw-bold py-3 text-dark d-flex align-items-center justify-content-center gap-2 shadow-sm border-0 hover-lift">
-                                    <i class="ri-whatsapp-line fs-22 text-dark"></i>
-                                    <span>Enviar Pedido de Orçamento no WhatsApp</span>
-                                </button>
-                                <small class="text-secondary text-center d-block mt-2">
-                                    Nossa equipe responderá com opções de fotos de toras e estimativa de prazo.
-                                </small>
-                            </div>
+                    <form id="formConsultaCPF" onsubmit="buscarPedidoCPF(event)">
+                        <div class="input-group input-group-lg mb-3 shadow-sm rounded-pill overflow-hidden border border-2 border-warning-subtle">
+                            <span class="input-group-text bg-white border-0 ps-4 text-muted">
+                                <i class="ri-user-search-line fs-20" style="color: #c85a17;"></i>
+                            </span>
+                            <input id="inputCpf" type="text" class="form-control border-0 fs-16 fw-semibold ps-2" placeholder="000.000.000-00" maxlength="14" value="{{ search_cpf or '' }}" autocomplete="off" required>
+                            <button id="btnConsultar" class="btn btn-warning fw-bold px-4 text-dark d-flex align-items-center gap-2" type="submit" style="background:#f59e0b; border: 0;">
+                                <i class="ri-search-line fs-18"></i>
+                                <span>Consultar</span>
+                            </button>
                         </div>
                     </form>
+
+                    <!-- Atalhos de Demonstração (Para teste rápido) -->
+                    <div class="mt-3 text-center">
+                        <small class="text-muted d-block mb-2 font-monospace" style="font-size: 12px;">💡 CPFs de exemplo para demonstração rápida (clique para testar):</small>
+                        <div class="d-flex flex-wrap justify-content-center gap-2">
+                            <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-2.5 py-1 fs-12 demo-cpf-btn" data-cpf="123.456.789-00">
+                                <strong>123.456.789-00</strong> · Mariana (Em Produção)
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-2.5 py-1 fs-12 demo-cpf-btn" data-cpf="987.654.321-00">
+                                <strong>987.654.321-00</strong> · Rodrigo (Aguardando Pagamento)
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-2.5 py-1 fs-12 demo-cpf-btn" data-cpf="111.222.333-44">
+                                <strong>111.222.333-44</strong> · Cecília (Sinal Confirmado)
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-2.5 py-1 fs-12 demo-cpf-btn" data-cpf="555.666.777-88">
+                                <strong>555.666.777-88</strong> · Carlos (Entregue)
+                            </button>
+                            <button type="button" class="btn btn-sm btn-outline-secondary rounded-pill px-2.5 py-1 fs-12 demo-cpf-btn" data-cpf="000.111.222-33">
+                                <strong>000.111.222-33</strong> · Beatriz (Pedido Registrado)
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </div>
 
+        <!-- SPINNER DE CARREGAMENTO -->
+        <div id="loadingSpinner" class="text-center py-5 d-none">
+            <div class="spinner-border text-warning" style="width: 3.5rem; height: 3.5rem; color:#c85a17!important;" role="status">
+                <span class="visually-hidden">Carregando pedido...</span>
+            </div>
+            <p class="text-secondary fw-semibold mt-3 fs-15">Localizando dados do pedido no casarão...</p>
+        </div>
+
+        <!-- ALERTA DE NÃO ENCONTRADO -->
+        <div id="orderNotFound" class="row justify-content-center d-none mb-5">
+            <div class="col-lg-8">
+                <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white text-center border-top border-warning border-4">
+                    <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 64px; height: 64px; background: #fee2e2; color: #dc2626;">
+                        <i class="ri-error-warning-line fs-32"></i>
+                    </div>
+                    <h4 class="fw-bold text-dark mb-2">Nenhum Pedido Encontrado</h4>
+                    <p id="notFoundMessage" class="text-secondary fs-15 mb-4" style="max-width: 550px; margin: 0 auto;">
+                        Não localizamos nenhuma encomenda vinculada ao CPF informado. Verifique os números digitados ou entre em contato direto com o ateliê de Olinda Aguiar.
+                    </p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <button type="button" class="btn btn-outline-dark rounded-pill px-4 py-2 fw-semibold" onclick="document.getElementById('inputCpf').focus()">
+                            Tentar Outro CPF
+                        </button>
+                        <a href="https://api.whatsapp.com/send?phone=5581994522504&text=Ol%C3%A1!%20Gostaria%20de%20localizar%20minha%20encomenda%20com%20a%20equipe." target="_blank" rel="noopener noreferrer" class="btn btn-success rounded-pill px-4 py-2 fw-bold d-inline-flex align-items-center gap-2" style="background:#25d366; border:0;">
+                            <i class="ri-whatsapp-line fs-19"></i> Consultar no WhatsApp
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- RESULTADO DO PEDIDO: TIMELINE + DETALHES -->
+        <div id="orderResult" class="{% if not initial_order %}d-none{% endif %} mb-5">
+            {% if initial_order %}
+            <script>window.__initialOrder = {{ initial_order|tojson }};</script>
+            {% endif %}
+
+            <!-- CARD PRINCIPAL COM A TIMELINE DOS 5 PASSOS -->
+            <div class="card border-0 shadow-sm rounded-4 p-4 p-lg-5 bg-white mb-4">
+                
+                <!-- Topo do Card de Pedido -->
+                <div class="d-flex flex-wrap justify-content-between align-items-center pb-4 mb-4 border-bottom border-light-subtle gap-3">
+                    <div>
+                        <span class="badge px-3 py-1.5 rounded-pill fw-bold text-uppercase mb-2" style="background:#ffedd5;color:#c85a17;font-size:11px;" id="badgeOrderNumber">
+                            PEDIDO #{{ initial_order.order_number if initial_order else '' }}
+                        </span>
+                        <h2 class="h3 fw-bold text-dark mb-1" id="orderClientName">
+                            {{ initial_order.client_name if initial_order else '' }}
+                        </h2>
+                        <span class="text-secondary fs-14">
+                            CPF: <strong id="orderClientCpf">{{ initial_order.cpf if initial_order else '' }}</strong> · Data: <span id="orderCreatedAt">{{ initial_order.created_at if initial_order else '' }}</span>
+                        </span>
+                    </div>
+
+                    <div class="text-md-end">
+                        <small class="text-secondary d-block mb-1">Status Atual</small>
+                        <span id="orderStatusPill" class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold fs-13 d-inline-flex align-items-center gap-1 shadow-sm">
+                            <i class="ri-loader-4-line spin"></i>
+                            <span id="orderStatusName">{{ initial_order.current_step_name if initial_order else '' }}</span>
+                        </span>
+                    </div>
+                </div>
+
+                <!-- TIMELINE VISUAL DOS 5 PASSOS REQUISITADOS -->
+                <div class="mb-5">
+                    <h5 class="fw-bold text-dark text-center mb-4">
+                        <i class="ri-route-line me-1" style="color: #c85a17;"></i>
+                        Linha do Tempo da Encomenda
+                    </h5>
+
+                    <div class="timeline-container">
+                        <!-- Barra de Fundo -->
+                        <div class="timeline-bar-bg"></div>
+                        <!-- Barra de Progresso Preenchida -->
+                        <div id="timelineProgressBar" class="timeline-bar-fill" style="width: 50%;"></div>
+
+                        <!-- Os 5 Passos: Pedido - Sinal financeiro - Elaboração da peça - Pagamento - Entrega -->
+                        <div class="timeline-steps-row" id="timelineStepsRow">
+                            <!-- Inserido dinamicamente via JavaScript -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CALLOUT DA ETAPA ATUAL -->
+                <div class="rounded-4 p-4 mb-4 border border-2 border-warning-subtle" style="background:#fffbeb;">
+                    <div class="d-flex align-items-start gap-3">
+                        <div class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width: 48px; height: 48px; background: #c85a17; color: #fff;">
+                            <i class="ri-flashlight-fill fs-22"></i>
+                        </div>
+                        <div class="flex-grow-1">
+                            <div class="d-flex flex-wrap justify-content-between align-items-center mb-1">
+                                <h5 class="fw-bold text-dark mb-0" id="currentStepHeadline">O que está acontecendo agora</h5>
+                                <span class="badge bg-white text-dark border border-warning rounded-pill px-3 py-1 fw-bold fs-12">
+                                    <i class="ri-calendar-line me-1 text-warning"></i> Previsão: <span id="orderDeliveryEstimate">-</span>
+                                </span>
+                            </div>
+                            <p class="text-secondary fs-15 mb-0" id="currentStepDescription">
+                                Informações da etapa em andamento...
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- DETALHES COMPLETOS EM 3 COLUNAS -->
+                <div class="row g-4 pt-3">
+                    
+                    <!-- Coluna 1: A Obra -->
+                    <div class="col-lg-4">
+                        <div class="p-3.5 p-md-4 rounded-4 bg-light border border-light-subtle h-100">
+                            <h6 class="fw-bold text-dark text-uppercase tracking-wider fs-13 mb-3 d-flex align-items-center gap-2">
+                                <i class="ri-ancient-gate-fill text-warning fs-18"></i>
+                                Especificações da Obra
+                            </h6>
+                            <h5 class="fw-bold text-dark mb-2" id="orderItemTitle">-</h5>
+                            <ul class="list-unstyled text-secondary fs-14 mb-0 d-grid gap-2">
+                                <li><strong>Madeira:</strong> <span id="orderWoodType">-</span></li>
+                                <li><strong>Dimensões:</strong> <span id="orderDimensions">-</span></li>
+                                <li><strong>Acabamento:</strong> Ceras botânicas atóxicas e óleos naturais</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Coluna 2: Detalhes do Ateliê -->
+                    <div class="col-lg-4">
+                        <div class="p-3.5 p-md-4 rounded-4 bg-light border border-light-subtle h-100">
+                            <h6 class="fw-bold text-dark text-uppercase tracking-wider fs-13 mb-3 d-flex align-items-center gap-2">
+                                <i class="ri-hammer-fill text-success fs-18"></i>
+                                Produção & Artesãos
+                            </h6>
+                            <p class="text-secondary fs-14 mb-2">
+                                <strong>Curadoria:</strong> Olinda Aguiar & Equipe de Mestres Entalhadores.
+                            </p>
+                            <p class="text-secondary fs-14 mb-0" id="orderNotes">
+                                Peça autoral executada artesanalmente com respeito aos veios e à integridade histórica da madeira.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Coluna 3: Resumo Financeiro -->
+                    <div class="col-lg-4">
+                        <div class="p-3.5 p-md-4 rounded-4 bg-light border border-light-subtle h-100">
+                            <h6 class="fw-bold text-dark text-uppercase tracking-wider fs-13 mb-3 d-flex align-items-center gap-2">
+                                <i class="ri-money-dollar-circle-fill text-primary fs-18"></i>
+                                Resumo Financeiro
+                            </h6>
+                            <div class="d-flex justify-content-between mb-2 fs-14">
+                                <span class="text-secondary">Valor Total da Peça:</span>
+                                <strong class="text-dark" id="orderTotalAmount">R$ 0,00</strong>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2 fs-14">
+                                <span class="text-secondary">Sinal Financeiro (Pago):</span>
+                                <span class="text-success fw-bold" id="orderDepositAmount">R$ 0,00</span>
+                            </div>
+                            <div class="d-flex justify-content-between pt-2 border-top border-secondary-subtle fs-15">
+                                <strong class="text-dark">Saldo Restante:</strong>
+                                <strong class="text-primary" style="color:#c85a17!important;" id="orderBalanceAmount">R$ 0,00</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BOTÕES DE AÇÃO DO PEDIDO -->
+                <div class="d-flex flex-wrap justify-content-between align-items-center pt-4 mt-4 border-top border-light-subtle gap-3">
+                    <button type="button" class="btn btn-outline-secondary rounded-pill px-4 py-2.5 fw-semibold d-inline-flex align-items-center gap-2" onclick="limparConsulta()">
+                        <i class="ri-arrow-left-line"></i> Consultar Outro CPF
+                    </button>
+
+                    <div class="d-flex gap-2">
+                        <a id="btnWhatsPedido" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-success rounded-pill px-4 py-2.5 fw-bold d-inline-flex align-items-center gap-2 shadow-sm border-0 hover-lift" style="background:#25d366;">
+                            <i class="ri-whatsapp-line fs-20"></i>
+                            <span>Falar com Olinda Aguiar sobre este Pedido</span>
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- SEÇÃO: ENCOMENDA PERSONALIZADA SOB MEDIDA (FORMULÁRIO) -->
+        <div class="row justify-content-center mt-5">
+            <div class="col-lg-10">
+                <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white">
+                    <div class="row align-items-center mb-4">
+                        <div class="col-md-8">
+                            <span class="badge px-3 py-1 rounded-pill fw-bold text-uppercase mb-2" style="background: rgba(200,90,23,0.15); color: #c85a17;">Projetos Autorais</span>
+                            <h3 class="fw-bold text-dark mb-1">Ainda não possui uma encomenda?</h3>
+                            <p class="text-secondary fs-15 mb-0">Solicite um orçamento sob medida desenhado por Olinda Aguiar com as medidas e a madeira de sua preferência.</p>
+                        </div>
+                        <div class="col-md-4 text-md-end mt-3 mt-md-0">
+                            <button class="btn btn-outline-dark rounded-pill px-4 py-2.5 fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEncomenda" aria-expanded="false" aria-controls="collapseEncomenda">
+                                <i class="ri-pencil-ruler-2-line me-1"></i> Abrir Formulário
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="collapse" id="collapseEncomenda">
+                        <hr class="my-4 border-light-subtle">
+                        <form id="encomendaForm" onsubmit="enviarEncomendaCustomizada(event)">
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold text-dark fs-14">Seu Nome Completo *</label>
+                                    <input type="text" id="encNome" class="form-control rounded-3" placeholder="Ex: Mariana Silva" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold text-dark fs-14">Seu WhatsApp com DDD *</label>
+                                    <input type="text" id="encWhatsApp" class="form-control rounded-3" placeholder="Ex: (81) 99876-5432" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold text-dark fs-14">Cidade e Estado de Entrega *</label>
+                                    <input type="text" id="encLocal" class="form-control rounded-3" placeholder="Ex: Olinda - PE ou São Paulo - SP" required>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold text-dark fs-14">Tipo de Peça Desejada *</label>
+                                    <select id="encTipo" class="form-select rounded-3" required>
+                                        <option value="" disabled selected>Selecione a categoria...</option>
+                                        <option value="Mesa Orgânica de Demolição">Mesa Orgânica (Jantar / Centro / Lateral)</option>
+                                        <option value="Escultura Autoral de Casarão">Escultura Autoral em Madeira</option>
+                                        <option value="Painel Decorativo de Parede">Painel Rústico / Revestimento de Casarão</option>
+                                        <option value="Aparador ou Balcão">Aparador, Bancada ou Balcão Maciço</option>
+                                        <option value="Linha Gourmet Nobre">Linha Gourmet & Utilitários</option>
+                                        <option value="Projeto Especial para Arquitetura">Projeto Arquitetônico Sob Medida</option>
+                                    </select>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold text-dark fs-14">Dimensões Aproximadas (Comprimento x Largura x Altura)</label>
+                                    <input type="text" id="encMedidas" class="form-control rounded-3" placeholder="Ex: 2,40m x 1,10m x 0,78m">
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold text-dark fs-14">Preferências (Tonalidade, bordas orgânicas, veios marcados)</label>
+                                    <textarea id="encDetalhes" rows="3" class="form-control rounded-3" placeholder="Ex: Gostaria de bordas orgânicas preservadas, madeira Peroba Rosa ou Ipê, acabamento acetinado com cera natural de abelha..."></textarea>
+                                </div>
+                                <div class="col-12 pt-2">
+                                    <button type="submit" class="btn btn-warning btn-lg w-100 rounded-pill fw-bold py-3 text-dark d-flex align-items-center justify-content-center gap-2 shadow-sm border-0 hover-lift">
+                                        <i class="ri-whatsapp-line fs-22 text-dark"></i>
+                                        <span>Enviar Pedido de Orçamento no WhatsApp</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Pilares de Confiança -->
@@ -195,22 +514,163 @@
 {% include 'partials/public-footer.html' %}
 
 <script>
-function consultarPedidoViaWhatsApp() {
-    const input = document.getElementById('consultaInput');
-    const valor = encodeURIComponent((input && input.value.trim()) || 'minha encomenda');
-    window.open(`https://api.whatsapp.com/send?phone=5581994522504&text=Ol%C3%A1!%20Gostaria%20de%20consultar%20o%20status%20do%20meu%20pedido:%20${valor}`, '_blank');
-}
+    // Máscara de CPF automática
+    const inputCpf = document.getElementById('inputCpf');
+    if (inputCpf) {
+        inputCpf.addEventListener('input', (e) => {
+            let v = e.target.value.replace(/\D/g, '');
+            if (v.length > 11) v = v.slice(0, 11);
+            if (v.length > 9) {
+                e.target.value = v.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, '$1.$2.$3-$4');
+            } else if (v.length > 6) {
+                e.target.value = v.replace(/(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3');
+            } else if (v.length > 3) {
+                e.target.value = v.replace(/(\d{3})(\d{1,3})/, '$1.$2');
+            } else {
+                e.target.value = v;
+            }
+        });
+    }
 
-function enviarEncomendaCustomizada(e) {
-    e.preventDefault();
-    const nome = document.getElementById('encNome').value.trim();
-    const whatsapp = document.getElementById('encWhatsApp').value.trim();
-    const local = document.getElementById('encLocal').value.trim();
-    const tipo = document.getElementById('encTipo').value;
-    const medidas = document.getElementById('encMedidas').value.trim() || 'A definir';
-    const detalhes = document.getElementById('encDetalhes').value.trim() || 'Sem observações adicionais';
+    // Atalhos dos CPFs de exemplo
+    document.querySelectorAll('.demo-cpf-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const cpf = btn.getAttribute('data-cpf');
+            inputCpf.value = cpf;
+            executarConsulta(cpf);
+        });
+    });
 
-    const texto = `*NOVA SOLICITAÇÃO DE ENCOMENDA SOB MEDIDA*
+    // Submissão do formulário de busca
+    function buscarPedidoCPF(e) {
+        e.preventDefault();
+        const cpf = inputCpf.value.trim();
+        if (!cpf) return;
+        executarConsulta(cpf);
+    }
+
+    // Requisição AJAX para o endpoint /api/pedido/consultar
+    function executarConsulta(cpf) {
+        const loading = document.getElementById('loadingSpinner');
+        const notFound = document.getElementById('orderNotFound');
+        const result = document.getElementById('orderResult');
+
+        loading.classList.remove('d-none');
+        notFound.classList.add('d-none');
+        result.classList.add('d-none');
+
+        fetch(`/api/pedido/consultar?cpf=${encodeURIComponent(cpf)}`)
+            .then(res => res.json())
+            .then(data => {
+                loading.classList.add('d-none');
+                if (data.success && data.order) {
+                    renderizarPedido(data.order);
+                    result.classList.remove('d-none');
+                    result.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                } else {
+                    document.getElementById('notFoundMessage').innerText = data.message || 'Nenhum pedido encontrado.';
+                    notFound.classList.remove('d-none');
+                    notFound.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            })
+            .catch(err => {
+                loading.classList.add('d-none');
+                document.getElementById('notFoundMessage').innerText = 'Erro ao consultar pedido. Tente novamente mais tarde.';
+                notFound.classList.remove('d-none');
+            });
+    }
+
+    // Renderização da Timeline dos 5 Passos e Detalhes
+    function renderizarPedido(order) {
+        // Cabeçalhos
+        document.getElementById('badgeOrderNumber').innerText = `PEDIDO #${order.order_number}`;
+        document.getElementById('orderClientName').innerText = order.client_name;
+        document.getElementById('orderClientCpf').innerText = order.cpf;
+        document.getElementById('orderCreatedAt').innerText = order.created_at;
+        document.getElementById('orderStatusName').innerText = order.current_step_name;
+
+        // Descrição e estimativa da etapa atual
+        document.getElementById('currentStepHeadline').innerText = `Etapa Atual: ${order.current_step_name}`;
+        document.getElementById('currentStepDescription').innerText = order.step_description;
+        document.getElementById('orderDeliveryEstimate').innerText = order.estimated_delivery;
+
+        // Dados da Obra
+        document.getElementById('orderItemTitle').innerText = order.item_title;
+        document.getElementById('orderWoodType').innerText = order.wood_type;
+        document.getElementById('orderDimensions').innerText = order.dimensions || 'Conforme projeto';
+        if (order.notes) {
+            document.getElementById('orderNotes').innerText = order.notes;
+        }
+
+        // Financeiro formatado em Real
+        const formatBRL = (val) => Number(val).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+        document.getElementById('orderTotalAmount').innerText = formatBRL(order.total_amount);
+        document.getElementById('orderDepositAmount').innerText = formatBRL(order.deposit_amount);
+        document.getElementById('orderBalanceAmount').innerText = formatBRL(order.balance_amount);
+
+        // Barra de progresso da timeline
+        // 5 etapas: 1 -> 0%, 2 -> 25%, 3 -> 50%, 4 -> 75%, 5 -> 100%
+        const progressPercentages = [0, 10, 35, 62, 85, 100];
+        const stepNum = Math.min(Math.max(order.current_step, 1), 5);
+        document.getElementById('timelineProgressBar').style.width = `${progressPercentages[stepNum]}%`;
+
+        // Renderizar os 5 nós da timeline
+        const container = document.getElementById('timelineStepsRow');
+        container.innerHTML = '';
+
+        order.steps.forEach(step => {
+            const node = document.createElement('div');
+            node.className = `timeline-step-node ${step.status}`;
+
+            let badgeHtml = '';
+            if (step.status === 'completed') {
+                badgeHtml = `<span class="timeline-step-badge bg-success bg-opacity-10 text-success">Concluído</span>`;
+            } else if (step.status === 'active') {
+                badgeHtml = `<span class="timeline-step-badge bg-warning bg-opacity-25 text-dark fw-bold">Em Andamento</span>`;
+            } else {
+                badgeHtml = `<span class="timeline-step-badge text-muted">Aguardando</span>`;
+            }
+
+            let iconContent = `<i class="${step.icon}"></i>`;
+            if (step.status === 'completed') {
+                iconContent = `<i class="ri-check-line fw-bold fs-24"></i>`;
+            }
+
+            node.innerHTML = `
+                <div class="timeline-step-circle">
+                    ${iconContent}
+                </div>
+                <div class="timeline-step-content">
+                    <span class="timeline-step-title d-block">${step.name}</span>
+                    <small class="text-secondary d-none d-md-block fs-12 mb-1">${step.sublabel}</small>
+                    ${badgeHtml}
+                </div>
+            `;
+            container.appendChild(node);
+        });
+
+        // Configurar botão de WhatsApp direto com mensagem pré-formatada
+        const whatsMsg = `Olá Olinda Aguiar! Gostaria de falar sobre o meu pedido *#${order.order_number}* (${order.item_title}), titular *${order.client_name}* (CPF ${order.cpf}). Status atual: *${order.current_step_name}*.`;
+        document.getElementById('btnWhatsPedido').href = `https://api.whatsapp.com/send?phone=5581994522504&text=${encodeURIComponent(whatsMsg)}`;
+    }
+
+    function limparConsulta() {
+        document.getElementById('orderResult').classList.add('d-none');
+        document.getElementById('orderNotFound').classList.add('d-none');
+        inputCpf.value = '';
+        inputCpf.focus();
+    }
+
+    function enviarEncomendaCustomizada(e) {
+        e.preventDefault();
+        const nome = document.getElementById('encNome').value.trim();
+        const whatsapp = document.getElementById('encWhatsApp').value.trim();
+        const local = document.getElementById('encLocal').value.trim();
+        const tipo = document.getElementById('encTipo').value;
+        const medidas = document.getElementById('encMedidas').value.trim() || 'A definir';
+        const detalhes = document.getElementById('encDetalhes').value.trim() || 'Sem observações adicionais';
+
+        const texto = `*NOVA SOLICITAÇÃO DE ENCOMENDA SOB MEDIDA*
 👤 *Nome:* ${nome}
 📱 *WhatsApp:* ${whatsapp}
 📍 *Cidade/UF:* ${local}
@@ -220,7 +680,16 @@ function enviarEncomendaCustomizada(e) {
 
 _Vim pela página de Pedido do site da Olinda Arte em Madeira._`;
 
-    window.open(`https://api.whatsapp.com/send?phone=5581994522504&text=${encodeURIComponent(texto)}`, '_blank');
-}
+        window.open(`https://api.whatsapp.com/send?phone=5581994522504&text=${encodeURIComponent(texto)}`, '_blank');
+    }
+
+    // Inicialização automática caso venha do server-side (ex: ?cpf=...)
+    document.addEventListener('DOMContentLoaded', () => {
+        if (window.__initialOrder) {
+            renderizarPedido(window.__initialOrder);
+        } else if (inputCpf && inputCpf.value.trim()) {
+            executarConsulta(inputCpf.value.trim());
+        }
+    });
 </script>
 {% endblock content %}
