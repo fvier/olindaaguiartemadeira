@@ -7,7 +7,17 @@ Guia rápido para resolução de problemas comuns no repositório **Olinda Aguia
 
 ---
 
-## 1. Problema: Permissão Negada ao Realizar Push no GitHub (`Permission denied (publickey)`)
+## 1. Problema: Banco SQLite Mantém Dados Legados de Rastreamento Veicular após Mudança de Marca
+
+### Sintoma
+Após alterar os textos das constantes em `apps/pages/routes.py`, a página inicial ainda exibia planos ou depoimentos antigos salvos no banco `apps/db.sqlite3`.
+
+### Solução
+A função `ensure_commercial_content()` foi configurada com auto-detecção de dados legados (`has_old_plans` e `has_old_reviews`). Ao detectar palavras-chave antigas como "veículo" ou "FIPE", a função limpa as tabelas `CommercialPlan`, `LandingCard` e `ClientReview`, recriando o seed com os dados e linhas da Olinda Arte em Madeira de forma totalmente atômica e segura.
+
+---
+
+## 2. Problema: Permissão Negada ao Realizar Push no GitHub (`Permission denied (publickey)`)
 
 ### Sintoma
 Ao tentar rodar `git push origin main`, ocorre o erro:

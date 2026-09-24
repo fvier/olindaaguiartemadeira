@@ -57,19 +57,19 @@ CAROUSEL_SET_TYPES = {
 }
 
 DEFAULT_PLAN_BENEFITS = [
-    'Acesso ilimitado ao aplicativo celular e computador',
-    'Suporte 24h Roubo / Furto',
-    'Central 0800 e monitoramento 24 Horas',
-    'Rastreamento + Bloqueio Remoto',
-    'Equipe de Recuperação Veicular',
+    'Madeira de demolição 100% nobre, recuperada e imunizada',
+    'Acabamento artesanal fino com ceras e óleos naturais atóxicos',
+    'Peça autoral única assinada pelo ateliê de Olinda Aguiar',
+    'Embalagem estruturada e envio protegido para todo o Brasil',
+    'Curadoria e consultoria sob medida para arquitetos e clientes',
 ]
 
 DEFAULT_PLANS = [
-    ('Rastreamento + Assistência', 'Qualquer veículo', 'Sem cobertura FIPE', 62, 'Para qualquer automóvel ou moto', 'QUALQUER VEÍCULO', False),
-    ('Moto Garantida + Assistência', 'Moto', 'Até R$ 15 mil FIPE', 78, 'Para motocicletas de até R$ 15 mil FIPE', 'MOTO', False),
-    ('Moto Top Garantida + Assistência', 'Moto', 'Até R$ 30 mil FIPE', 100, 'Para motocicletas de até R$ 30 mil FIPE', 'MOTO TOP', False),
-    ('Carro Garantido + Assistência', 'Carro', 'Até R$ 30 mil FIPE', 120, 'Para veículos de passeio de até R$ 30 mil FIPE', 'CARRO', False),
-    ('Carro VIP Garantido + Assistência', 'Carro', 'Até R$ 60 mil FIPE', 150, 'Para veículos de passeio de até R$ 60 mil FIPE', 'CARRO VIP', True),
+    ('Esculturas & Obras de Autor', 'Arte em Madeira', 'Peça Autoral Única', 380, 'Esculturas entalhadas à mão valorizando os veios históricos e nós da madeira.', 'ESCULTURAS', False),
+    ('Mesas & Mobiliário Orgânico', 'Mobiliário Nobre', 'Demolição Maciça', 1850, 'Mesas de centro, jantar e aparadores com borda orgânica e acabamento acetinado.', 'MÓVEIS', False),
+    ('Painéis & Revestimentos', 'Design de Parede', 'Composição Rústica', 950, 'Painéis arquitetônicos em relevo feitos com madeira de demolição restaurada.', 'PAINÉIS', False),
+    ('Utilitários & Linha Gourmet', 'Arte Culinária', 'Madeira Tratada', 190, 'Tábuas nobres de corte, gamelas e travessas com cura mineral atóxica.', 'UTILITÁRIOS', False),
+    ('Projetos Sob Medida & Arquitetura', 'Alta Marcenaria', 'Design Exclusivo', 2800, 'Mobiliário e obras customizadas sob liderança e consultoria de Olinda Aguiar.', 'SOB MEDIDA', True),
 ]
 
 DEFAULT_LINKS = [
@@ -182,7 +182,11 @@ def active_carousel_images():
 def ensure_commercial_content():
     """Seed editable public content once for new and existing installations."""
     changed = False
-    if CommercialPlan.query.count() == 0:
+    has_old_plans = any(p.vehicle_type in ['Qualquer veículo', 'Moto', 'Carro'] or 'FIPE' in (p.coverage or '') for p in CommercialPlan.query.all())
+    if CommercialPlan.query.count() == 0 or has_old_plans:
+        LandingCard.query.delete()
+        CommercialPlan.query.delete()
+        db.session.flush()
         benefits = '\n'.join(DEFAULT_PLAN_BENEFITS)
         for position, item in enumerate(DEFAULT_PLANS, start=1):
             name, vehicle_type, coverage, price, description, badge, featured = item
@@ -190,7 +194,7 @@ def ensure_commercial_content():
                 name=name, vehicle_type=vehicle_type, coverage=coverage,
                 monthly_price=price, installation_price=0, description=description,
                 benefits=benefits, badge=badge, featured=featured,
-                whatsapp_url=f'https://api.whatsapp.com/send?phone=5581994522504&text=Olá! Quero saber mais sobre {name}.',
+                whatsapp_url=f'https://api.whatsapp.com/send?phone=5581994522504&text=Olá! Gostaria de encomendar ou saber mais sobre a linha {name} da Olinda Arte em Madeira.',
                 active=True, sort_order=position * 10,
             ))
         changed = True
@@ -207,13 +211,15 @@ def ensure_commercial_content():
         for position, item in enumerate(DEFAULT_LINKS, start=1):
             title, subtitle, url, icon, color = item
             db.session.add(LinktreeLink(title=title, subtitle=subtitle, url=url, icon=icon,
-                                        color=color, active=True, sort_order=position * 10))
+                                         color=color, active=True, sort_order=position * 10))
         changed = True
-    if ClientReview.query.count() == 0:
+    has_old_reviews = any('veicular' in (r.review_text or '').lower() or 'rastreamento' in (r.review_text or '').lower() or 'paraíba' in (r.review_text or '').lower() for r in ClientReview.query.all())
+    if ClientReview.query.count() == 0 or has_old_reviews:
+        ClientReview.query.delete()
         default_reviews = [
-            ("Carlos Eduardo", "Cliente desde 2023", "avatar-1.jpg", 5, "Instalação muito rápida e limpa no carro. A precisão do aplicativo é excelente e o suporte é sempre prestativo e de prontidão.", 10),
-            ("Fernanda Lima", "Cliente desde 2022", "avatar-2.jpg", 5, "A melhor proteção veicular da Paraíba. O aplicativo é super prático e as notificações de segurança me dão muita paz de espírito.", 20),
-            ("Roberto Silva", "Cliente desde 2023", "avatar-3.jpg", 5, "Atendimento excelente e preço mensal muito justo. Recomendo para quem busca segurança sem complicações para frota ou veículo particular.", 30),
+            ("Mariana Albuquerque", "Arquiteta & Designer de Interiores", "avatar-2.jpg", 5, "A mesa em madeira maciça de demolição que a Olinda e sua equipe produziram para o meu projeto ficou espetacular. Saber que é uma empresa liderada por uma mulher visionária torna tudo ainda mais nobre e inspirador!", 10),
+            ("Rodrigo Vasconcelos", "Colecionador de Arte Contemporânea", "avatar-1.jpg", 5, "Visitei o casarão colonial no Carmo em Olinda e fiquei encantado. A escultura chegou impecável em São Paulo, embalada com máximo cuidado e respeitando todos os veios históricos da tora.", 20),
+            ("Dra. Cecília Meireles", "Apreciadora de Arte Popular", "avatar-4.jpg", 5, "O ateliê da Olinda Aguiar une o charme secular da nossa história, sustentabilidade real com madeira de demolição e alto acabamento. Peças únicas que têm alma.", 30),
         ]
         for name, role, avatar, rating, text, order in default_reviews:
             db.session.add(ClientReview(
@@ -231,7 +237,7 @@ def ensure_commercial_content():
 
 
 def plan_view(plan):
-    whatsapp_message = quote(f'Olá! Quero contratar o plano {plan.name} da GPS Paraíba.')
+    whatsapp_message = quote(f'Olá! Gostaria de encomendar ou saber mais sobre a linha {plan.name} da Olinda Arte em Madeira.')
     return {
         'id': plan.id, 'nome': plan.name, 'tipoVeiculo': plan.vehicle_type,
         'cobertura': plan.coverage, 'mensalidade': float(plan.monthly_price or 0),
@@ -324,7 +330,7 @@ def serve_favicon():
 
 @blueprint.route('/')
 def home():
-    """Render the public landing page for GPS Paraíba."""
+    """Render the public landing page for Olinda Arte em Madeira."""
     ensure_default_user()
     ensure_commercial_content()
     config_data = load_reviews_config()
