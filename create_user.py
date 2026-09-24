@@ -1,10 +1,16 @@
 #!/usr/bin/env python3
+import os
 import sys
+from dotenv import load_dotenv
+
+load_dotenv()
+
 from apps import create_app, db
 from apps.config import config_dict
 from apps.pages.models import User
 
-app = create_app(config_dict['Production'])
+mode = 'Debug' if os.getenv('DEBUG', 'False') == 'True' else 'Production'
+app = create_app(config_dict[mode])
 
 def add_user(email, password, username=None):
     email = email.strip().lower()

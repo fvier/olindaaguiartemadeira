@@ -1,7 +1,10 @@
 import os
-from   flask_minify  import Minify
 from   sys import exit
+from   dotenv import load_dotenv
 
+load_dotenv()
+
+from   flask_minify  import Minify
 from apps.config import config_dict
 from apps import create_app, db
 
@@ -31,4 +34,4 @@ if DEBUG:
     app.logger.info('ASSETS_ROOT      = ' + app_config.ASSETS_ROOT )
 
 if __name__ == "__main__":
-    app.run()
+    app.run(host='0.0.0.0', port=5000)

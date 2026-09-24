@@ -32,6 +32,9 @@ VALID_ROLES = {'admin', 'gerente', 'usuario'}
 VALID_CATEGORIES = {'Orange', 'Blue', 'Green', 'Gold', 'Platinum', 'Diamond', 'Black'}
 
 CAROUSEL_IMAGE_TITLES = {
+    'hero-fachada-coral-entardecer.png': 'Fachada Coral ao Entardecer — Olinda Aguiar',
+    'hero-fachada-noite-azul.png': 'Fachada Noturna com Iluminação Cênica Quente',
+    'hero-fachada-luz-dourada.png': 'Casarão Histórico sob Luz Dourada',
     'hero-set-hatches-v2.png': 'Conjunto 1 — Carros hatch populares',
     'hero-conjunto-2-v2.png': 'Conjunto 2 — Motos populares',
     'hero-conjunto-3-v2.png': 'Conjunto 3 — Pick-ups leves e utilitários',
@@ -39,7 +42,11 @@ CAROUSEL_IMAGE_TITLES = {
     'hero-conjunto-5-v2.png': 'Conjunto 5 — Motos premium e aventureiras',
     'rastrek_hero_vehicle.png': 'Range Rover — imagem original',
 }
-DEFAULT_ACTIVE_CAROUSEL = list(CAROUSEL_IMAGE_TITLES)[:5]
+DEFAULT_ACTIVE_CAROUSEL = [
+    'hero-fachada-coral-entardecer.png',
+    'hero-fachada-noite-azul.png',
+    'hero-fachada-luz-dourada.png',
+]
 CAROUSEL_SET_TYPES = {
     'conjunto_1': 'Conjunto 1 — Carros Hatch',
     'conjunto_2': 'Conjunto 2 — Motos Populares',
