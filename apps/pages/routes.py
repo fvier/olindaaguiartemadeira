@@ -2800,6 +2800,7 @@ def add_review():
         name_part, ext_part = os.path.splitext(filename)
         filename = f"{name_part}_{random_suffix}{ext_part}"
         save_path = os.path.join(current_app.root_path, 'static', 'images', 'users', filename)
+        os.makedirs(os.path.dirname(save_path), exist_ok=True)
         avatar_file.save(save_path)
         avatar_filename = filename
     else:
@@ -2864,6 +2865,7 @@ def save_reviews():
             name_part, ext_part = os.path.splitext(filename)
             filename = f"{name_part}_{random_suffix}{ext_part}"
             save_path = os.path.join(current_app.root_path, 'static', 'images', 'users', filename)
+            os.makedirs(os.path.dirname(save_path), exist_ok=True)
             avatar_file.save(save_path)
             review.avatar_filename = filename
 
