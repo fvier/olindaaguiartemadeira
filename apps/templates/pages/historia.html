@@ -121,28 +121,32 @@
 {% include 'partials/public-reviews-bar.html' %}
 {% include 'partials/public-navbar.html' %}
 
-<!-- Banner Ultra-Minimalista da Página de História -->
-<section class="tribute-hero-section py-3 py-md-4">
-    <div class="container text-center max-w-750 mx-auto">
-        <span class="badge px-3 py-1 rounded-pill fw-bold text-uppercase mb-2 d-inline-block" style="background:#ffedd5;color:#c85a17;font-size:0.72rem;letter-spacing:0.06em;">
-            <i class="ri-leaf-fill me-1"></i> NOSSA TRAJETÓRIA · OLINDA - PE
-        </span>
-        <h1 class="fw-extrabold text-dark mb-2" style="font-size: 1.85rem; letter-spacing: -0.02em;">
-            A História de <span style="color:#c85a17;">Mestre Byll & Olinda Aguiar</span>
-        </h1>
-        <p class="fs-14 text-secondary mb-3 max-w-600 mx-auto" style="line-height: 1.45;">
-            Da marcenaria artesanal de demolição à liderança feminina inspiradora no casarão colonial do Carmo.
-        </p>
-        <div class="d-flex justify-content-center align-items-center gap-3">
-            <a href="/byll" class="btn btn-sm btn-link text-secondary text-decoration-none px-2 py-0 fw-semibold fs-13 d-inline-flex align-items-center gap-1">
-                <i class="ri-arrow-left-line"></i> Voltar à Homenagem
-            </a>
-            <span class="text-muted opacity-50">•</span>
-            <a href="https://api.whatsapp.com/send?phone=5581994522504&text=Ol%C3%A1!%20Li%20a%20hist%C3%B3ria%20do%20Mestre%20Byll%20e%20gostaria%20de%20visitar%20o%20ateli%C3%AA." 
-               target="_blank" rel="noopener noreferrer"
-               class="btn btn-sm btn-success rounded-pill px-3 py-1 fw-bold d-inline-flex align-items-center gap-1 text-white border-0 shadow-xs" style="background:#25d366;font-size:0.8rem;">
-                <i class="ri-whatsapp-line fs-14"></i> Falar com Olinda
-            </a>
+<!-- Banner Ultra-Minimalista da Página de História (Inspirado no cabeçalho editorial) -->
+<section class="tribute-hero-section py-2 py-md-3 bg-white border-bottom shadow-2xs">
+    <div class="container">
+        <!-- Linha 1: Título + Descrição Inline à esquerda, Ação à direita -->
+        <div class="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-2 mb-2">
+            <div class="d-flex flex-wrap align-items-baseline gap-2">
+                <h1 class="fw-bold text-dark mb-0 fs-5" style="letter-spacing: -0.01em;">
+                    A História de <span style="color:#c85a17;">Mestre Byll & Olinda Aguiar</span>
+                </h1>
+                <span class="text-secondary fs-13">Da marcenaria artesanal de demolição à liderança inspiradora no casarão colonial do Carmo.</span>
+            </div>
+            <div class="flex-shrink-0">
+                <a href="/byll" class="btn btn-sm btn-outline-secondary rounded-pill px-3 py-1 fw-semibold fs-13 d-inline-flex align-items-center gap-1">
+                    <i class="ri-arrow-left-line"></i> Voltar à Homenagem
+                </a>
+            </div>
+        </div>
+
+        <!-- Linha 2: Temas / Pílulas de Navegação -->
+        <div class="d-flex align-items-center gap-2 overflow-x-auto pb-1" style="scrollbar-width: none;">
+            <span class="text-uppercase fw-bold text-muted me-1" style="font-size: 0.68rem; letter-spacing: 0.08em; flex-shrink: 0;">TEMAS</span>
+            <span class="badge rounded-pill px-3 py-1.5 fw-bold" style="background:#c85a17; color:#fff; font-size: 0.75rem; flex-shrink:0;">Nossa Trajetória</span>
+            <span class="badge rounded-pill px-3 py-1.5 fw-semibold border text-dark bg-white" style="font-size: 0.75rem; flex-shrink:0;">De Pai para Filha</span>
+            <span class="badge rounded-pill px-3 py-1.5 fw-semibold border text-dark bg-white" style="font-size: 0.75rem; flex-shrink:0;">Sustentabilidade</span>
+            <span class="badge rounded-pill px-3 py-1.5 fw-semibold border text-dark bg-white" style="font-size: 0.75rem; flex-shrink:0;">Marcenaria Colonial</span>
+            <span class="badge rounded-pill px-3 py-1.5 fw-semibold border text-dark bg-white" style="font-size: 0.75rem; flex-shrink:0;">Carmo, Olinda - PE</span>
         </div>
     </div>
 </section>
