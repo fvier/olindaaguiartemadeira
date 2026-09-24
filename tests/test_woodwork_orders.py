@@ -72,6 +72,14 @@ class WoodworkOrderTimelineTests(unittest.TestCase):
         self.assertIn('Verniz PU', bancada['name'])
         self.assertIn('Cada racha e marca', bancada['description'])
 
+        # Verifica os armários em jatobá OLA-A16 com lambri de demolição
+        armario = next((p for p in data['products'] if p['id'] == 'OLA-A16'), None)
+        self.assertIsNotNone(armario)
+        self.assertEqual(armario['wood_type'], 'jatoba')
+        self.assertEqual(len(armario['images']), 3)
+        self.assertIn('Jatobá', armario['name'])
+        self.assertIn('lambri de demolição', armario['description'])
+
     def test_consultar_order_by_formatted_cpf(self):
         response = self.client.get('/api/pedido/consultar?cpf=123.456.789-00')
         self.assertEqual(response.status_code, 200)

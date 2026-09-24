@@ -72,7 +72,8 @@
       'jacaranda': 'Jacarandá da Bahia',
       'cumaru': 'Cumaru de Demolição',
       'brauna': 'Braúna Centenária',
-      'canela-preta': 'Canela Preta'
+      'canela-preta': 'Canela Preta',
+      'jatoba': 'Jatobá de Demolição'
     };
     if (wood !== 'all') labels.push(woodNames[wood] || wood);
     if (categories.size) labels.push([...categories].join(', '));
@@ -240,7 +241,8 @@
       'jacaranda': 'Jacarandá da Bahia',
       'cumaru': 'Cumaru de Demolição',
       'brauna': 'Braúna Centenária',
-      'canela-preta': 'Canela Preta'
+      'canela-preta': 'Canela Preta',
+      'jatoba': 'Jatobá de Demolição'
     };
 
     if (modalWoodTag) modalWoodTag.textContent = woodNames[currentProduct.wood_type] || currentProduct.wood_type;

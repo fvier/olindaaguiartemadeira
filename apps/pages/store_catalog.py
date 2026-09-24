@@ -10,6 +10,7 @@ STORE_WOOD_TYPES = [
     {'id': 'cumaru', 'name': 'Cumaru de Demolição', 'origin': 'Estruturas Portuárias Históricas'},
     {'id': 'brauna', 'name': 'Braúna Centenária', 'origin': 'Pilares de Engenhos do Nordeste'},
     {'id': 'canela-preta', 'name': 'Canela Preta', 'origin': 'Dormentes Ferroviários Históricos'},
+    {'id': 'jatoba', 'name': 'Jatobá de Demolição', 'origin': 'Vigas Estruturais Nobres Centenárias'},
 ]
 
 STORE_CATEGORIES = [
@@ -103,6 +104,55 @@ WOODWORK_PRODUCTS = [
                 'price': 2300.00,
                 'old_price': 2650.00,
                 'badge': '100% Ecológico'
+            }
+        ]
+    },
+    {
+        'id': 'OLA-A16',
+        'wood_type': 'jatoba',
+        'category': 'Cristaleiras & Armários',
+        'name': 'Armários em Jatobá com Madeira e Lambri de Demolição',
+        'price': 8900.00,
+        'old_price': 10200.00,
+        'icon': '🗄️',
+        'image': 'armarios-cozinha-jatoba-lambri-demolicao-1.png',
+        'images': [
+            'armarios-cozinha-jatoba-lambri-demolicao-1.png',
+            'armarios-cozinha-jatoba-lambri-demolicao-2.png',
+            'armarios-cozinha-jatoba-lambri-demolicao-3.png',
+        ],
+        'badge': 'Sob Medida • Projeto Especial',
+        'sizes': [
+            'Cozinha Completa: 3,40m lineares (inferiores + aéreos)',
+            'Módulo Bancada: 2,40m x 0,60m x 0,90m altura',
+            'Módulos Aéreos: 2,40m x 0,38m x 0,75m altura',
+            'Projeto 100% Sob Medida conforme planta do cliente'
+        ],
+        'description': 'Armários em jatobá, com madeira e lambri de demolição. Projeto autoral de marcenaria artesanal com portas em lambri/veneziana maciço que oferecem circulação de ar e sofisticação rústica. Estrutura robusta em jatobá centenário com gaveteiros reforçados, puxadores ergonômicos em arco de aço escovado e acabamento com selador protetor contra vapores e umidade.',
+        'colors': [
+            {
+                'id': 'jatoba-natural',
+                'name': 'Jatobá Natural com Selador Náutico & Cera',
+                'hex': '#883e1c',
+                'price': 8900.00,
+                'old_price': 10200.00,
+                'badge': 'Projeto Assinado'
+            },
+            {
+                'id': 'jatoba-escurecido',
+                'name': 'Jatobá Colonial Envelhecido',
+                'hex': '#582611',
+                'price': 9200.00,
+                'old_price': 10600.00,
+                'badge': 'Rústico Nobre'
+            },
+            {
+                'id': 'verniz-pu-maritimo',
+                'name': 'Verniz PU Acetinado Hidrorrepelente',
+                'hex': '#9c4d23',
+                'price': 9450.00,
+                'old_price': 10900.00,
+                'badge': 'Máxima Proteção'
             }
         ]
     },
