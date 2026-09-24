@@ -49,7 +49,7 @@ class WoodworkOrderTimelineTests(unittest.TestCase):
     def test_loja_page_renders_catalog(self):
         response = self.client.get('/loja')
         self.assertEqual(response.status_code, 200)
-        self.assertIn(b'Mesa Org', response.data)
+        self.assertIn(b'Mesa Escultural', response.data)
         self.assertIn(b'Peroba Rosa', response.data)
         self.assertIn(b'store-product-grid', response.data)
         self.assertIn(b'storeProductModal', response.data)
