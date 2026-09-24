@@ -1,32 +1,92 @@
-<!-- Google Reviews Top Bar -->
+<!-- Google Reviews Top Bar (Self-Contained Component) -->
+<style>
+    .google-reviews-bar {
+        background-color: #f8fafc;
+        border-bottom: 1px solid #e2e8f0;
+        font-size: 13px;
+        color: #334155;
+        padding: 5px 0;
+        font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
+        line-height: 1.4;
+    }
+    html[data-bs-theme="dark"] .google-reviews-bar {
+        background-color: #0b1322;
+        border-bottom: 1px solid #1e293b;
+        color: #94a3b8;
+    }
+    .google-reviews-bar .dark-text-light {
+        color: #0f172a;
+    }
+    html[data-bs-theme="dark"] .google-reviews-bar .dark-text-light {
+        color: #f1f5f9 !important;
+    }
+    .reviews-carousel {
+        position: relative;
+        overflow: hidden;
+        height: 20px;
+        max-width: 500px;
+    }
+    .reviews-track {
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.5s ease-in-out;
+    }
+    .review-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        height: 20px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        font-size: 13px;
+    }
+    .review-avatar {
+        width: 18px !important;
+        height: 18px !important;
+        min-width: 18px !important;
+        min-height: 18px !important;
+        max-width: 18px !important;
+        max-height: 18px !important;
+        border-radius: 50% !important;
+        object-fit: cover !important;
+        display: inline-block !important;
+        flex: 0 0 18px !important;
+    }
+    .stars-color {
+        color: #f59e0b; /* Golden Yellow */
+        font-size: 12px;
+    }
+</style>
+
 <div class="google-reviews-bar d-none d-sm-block">
     <div class="container d-flex justify-content-between align-items-center">
         <div class="d-flex align-items-center gap-2 fw-semibold">
-            <i class="ri-google-fill text-primary fs-16"></i>
+            <i class="ri-google-fill fs-16" style="color: #c85a17;"></i>
             <span>Google</span>
             <span class="text-dark fw-bold dark-text-light ms-1">4.9/5</span>
             <span class="stars-color"><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i></span>
             <span class="text-muted fs-11 ms-1 d-none d-md-inline">(140+ avaliações)</span>
         </div>
-        <div class="reviews-carousel flex-grow-1 ms-4 text-center text-md-start" style="max-width: 500px;">
-            <div class="reviews-track" id="reviewsTrack">
-                <div class="review-item">
-                    <img src="{{ config.ASSETS_ROOT }}/images/users/avatar-2.jpg" class="review-avatar" alt="Avatar Mariana A.">
-                    <span class="fw-bold text-dark dark-text-light">Mariana Albuquerque</span>
+        <div class="reviews-carousel flex-grow-1 ms-4 text-center text-md-start" style="max-width: 500px; height: 20px; overflow: hidden; position: relative;">
+            <div class="reviews-track" id="reviewsTrack" style="display: flex; flex-direction: column; transition: transform 0.5s ease-in-out;">
+                <div class="review-item" style="height: 20px; display: flex; align-items: center; gap: 8px; white-space: nowrap; overflow: hidden;">
+                    <img src="{{ config.ASSETS_ROOT }}/images/users/avatar-2.jpg" class="review-avatar" width="18" height="18" style="width:18px;height:18px;min-width:18px;min-height:18px;max-width:18px;max-height:18px;border-radius:50%;object-fit:cover;flex-shrink:0;" alt="Mariana A.">
+                    <span class="fw-bold text-dark dark-text-light fs-13">Mariana Albuquerque</span>
                     <span class="stars-color d-none d-md-inline"><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i></span>
-                    <span class="text-muted">"A mesa em madeira de demolição é uma verdadeira obra de arte!"</span>
+                    <span class="text-muted fs-13">"A mesa em madeira de demolição é uma verdadeira obra de arte!"</span>
                 </div>
-                <div class="review-item">
-                    <img src="{{ config.ASSETS_ROOT }}/images/users/avatar-1.jpg" class="review-avatar" alt="Avatar Rodrigo V.">
-                    <span class="fw-bold text-dark dark-text-light">Rodrigo Vasconcelos</span>
+                <div class="review-item" style="height: 20px; display: flex; align-items: center; gap: 8px; white-space: nowrap; overflow: hidden;">
+                    <img src="{{ config.ASSETS_ROOT }}/images/users/avatar-1.jpg" class="review-avatar" width="18" height="18" style="width:18px;height:18px;min-width:18px;min-height:18px;max-width:18px;max-height:18px;border-radius:50%;object-fit:cover;flex-shrink:0;" alt="Rodrigo V.">
+                    <span class="fw-bold text-dark dark-text-light fs-13">Rodrigo Vasconcelos</span>
                     <span class="stars-color d-none d-md-inline"><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i></span>
-                    <span class="text-muted">"Escultura impecável e entrega super segura em São Paulo."</span>
+                    <span class="text-muted fs-13">"Escultura impecável e entrega super segura em São Paulo."</span>
                 </div>
-                <div class="review-item">
-                    <img src="{{ config.ASSETS_ROOT }}/images/users/avatar-4.jpg" class="review-avatar" alt="Avatar Cecília M.">
-                    <span class="fw-bold text-dark dark-text-light">Dra. Cecília Meireles</span>
+                <div class="review-item" style="height: 20px; display: flex; align-items: center; gap: 8px; white-space: nowrap; overflow: hidden;">
+                    <img src="{{ config.ASSETS_ROOT }}/images/users/avatar-4.jpg" class="review-avatar" width="18" height="18" style="width:18px;height:18px;min-width:18px;min-height:18px;max-width:18px;max-height:18px;border-radius:50%;object-fit:cover;flex-shrink:0;" alt="Dra. Cecília M.">
+                    <span class="fw-bold text-dark dark-text-light fs-13">Dra. Cecília Meireles</span>
                     <span class="stars-color d-none d-md-inline"><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i></span>
-                    <span class="text-muted">"Liderança feminina inspiradora e sustentabilidade autêntica."</span>
+                    <span class="text-muted fs-13">"Liderança feminina inspiradora e sustentabilidade autêntica."</span>
                 </div>
             </div>
         </div>
@@ -35,3 +95,21 @@
         </div>
     </div>
 </div>
+
+<script>
+    (() => {
+        const track = document.getElementById('reviewsTrack');
+        if (track && !window.__reviewsTrackInit) {
+            window.__reviewsTrackInit = true;
+            let currentIndex = 0;
+            const items = track.querySelectorAll('.review-item');
+            const itemCount = items.length;
+            if (itemCount > 1) {
+                setInterval(() => {
+                    currentIndex = (currentIndex + 1) % itemCount;
+                    track.style.transform = `translateY(-${currentIndex * 20}px)`;
+                }, 4000);
+            }
+        }
+    })();
+</script>

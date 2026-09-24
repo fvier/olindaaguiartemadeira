@@ -1,4 +1,18 @@
 <!-- Header Navigation (Navbar Público Olinda Arte em Madeira) -->
+<style>
+    .landing-palette-swatch { width:13px;height:13px;border-radius:50%;display:inline-block;box-shadow:0 0 0 2px rgba(148,163,184,.2); }
+    .landing-palette-option.active { background:rgba(var(--landing-accent-rgb, 200, 90, 23),.12)!important;font-weight:700;color:var(--landing-accent, #c85a17)!important; }
+    .hover-terracotta { transition: color 0.15s ease; }
+    .hover-terracotta:hover { color: #c85a17 !important; }
+    html[data-bs-theme="dark"] .landing-navbar-brand strong { color: #f8fafc !important; }
+    html[data-bs-theme="dark"] .landing-navbar-brand small { color: #94a3b8 !important; }
+    html[data-bs-theme="dark"] .navbar { background: rgba(8, 14, 26, 0.94) !important; border-color: #263449 !important; backdrop-filter: blur(12px); }
+    html[data-bs-theme="dark"] .navbar .nav-link { color: #cbd5e1 !important; }
+    html[data-bs-theme="dark"] .navbar .nav-link.active,
+    html[data-bs-theme="dark"] .navbar .nav-link:hover { color: var(--landing-accent, #c85a17) !important; }
+    html[data-bs-theme="dark"] .navbar-toggler-icon { filter: invert(1) grayscale(1) brightness(1.8); }
+</style>
+
 <nav class="navbar navbar-expand-lg navbar-light bg-white py-2 sticky-top border-bottom border-light-subtle shadow-sm z-3">
     <div class="container">
         <!-- Logo Image & Brand Name -->
@@ -95,3 +109,54 @@
         </div>
     </div>
 </nav>
+
+<script>
+    (() => {
+        // Theme initialization
+        const savedTheme = localStorage.getItem('gps_landing_theme') || 'light';
+        const savedAccent = localStorage.getItem('gps_color_palette') || localStorage.getItem('gps_landing_accent') || 'gold';
+        document.documentElement.setAttribute('data-bs-theme', savedTheme);
+        document.documentElement.setAttribute('data-landing-accent', savedAccent);
+
+        // Theme toggle button
+        const toggle = document.getElementById('landing-theme-toggle');
+        const moonIcon = document.getElementById('landing-theme-moon');
+        const sunIcon = document.getElementById('landing-theme-sun');
+        if (toggle && moonIcon && sunIcon) {
+            function updateThemeButtons() {
+                const dark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+                moonIcon.classList.toggle('d-none', dark);
+                sunIcon.classList.toggle('d-none', !dark);
+                toggle.title = dark ? 'Ativar tema claro' : 'Ativar tema escuro';
+                toggle.setAttribute('aria-pressed', dark ? 'true' : 'false');
+            }
+            toggle.addEventListener('click', () => {
+                const nextTheme = document.documentElement.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-bs-theme', nextTheme);
+                localStorage.setItem('gps_landing_theme', nextTheme);
+                updateThemeButtons();
+            });
+            updateThemeButtons();
+        }
+
+        // Palette selector
+        const paletteOptions = [...document.querySelectorAll('.landing-palette-option')];
+        if (paletteOptions.length > 0) {
+            function updatePaletteUI() {
+                const currentAccent = document.documentElement.getAttribute('data-landing-accent') || 'gold';
+                paletteOptions.forEach(option => {
+                    const active = option.dataset.accent === currentAccent;
+                    option.classList.toggle('active', active);
+                    option.setAttribute('aria-pressed', active ? 'true' : 'false');
+                });
+            }
+            paletteOptions.forEach(option => option.addEventListener('click', () => {
+                document.documentElement.setAttribute('data-landing-accent', option.dataset.accent);
+                localStorage.setItem('gps_landing_accent', option.dataset.accent);
+                localStorage.setItem('gps_color_palette', option.dataset.accent);
+                updatePaletteUI();
+            }));
+            updatePaletteUI();
+        }
+    })();
+</script>
