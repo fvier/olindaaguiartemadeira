@@ -45,6 +45,12 @@ class WoodworkOrderTimelineTests(unittest.TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'Mestre Byll', response.data)
         self.assertIn(b'byll-e-olinda-aguiar.png', response.data)
+        self.assertIn(b'/byll/historia', response.data)
+
+    def test_historia_page_renders_ok(self):
+        response = self.client.get('/byll/historia')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'Mestre Byll', response.data)
         self.assertIn(b'byll-mestre-artesao.png', response.data)
         self.assertIn(b'administra', response.data)
 
@@ -151,21 +157,25 @@ class WoodworkOrderTimelineTests(unittest.TestCase):
         data = response.get_json()
         self.assertFalse(data['success'])
 
-    def test_loja_page_renders_mar_de_tags(self):
+    def test_loja_page_renders_characteristic_filters(self):
         response = self.client.get('/loja')
         self.assertEqual(response.status_code, 200)
         self.assertIn(b'store-tag-sea-card', response.data)
-        self.assertIn(b'Mar de Tags', response.data)
+        self.assertIn('Características'.encode(), response.data)
         self.assertIn(b'storeTagGroupsNav', response.data)
         self.assertIn(b'store-tag-pill', response.data)
         self.assertIn(b'modalTagsBlock', response.data)
         self.assertIn(b'modalTagsRow', response.data)
 
-        # Verifica a nova Faixa de Investimento com slider de preço (slace de preço)
+        # Verifica a faixa de investimento com leitura única, slider e atalhos claros
         self.assertIn(b'storePriceSlider', response.data)
-        self.assertIn(b'store-price-slider', response.data)
-        self.assertIn(b'priceSliderBadge', response.data)
+        self.assertIn(b'priceSliderDisplay', response.data)
         self.assertIn(b'store-chip-btn', response.data)
+        self.assertNotIn(b'priceSliderBadge', response.data)
+
+        # Características usam somente texto e contagem, sem emojis decorativos
+        self.assertNotIn(b'tag-emoji', response.data)
+        self.assertNotIn(b'store-tag-sea-wave-icon', response.data)
 
         # Valida que o Mar de Tags está posicionado exatamente abaixo da Faixa de Investimento
         html_content = response.data.decode('utf-8')
@@ -341,4 +351,3 @@ class WoodworkOrderTimelineTests(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
-

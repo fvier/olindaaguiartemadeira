@@ -1,18 +1,22 @@
 from apps.pages import blueprint
 from apps.pages.models import (User, CarouselImage, CommercialPlan, PlanVersion, LinktreeLink,
                                LandingCard, FinancialCategory, FinancialEntry, AuditLog, FinancialCompany,
-                               IntegratedSale, ClientReview, WoodworkOrder)
+                               IntegratedSale, ClientReview, WoodworkOrder, BlogArticle)
 from apps.pages.store_catalog import (get_woodwork_products, get_store_categories,
                                       get_store_wood_types, get_store_tags,
                                       get_store_tag_groups, update_woodwork_product,
                                       get_product_by_id)
 from apps import db, csrf, limiter
-from flask import render_template, request, redirect, url_for, session, flash, current_app, jsonify, send_from_directory
+from flask import abort, render_template, request, redirect, url_for, session, flash, current_app, jsonify, send_from_directory
 from werkzeug.utils import secure_filename
 from uuid import uuid4
 import os
 import json
+import math
+import re
 import secrets
+import unicodedata
+from collections import Counter
 from datetime import datetime, timezone, date, timedelta
 from decimal import Decimal, InvalidOperation
 from urllib.parse import quote, urljoin, urlparse
@@ -25,6 +29,8 @@ PUBLIC_PAGES = [
     'pedido', 'pedido.html',
     'blog', 'blog.html',
     'byll', 'byll.html',
+    'byll/historia', 'byll/historia.html',
+    'historia', 'historia.html',
     'index', 'index.html',
     'links', 'links.html',
     'auth-signin', 'auth-signin.html',
@@ -686,7 +692,121 @@ def api_consultar_pedido():
     })
 
 
-CUSTOM_BLOG_ARTICLES = []
+BLOG_CATEGORIES = (
+    'Sustentabilidade',
+    'Técnicas Artesanais',
+    'Projetos Autorais',
+    'Marcenaria Colonial',
+    'Liderança & Propósito',
+    'Acabamentos & Ceras',
+)
+
+BLOG_AUTHORS = {
+    'Olinda Aguiar': {
+        'role': 'Fundadora e Curadora',
+        'avatar': 'byll-e-olinda-aguiar.png',
+    },
+    'Mestre Byll': {
+        'role': 'Mestre Artesão Entalhador',
+        'avatar': 'byll-mestre-artesao.png',
+    },
+}
+
+BLOG_COVER_IMAGES = (
+    ('hero-fachada-luz-dourada.png', 'Fachada sob luz dourada'),
+    ('cadeiras-encosto-empalhado-madeira-demolicao.png', 'Cadeiras empalhadas'),
+    ('bar-resort-lambri-jatoba.png', 'Bar em lambri de Jatobá'),
+    ('cristaleira-colonial-portas-vidro-peroba.png', 'Cristaleira colonial'),
+    ('hero-fachada-coral-entardecer.png', 'Fachada coral ao entardecer'),
+    ('comoda-balcao-gaveteiro-demolicao.png', 'Cômoda e balcão gaveteiro'),
+    ('mesa-jantar-peroba-rosa-demolicao-1.png', 'Mesa de jantar em Peroba Rosa'),
+)
+
+
+def blog_slug(value):
+    normalized = unicodedata.normalize('NFKD', value or '').encode('ascii', 'ignore').decode('ascii')
+    return re.sub(r'[^a-z0-9]+', '-', normalized.lower()).strip('-')
+
+
+def blog_paragraphs(content):
+    return [paragraph.strip() for paragraph in re.split(r'\n\s*\n', content or '') if paragraph.strip()]
+
+
+def blog_read_time(content):
+    word_count = len(re.findall(r'\b\w+\b', content or '', flags=re.UNICODE))
+    minutes = max(1, math.ceil(word_count / 180))
+    return f'{minutes} min de leitura'
+
+
+BLOG_FORM_FIELDS = (
+    'title', 'category', 'author_name', 'cover_image', 'excerpt', 'quote',
+    'content', 'gallery_image_1', 'gallery_image_2', 'published_date',
+)
+
+
+def blog_form_values(source):
+    return {key: source.get(key, '').strip() for key in BLOG_FORM_FIELDS}
+
+
+def blog_form_errors(form_data, require_published_date=False):
+    errors = {}
+    title = form_data['title']
+    excerpt = form_data['excerpt']
+    content = form_data['content']
+    cover_filenames = {filename for filename, _ in BLOG_COVER_IMAGES}
+
+    if len(title) < 10:
+        errors['title'] = 'Use um título com pelo menos 10 caracteres.'
+    elif len(title) > 200:
+        errors['title'] = 'O título deve ter no máximo 200 caracteres.'
+    if form_data['category'] not in BLOG_CATEGORIES:
+        errors['category'] = 'Selecione uma categoria válida.'
+    if form_data['author_name'] not in BLOG_AUTHORS:
+        errors['author_name'] = 'Selecione um autor válido.'
+    if form_data['cover_image'] not in cover_filenames:
+        errors['cover_image'] = 'Selecione uma imagem de capa válida.'
+    if len(excerpt) < 30:
+        errors['excerpt'] = 'Escreva um resumo com pelo menos 30 caracteres.'
+    elif len(excerpt) > 600:
+        errors['excerpt'] = 'O resumo deve ter no máximo 600 caracteres.'
+    if len(form_data['quote']) > 500:
+        errors['quote'] = 'A citação deve ter no máximo 500 caracteres.'
+    if len(content) < 100:
+        errors['content'] = 'O artigo precisa ter pelo menos 100 caracteres.'
+    elif len(content) > 30000:
+        errors['content'] = 'O artigo deve ter no máximo 30.000 caracteres.'
+    for field in ('gallery_image_1', 'gallery_image_2'):
+        if form_data[field] and form_data[field] not in cover_filenames:
+            errors[field] = 'Selecione uma imagem válida.'
+    if require_published_date:
+        try:
+            datetime.strptime(form_data['published_date'], '%Y-%m-%d')
+        except ValueError:
+            errors['published_date'] = 'Informe uma data de publicação válida.'
+    return errors
+
+
+def blog_gallery(form_data):
+    gallery = []
+    for field in ('gallery_image_1', 'gallery_image_2'):
+        image = form_data[field]
+        if image and image != form_data['cover_image'] and image not in gallery:
+            gallery.append(image)
+    return gallery
+
+
+def blog_date_input(article):
+    if article.get('published_date'):
+        return article['published_date']
+    months = {name.lower(): index for index, name in enumerate(
+        ('Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+         'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'), start=1)}
+    match = re.match(r'(\d{1,2}) de ([^,]+), (\d{4})', article.get('date', ''))
+    if not match:
+        return date.today().isoformat()
+    day, month_name, year = match.groups()
+    month = months.get(month_name.lower(), 1)
+    return f'{int(year):04d}-{month:02d}-{int(day):02d}'
 
 def get_blog_articles():
     """Return dictionary list of blog articles for grid and detail pages."""
@@ -813,7 +933,20 @@ def get_blog_articles():
             'gallery': ['comoda-balcao-gaveteiro-demolicao.png', 'conjunto-lavatorio-gabinete-espelho-redondo.png']
         }
     ]
-    return defaults + CUSTOM_BLOG_ARTICLES
+    for article in defaults:
+        article['published_date'] = blog_date_input(article)
+        article['edited_date'] = ''
+        article['is_edited'] = False
+        article['display_date'] = article['date']
+
+    custom_articles = [article.to_public_dict() for article in
+                       BlogArticle.query.filter_by(active=True)
+                       .order_by(BlogArticle.published_at.desc(), BlogArticle.id.desc()).all()]
+    defaults_by_id = {article['id']: article for article in defaults}
+    custom_by_id = {article['id']: article for article in custom_articles}
+    new_articles = [article for article in custom_articles if article['id'] not in defaults_by_id]
+    merged_defaults = [custom_by_id.get(article['id'], article) for article in defaults]
+    return new_articles + merged_defaults
 
 
 @blueprint.route('/blog')
@@ -832,58 +965,154 @@ def blog_novo():
     ensure_default_user()
     if not session.get('logged_in') or session.get('user_role') not in ['admin', 'gerente']:
         flash('Acesso restrito a administradores do ateliê.', 'warning')
-        return redirect(url_for('pages.login'))
+        return redirect(url_for('pages_blueprint.login'))
 
     articles = get_blog_articles()
+    form_data = {
+        'category': BLOG_CATEGORIES[0],
+        'author_name': 'Olinda Aguiar',
+        'cover_image': BLOG_COVER_IMAGES[0][0],
+        'gallery_image_1': '',
+        'gallery_image_2': '',
+    }
+    form_errors = {}
 
     if request.method == 'POST':
-        title = request.form.get('title', '').strip()
-        category = request.form.get('category', '').strip() or 'Artigos Autorais'
-        author_name = request.form.get('author_name', '').strip() or 'Olinda Aguiar'
-        author_role = 'Fundadora e Curadora' if 'Olinda' in author_name else 'Mestre Artesão Entalhador'
-        read_time = request.form.get('read_time', '').strip() or '5 min de leitura'
-        cover_image = request.form.get('cover_image', '').strip() or 'hero-fachada-luz-dourada.png'
-        excerpt = request.form.get('excerpt', '').strip() or title
-        quote = request.form.get('quote', '').strip() or excerpt
-        content_raw = request.form.get('content', '').strip()
+        form_data = blog_form_values(request.form)
+        title = form_data['title']
+        excerpt = form_data['excerpt']
+        content_raw = form_data['content']
+        form_errors = blog_form_errors(form_data)
 
-        paragraphs = [p.strip() for p in content_raw.split('\n') if p.strip()]
-        if not paragraphs:
-            paragraphs = [excerpt]
+        if form_errors:
+            return render_template(
+                'pages/blog-novo.html', segment='blog', articles=articles,
+                blog_categories=BLOG_CATEGORIES, blog_authors=BLOG_AUTHORS,
+                blog_cover_images=BLOG_COVER_IMAGES, form_data=form_data,
+                form_errors=form_errors,
+            ), 400
 
-        all_ids = [a['id'] for a in articles]
+        paragraphs = blog_paragraphs(content_raw)
+        all_ids = [article['id'] for article in articles]
         new_id = (max(all_ids) if all_ids else 0) + 1
+        base_slug = blog_slug(title) or f'artigo-{new_id}'
+        existing_slugs = {article['slug'] for article in articles}
+        slug = base_slug
+        suffix = 2
+        while slug in existing_slugs:
+            slug = f'{base_slug}-{suffix}'
+            suffix += 1
 
-        import re
-        slug = re.sub(r'[^a-z0-9]+', '-', title.lower()).strip('-') or f'artigo-{new_id}'
+        author = BLOG_AUTHORS[form_data['author_name']]
+        gallery = blog_gallery(form_data)
 
-        from datetime import datetime
-        months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
-        now = datetime.now()
-        date_str = f"{now.day} de {months[now.month - 1]}, {now.year}"
-
-        new_art = {
-            'id': new_id,
-            'slug': slug,
-            'title': title,
-            'category': category,
-            'author_name': author_name,
-            'author_role': author_role,
-            'author_avatar': 'byll-e-olinda-aguiar.png' if 'Olinda' in author_name else 'byll-mestre-artesao.png',
-            'date': date_str,
-            'read_time': read_time,
-            'cover_image': cover_image,
-            'excerpt': excerpt,
-            'quote': quote,
-            'content_paragraphs': paragraphs,
-            'gallery': ['mesa-base-escultural-vidro-1.png', 'cadeiras-encosto-empalhado-madeira-demolicao.png']
-        }
-
-        CUSTOM_BLOG_ARTICLES.append(new_art)
+        article = BlogArticle(
+            id=new_id,
+            slug=slug,
+            title=title,
+            category=form_data['category'],
+            author_name=form_data['author_name'],
+            author_role=author['role'],
+            author_avatar=author['avatar'],
+            read_time=blog_read_time(content_raw),
+            cover_image=form_data['cover_image'],
+            excerpt=excerpt,
+            quote=form_data['quote'] or excerpt,
+            content_json=json.dumps(paragraphs, ensure_ascii=False),
+            gallery_json=json.dumps(gallery, ensure_ascii=False),
+            active=True,
+        )
+        db.session.add(article)
+        db.session.commit()
         flash('Novo artigo publicado com sucesso!', 'success')
-        return redirect(url_for('pages.blog_detail', article_id=new_id))
+        return redirect(f'/blog/{new_id}')
 
-    return render_template('pages/blog-novo.html', segment='blog', articles=articles)
+    return render_template(
+        'pages/blog-novo.html', segment='blog', articles=articles,
+        blog_categories=BLOG_CATEGORIES, blog_authors=BLOG_AUTHORS,
+        blog_cover_images=BLOG_COVER_IMAGES, form_data=form_data,
+        form_errors=form_errors,
+    )
+
+
+@blueprint.route('/blog/<int:article_id>/editar', methods=['GET', 'POST'])
+def blog_editar(article_id):
+    """Edit a persisted article or create a persistent override for a built-in article."""
+    ensure_default_user()
+    if not session.get('logged_in') or session.get('user_role') not in ['admin', 'gerente']:
+        flash('Acesso restrito a administradores do ateliê.', 'warning')
+        return redirect(url_for('pages_blueprint.login', next=request.path))
+
+    articles = get_blog_articles()
+    current = next((article for article in articles if article['id'] == article_id), None)
+    if not current:
+        abort(404)
+
+    form_data = {
+        'title': current['title'],
+        'category': current['category'],
+        'author_name': current['author_name'],
+        'cover_image': current['cover_image'],
+        'excerpt': current['excerpt'],
+        'quote': current.get('quote', ''),
+        'content': '\n\n'.join(current.get('content_paragraphs', [])),
+        'gallery_image_1': (current.get('gallery') or [''])[0],
+        'gallery_image_2': (current.get('gallery') or ['', ''])[1] if len(current.get('gallery') or []) > 1 else '',
+        'published_date': blog_date_input(current),
+    }
+    form_errors = {}
+
+    if request.method == 'POST':
+        form_data = blog_form_values(request.form)
+        form_errors = blog_form_errors(form_data, require_published_date=True)
+        if form_errors:
+            return render_template(
+                'pages/blog-novo.html', segment='blog', articles=articles,
+                blog_categories=BLOG_CATEGORIES, blog_authors=BLOG_AUTHORS,
+                blog_cover_images=BLOG_COVER_IMAGES, form_data=form_data,
+                form_errors=form_errors, editing=True, article_id=article_id,
+            ), 400
+
+        article = db.session.get(BlogArticle, article_id)
+        if article is None:
+            article = BlogArticle(id=article_id)
+            db.session.add(article)
+
+        base_slug = blog_slug(form_data['title']) or f'artigo-{article_id}'
+        existing_slugs = {item['slug'] for item in articles if item['id'] != article_id}
+        slug = base_slug
+        suffix = 2
+        while slug in existing_slugs:
+            slug = f'{base_slug}-{suffix}'
+            suffix += 1
+
+        author = BLOG_AUTHORS[form_data['author_name']]
+        article.slug = slug
+        article.title = form_data['title']
+        article.category = form_data['category']
+        article.author_name = form_data['author_name']
+        article.author_role = author['role']
+        article.author_avatar = author['avatar']
+        article.read_time = blog_read_time(form_data['content'])
+        article.cover_image = form_data['cover_image']
+        article.excerpt = form_data['excerpt']
+        article.quote = form_data['quote'] or form_data['excerpt']
+        article.content_json = json.dumps(blog_paragraphs(form_data['content']), ensure_ascii=False)
+        article.gallery_json = json.dumps(blog_gallery(form_data), ensure_ascii=False)
+        article.active = True
+        article.published_at = datetime.strptime(form_data['published_date'], '%Y-%m-%d').replace(tzinfo=timezone.utc)
+        article.edited_at = datetime.now(timezone.utc)
+        db.session.commit()
+
+        flash('Artigo atualizado com sucesso!', 'success')
+        return redirect(f'/blog/{article_id}')
+
+    return render_template(
+        'pages/blog-novo.html', segment='blog', articles=articles,
+        blog_categories=BLOG_CATEGORIES, blog_authors=BLOG_AUTHORS,
+        blog_cover_images=BLOG_COVER_IMAGES, form_data=form_data,
+        form_errors=form_errors, editing=True, article_id=article_id,
+    )
 
 
 @blueprint.route('/blog/<int:article_id>')
@@ -895,18 +1124,34 @@ def blog_detail(article_id=1):
     articles = get_blog_articles()
     article = next((a for a in articles if a['id'] == article_id), None)
     if not article:
-        article = articles[0]
+        abort(404)
     
     related_articles = [a for a in articles if a['id'] != article['id']][:3]
-    return render_template('pages/blog-detail.html', segment='blog', article=article, related_articles=related_articles, articles=articles)
+    category_counts = Counter(item['category'] for item in articles)
+    is_admin = session.get('logged_in') and session.get('user_role') in ['admin', 'gerente']
+    return render_template(
+        'pages/blog-detail.html', segment='blog', article=article,
+        related_articles=related_articles, articles=articles,
+        category_counts=category_counts, is_admin=is_admin,
+    )
 
 
 @blueprint.route('/byll')
 @blueprint.route('/byll.html')
 def byll():
-    """Render dedicated Byll & Olinda Aguiar history and manifesto page."""
+    """Render dedicated Byll & Olinda Aguiar tribute page."""
     ensure_default_user()
     return render_template('pages/byll.html', segment='byll')
+
+
+@blueprint.route('/byll/historia')
+@blueprint.route('/byll/historia.html')
+@blueprint.route('/historia')
+@blueprint.route('/historia.html')
+def historia():
+    """Render dedicated history, legacy, and manifesto page for Mestre Byll and Olinda Aguiar."""
+    ensure_default_user()
+    return render_template('pages/historia.html', segment='byll')
 
 
 @blueprint.route('/login', methods=['GET', 'POST'])
