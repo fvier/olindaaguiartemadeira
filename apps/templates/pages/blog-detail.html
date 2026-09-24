@@ -1,0 +1,219 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}{{ article.title }} | Blog Olinda Arte em Madeira{% endblock title %}
+
+{% block html_attribute %}data-bs-theme="light"{% endblock html_attribute %}
+{% block body_attribute %}class="landing-page bg-light text-dark"{% endblock body_attribute %}
+
+{% block content %}
+<style>
+    .landing-page { --landing-accent:#c85a17;--landing-accent-rgb:200,90,23;--landing-accent-soft:#ffedd5; }
+    .hover-terracotta { transition: color 0.15s ease; }
+    .hover-terracotta:hover { color: #c85a17 !important; }
+    .landing-page .text-primary { color:var(--landing-accent)!important; }
+    .landing-page .bg-primary { background-color:var(--landing-accent)!important; }
+    .landing-page .bg-primary-subtle { background-color:var(--landing-accent-soft)!important; }
+    .landing-page .btn-primary { --bs-btn-bg:var(--landing-accent);--bs-btn-border-color:var(--landing-accent);--bs-btn-hover-bg:var(--landing-accent);--bs-btn-hover-border-color:var(--landing-accent); }
+    .hover-lift { transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease; }
+    .hover-lift:hover { transform: translateY(-4px); box-shadow: 0 16px 36px rgba(15, 23, 42, 0.14) !important; }
+
+    /* Blog Detail Custom Styling */
+    .article-hero-cover {
+        width: 100%;
+        max-height: 460px;
+        object-fit: cover;
+        border-radius: 20px;
+        box-shadow: 0 12px 36px rgba(15, 23, 42, 0.12);
+    }
+    .article-quote-block {
+        border-left: 5px solid var(--landing-accent);
+        background: #fffaf5;
+        padding: 24px 30px;
+        border-radius: 0 16px 16px 0;
+        margin: 32px 0;
+    }
+    .article-author-badge {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #ffffff;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .related-card-img {
+        height: 180px;
+        object-fit: cover;
+        width: 100%;
+    }
+
+    .site-footer { background:#f8fafc;color:#475569; }
+    .site-footer h5,.site-footer h6 { color:#0f172a;font-weight:800; }
+    .site-footer a { color:#475569;transition:color .2s ease; }
+    .site-footer a:hover { color:var(--landing-accent); }
+    .footer-contact-item { display:flex;align-items:flex-start;gap:10px;padding:9px 0; }
+    .footer-contact-icon { width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--landing-accent-soft);color:var(--landing-accent);flex:0 0 auto; }
+    .footer-app-link { width:38px;height:38px;border-radius:11px;display:inline-grid;place-items:center;background:#fff;border:1px solid #dbe3ef;color:#0f172a!important; }
+
+    html[data-bs-theme="dark"] body.landing-page { background:#080e1a!important;color:#e5edf8!important; }
+    html[data-bs-theme="dark"] .landing-page .card { background-color:#111827!important;color:#dbe6f3!important;border-color:#263449!important; }
+    html[data-bs-theme="dark"] .article-quote-block { background:#1e1b18!important; color:#e2e8f0!important; }
+    html[data-bs-theme="dark"] .landing-page .bg-white { background-color:#111827!important; }
+    html[data-bs-theme="dark"] .landing-page .bg-light { background-color:#0f172a!important; }
+</style>
+
+<!-- Floating WhatsApp Button -->
+<a href="https://api.whatsapp.com/send?phone=5581994522504&text=Ol%C3%A1!%20Li%20o%20artigo%20'{{ article.title|urlencode }}'%20no%20blog%20e%20gostaria%20de%20conversar."
+   target="_blank" rel="noopener noreferrer"
+   class="position-fixed floating-whatsapp-btn z-3 btn btn-success rounded-circle shadow-lg d-flex align-items-center justify-content-center border-0 hover-lift"
+   style="bottom: 24px; right: 24px; width: 56px; height: 56px; background-color: #25d366;" title="Falar no WhatsApp com Olinda Aguiar">
+    <i class="ri-whatsapp-fill fs-28 text-white"></i>
+</a>
+
+{% include 'partials/public-reviews-bar.html' %}
+{% include 'partials/public-navbar.html' %}
+
+<main class="py-5 bg-light">
+    <div class="container" style="max-width: 900px;">
+
+        <!-- NAVEGAÇÃO DE VOLTA AO BLOG -->
+        <div class="mb-4">
+            <a href="/blog" class="btn btn-outline-dark rounded-pill px-3.5 py-1.5 fs-13 fw-bold d-inline-flex align-items-center gap-1.5">
+                <i class="ri-arrow-left-line fs-16"></i> Voltar para a Lista de Artigos
+            </a>
+        </div>
+
+        <!-- CONTAINER PRINCIPAL DO ARTIGO (PÁGINA DEDICADA) -->
+        <article class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white mb-5">
+            
+            <!-- META DO ARTIGO (CATEGORIA & TEMPO DE LEITURA) -->
+            <div class="d-flex align-items-center gap-2 mb-3">
+                <span class="badge bg-primary-subtle text-primary px-3 py-1.5 rounded-pill fw-bold fs-12 text-uppercase">
+                    {{ article.category }}
+                </span>
+                <small class="text-muted fs-13"><i class="ri-time-line me-1"></i>{{ article.read_time }}</small>
+            </div>
+
+            <!-- TÍTULO DO ARTIGO -->
+            <h1 class="display-6 fw-extrabold text-dark mb-4 lh-sm">
+                {{ article.title }}
+            </h1>
+
+            <!-- INFORMAÇÕES DO AUTOR E DATA DE PUBLICAÇÃO -->
+            <div class="d-flex align-items-center justify-content-between pb-4 mb-4 border-bottom border-light-subtle flex-wrap gap-3">
+                <div class="d-flex align-items-center gap-3">
+                    <img src="{{ config.ASSETS_ROOT }}/images/{{ article.author_avatar }}" class="article-author-badge" alt="Foto {{ article.author_name }}">
+                    <div>
+                        <strong class="d-block text-dark fs-15">{{ article.author_name }}</strong>
+                        <small class="text-muted fs-12">{{ article.author_role }} · Publicado em {{ article.date }}</small>
+                    </div>
+                </div>
+
+                <div class="d-flex gap-2">
+                    {% set share_text = 'Confira este artigo incrível no Blog da Olinda Arte em Madeira: ' ~ article.title %}
+                    <a href="https://api.whatsapp.com/send?text={{ share_text|urlencode }}" target="_blank" rel="noopener noreferrer" class="btn btn-success btn-sm rounded-pill px-3.5 fw-bold d-inline-flex align-items-center gap-1.5" style="background:#25d366; border:0;">
+                        <i class="ri-whatsapp-line fs-17"></i> Compartilhar
+                    </a>
+                </div>
+            </div>
+
+            <!-- IMAGEM DE CAPA DO ARTIGO -->
+            <div class="mb-4 text-center">
+                <img src="{{ config.ASSETS_ROOT }}/images/{{ article.cover_image }}" class="article-hero-cover" alt="{{ article.title }}">
+            </div>
+
+            <!-- RESUMO EM DESTAQUE -->
+            <p class="fs-18 text-dark fw-semibold lh-base mb-4 border-bottom border-light-subtle pb-4">
+                {{ article.excerpt }}
+            </p>
+
+            <!-- CORPO DO ARTIGO -->
+            <div class="article-content fs-16 text-secondary lh-lg mb-4">
+                {% for paragraph in article.content_paragraphs %}
+                <p class="mb-4">{{ paragraph }}</p>
+                {% endfor %}
+            </div>
+
+            <!-- BLOCO DE CITAÇÃO EM DESTAQUE -->
+            {% if article.quote %}
+            <div class="article-quote-block">
+                <i class="ri-double-quotes-l fs-28 d-block mb-2 text-primary"></i>
+                <p class="fs-17 fw-semibold text-dark italic mb-2">"{{ article.quote }}"</p>
+                <small class="text-muted font-monospace fs-12">— {{ article.author_name }} · Olinda Arte em Madeira</small>
+            </div>
+            {% endif %}
+
+            <!-- GALERIA DE FOTOS RELACIONADAS À PEÇA/PROCESSO -->
+            {% if article.gallery %}
+            <div class="my-4 pt-2">
+                <h5 class="fw-bold text-dark mb-3"><i class="ri-gallery-line text-warning me-1"></i> Registros de Marcenaria & Obras Relacionadas</h5>
+                <div class="row g-3">
+                    {% for img_name in article.gallery %}
+                    <div class="col-md-6">
+                        <div class="rounded-4 overflow-hidden shadow-sm border border-light-subtle">
+                            <img src="{{ config.ASSETS_ROOT }}/images/{{ img_name }}" class="img-fluid w-100" style="height: 240px; object-fit: cover;" alt="Registro de Marcenaria">
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- CARD BIO DO AUTOR NO RODAPÉ DO ARTIGO -->
+            <div class="rounded-4 p-4 bg-light border border-light-subtle mt-4 d-flex align-items-center gap-3">
+                <img src="{{ config.ASSETS_ROOT }}/images/{{ article.author_avatar }}" class="rounded-circle flex-shrink-0" style="width: 56px; height: 56px; object-fit: cover;" alt="Foto {{ article.author_name }}">
+                <div class="flex-grow-1">
+                    <strong class="d-block text-dark fs-15">{{ article.author_name }}</strong>
+                    <p class="text-secondary fs-13 mb-0">
+                        {{ article.author_role }} no Ateliê Olinda Aguiar. Especialista no resgate de toras coloniais centenárias e na criação de peças exclusivas sob medida.
+                    </p>
+                </div>
+            </div>
+
+            <!-- BOTÃO DE AÇÃO NO ZAP AO FINAL DA LEITURA -->
+            <div class="text-center pt-4 mt-4 border-top border-light-subtle">
+                <h5 class="fw-bold text-dark mb-2">Gostou da leitura? Gostaria de encomendar uma peça autoral?</h5>
+                <p class="text-secondary fs-14 mb-3">Converse diretamente com Olinda Aguiar no WhatsApp oficial do ateliê.</p>
+                {% set zap_msg = 'Olá Olinda! Li o artigo "' ~ article.title ~ '" no blog e gostaria de conversar sobre encomendas.' %}
+                <a href="https://api.whatsapp.com/send?phone=5581994522504&text={{ zap_msg|urlencode }}" target="_blank" rel="noopener noreferrer" class="btn btn-warning rounded-pill px-4 py-2.5 fw-bold text-dark shadow-sm border-0 d-inline-flex align-items-center gap-2" style="background:#c85a17; color:#fff!important;">
+                    <i class="ri-whatsapp-line fs-20"></i>
+                    <span>Falar sobre este Artigo no WhatsApp</span>
+                </a>
+            </div>
+
+        </article>
+
+        <!-- SEÇÃO: OUTROS ARTIGOS DO BLOG (RELATED POSTS) -->
+        {% if related_articles %}
+        <div class="mb-5">
+            <h4 class="fw-bold text-dark mb-4 text-center"><i class="ri-article-line text-primary me-1"></i> Outros Artigos que Você Pode Gostar</h4>
+            <div class="row g-4">
+                {% for rel in related_articles %}
+                <div class="col-md-4">
+                    <div class="card h-100 rounded-4 border-0 shadow-sm overflow-hidden bg-white hover-lift flex-column">
+                        <a href="/blog/{{ rel.id }}">
+                            <img src="{{ config.ASSETS_ROOT }}/images/{{ rel.cover_image }}" class="related-card-img" alt="{{ rel.title }}">
+                        </a>
+                        <div class="p-3.5 d-flex flex-column flex-grow-1">
+                            <span class="badge bg-primary-subtle text-primary px-2.5 py-1 rounded-pill fw-bold fs-11 me-auto mb-2">{{ rel.category }}</span>
+                            <h6 class="fw-bold text-dark mb-2 fs-15">
+                                <a href="/blog/{{ rel.id }}" class="text-dark text-decoration-none hover-terracotta">{{ rel.title }}</a>
+                            </h6>
+                            <p class="text-secondary fs-13 flex-grow-1 mb-3">
+                                {{ rel.excerpt[:90] }}...
+                            </p>
+                            <a href="/blog/{{ rel.id }}" class="fw-bold text-decoration-none fs-13 d-inline-flex align-items-center gap-1" style="color:#c85a17;">
+                                Ler Artigo <i class="ri-arrow-right-line"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+    </div>
+</main>
+
+{% include 'partials/public-footer.html' %}
+{% endblock content %}

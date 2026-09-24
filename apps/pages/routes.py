@@ -647,12 +647,155 @@ def api_consultar_pedido():
     })
 
 
+def get_blog_articles():
+    """Return dictionary list of blog articles for grid and detail pages."""
+    return [
+        {
+            'id': 1,
+            'slug': 'resgate-madeiras-centenarias',
+            'title': 'O Resgate das Madeiras Centenárias: Vida Nova com Respeito Ecológico',
+            'category': 'Sustentabilidade',
+            'author_name': 'Olinda Aguiar',
+            'author_role': 'Fundadora e Curadora',
+            'author_avatar': 'byll-e-olinda-aguiar.png',
+            'date': '24 de Setembro, 2026',
+            'read_time': '6 min de leitura',
+            'cover_image': 'hero-fachada-luz-dourada.png',
+            'excerpt': 'Como casarões seculares e estruturas desativadas fornecem toras com veios raros e densidade que não existem mais em madeiras novas. Entenda nosso processo de triagem, expurgo natural e preservação de memória.',
+            'quote': 'A madeira de demolição não é apenas matéria-prima; é a memória viva dos casarões coloniais que abrigaram gerações em Pernambuco.',
+            'content_paragraphs': [
+                'Nas ruas históricas de Recife e Olinda, casarões seculares e engenhos desativados guardam uma riqueza inestimável: toras de Peroba Rosa, Jatobá, Jacarandá e Braúna que enfrentaram mais de cem anos de sol, chuva e maresia.',
+                'Diferente das madeiras jovens de reflorestamento, a madeira de demolição possui uma densidade extraordinária e veios profundamente marcados. Cada racha, marca de prego antigo e tonalidade avermelhada contam uma página da arquitetura nordestina.',
+                'No nosso ateliê, o processo começa na triagem ética: selecionamos apenas vigas de demolição autênticas com procedência. Em seguida, as peças passam por expurgo natural, higienização cuidadosa e estabilização de umidade antes de irem para o cavalete dos mestres entalhadores.',
+                'O resultado são móveis e obras autorais que combinam robustez secular com leveza contemporânea, garantindo durabilidade para passar por gerações na sua família.'
+            ],
+            'gallery': ['mesa-base-escultural-vidro-1.png', 'bancada-madeira-demolicao-verniz-pu-1.png']
+        },
+        {
+            'id': 2,
+            'slug': 'cadeiras-empalhadas-a-mao',
+            'title': 'Cadeiras Empalhadas à Mão: A Tradição da Palhinha Natural no Ateliê',
+            'category': 'Técnicas Artesanais',
+            'author_name': 'Mestre Byll',
+            'author_role': 'Mestre Artesão Entalhador',
+            'author_avatar': 'byll-mestre-artesao.png',
+            'date': '20 de Setembro, 2026',
+            'read_time': '5 min de leitura',
+            'cover_image': 'cadeiras-encosto-empalhado-madeira-demolicao.png',
+            'excerpt': 'O entrelaçamento manual da palhinha indiana combinado com a solidez maciça da Peroba Rosa resgatada de casarões coloniais.',
+            'quote': 'A tela de palhinha tecida à mão traz conforto térmico, leveza visual e a alma da marcenaria tradicional brasileira.',
+            'content_paragraphs': [
+                'A técnica do encosto empalhado à mão é um dos símbolos mais nobres do mobiliário colonial brasileiro. No Ateliê Olinda Aguiar, resgatamos essa tradição aplicando a trama de palhinha indiana natural em estruturas maciças de Peroba Rosa.',
+                'Cada encosto leva horas de trabalho paciente. O artesão alinha e fixa manualmente cada fibra vegetal através de perfurações precisas na madeira maciça, garantindo tensão uniforme e alta resistência.',
+                'Além do apelo estético aconchegante, as cadeiras empalhadas oferecem conforto térmico superior no clima tropical, permitindo a circulação contínua do ar e adaptando-se perfeitamente a salas de jantar, varandas e espaços gourmet.'
+            ],
+            'gallery': ['cadeiras-encosto-empalhado-madeira-demolicao.png', 'byll-mestre-artesao.png']
+        },
+        {
+            'id': 3,
+            'slug': 'bares-em-lambri-de-jatoba',
+            'title': 'Bares em Lambri de Jatobá: Resistência Náutica e Sofisticação Gourmet',
+            'category': 'Projetos Autorais',
+            'author_name': 'Olinda Aguiar',
+            'author_role': 'Fundadora e Curadora',
+            'author_avatar': 'byll-e-olinda-aguiar.png',
+            'date': '15 de Setembro, 2026',
+            'read_time': '4 min de leitura',
+            'cover_image': 'bar-resort-lambri-jatoba.png',
+            'excerpt': 'Revestimento integral em réguas maciças de Jatobá de alta densidade com tratamento especial contra sol, umidade e maresia.',
+            'quote': 'Projetar para áreas externas e litorâneas exige madeiras de altíssima densidade como o Jatobá, tratadas com seladores marítimos atóxicos.',
+            'content_paragraphs': [
+                'Ambientes de praia, resorts e varandas gourmet demandam materiais que suportem sol intenso, maresia e variação de umidade sem empenar ou deteriorar.',
+                'O bar em lambri de jatobá foi concebido para atender a essa exigência extrema. As réguas maciças encaixadas com precisão milimétrica formam uma blindagem rústica de alta elegância.',
+                'A estrutura conta com tratamento náutico hidrorrepelente que preserva a tonalidade avermelhada natural do Jatobá de demolição, acompanhada de bancada de atendimento anatômica e compartimentos internos para conservação.'
+            ],
+            'gallery': ['bar-resort-lambri-jatoba.png', 'armarios-cozinha-jatoba-lambri-demolicao-1.png']
+        },
+        {
+            'id': 4,
+            'slug': 'cristaleiras-coloniais-memorias',
+            'title': 'Cristaleiras Coloniais: Onde a História Guarda Suas Memórias',
+            'category': 'Marcenaria Colonial',
+            'author_name': 'Olinda Aguiar',
+            'author_role': 'Fundadora e Curadora',
+            'author_avatar': 'byll-e-olinda-aguiar.png',
+            'date': '10 de Setembro, 2026',
+            'read_time': '5 min de leitura',
+            'cover_image': 'cristaleira-colonial-portas-vidro-peroba.png',
+            'excerpt': 'Portas envidraçadas duplas, encaixes tradicionais de espiga e acabamento com cera de carnaúba pura para destacar os tons mel.',
+            'quote': 'Uma cristaleira colonial bem executada é o coração afetivo da sala de jantar, combinando vidro cristalino e Peroba Rosa encerada.',
+            'content_paragraphs': [
+                'Inspiradas nas peças clássicas dos casarões do século XIX, nossas cristaleiras são construídas em pranchas maciças de Peroba Rosa resgatadas.',
+                'As portas duplas envidraçadas possuem divisórias retilíneas elegantes, prateleiras de elevada capacidade de carga para cristais e louçarias nobres, e gavetões inferiores com encaixe rabo-de-andorinha.',
+                'O acabamento final é feito à mão com cera de carnaúba pura e óleo de rícino, conferindo um toque acetinado incomparável e aroma acolhedor de madeira natural.'
+            ],
+            'gallery': ['cristaleira-colonial-portas-vidro-peroba.png', 'estante-expositora-cristaleira-casarao.png']
+        },
+        {
+            'id': 5,
+            'slug': 'lideranca-feminina-marcenaria',
+            'title': 'Liderança Feminina na Marcenaria: A Visão de Olinda Aguiar',
+            'category': 'Liderança & Propósito',
+            'author_name': 'Olinda Aguiar',
+            'author_role': 'Fundadora e Curadora',
+            'author_avatar': 'byll-e-olinda-aguiar.png',
+            'date': '05 de Setembro, 2026',
+            'read_time': '7 min de leitura',
+            'cover_image': 'hero-fachada-coral-entardecer.png',
+            'excerpt': 'Como a visão inspiradora e o olhar sensível sobre o design revolucionaram a restauração de madeira de lei em Pernambuco.',
+            'quote': 'Liderar um ateliê no setor de marcenaria pesada exige unir sensibilidade no design, gestão rigorosa e profundo respeito aos mestres artesãos.',
+            'content_paragraphs': [
+                'Historicamente dominado por homens, o setor da marcenaria e restauração de móveis ganha uma nova atmosfera com a liderança visionária de Olinda Aguiar.',
+                'Com curadoria apurada, Olinda coordena a equipe de mestres entalhadores no casarão do Carmo, trazendo inovação no atendimento, personalização sob medida e transparência nas etapas de encomenda.',
+                'Sua liderança inspira arquitetos, colecionadores e clientes de todo o Brasil que buscam peças exclusivas produzidas com valorização humana e sustentabilidade real.'
+            ],
+            'gallery': ['hero-fachada-coral-entardecer.png', 'hero-fachada-noite-azul.png']
+        },
+        {
+            'id': 6,
+            'slug': 'ceras-naturais-e-oleos-botanicos',
+            'title': 'Ceras Naturais e Óleos Botânicos: Por Que Abolimos Vernizes Sintéticos',
+            'category': 'Acabamentos & Ceras',
+            'author_name': 'Mestre Byll',
+            'author_role': 'Mestre Artesão Entalhador',
+            'author_avatar': 'byll-mestre-artesao.png',
+            'date': '01 de Setembro, 2026',
+            'read_time': '4 min de leitura',
+            'cover_image': 'comoda-balcao-gaveteiro-demolicao.png',
+            'excerpt': 'Fórmulas atóxicas e ecológicas que permitem à madeira centenária respirar, garantindo um toque aveludado e brilho acetinado duradouro.',
+            'quote': 'Fórmulas de cera de abelha e carnaúba nutrem os veios seculares e deixam a madeira respirar sem criar películas plásticas artificiais.',
+            'content_paragraphs': [
+                'Vernizes sintéticos e resinas plásticas tendem a descascar, amarelar com o tempo e sufocar os veios vivos da madeira de demolição.',
+                'No nosso processo artesanal, priorizamos misturas próprias de cera de abelha silvestre, cera de carnaúba e óleos botânicos atóxicos.',
+                'Esse acabamento nutre profundamente as fibras da madeira, repele umidade com naturalidade e cria uma pátina suave que fica cada vez mais bonita com o passar dos anos.'
+            ],
+            'gallery': ['comoda-balcao-gaveteiro-demolicao.png', 'conjunto-lavatorio-gabinete-espelho-redondo.png']
+        }
+    ]
+
+
 @blueprint.route('/blog')
 @blueprint.route('/blog.html')
 def blog():
-    """Render dedicated blog and stories page."""
+    """Render dedicated blog catalog grid page."""
     ensure_default_user()
-    return render_template('pages/blog.html', segment='blog')
+    articles = get_blog_articles()
+    return render_template('pages/blog.html', segment='blog', articles=articles)
+
+
+@blueprint.route('/blog/<int:article_id>')
+@blueprint.route('/blog/artigo/<int:article_id>')
+@blueprint.route('/blog-detail.html')
+def blog_detail(article_id=1):
+    """Render dedicated individual article page (apps-blog-detail.html)."""
+    ensure_default_user()
+    articles = get_blog_articles()
+    article = next((a for a in articles if a['id'] == article_id), None)
+    if not article:
+        article = articles[0]
+    
+    related_articles = [a for a in articles if a['id'] != article['id']][:3]
+    return render_template('pages/blog-detail.html', segment='blog', article=article, related_articles=related_articles)
 
 
 @blueprint.route('/byll')
