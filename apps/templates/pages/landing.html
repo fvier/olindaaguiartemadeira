@@ -456,31 +456,31 @@
 </section>
 
 <!-- Seção: Avaliações de Clientes (Google Reviews Style Carousel) -->
-<section id="avaliacoes" class="py-5 bg-white border-top border-light-subtle">
-    <div class="container py-lg-4">
-        <div class="text-center max-w-700 mx-auto mb-5">
+<section id="avaliacoes" class="py-3 py-md-4 bg-white border-top border-light-subtle">
+    <div class="container py-0">
+        <div class="text-center max-w-700 mx-auto mb-3 mb-md-4">
             <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill fw-bold text-uppercase mb-2">Avaliações</span>
             <h2 class="display-6 fw-bold text-dark mt-2">O que dizem clientes e colecionadores</h2>
-            <p class="text-secondary fs-16">
+            <p class="text-secondary fs-16 mb-0">
                 Depoimentos reais de quem adquiriu peças autorais da Olinda Arte em Madeira e vivenciou a experiência do nosso ateliê colonial.
             </p>
         </div>
 
         <div id="reviewsCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="6000">
             <!-- Carousel Indicators -->
-            <div class="carousel-indicators" style="bottom: -45px;">
-                {% for review in reviews %}
+            <div class="carousel-indicators" style="bottom: -25px;">
+                {% for review in reviews[:3] %}
                 <button type="button" data-bs-target="#reviewsCarousel" data-bs-slide-to="{{ loop.index0 }}" class="{% if loop.first %}active{% endif %} bg-primary" aria-current="{% if loop.first %}true{% endif %}" aria-label="Avaliação {{ loop.index }}" style="width: 24px; height: 4px; border-radius: 2px;"></button>
                 {% endfor %}
             </div>
 
             <!-- Carousel Items -->
-            <div class="carousel-inner px-lg-5 mb-3">
-                {% for review in reviews %}
+            <div class="carousel-inner px-lg-5 mb-2">
+                {% for review in reviews[:3] %}
                 <div class="carousel-item {% if loop.first %}active{% endif %}">
                     <div class="row justify-content-center">
                         <div class="col-11 col-md-9 col-lg-7">
-                            <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-light position-relative hover-lift border-top border-primary border-3 text-center">
+                            <div class="card border-0 shadow-sm rounded-4 p-3 p-md-4 bg-light position-relative hover-lift border-top border-primary border-3 text-center">
                                 <div class="position-absolute top-0 end-0 m-3 text-muted opacity-25">
                                     <i class="ri-google-fill fs-30"></i>
                                 </div>
