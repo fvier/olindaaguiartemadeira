@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt-BR" {% block html_attribute %}{% endblock html_attribute %}>
+<head>
+    <!-- Title & Meta -->
+    <meta charset="utf-8"/>
+    <title>{% block title %}GPS Paraíba | Rastreamento Veicular{% endblock title %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="GPS Paraíba - Rastreamento Veicular & Telemetria em Tempo Real 24h. Segurança, localização e gestão de frotas."/>
+    <meta name="author" content="GPS Paraíba"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <!-- Open Graph / Social Media Preview -->
+    <meta property="og:type" content="website"/>
+    <meta property="og:title" content="GPS Paraíba | Rastreamento Veicular"/>
+    <meta property="og:description" content="GPS Paraíba - Rastreamento Veicular & Telemetria em Tempo Real 24h."/>
+    <meta property="og:site_name" content="GPS Paraíba"/>
+    <meta property="og:image" content="{{ config.ASSETS_ROOT }}/images/logo_fundo_preto.png"/>
+
+    <!-- Favicon & Icons -->
+    <link rel="shortcut icon" href="{{ config.ASSETS_ROOT }}/images/logo_fundo_preto.png" type="image/png">
+    <link rel="icon" href="{{ config.ASSETS_ROOT }}/images/logo_fundo_preto.png" type="image/png">
+    <link rel="apple-touch-icon" href="{{ config.ASSETS_ROOT }}/images/logo_fundo_preto.png">
+
+    {% block extra_css %}{% endblock extra_css %}
+    {% include 'partials/head-css.html' %}
+</head>
+<body {% block body_attribute %}{% endblock body_attribute %}>
+
+{% block preloader %}{% endblock %}
+
+{% block content %}{% endblock content %}
+
+{% include 'partials/vendor-scripts.html' %}
+<script>
+(() => {
+    const token = document.querySelector('meta[name="csrf-token"]')?.content;
+    if (!token) return;
+    document.querySelectorAll('form[method="post" i]').forEach((form) => {
+        if (form.querySelector('input[name="csrf_token"]')) return;
+        const input = document.createElement('input');
+        input.type = 'hidden'; input.name = 'csrf_token'; input.value = token;
+        form.prepend(input);
+    });
+    const originalFetch = window.fetch.bind(window);
+    window.fetch = (input, init = {}) => {
+        const url = typeof input === 'string' ? input : input.url;
+        const method = (init.method || (typeof input !== 'string' && input.method) || 'GET').toUpperCase();
+        if (new URL(url, window.location.href).origin === window.location.origin && !['GET', 'HEAD', 'OPTIONS'].includes(method)) {
+            const headers = new Headers(init.headers || (typeof input !== 'string' ? input.headers : undefined));
+            headers.set('X-CSRFToken', token);
+            init = {...init, headers};
+        }
+        return originalFetch(input, init);
+    };
+})();
+</script>
+{% block extra_javascript %}{% endblock extra_javascript %}
+
+</body>
+</html>

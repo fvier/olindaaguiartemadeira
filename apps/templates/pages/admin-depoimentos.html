@@ -1,0 +1,206 @@
+{% extends 'layouts/vertical.html' %}
+
+{% block title %}Depoimentos | Admin GPS Paraíba{% endblock title %}
+
+{% block page_content %}
+<style>
+    .review-admin-grid { display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:18px; }
+    .review-admin-card { overflow:hidden;transition:all .2s ease; border-top: 3px solid #cbd5e1!important; }
+    .review-admin-card.is-active { border-top-color:var(--bs-primary)!important; box-shadow:0 12px 28px rgba(29,78,216,.12)!important; }
+    .review-admin-avatar-preview { width:64px;height:64px;border-radius:50%;object-fit:cover;border:2px solid #e2e8f0;background:#f8fafc; }
+    .review-status-dot { width:8px;height:8px;border-radius:50%;display:inline-block;background:#94a3b8; }
+    .is-active .review-status-dot { background:#22c55e;box-shadow:0 0 0 4px rgba(34,197,94,.13); }
+    .stars-color { color: #f59e0b; }
+</style>
+
+<div class="container-fluid py-3">
+    <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-3">
+        <div>
+            <h4 class="fw-bold text-dark mb-1"><i class="ri-chat-smile-line text-primary me-2"></i>Gerenciar Depoimentos</h4>
+            <p class="text-secondary small mb-0">Gerencie as avaliações dos clientes que aparecem na landing page (Google Reviews).</p>
+        </div>
+        <a href="/" target="_blank" class="btn btn-outline-primary rounded-pill px-4"><i class="ri-external-link-line me-1"></i>Visualizar landing page</a>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show mb-4">{{ message }}<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>
+    {% endfor %}
+    {% endwith %}
+
+    <!-- Card: Adicionar Depoimento -->
+    <div class="card border-0 shadow-sm p-4 mb-4">
+        <div class="d-flex justify-content-between align-items-start flex-wrap gap-3 mb-3">
+            <div>
+                <h5 class="fw-bold mb-1">Cadastrar Novo Depoimento</h5>
+                <p class="text-secondary small mb-0">Insira as informações do cliente para exibir na landing page.</p>
+            </div>
+            <span class="badge bg-primary-subtle text-primary px-3 py-2">Ficará ativo imediatamente</span>
+        </div>
+        
+        <form method="POST" action="/admin/depoimento/add" enctype="multipart/form-data">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label small fw-bold">Nome do Cliente *</label>
+                    <input type="text" name="client_name" class="form-control" placeholder="Ex.: Carlos Eduardo" required>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small fw-bold">Subtexto / Cargo</label>
+                    <input type="text" name="client_role" class="form-control" placeholder="Ex.: Cliente desde 2023">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label small fw-bold">Estrelas (Nota) *</label>
+                    <select name="rating" class="form-select" required>
+                        <option value="5" selected>5 Estrelas</option>
+                        <option value="4">4 Estrelas</option>
+                        <option value="3">3 Estrelas</option>
+                        <option value="2">2 Estrelas</option>
+                        <option value="1">1 Estrela</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label small fw-bold">Ordem de Exibição</label>
+                    <input type="number" name="sort_order" class="form-control" value="0" min="0">
+                </div>
+                <div class="col-md-8">
+                    <label class="form-label small fw-bold">Depoimento *</label>
+                    <textarea name="review_text" class="form-control" rows="2" placeholder="Digite a avaliação breve do cliente..." required></textarea>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label small fw-bold">Foto do Cliente (Avatar)</label>
+                    <input type="file" name="avatar_image" class="form-control" accept="image/*">
+                    <small class="text-muted d-block mt-1">Se não enviar, um avatar aleatório padrão será atribuído.</small>
+                </div>
+                <div class="col-12 d-flex justify-content-end">
+                    <button class="btn btn-primary px-4" type="submit"><i class="ri-add-line me-1"></i>Adicionar Depoimento</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Configurações do Carrossel -->
+    <div class="card border-0 shadow-sm p-4 mb-4">
+        <div class="d-flex align-items-center gap-2 mb-3">
+            <h5 class="fw-bold mb-0"><i class="ri-settings-3-line text-primary me-2"></i>Configurações do Carrossel</h5>
+        </div>
+        <div class="row align-items-end g-3">
+            <div class="col-md-3">
+                <label class="form-label small fw-bold" for="max-reviews-input">Depoimentos a exibir no carrossel</label>
+                <input id="max-reviews-input" type="number" name="max_reviews" class="form-control" value="{{ max_reviews }}" min="1" required>
+            </div>
+            <div class="col-md-9">
+                <p class="text-secondary small mb-0">Indique o número máximo de depoimentos ativos que devem ser mostrados no carrossel da página inicial. Depoimentos excedentes serão ocultados automaticamente com base na ordem de exibição.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lista de Depoimentos Existentes -->
+    <form method="POST" action="/admin/depoimento/save" enctype="multipart/form-data">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+            <div>
+                <h5 class="fw-bold mb-1">Depoimentos Cadastrados</h5>
+                <p class="text-secondary small mb-0"><span id="active-count">0</span> ativo(s) na landing page.</p>
+            </div>
+            <button type="submit" class="btn btn-success rounded-pill px-4 shadow-sm"><i class="ri-save-line me-1"></i>Salvar alterações</button>
+        </div>
+
+        <div class="review-admin-grid">
+            {% for review in reviews %}
+            <article class="card review-admin-card border-0 shadow-sm {% if review.active %}is-active{% endif %}" data-review-card data-active="{{ 1 if review.active else 0 }}">
+                <div class="p-4">
+                    <!-- Top Actions & Visibilidade Toggle -->
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <span class="small fw-semibold">
+                            <span class="review-status-dot me-2"></span>
+                            <span data-status-label>{{ 'Visível' if review.active else 'Oculto' }}</span>
+                        </span>
+                        <div class="form-check form-switch m-0">
+                            <input class="form-check-input review-active-toggle" type="checkbox" role="switch" name="active_ids" value="{{ review.id }}" id="active-review-{{ review.id }}" {% if review.active %}checked{% endif %}>
+                            <label class="visually-hidden" for="active-review-{{ review.id }}">Exibir depoimento de {{ review.client_name }}</label>
+                        </div>
+                    </div>
+
+                    <!-- Client avatar and meta -->
+                    <div class="d-flex align-items-start gap-3 mb-3">
+                        <div class="text-center">
+                            <img class="review-admin-avatar-preview" src="{{ config.ASSETS_ROOT }}/images/users/{{ review.avatar_filename or 'dummy-avatar.jpg' }}" alt="{{ review.client_name }}">
+                        </div>
+                        <div class="flex-grow-1">
+                            <label class="form-label small fw-bold mb-1" for="name-{{ review.id }}">Nome do Cliente</label>
+                            <input id="name-{{ review.id }}" type="text" class="form-control form-control-sm mb-1" name="name_{{ review.id }}" value="{{ review.client_name }}" required>
+                            
+                            <label class="form-label small fw-bold mb-1" for="role-{{ review.id }}">Subtexto / Cargo</label>
+                            <input id="role-{{ review.id }}" type="text" class="form-control form-control-sm mb-1" name="role_{{ review.id }}" value="{{ review.client_role }}">
+
+                            <label class="form-label small fw-bold mb-1" for="avatar-{{ review.id }}">Alterar Foto</label>
+                            <input id="avatar-{{ review.id }}" type="file" class="form-control form-control-sm" name="avatar_{{ review.id }}" accept="image/*">
+                        </div>
+                    </div>
+
+                    <div class="row g-2 mb-3">
+                        <div class="col-6">
+                            <label class="form-label small fw-bold mb-1">Avaliação</label>
+                            <select class="form-select form-select-sm" name="rating_{{ review.id }}">
+                                <option value="5" {% if review.rating == 5 %}selected{% endif %}>5 Estrelas</option>
+                                <option value="4" {% if review.rating == 4 %}selected{% endif %}>4 Estrelas</option>
+                                <option value="3" {% if review.rating == 3 %}selected{% endif %}>3 Estrelas</option>
+                                <option value="2" {% if review.rating == 2 %}selected{% endif %}>2 Estrelas</option>
+                                <option value="1" {% if review.rating == 1 %}selected{% endif %}>1 Estrela</option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label small fw-bold mb-1">Ordenação</label>
+                            <input type="number" class="form-control form-control-sm" name="sort_order_{{ review.id }}" value="{{ review.sort_order }}" min="0">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold mb-1">Depoimento</label>
+                        <textarea class="form-control form-control-sm" name="text_{{ review.id }}" rows="3" required>{{ review.review_text }}</textarea>
+                    </div>
+
+                    <!-- Footer Details and Delete Button -->
+                    <div class="d-flex justify-content-between align-items-center border-top pt-3 mt-2">
+                        <div class="text-secondary small text-truncate" title="Avatar: {{ review.avatar_filename or 'nenhum' }}">
+                            <i class="ri-user-line me-1"></i>{{ review.avatar_filename or 'padrão' }}
+                        </div>
+                        <button type="submit" class="btn btn-sm btn-outline-danger delete-review-button" formaction="/admin/depoimento/{{ review.id }}/delete" formmethod="post" formnovalidate data-client-name="{{ review.client_name }}" title="Excluir este depoimento">
+                            <i class="ri-delete-bin-6-line me-1"></i>Excluir
+                        </button>
+                    </div>
+                </div>
+            </article>
+            {% else %}
+            <div class="col-12 card p-5 text-center text-secondary border-0 shadow-sm rounded-4">Nenhum depoimento cadastrado no momento.</div>
+            {% endfor %}
+        </div>
+
+        <div class="d-flex justify-content-end mt-4">
+            <button type="submit" class="btn btn-success rounded-pill px-4 shadow-sm"><i class="ri-save-line me-1"></i>Salvar alterações</button>
+        </div>
+    </form>
+</div>
+
+<script>
+    const toggles = [...document.querySelectorAll('.review-active-toggle')];
+    function updateSelection() {
+        const activeCount = toggles.filter(toggle => toggle.checked).length;
+        document.getElementById('active-count').textContent = activeCount;
+        toggles.forEach(toggle => {
+            const card = toggle.closest('[data-review-card]');
+            card.dataset.active = toggle.checked ? '1' : '0';
+            card.classList.toggle('is-active', toggle.checked);
+            card.querySelector('[data-status-label]').textContent = toggle.checked ? 'Visível' : 'Oculto';
+        });
+    }
+    toggles.forEach(toggle => toggle.addEventListener('change', updateSelection));
+    updateSelection();
+
+    document.querySelectorAll('.delete-review-button').forEach(button => button.addEventListener('click', event => {
+        const confirmed = window.confirm(`Excluir permanentemente o depoimento de “${button.dataset.clientName}”?\n\nEssa ação não poderá ser desfeita.`);
+        if (!confirmed) event.preventDefault();
+    }));
+</script>
+{% endblock page_content %}

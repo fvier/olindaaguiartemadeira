@@ -1,0 +1,624 @@
+{% extends 'layouts/vertical.html' %}
+
+{% block title %}Central de Integrações & APIs | GPS Paraíba ERP{% endblock title %}
+
+{% block page_content %}
+<style>
+    /* Design de Guias Estilo Google Chrome */
+    .chrome-tabs-container {
+        background-color: #e2e8f0;
+        padding: 6px 8px 0 8px;
+        border-radius: 16px 16px 0 0;
+        border: 1px solid #cbd5e1;
+        border-bottom: none;
+    }
+    .chrome-tabs {
+        border-bottom: none !important;
+        gap: 6px;
+    }
+    .chrome-tabs .nav-link {
+        background: #cbd5e1;
+        color: #475569;
+        border-radius: 12px 12px 0 0 !important;
+        border: 1px solid #94a3b8 !important;
+        border-bottom: none !important;
+        padding: 10px 22px;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.2s ease-in-out;
+        position: relative;
+    }
+    .chrome-tabs .nav-link:hover {
+        background: #f1f5f9;
+        color: #0f172a;
+    }
+    .chrome-tabs .nav-link.active {
+        background: #ffffff !important;
+        color: #2563eb !important;
+        border-color: #cbd5e1 #cbd5e1 #ffffff #cbd5e1 !important;
+        box-shadow: 0 -4px 12px rgba(15, 23, 42, 0.08);
+        font-weight: 700;
+    }
+    .chrome-tabs-content {
+        background: #ffffff;
+        border: 1px solid #cbd5e1;
+        border-top: none;
+        border-radius: 0 0 16px 16px;
+        padding: 1.75rem;
+        box-shadow: 0 10px 25px rgba(15, 23, 42, 0.05);
+    }
+
+    /* Ajustes Específicos para TEMA ESCURO (Dark Mode) */
+    html[data-bs-theme="dark"] .chrome-tabs-container {
+        background-color: #0f172a !important;
+        border-color: #334155 !important;
+    }
+    html[data-bs-theme="dark"] .chrome-tabs .nav-link {
+        background: #1e293b !important;
+        color: #94a3b8 !important;
+        border-color: #334155 !important;
+    }
+    html[data-bs-theme="dark"] .chrome-tabs .nav-link:hover {
+        background: #334155 !important;
+        color: #f8fafc !important;
+    }
+    html[data-bs-theme="dark"] .chrome-tabs .nav-link.active {
+        background: #1e293b !important;
+        color: #60a5fa !important;
+        border-color: #334155 #334155 #1e293b #334155 !important;
+        box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.4);
+    }
+    html[data-bs-theme="dark"] .chrome-tabs-content {
+        background: #1e293b !important;
+        border-color: #334155 !important;
+        color: #f1f5f9 !important;
+    }
+    html[data-bs-theme="dark"] .card.bg-white,
+    html[data-bs-theme="dark"] .bg-white {
+        background-color: #1e293b !important;
+        color: #f1f5f9 !important;
+        border-color: #334155 !important;
+    }
+    html[data-bs-theme="dark"] .bg-light {
+        background-color: #0f172a !important;
+        color: #e2e8f0 !important;
+        border-color: #334155 !important;
+    }
+    html[data-bs-theme="dark"] .text-dark {
+        color: #f8fafc !important;
+    }
+    html[data-bs-theme="dark"] .table-light,
+    html[data-bs-theme="dark"] table thead tr {
+        background-color: #0f172a !important;
+        color: #f1f5f9 !important;
+    }
+    html[data-bs-theme="dark"] table th,
+    html[data-bs-theme="dark"] table td {
+        border-color: #334155 !important;
+        color: #cbd5e1 !important;
+    }
+    html[data-bs-theme="dark"] .form-control,
+    html[data-bs-theme="dark"] .form-select {
+        background-color: #0f172a !important;
+        color: #f8fafc !important;
+        border-color: #334155 !important;
+    }
+    html[data-bs-theme="dark"] code {
+        color: #93c5fd !important;
+    }
+</style>
+
+<div class="container-fluid py-3">
+    <div class="d-flex align-items-center justify-content-between mb-4 flex-wrap gap-3">
+        <div>
+            <h4 class="fw-bold text-dark mb-1">
+                <i class="ri-code-s-slash-line text-primary me-2"></i>Central de Integrações & APIs REST
+            </h4>
+            <p class="text-secondary small mb-0">Documentação interativa, autenticação Bearer Token, parâmetros de consulta e testadores ao vivo.</p>
+        </div>
+        <span class="badge bg-success-subtle text-success px-3 py-2 rounded-pill fw-bold fs-12">
+            <i class="ri-checkbox-circle-line me-1"></i>APIs Ativas & Operacionais
+        </span>
+    </div>
+
+    <!-- Container das Guias Estilo Chrome -->
+    <div class="chrome-tabs-container">
+        <ul class="nav nav-tabs chrome-tabs" id="api-chrome-tabs" role="tablist">
+            <li class="nav-item">
+                <button class="nav-link active" id="tab-guide-btn" data-bs-toggle="tab" data-bs-target="#tab-guide" type="button">
+                    <i class="ri-lightbulb-line me-1.5 text-warning"></i>1. Guia & Conceitos
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" id="tab-vendas-btn" data-bs-toggle="tab" data-bs-target="#tab-vendas" type="button">
+                    <i class="ri-shopping-cart-2-line me-1.5 text-success"></i>2. Endpoint: Vendas
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" id="tab-lancamentos-btn" data-bs-toggle="tab" data-bs-target="#tab-lancamentos" type="button">
+                    <i class="ri-wallet-3-line me-1.5 text-info"></i>3. Endpoint: Lançamentos
+                </button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link" id="tab-auth-btn" data-bs-toggle="tab" data-bs-target="#tab-auth" type="button">
+                    <i class="ri-key-2-line me-1.5 text-primary"></i>4. Bearer Token & Segurança
+                </button>
+            </li>
+        </ul>
+    </div>
+
+    <!-- Conteúdo das Guias -->
+    <div class="tab-content chrome-tabs-content mb-4" id="api-tabs-content">
+
+        <!-- ABA 1: GUIA E CONCEITOS -->
+        <div class="tab-pane fade show active" id="tab-guide" role="tabpanel">
+            <h5 class="fw-bold text-dark mb-3"><i class="ri-book-open-line text-primary me-2"></i>O que é e Por Que Usar a API do GPS Paraíba?</h5>
+            <p class="text-secondary fs-15">
+                Uma **API (Interface de Programação de Aplicações)** é uma ponte digital que permite que outros sistemas (como o seu site de vendas, formulários de WhatsApp, gateways de pagamento ou CRMs externos) conversem diretamente com o ERP da GPS Paraíba sem precisar de intervenção manual.
+            </p>
+            <div class="row g-4 my-2">
+                <div class="col-md-6">
+                    <div class="p-3 bg-light rounded-3 border h-100">
+                        <h6 class="fw-bold text-primary mb-2"><i class="ri-download-2-line me-1"></i>Verbo GET (Consultar Dados)</h6>
+                        <p class="small text-muted mb-0">Usado para <strong>buscar/ler informações</strong> salvas no ERP. Exemplo: Seu CRM externo consulta quantas vendas foram realizadas hoje ou quais mensalidades estão pendentes.</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-3 bg-light rounded-3 border h-100">
+                        <h6 class="fw-bold text-success mb-2"><i class="ri-send-plane-line me-1"></i>Verbo POST (Cadastrar Dados)</h6>
+                        <p class="small text-muted mb-0">Usado para <strong>enviar e salvar novos dados</strong> no ERP. Exemplo: Quando um cliente preenche um formulário de contratação no site, o site dispara um `POST` e o contrato já aparece pronto no painel.</p>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="my-4">
+
+            <h6 class="fw-bold text-dark mb-3"><i class="ri-shield-keyhole-line text-success me-2"></i>Autenticação Padrão RFC 6750 (Bearer Token)</h6>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="p-3 border rounded-3 text-center">
+                        <i class="ri-shield-user-line fs-24 text-warning"></i>
+                        <h6 class="fw-bold mt-2 mb-1">1. Bearer Token (Padrão)</h6>
+                        <small class="text-muted d-block">Envie o cabeçalho padrão <code>Authorization: Bearer &lt;token&gt;</code> em cada chamada.</small>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-3 border rounded-3 text-center">
+                        <i class="ri-file-code-line fs-24 text-info"></i>
+                        <h6 class="fw-bold mt-2 mb-1">2. Formato Padrão JSON</h6>
+                        <small class="text-muted d-block">Todas as respostas da API usam a estrutura leve e universal JSON UTF-8.</small>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-3 border rounded-3 text-center">
+                        <i class="ri-checkbox-circle-line fs-24 text-success"></i>
+                        <h6 class="fw-bold mt-2 mb-1">3. Códigos HTTP</h6>
+                        <small class="text-muted d-block"><code>200 OK</code> (sucesso), <code>201 Created</code> (criado), <code>400</code> (dados inválidos) e <code>401</code> (sem permissão).</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ABA 2: ENDPOINT VENDAS -->
+        <div class="tab-pane fade" id="tab-vendas" role="tabpanel">
+            <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+                <h5 class="fw-bold text-dark mb-0"><i class="ri-shopping-cart-2-line text-success me-2"></i>Endpoint 1: Gestão de Vendas & Contratos</h5>
+                <div>
+                    <span class="badge bg-primary px-3 py-1 me-1">GET</span>
+                    <span class="badge bg-success px-3 py-1">POST</span>
+                </div>
+            </div>
+            <div class="bg-light p-3 rounded-3 mb-4 border">
+                <small class="text-muted d-block fw-semibold mb-1">URL Completa do Endpoint:</small>
+                <code class="text-dark fw-bold fs-15 text-break">https://gpsparaiba.com.br/api/v1/integracoes/vendas</code>
+            </div>
+
+            <!-- Tabela Parâmetros GET -->
+            <h6 class="fw-bold text-dark mb-2"><i class="ri-filter-3-line me-1 text-primary"></i>Parâmetros de Consulta (Query Parameters para GET):</h6>
+            <div class="table-responsive mb-4">
+                <table class="table table-bordered align-middle small">
+                    <thead class="table-light">
+                        <tr><th>Parâmetro</th><th>Tipo</th><th>Exemplo</th><th>Descrição</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>limit</code></td><td>Integer</td><td><code>?limit=10</code></td><td>Limita a quantidade de vendas retornadas (ex: 10 mais recentes).</td></tr>
+                        <tr><td><code>status</code></td><td>String</td><td><code>?status=Ativo</code></td><td>Filtra por status da venda (ex: <code>Ativo</code>, <code>Pendente</code>, <code>Cancelado</code>).</td></tr>
+                        <tr><td><code>q</code></td><td>String</td><td><code>?q=Maria</code></td><td>Busca por nome do cliente, placa do veículo ou número do contrato.</td></tr>
+                        <tr><td><code>start_date</code></td><td>Data (YYYY-MM-DD)</td><td><code>?start_date=2026-08-01</code></td><td>Data inicial de ativação do contrato.</td></tr>
+                        <tr><td><code>end_date</code></td><td>Data (YYYY-MM-DD)</td><td><code>?end_date=2026-08-31</code></td><td>Data final de ativação do contrato.</td></tr>
+                        <tr><td><code>seller_name</code></td><td>String</td><td><code>?seller_name=Fernando</code></td><td>Filtra vendas associadas a um vendedor específico.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <small class="text-muted d-block fw-semibold mb-1">Modelo do Payload de Envio (POST JSON):</small>
+                    <pre class="bg-dark text-light p-3 rounded-3 fs-12 mb-0" style="max-height: 220px; overflow-y: auto;">{
+  "contract_number": "CTR-8840",
+  "client_name": "Maria Oliveira",
+  "ddd": "83",
+  "contact": "998877665",
+  "vehicle_type": "Carro",
+  "vehicle_brand": "Toyota",
+  "vehicle_model": "Corolla",
+  "plate": "QFB-2026",
+  "plan_name": "GPS Total",
+  "monthly_fee": 79.90,
+  "seller_name": "Vendedor Web",
+  "instalacao": true,
+  "status": "Ativo"
+}</pre>
+                </div>
+                <div class="col-lg-6">
+                    <small class="text-muted d-block fw-semibold mb-1">Exemplo em cURL com Bearer Token:</small>
+                    <pre class="bg-dark text-success p-3 rounded-3 fs-12 mb-0" style="max-height: 220px; overflow-y: auto;">curl -X POST https://gpsparaiba.com.br/api/v1/integracoes/vendas \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <SEU_BEARER_TOKEN>" \
+  -d '{
+    "client_name": "Maria Oliveira",
+    "contact": "998877665",
+    "monthly_fee": 79.90
+  }'</pre>
+                </div>
+            </div>
+
+            <hr class="my-4">
+
+            <!-- Testador Interativo Vendas -->
+            <h6 class="fw-bold text-dark mb-3"><i class="ri-terminal-box-line me-1 text-success"></i>Testador de Requisição ao Vivo (Sandbox Vendas)</h6>
+            <div class="row g-3 mb-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label small text-muted">Status</label>
+                    <select id="test-vendas-status" class="form-select form-select-sm"><option value="">Todos</option><option value="Ativo">Ativo</option><option value="Pendente">Pendente</option></select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small text-muted">Busca (Nome/Placa)</label>
+                    <input type="text" id="test-vendas-q" class="form-control form-control-sm" placeholder="Ex: Honda ou Maria">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label small text-muted">Limite</label>
+                    <input type="number" id="test-vendas-limit" class="form-control form-control-sm" value="5">
+                </div>
+                <div class="col-md-4 d-flex gap-2">
+                    <button type="button" class="btn btn-outline-primary btn-sm rounded-pill flex-fill" onclick="runVendasTestGET()">
+                        <i class="ri-play-line me-1"></i> Executar GET (Com Filtros)
+                    </button>
+                    <button type="button" class="btn btn-success btn-sm rounded-pill flex-fill text-white" onclick="testApi('/api/v1/integracoes/vendas', 'POST', sampleSalePayload, 'response-vendas')">
+                        <i class="ri-add-line me-1"></i> Executar POST (Cadastrar)
+                    </button>
+                </div>
+            </div>
+
+            <div>
+                <small class="text-muted d-block fw-semibold mb-1">Resposta do Servidor (JSON Output):</small>
+                <pre id="response-vendas" class="bg-dark text-warning p-3 rounded-3 fs-12 mb-0" style="min-height: 140px; max-height: 260px; overflow-y: auto;">// Clique em "Executar GET" ou "Executar POST" para testar o endpoint...</pre>
+            </div>
+        </div>
+
+        <!-- ABA 3: ENDPOINT LANÇAMENTOS -->
+        <div class="tab-pane fade" id="tab-lancamentos" role="tabpanel">
+            <div class="d-flex align-items-center justify-content-between mb-3 flex-wrap gap-2">
+                <h5 class="fw-bold text-dark mb-0"><i class="ri-wallet-3-line text-info me-2"></i>Endpoint 2: Gestão de Lançamentos Financeiros</h5>
+                <div>
+                    <span class="badge bg-primary px-3 py-1 me-1">GET</span>
+                    <span class="badge bg-success px-3 py-1">POST</span>
+                </div>
+            </div>
+            <div class="bg-light p-3 rounded-3 mb-4 border">
+                <small class="text-muted d-block fw-semibold mb-1">URL Completa do Endpoint:</small>
+                <code class="text-dark fw-bold fs-15 text-break">https://gpsparaiba.com.br/api/v1/integracoes/lancamentos</code>
+            </div>
+
+            <!-- Tabela Parâmetros GET -->
+            <h6 class="fw-bold text-dark mb-2"><i class="ri-filter-3-line me-1 text-primary"></i>Parâmetros de Consulta (Query Parameters para GET):</h6>
+            <div class="table-responsive mb-4">
+                <table class="table table-bordered align-middle small">
+                    <thead class="table-light">
+                        <tr><th>Parâmetro</th><th>Tipo</th><th>Exemplo</th><th>Descrição</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><code>limit</code></td><td>Integer</td><td><code>?limit=15</code></td><td>Limita a quantidade de lançamentos retornados.</td></tr>
+                        <tr><td><code>entry_type</code></td><td>String</td><td><code>?entry_type=receita</code></td><td>Filtra por tipo de lançamento (<code>receita</code> ou <code>despesa</code>).</td></tr>
+                        <tr><td><code>status</code></td><td>String</td><td><code>?status=pago</code></td><td>Filtra por status (<code>pago</code>, <code>pendente</code>, <code>vencido</code>, <code>perto_vencer</code>).</td></tr>
+                        <tr><td><code>company_id</code></td><td>Integer</td><td><code>?company_id=1</code></td><td>Filtra por empresa/unidade (<code>1</code>: GPS Paraíba, <code>2</code>: Casa).</td></tr>
+                        <tr><td><code>q</code></td><td>String</td><td><code>?q=Mensalidade</code></td><td>Busca textual na descrição ou observações do lançamento.</td></tr>
+                        <tr><td><code>start_date</code></td><td>Data (YYYY-MM-DD)</td><td><code>?start_date=2026-08-01</code></td><td>Data inicial de vencimento.</td></tr>
+                        <tr><td><code>end_date</code></td><td>Data (YYYY-MM-DD)</td><td><code>?end_date=2026-08-31</code></td><td>Data final de vencimento.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-lg-6">
+                    <small class="text-muted d-block fw-semibold mb-1">Modelo do Payload de Envio (POST JSON):</small>
+                    <pre class="bg-dark text-light p-3 rounded-3 fs-12 mb-0" style="max-height: 220px; overflow-y: auto;">{
+  "company_id": 1,
+  "entry_type": "receita",
+  "amount": 250.00,
+  "description": "Pagamento Mensalidade Cliente #402",
+  "due_date": "2026-08-10",
+  "status": "pago",
+  "notes": "Recebido via Gateway de Pagamento API"
+}</pre>
+                </div>
+                <div class="col-lg-6">
+                    <small class="text-muted d-block fw-semibold mb-1">Exemplo em cURL com Bearer Token:</small>
+                    <pre class="bg-dark text-info p-3 rounded-3 fs-12 mb-0" style="max-height: 220px; overflow-y: auto;">curl -X POST https://gpsparaiba.com.br/api/v1/integracoes/lancamentos \
+  -H "Content-Type: application/json" \
+  -H "Authorization: Bearer <SEU_BEARER_TOKEN>" \
+  -d '{
+    "description": "Recebimento Mensalidade",
+    "amount": 150.00,
+    "due_date": "2026-08-15"
+  }'</pre>
+                </div>
+            </div>
+
+            <hr class="my-4">
+
+            <!-- Testador Interativo Lançamentos -->
+            <h6 class="fw-bold text-dark mb-3"><i class="ri-terminal-box-line me-1 text-info"></i>Testador de Requisição ao Vivo (Sandbox Lançamentos)</h6>
+            <div class="row g-3 mb-3 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label small text-muted">Tipo</label>
+                    <select id="test-lanc-type" class="form-select form-select-sm"><option value="">Todos</option><option value="receita">Receitas</option><option value="despesa">Despesas</option></select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label small text-muted">Busca (Descrição)</label>
+                    <input type="text" id="test-lanc-q" class="form-control form-control-sm" placeholder="Ex: Mensalidade">
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label small text-muted">Limite</label>
+                    <input type="number" id="test-lanc-limit" class="form-control form-control-sm" value="5">
+                </div>
+                <div class="col-md-4 d-flex gap-2">
+                    <button type="button" class="btn btn-outline-primary btn-sm rounded-pill flex-fill" onclick="runLancamentosTestGET()">
+                        <i class="ri-play-line me-1"></i> Executar GET (Com Filtros)
+                    </button>
+                    <button type="button" class="btn btn-success btn-sm rounded-pill flex-fill text-white" onclick="testApi('/api/v1/integracoes/lancamentos', 'POST', sampleLancamentoPayload, 'response-lancamentos')">
+                        <i class="ri-add-line me-1"></i> Executar POST (Cadastrar)
+                    </button>
+                </div>
+            </div>
+
+            <div>
+                <small class="text-muted d-block fw-semibold mb-1">Resposta do Servidor (JSON Output):</small>
+                <pre id="response-lancamentos" class="bg-dark text-info p-3 rounded-3 fs-12 mb-0" style="min-height: 140px; max-height: 260px; overflow-y: auto;">// Clique em "Executar GET" ou "Executar POST" para testar o endpoint...</pre>
+            </div>
+        </div>
+
+        <!-- ABA 4: AUTENTICAÇÃO, GERADOR DE TOKEN & GUIA POSTMAN PARA DEV JR -->
+        <div class="tab-pane fade" id="tab-auth" role="tabpanel">
+            <h5 class="fw-bold text-dark mb-2"><i class="ri-shield-keyhole-line text-primary me-2"></i>Gerenciador de Chaves de Acesso & Guia para Desenvolvedores</h5>
+            <p class="text-secondary small mb-4">Aprenda a autenticar suas chamadas HTTP e teste os endpoints usando o Postman ou Insomnia de forma simples e rápida.</p>
+
+            <!-- Card Gerenciador de Token -->
+            <div class="card border-0 bg-light p-4 rounded-4 mb-4">
+                <div class="d-flex align-items-center justify-content-between flex-wrap gap-2 mb-2">
+                    <label class="form-label fw-bold text-dark mb-0 fs-15"><i class="ri-key-2-line text-warning me-1"></i>Bearer Token de Produção Ativo:</label>
+                    <button class="btn btn-outline-danger btn-sm rounded-pill px-3 fw-semibold" type="button" onclick="generateNewToken()">
+                        <i class="ri-refresh-line me-1"></i> Gerar Novo Token (Rotacionar Chave)
+                    </button>
+                </div>
+                <div class="input-group mb-2">
+                    <span class="input-group-text bg-white border-0"><i class="ri-lock-2-line text-primary"></i></span>
+                    <input type="text" id="api-key-input" class="form-control bg-white border-0 fw-bold text-dark fs-15" value="{{ api_integration_key }}" readonly>
+                    <button class="btn btn-primary rounded-end px-3 fw-bold" type="button" onclick="copyApiKey()">
+                        <i class="ri-file-copy-line me-1"></i> Copiar Token
+                    </button>
+                </div>
+                <div id="copy-toast" class="small text-success d-none"><i class="ri-checkbox-circle-line me-1"></i>Bearer Token copiado com sucesso!</div>
+                <div id="gen-toast" class="small text-danger d-none"><i class="ri-refresh-line me-1"></i>Novo Bearer Token gerado e ativado! Lembre-se de atualizar nos seus clientes de API.</div>
+            </div>
+
+            <!-- Guia Passo a Passo Postman para Desenvolvedores Júnior -->
+            <div class="card border-0 shadow-sm rounded-4 p-4 mb-4 bg-white">
+                <h6 class="fw-bold text-primary mb-3"><i class="ri-rocket-line me-2"></i>Guia Passo a Passo: Como Testar a API no Postman (Para Devs Júnior)</h6>
+
+                <div class="alert alert-info border-0 rounded-3 small mb-4">
+                    <i class="ri-information-line me-1 text-primary"></i> <strong>O que é um Bearer Token?</strong> Pense no Bearer Token como o seu crachá VIP digital. A palavra <em>"Bearer"</em> significa <em>"Portador"</em>. Quando você faz uma requisição HTTP enviando esse código no cabeçalho (*Header*), a API do GPS Paraíba sabe que é o seu sistema autorizado fazendo a operação.
+                </div>
+
+                <div class="row g-3">
+                    <div class="col-md-6 col-lg-3">
+                        <div class="border rounded-4 p-3 h-100 bg-light">
+                            <span class="badge bg-primary rounded-circle mb-2" style="width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center;">1</span>
+                            <h6 class="fw-bold text-dark fs-14">Definir o Método e URL</h6>
+                            <p class="small text-muted mb-0">No Postman, crie uma nova aba, escolha o método <code>POST</code> e cole a URL:<br><code class="text-primary text-break fw-bold">https://gpsparaiba.com.br/api/v1/integracoes/vendas</code></p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3">
+                        <div class="border rounded-4 p-3 h-100 bg-light">
+                            <span class="badge bg-primary rounded-circle mb-2" style="width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center;">2</span>
+                            <h6 class="fw-bold text-dark fs-14">Configurar Autenticação</h6>
+                            <p class="small text-muted mb-0">Clique na aba <strong>Auth</strong> -> Selecione <strong>Type: Bearer Token</strong> -> Cole no campo <em>Token</em> a chave:<br><code class="text-warning text-break fw-bold" id="postman-token-preview">{{ api_integration_key }}</code></p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3">
+                        <div class="border rounded-4 p-3 h-100 bg-light">
+                            <span class="badge bg-primary rounded-circle mb-2" style="width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center;">3</span>
+                            <h6 class="fw-bold text-dark fs-14">Preencher o Corpo (Body)</h6>
+                            <p class="small text-muted mb-0">Clique na aba <strong>Body</strong> -> Marque a opção <strong>raw</strong> -> Mude a chave à direita de <em>Text</em> para <strong>JSON</strong> e cole o payload de envio.</p>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-lg-3">
+                        <div class="border rounded-4 p-3 h-100 bg-light">
+                            <span class="badge bg-success rounded-circle mb-2" style="width: 28px; height: 28px; display: inline-flex; align-items: center; justify-content: center;">4</span>
+                            <h6 class="fw-bold text-dark fs-14">Enviar e Receber 201</h6>
+                            <p class="small text-muted mb-0">Clique no botão azul <strong>Send</strong>. Você receberá o retorno <code>201 Created</code> confirmando que o cadastro foi realizado com sucesso no ERP!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-4 p-3 bg-dark text-light rounded-3">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <small class="fw-semibold text-warning"><i class="ri-code-s-slash-line me-1"></i>Modelo de JSON Copiável para o Body no Postman:</small>
+                        <button type="button" class="btn btn-outline-warning btn-xs rounded-pill" onclick="copyPostmanJson()">
+                            <i class="ri-file-copy-line me-1"></i> Copiar JSON do Body
+                        </button>
+                    </div>
+                    <pre id="postman-json-code" class="text-success font-monospace mb-0 fs-12" style="max-height: 160px; overflow-y: auto;">{
+  "contract_number": "CTR-9900",
+  "client_name": "Cliente Exemplo Postman",
+  "ddd": "83",
+  "contact": "999887766",
+  "vehicle_type": "Carro",
+  "vehicle_brand": "Fiat",
+  "vehicle_model": "Argo",
+  "plate": "QFC-2026",
+  "plan_name": "GPS Frota Segura",
+  "monthly_fee": 69.90,
+  "seller_name": "Vendedor Postman",
+  "instalacao": true,
+  "status": "Ativo"
+}</pre>
+                </div>
+            </div>
+
+            <!-- Tabela de Respostas HTTP para Devs JR -->
+            <div class="card border-0 shadow-sm rounded-4 p-4 mb-0 bg-white">
+                <h6 class="fw-bold text-dark mb-3"><i class="ri-questionnaire-line me-1 text-info"></i>Dicionário de Respostas HTTP (Para Entender os Retornos)</h6>
+                <div class="table-responsive">
+                    <table class="table table-bordered align-middle small mb-0">
+                        <thead class="table-light">
+                            <tr><th>Código HTTP</th><th>Significado</th><th>Quando Acontece?</th></tr>
+                        </thead>
+                        <tbody>
+                            <tr><td><span class="badge bg-success">200 OK</span></td><td>Sucesso na Consulta</td><td>Sua requisição <code>GET</code> foi processada e os dados foram retornados em JSON.</td></tr>
+                            <tr><td><span class="badge bg-success">201 Created</span></td><td>Registro Criado</td><td>Sua requisição <code>POST</code> cadastrou uma nova venda ou lançamento financeiro com sucesso.</td></tr>
+                            <tr><td><span class="badge bg-warning text-dark">400 Bad Request</span></td><td>Dados Incompletos</td><td>Faltou algum campo obrigatório no JSON (ex: <code>client_name</code> ou <code>contact</code>).</td></tr>
+                            <tr><td><span class="badge bg-danger">401 Unauthorized</span></td><td>Não Autorizado</td><td>O Bearer Token não foi enviado no cabeçalho ou a chave digitada está incorreta.</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+function copyApiKey() {
+    const input = document.getElementById('api-key-input');
+    navigator.clipboard.writeText(input.value);
+    const toast = document.getElementById('copy-toast');
+    toast.classList.remove('d-none');
+    setTimeout(() => toast.classList.add('d-none'), 3000);
+}
+
+function generateNewToken() {
+    if (!confirm('Deseja realmente rotacionar e gerar um novo Bearer Token de API?')) return;
+    const randomHex = Array.from(crypto.getRandomValues(new Uint8Array(10))).map(b => b.toString(16).padStart(2, '0')).join('');
+    const newToken = 'gps_live_key_' + randomHex;
+    document.getElementById('api-key-input').value = newToken;
+    const preview = document.getElementById('postman-token-preview');
+    if (preview) preview.textContent = newToken;
+
+    const toast = document.getElementById('gen-toast');
+    toast.classList.remove('d-none');
+    setTimeout(() => toast.classList.add('d-none'), 5000);
+}
+
+function copyPostmanJson() {
+    const code = document.getElementById('postman-json-code').textContent;
+    navigator.clipboard.writeText(code);
+    alert('JSON do Body copiado! Cole diretamente na aba Body -> raw (JSON) do Postman.');
+}
+
+const sampleSalePayload = {
+    contract_number: "CTR-" + Math.floor(1000 + Math.random() * 9000),
+    client_name: "Cliente Teste API",
+    ddd: "83",
+    contact: "988776655",
+    vehicle_type: "Moto",
+    vehicle_brand: "Honda",
+    vehicle_model: "CG 160 Fan",
+    plate: "QFA-8899",
+    plan_name: "GPS Moto Segura",
+    monthly_fee: 59.90,
+    seller_name: "Integrador API",
+    instalacao: true,
+    status: "Ativo"
+};
+
+const sampleLancamentoPayload = {
+    company_id: 1,
+    entry_type: "receita",
+    amount: 150.00,
+    description: "Recebimento Mensalidade API #" + Math.floor(100 + Math.random() * 900),
+    due_date: new Date().toISOString().split('T')[0],
+    status: "pago",
+    notes: "Lançamento automatizado via API REST"
+};
+
+function runVendasTestGET() {
+    const status = document.getElementById('test-vendas-status').value;
+    const q = document.getElementById('test-vendas-q').value;
+    const limit = document.getElementById('test-vendas-limit').value;
+    let url = '/api/v1/integracoes/vendas?';
+    const params = new URLSearchParams();
+    if (status) params.append('status', status);
+    if (q) params.append('q', q);
+    if (limit) params.append('limit', limit);
+    testApi(url + params.toString(), 'GET', null, 'response-vendas');
+}
+
+function runLancamentosTestGET() {
+    const type = document.getElementById('test-lanc-type').value;
+    const q = document.getElementById('test-lanc-q').value;
+    const limit = document.getElementById('test-lanc-limit').value;
+    let url = '/api/v1/integracoes/lancamentos?';
+    const params = new URLSearchParams();
+    if (type) params.append('entry_type', type);
+    if (q) params.append('q', q);
+    if (limit) params.append('limit', limit);
+    testApi(url + params.toString(), 'GET', null, 'response-lancamentos');
+}
+
+async function testApi(url, method, data, targetId) {
+    const output = document.getElementById(targetId);
+    output.textContent = "// Enviando requisição [" + method + "] para " + url + "...";
+
+    let apiKey = document.getElementById('api-key-input') ? document.getElementById('api-key-input').value : '';
+    if (!apiKey || !apiKey.trim()) {
+        apiKey = "{{ api_integration_key }}";
+        if (document.getElementById('api-key-input')) document.getElementById('api-key-input').value = apiKey;
+    }
+
+    const options = {
+        method: method,
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + apiKey
+        }
+    };
+    if (data && method === 'POST') {
+        options.body = JSON.stringify(data);
+    }
+
+    try {
+        const response = await fetch(url, options);
+        const resJson = await response.json();
+        output.textContent = JSON.stringify(resJson, null, 2);
+    } catch (err) {
+        output.textContent = "// Erro na requisição: " + err.message;
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const input = document.getElementById('api-key-input');
+    const preview = document.getElementById('postman-token-preview');
+    const defaultKey = "{{ api_integration_key }}";
+    if (input && (!input.value || !input.value.trim())) {
+        input.value = defaultKey;
+    }
+    if (preview && (!preview.textContent || !preview.textContent.trim())) {
+        preview.textContent = defaultKey;
+    }
+});
+</script>
+{% endblock page_content %}

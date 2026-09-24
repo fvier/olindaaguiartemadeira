@@ -1,0 +1,949 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}GPS Paraíba | Rastreamento Veicular & Telemetria 24h{% endblock title %}
+
+{% block html_attribute %}data-bs-theme="light"{% endblock html_attribute %}
+
+{% block body_attribute %}class="landing-page bg-light text-dark"{% endblock body_attribute %}
+
+{% block content %}
+<script>
+    (() => {
+        const savedTheme = localStorage.getItem('gps_landing_theme');
+        const savedAccent = localStorage.getItem('gps_color_palette') || localStorage.getItem('gps_landing_accent');
+        document.documentElement.setAttribute('data-bs-theme', savedTheme === 'dark' ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-landing-accent', ['blue','gold','green','purple','graphite'].includes(savedAccent) ? savedAccent : 'blue');
+    })();
+</script>
+<!-- Custom Glassmorphism & Hero Styles -->
+<style>
+    .landing-page { --landing-accent:#2563eb;--landing-accent-rgb:37,99,235;--landing-accent-soft:#dbeafe; }
+    html[data-landing-accent="gold"] .landing-page { --landing-accent:#d97706;--landing-accent-rgb:217,119,6;--landing-accent-soft:#fef3c7; }
+    html[data-landing-accent="green"] .landing-page { --landing-accent:#15803d;--landing-accent-rgb:21,128,61;--landing-accent-soft:#dcfce7; }
+    html[data-landing-accent="purple"] .landing-page { --landing-accent:#7c3aed;--landing-accent-rgb:124,58,237;--landing-accent-soft:#ede9fe; }
+    html[data-landing-accent="graphite"] .landing-page { --landing-accent:#475569;--landing-accent-rgb:71,85,105;--landing-accent-soft:#e2e8f0; }
+    .landing-page .text-primary { color:var(--landing-accent)!important; }
+    .landing-page .bg-primary { background-color:var(--landing-accent)!important; }
+    .landing-page .bg-primary-subtle { background-color:var(--landing-accent-soft)!important; }
+    .landing-page .btn-primary { --bs-btn-bg:var(--landing-accent);--bs-btn-border-color:var(--landing-accent);--bs-btn-hover-bg:var(--landing-accent);--bs-btn-hover-border-color:var(--landing-accent); }
+    .landing-page .btn-outline-primary { --bs-btn-color:var(--landing-accent);--bs-btn-border-color:var(--landing-accent);--bs-btn-hover-bg:var(--landing-accent);--bs-btn-hover-border-color:var(--landing-accent); }
+    .hero-full-bg {
+        position: relative;
+        background: #eef4fb;
+        min-height: 82vh;
+        display: flex;
+        align-items: center;
+    }
+    .hero-background-carousel { position:absolute;inset:0;z-index:0; }
+    .hero-background-carousel .carousel-inner,
+    .hero-background-carousel .carousel-item { height:100%; }
+    .hero-slide-bg { width:100%;height:100%;background-position:center;background-size:cover;background-repeat:no-repeat; }
+    .hero-background-carousel .carousel-indicators { z-index:3;justify-content:flex-end;margin-right:3%;margin-left:60%; }
+    .hero-background-carousel .carousel-indicators button { width:8px;height:8px;border-radius:50%;border:2px solid #fff;background-color:var(--landing-accent);box-shadow:0 2px 8px rgba(15,23,42,.22); }
+    .hero-manual-control { z-index:5;width:46px;height:46px;top:50%;bottom:auto;transform:translateY(-50%);border-radius:50%;background:rgba(15,23,42,.48);border:1px solid rgba(255,255,255,.65);opacity:.82;backdrop-filter:blur(8px);transition:opacity .2s ease,background .2s ease,transform .2s ease; }
+    .hero-manual-control.carousel-control-prev { left:18px; }
+    .hero-manual-control.carousel-control-next { right:18px; }
+    .hero-manual-control:hover { opacity:1;background:rgba(29,78,216,.88);transform:translateY(-50%) scale(1.06); }
+    .hero-manual-control .carousel-control-prev-icon,
+    .hero-manual-control .carousel-control-next-icon { width:18px;height:18px; }
+    @media(max-width:767.98px){.hero-manual-control{width:38px;height:38px}.hero-manual-control.carousel-control-prev{left:8px}.hero-manual-control.carousel-control-next{right:8px}}
+    .hero-overlay {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(90deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.88) 45%, rgba(255, 255, 255, 0.45) 80%, rgba(255, 255, 255, 0.15) 100%);
+        z-index: 1;
+        pointer-events: none;
+    }
+    .hero-content {
+        position: relative;
+        z-index: 2;
+    }
+    .glass-badge {
+        background: rgba(255, 255, 255, 0.88);
+        backdrop-filter: blur(14px);
+        -webkit-backdrop-filter: blur(14px);
+        border: 1px solid rgba(255, 255, 255, 0.8);
+        box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+    }
+    .hero-brand-lockup { background:transparent;border:0;box-shadow:none; }
+    .hero-brand-logo { width:54px;height:54px;object-fit:contain;border-radius:13px;flex:0 0 auto; }
+    .landing-navbar-brand { gap:10px;padding:4px 8px 4px 2px!important;border:0;background:transparent;box-shadow:none; }
+    .landing-brand-mark,.hero-brand-logo,.site-footer img[alt="GPS Paraíba"] { filter:drop-shadow(0 6px 7px rgba(15,23,42,.2)) drop-shadow(0 0 3px rgba(255,255,255,.72))!important; }
+    .landing-brand-name { color:#0f172a;font-size:18px;font-weight:850;letter-spacing:-.025em;line-height:1;white-space:nowrap; }
+    .landing-brand-name small { display:block;color:#64748b;font-size:9px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;margin-top:5px; }
+    .hero-price-line { display:inline-flex;align-items:baseline;gap:6px;color:#475569;font-weight:600; }
+    .hero-price-line strong { color:var(--landing-accent);font-size:1.45rem; }
+    .hover-lift {
+        transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+    }
+    .hover-lift:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 14px 32px rgba(15, 23, 42, 0.15) !important;
+    }
+    .site-footer { background:#f8fafc;color:#475569; }
+    .site-footer h5,.site-footer h6 { color:#0f172a;font-weight:800; }
+    .site-footer a { color:#475569;transition:color .2s ease,transform .2s ease; }
+    .site-footer a:hover { color:var(--landing-accent); }
+    .footer-contact-item { display:flex;align-items:flex-start;gap:10px;padding:9px 0; }
+    .footer-contact-icon { width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--landing-accent-soft);color:var(--landing-accent);flex:0 0 auto; }
+    .landing-palette-swatch { width:13px;height:13px;border-radius:50%;display:inline-block;box-shadow:0 0 0 2px rgba(148,163,184,.2); }
+    .landing-palette-option.active { background:rgba(var(--landing-accent-rgb),.12)!important;font-weight:700;color:var(--landing-accent)!important; }
+    .footer-app-link { width:38px;height:38px;border-radius:11px;display:inline-grid;place-items:center;background:#fff;border:1px solid #dbe3ef;color:#0f172a!important;box-shadow:0 4px 14px rgba(15,23,42,.06); }
+    .footer-brand-lockup { display:inline-flex;padding:3px 4px 3px 0;border:0;background:transparent;box-shadow:none; }
+    .social-btn-round {
+        width: 40px;
+        height: 40px;
+        background-color: #dc2626;
+        color: #ffffff;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.2s ease, background-color 0.2s ease;
+    }
+    .social-btn-round:hover {
+        transform: translateY(-3px);
+        background-color: #ef4444;
+        color: #ffffff;
+    }
+    html[data-bs-theme="dark"] body.landing-page { background:#080e1a!important;color:#e5edf8!important; }
+    html[data-bs-theme="dark"] .landing-page .navbar { background:rgba(8,14,26,.94)!important;border-color:#263449!important;backdrop-filter:blur(12px); }
+    html[data-bs-theme="dark"] .landing-page .navbar .nav-link { color:#cbd5e1!important; }
+    html[data-bs-theme="dark"] .landing-page .navbar .nav-link.active,
+    html[data-bs-theme="dark"] .landing-page .navbar .nav-link:hover { color:var(--landing-accent)!important;filter:brightness(1.25); }
+    html[data-bs-theme="dark"] .landing-page .navbar-toggler-icon { filter:invert(1) grayscale(1) brightness(1.8); }
+    html[data-bs-theme="dark"] .landing-page .hero-full-bg { background:#0b1220; }
+    html[data-bs-theme="dark"] .landing-page .hero-overlay { background:linear-gradient(90deg,rgba(8,14,26,.97) 0%,rgba(8,14,26,.9) 45%,rgba(8,14,26,.56) 80%,rgba(8,14,26,.28) 100%); }
+    html[data-bs-theme="dark"] .landing-page .glass-badge { background:rgba(15,23,42,.88);border-color:rgba(71,85,105,.72);box-shadow:0 12px 34px rgba(0,0,0,.3); }
+    html[data-bs-theme="dark"] .landing-page .bg-white { background-color:#111827!important; }
+    html[data-bs-theme="dark"] .landing-page .bg-light { background-color:#0f172a!important; }
+    html[data-bs-theme="dark"] .landing-page .text-dark { color:#f1f5f9!important; }
+    html[data-bs-theme="dark"] .landing-page .text-secondary { color:#aebdd0!important; }
+    html[data-bs-theme="dark"] .landing-page .border-light-subtle,
+    html[data-bs-theme="dark"] .landing-page .border { border-color:#334155!important; }
+    html[data-bs-theme="dark"] .landing-page .card,
+    html[data-bs-theme="dark"] .landing-page .accordion-item,
+    html[data-bs-theme="dark"] .landing-page .accordion-button,
+    html[data-bs-theme="dark"] .landing-page .accordion-body { background-color:#111827!important;color:#dbe6f3!important; }
+    html[data-bs-theme="dark"] .landing-page .accordion-button:not(.collapsed) { background-color:#172554!important;color:#bfdbfe!important; }
+    html[data-bs-theme="dark"] .landing-page .accordion-button::after { filter:invert(1) grayscale(1) brightness(1.8); }
+    html[data-bs-theme="dark"] .landing-page .btn-light { background:#172033!important;border-color:#334155!important;color:#e5edf8!important; }
+    html[data-bs-theme="dark"] .landing-page #landing-theme-toggle { background:#1e293b!important;color:#fbbf24!important; }
+    html[data-bs-theme="dark"] .landing-page .erp-access-button { background:#f8fafc!important;border-color:#f8fafc!important;color:#0f172a!important; }
+    html[data-bs-theme="dark"] .landing-page .hero-brand-lockup { background:transparent;border:0;box-shadow:none; }
+    html[data-bs-theme="dark"] .landing-page .hero-price-line { color:#aebdd0; }
+    html[data-bs-theme="dark"] .landing-page .hero-price-line strong { color:var(--landing-accent);filter:brightness(1.25); }
+    html[data-bs-theme="dark"] .landing-page .landing-brand-name { color:#f8fafc; }
+    html[data-bs-theme="dark"] .landing-page .landing-brand-name small { color:#94a3b8; }
+    html[data-bs-theme="dark"] .landing-page .landing-navbar-brand,
+    html[data-bs-theme="dark"] .landing-page .footer-brand-lockup { background:transparent;border:0;box-shadow:none; }
+    html[data-bs-theme="dark"] .landing-page .landing-brand-mark,
+    html[data-bs-theme="dark"] .landing-page .hero-brand-logo,
+    html[data-bs-theme="dark"] .landing-page .site-footer img[alt="GPS Paraíba"] { filter:drop-shadow(0 7px 9px rgba(0,0,0,.5)) drop-shadow(0 0 4px rgba(251,191,36,.2))!important; }
+    html[data-bs-theme="dark"] .landing-page .site-footer { background:#080e1a;color:#aebdd0;border-color:#263449!important; }
+    html[data-bs-theme="dark"] .landing-page .site-footer h5,
+    html[data-bs-theme="dark"] .landing-page .site-footer h6 { color:#f1f5f9; }
+    html[data-bs-theme="dark"] .landing-page .site-footer a { color:#b8c6d9; }
+    html[data-bs-theme="dark"] .landing-page .site-footer a:hover { color:var(--landing-accent);filter:brightness(1.25); }
+    html[data-bs-theme="dark"] .landing-page .footer-contact-icon,
+    html[data-bs-theme="dark"] .landing-page .footer-app-link { background:#111c2e;border-color:#334155;color:var(--landing-accent)!important; }
+
+    /* Google Reviews Top Bar */
+    .google-reviews-bar {
+        background-color: #f8fafc;
+        border-bottom: 1px solid #e2e8f0;
+        font-size: 13px;
+        color: #334155;
+        padding: 6px 0;
+        font-family: 'Outfit', sans-serif;
+    }
+    html[data-bs-theme="dark"] .google-reviews-bar {
+        background-color: #0b1322;
+        border-bottom: 1px solid #1e293b;
+        color: #94a3b8;
+    }
+    html[data-bs-theme="dark"] .dark-text-light {
+        color: #f1f5f9 !important;
+    }
+    .reviews-carousel {
+        position: relative;
+        overflow: hidden;
+        height: 20px;
+    }
+    .reviews-track {
+        display: flex;
+        flex-direction: column;
+        transition: transform 0.5s ease-in-out;
+    }
+    .review-item {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        height: 20px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+    .review-avatar {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+    .stars-color {
+        color: #f59e0b; /* Golden Yellow */
+    }
+    /* Reviews Slider Controls */
+    .carousel-control-prev,
+    .carousel-control-next {
+        opacity: 0.85;
+    }
+    .carousel-control-prev:hover,
+    .carousel-control-next:hover {
+        opacity: 1;
+    }
+    .carousel-control-prev span:hover,
+    .carousel-control-next span:hover {
+        transform: scale(1.1);
+        border-color: var(--landing-accent) !important;
+        color: var(--landing-accent) !important;
+    }
+    html[data-bs-theme="dark"] .carousel-control-prev span,
+    html[data-bs-theme="dark"] .carousel-control-next span {
+        background-color: #1e293b !important;
+        border-color: #334155 !important;
+        color: #f1f5f9 !important;
+    }
+</style>
+
+<!-- Floating WhatsApp Button -->
+<a href="https://api.whatsapp.com/send?phone=5583991386279&text=Ol%C3%A1!%20Vim%20pelo%20site%20da%20GPS%20Para%C3%ADba%20e%20gostaria%20de%20solicitar%20uma%20cota%C3%A7%C3%A3o."
+   target="_blank"
+   rel="noopener noreferrer"
+   class="position-fixed bottom-0 end-0 m-4 z-3 btn btn-success rounded-circle shadow-lg p-3 d-flex align-items-center justify-content-center border-0 hover-lift"
+   style="width: 58px; height: 58px; background-color: #25d366;"
+   title="Falar no WhatsApp">
+    <i class="ri-whatsapp-fill fs-30 text-white"></i>
+</a>
+
+<!-- Google Reviews Top Bar -->
+<div class="google-reviews-bar d-none d-sm-block">
+    <div class="container d-flex justify-content-between align-items-center">
+        <div class="d-flex align-items-center gap-2 fw-semibold">
+            <i class="ri-google-fill text-primary fs-16"></i>
+            <span>Google</span>
+            <span class="text-dark fw-bold dark-text-light ms-1">4.9/5</span>
+            <span class="stars-color"><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i></span>
+            <span class="text-muted fs-11 ms-1 d-none d-md-inline">(120+ avaliações)</span>
+        </div>
+        <div class="reviews-carousel flex-grow-1 ms-4 text-center text-md-start" style="max-width: 500px;">
+            <div class="reviews-track" id="reviewsTrack">
+                <div class="review-item">
+                    <img src="{{ config.ASSETS_ROOT }}/images/users/avatar-1.jpg" class="review-avatar" alt="Avatar Carlos E.">
+                    <span class="fw-bold text-dark dark-text-light">Carlos Eduardo</span>
+                    <span class="stars-color d-none d-md-inline"><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i></span>
+                    <span class="text-muted">"Instalação rápida e suporte impecável."</span>
+                </div>
+                <div class="review-item">
+                    <img src="{{ config.ASSETS_ROOT }}/images/users/avatar-2.jpg" class="review-avatar" alt="Avatar Fernanda L.">
+                    <span class="fw-bold text-dark dark-text-light">Fernanda Lima</span>
+                    <span class="stars-color d-none d-md-inline"><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i></span>
+                    <span class="text-muted">"O rastreamento em tempo real é muito preciso."</span>
+                </div>
+                <div class="review-item">
+                    <img src="{{ config.ASSETS_ROOT }}/images/users/avatar-3.jpg" class="review-avatar" alt="Avatar Roberto S.">
+                    <span class="fw-bold text-dark dark-text-light">Roberto Silva</span>
+                    <span class="stars-color d-none d-md-inline"><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i></span>
+                    <span class="text-muted">"Atendimento excelente e preço justo mensal."</span>
+                </div>
+                <div class="review-item">
+                    <img src="{{ config.ASSETS_ROOT }}/images/users/avatar-4.jpg" class="review-avatar" alt="Avatar Mariana C.">
+                    <span class="fw-bold text-dark dark-text-light">Mariana Costa</span>
+                    <span class="stars-color d-none d-md-inline"><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i><i class="ri-star-fill"></i></span>
+                    <span class="text-muted">"A melhor proteção veicular da Paraíba."</span>
+                </div>
+            </div>
+        </div>
+        <div class="d-none d-lg-block fs-11 text-muted">
+            <i class="ri-shield-check-line text-success"></i> Verificado por Google
+        </div>
+    </div>
+</div>
+
+<!-- Header Navigation (Navbar Enxuto) -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white py-2 sticky-top border-bottom border-light-subtle shadow-sm z-3">
+    <div class="container">
+        <!-- Logo Image Compact -->
+        <a class="navbar-brand landing-navbar-brand d-flex align-items-center py-0" href="/">
+            <img src="{{ config.ASSETS_ROOT }}/images/logo-gps-profissional-v1.png?v=20260802a" alt="GPS Paraíba Logo" style="height:42px;width:auto" class="landing-brand-mark">
+            <span class="landing-brand-name">GPS Paraíba<small>Rastreamento veicular</small></span>
+        </a>
+
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav me-auto ms-lg-4 mb-2 mb-lg-0 fw-semibold text-secondary fs-15">
+                <li class="nav-item"><a class="nav-link active text-primary" href="#inicio">Início</a></li>
+                <li class="nav-item"><a class="nav-link text-dark hover-primary" href="#planos">Planos</a></li>
+                <li class="nav-item"><a class="nav-link text-dark hover-primary" href="#quemsomos">Quem Somos</a></li>
+                <li class="nav-item"><a class="nav-link text-dark hover-primary" href="#avaliacoes">Avaliações</a></li>
+                <li class="nav-item"><a class="nav-link text-dark hover-primary" href="#faq">Dúvidas</a></li>
+                <li class="nav-item"><a class="nav-link text-dark hover-primary" href="#rodape">Contato</a></li>
+            </ul>
+
+            <!-- Header Right: Social Icons Only & Dual Login Buttons -->
+            <div class="d-flex align-items-center gap-2">
+                <button id="landing-theme-toggle" type="button" class="btn btn-light btn-sm rounded-circle p-0 d-inline-flex align-items-center justify-content-center border shadow-sm" style="width:36px;height:36px" title="Ativar tema escuro" aria-label="Alternar tema claro e escuro">
+                    <i id="landing-theme-moon" class="ri-moon-line fs-18"></i>
+                    <i id="landing-theme-sun" class="ri-sun-line fs-18 d-none"></i>
+                </button>
+                <div class="dropdown">
+                    <button id="landing-palette-toggle" type="button" class="btn btn-light btn-sm rounded-circle p-0 d-inline-flex align-items-center justify-content-center border shadow-sm" style="width:36px;height:36px" data-bs-toggle="dropdown" aria-expanded="false" title="Escolher cor do tema" aria-label="Escolher cor do tema"><i class="ri-palette-line fs-18"></i></button>
+                    <div class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-3 p-2" style="min-width:190px">
+                        <small class="text-secondary text-uppercase fw-bold px-2 d-block mb-1" style="font-size:9px;letter-spacing:.1em">Cor do tema</small>
+                        <button type="button" class="dropdown-item rounded-2 landing-palette-option d-flex align-items-center gap-2" data-accent="blue"><span class="landing-palette-swatch" style="background:#2563eb"></span>Azul</button>
+                        <button type="button" class="dropdown-item rounded-2 landing-palette-option d-flex align-items-center gap-2" data-accent="gold"><span class="landing-palette-swatch" style="background:#d97706"></span>Dourado</button>
+                        <button type="button" class="dropdown-item rounded-2 landing-palette-option d-flex align-items-center gap-2" data-accent="green"><span class="landing-palette-swatch" style="background:#15803d"></span>Verde</button>
+                        <button type="button" class="dropdown-item rounded-2 landing-palette-option d-flex align-items-center gap-2" data-accent="purple"><span class="landing-palette-swatch" style="background:#7c3aed"></span>Roxo</button>
+                        <button type="button" class="dropdown-item rounded-2 landing-palette-option d-flex align-items-center gap-2" data-accent="graphite"><span class="landing-palette-swatch" style="background:#475569"></span>Grafite</button>
+                    </div>
+                </div>
+                <!-- Instagram -->
+                <a href="https://www.instagram.com/rastrekparaiba/"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="btn btn-light btn-sm rounded-circle p-0 d-inline-flex align-items-center justify-content-center text-danger border shadow-sm"
+                   style="width: 36px; height: 36px;"
+                   title="Instagram @rastrekparaiba">
+                    <i class="ri-instagram-line fs-18"></i>
+                </a>
+
+                <!-- WhatsApp -->
+                <a href="https://api.whatsapp.com/send?phone=5583991386279&text=Ol%C3%A1!%20Gostaria%20de%20saber%20mais%20sobre%20o%20rastreamento%20veicular%20da%20GPS%20Para%C3%ADba."
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="btn btn-success btn-sm rounded-circle p-0 d-inline-flex align-items-center justify-content-center text-white border-0 shadow-sm"
+                   style="width: 36px; height: 36px; background-color: #25d366;"
+                   title="WhatsApp (83) 99138-6279">
+                    <i class="ri-whatsapp-line fs-18"></i>
+                </a>
+
+                <div class="d-inline-flex align-items-center position-relative shadow-sm rounded-pill border border-secondary border-opacity-20 bg-light p-1 ms-1">
+                    <a href="https://lionras.rastrosystem.com.br/acl/login/?next=/pessoa/" target="_blank" rel="noopener noreferrer" class="btn btn-primary rounded-pill px-3 py-1-5 fw-bold text-white d-inline-flex align-items-center gap-1 border-0 shadow-sm" style="font-size:13px" title="Abrir Portal do Cliente">
+                        <i class="ri-user-shared-line fs-15"></i><span>Login</span>
+                    </a>
+                    <span class="badge bg-white text-secondary border rounded-circle z-2 p-1.5 fs-11 fw-bold shadow-xs" style="margin-left:-7px;margin-right:-7px;min-width:24px;height:24px;display:inline-flex;align-items:center;justify-content:center">ou</span>
+                    <a href="/auth-signin.html" class="btn btn-dark erp-access-button rounded-pill px-3 py-1-5 fw-bold text-white d-inline-flex align-items-center gap-1 border-0 shadow-sm" style="font-size:13px" title="Acessar sistema interno">
+                        <i class="ri-dashboard-line fs-15"></i><span>ERP</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO SECTION FULL-WIDTH: Imagem ocupando toda a tela com veículo à esquerda e informações sobrepostas -->
+<section id="inicio" class="hero-full-bg py-4 overflow-hidden">
+    <div id="landing-hero-carousel" class="carousel slide carousel-fade hero-background-carousel" data-bs-ride="carousel" data-bs-interval="6500" data-bs-pause="false" aria-label="Demonstração de imagens do destaque principal">
+        <div class="carousel-indicators">
+            {% for image in carousel_images %}
+            <button type="button" data-bs-target="#landing-hero-carousel" data-bs-slide-to="{{ loop.index0 }}" {% if loop.first %}class="active" aria-current="true"{% endif %} aria-label="{{ image.title }}"></button>
+            {% endfor %}
+        </div>
+        <div class="carousel-inner">
+            {% for image in carousel_images %}
+            <div class="carousel-item {% if loop.first %}active{% endif %}"><div class="hero-slide-bg" style="background-image:url('{{ config.ASSETS_ROOT }}/images/{{ image.filename }}?v={{ image.version }}')"></div></div>
+            {% endfor %}
+        </div>
+    </div>
+        {% if carousel_images|length > 1 %}
+        <button class="carousel-control-next hero-manual-control" type="button" data-bs-target="#landing-hero-carousel" data-bs-slide="next" aria-label="Próxima imagem">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Próxima imagem</span>
+        </button>
+        {% endif %}
+    <div class="hero-overlay"></div>
+
+    <div class="container hero-content py-lg-4">
+        <div class="row align-items-center">
+            <div class="col-lg-7 col-xl-6">
+                <div class="hero-brand-lockup d-inline-flex align-items-center gap-3 rounded-4 p-2 pe-4 mb-4">
+                    <img src="{{ config.ASSETS_ROOT }}/images/logo-gps-profissional-v1.png?v=20260802a" class="hero-brand-logo" alt="Logo GPS Paraíba">
+                    <div class="text-start">
+                        <strong class="d-block text-dark fs-17 lh-sm">GPS Paraíba</strong>
+                        <small class="text-secondary fw-semibold">Rastreamento veicular desde 2022</small>
+                    </div>
+                </div>
+
+                <h1 class="display-5 fw-extrabold text-dark tracking-tight lh-sm mb-2">
+                    Rastreamento veicular e telemetria em tempo real
+                </h1>
+                <div class="hero-price-line mb-3"><span>Planos a partir de</span><strong>R$ 62,00/mês</strong></div>
+
+                <!-- Subheadline -->
+                <p class="text-secondary fs-17 mb-4 lh-base" style="max-width: 540px;">
+                    Rastreamento GPS 24h, bloqueio remoto instantâneo via app, reboque 200km e assistência completa sem consulta ao SPC/Serasa.
+                </p>
+
+                <!-- Information Badges sobrepostos -->
+                <div class="row g-2 mb-4" style="max-width: 560px;">
+                    <div class="col-6">
+                        <div class="p-2-5 px-3 glass-badge rounded-3 d-flex align-items-center gap-2 shadow-sm">
+                            <i class="ri-checkbox-circle-fill text-success fs-18"></i>
+                            <span class="fw-bold text-dark fs-14">Sem Análise de Perfil</span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-2-5 px-3 glass-badge rounded-3 d-flex align-items-center gap-2 shadow-sm">
+                            <i class="ri-truck-fill text-primary fs-18"></i>
+                            <span class="fw-bold text-dark fs-14">Reboque 200km Brasil</span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-2-5 px-3 glass-badge rounded-3 d-flex align-items-center gap-2 shadow-sm">
+                            <i class="ri-headphone-fill text-warning fs-18"></i>
+                            <span class="fw-bold text-dark fs-14">Central 0800 24 Horas</span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="p-2-5 px-3 glass-badge rounded-3 d-flex align-items-center gap-2 shadow-sm">
+                            <i class="ri-shield-check-fill text-success fs-18"></i>
+                            <span class="fw-bold text-dark fs-14">Garantia FIPE R$ 60k</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Call To Actions -->
+                <div class="d-flex flex-wrap align-items-center gap-3 mb-4">
+                    <a href="https://api.whatsapp.com/send?phone=5583991386279&text=Ol%C3%A1!%20Gostaria%20de%20solicitar%20uma%20cota%C3%A7%C3%A3o%20de%20rastreamento%20para%20meu%20ve%C3%ADculo."
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="btn btn-success btn-lg rounded-pill px-4 py-3 fw-bold d-inline-flex align-items-center gap-2 shadow border-0 hover-lift"
+                       style="background-color: #25d366; font-size: 16px;">
+                        <i class="ri-whatsapp-line fs-22"></i>
+                        <span>Cotar no WhatsApp em 1 minuto</span>
+                    </a>
+
+                    <a href="#planos" class="btn btn-outline-dark btn-lg rounded-pill px-4 py-3 fw-semibold" style="font-size: 16px;">
+                        Ver Planos
+                    </a>
+                </div>
+
+                <!-- Informações institucionais verificáveis -->
+                <div class="row g-3 pt-3 border-top border-light-subtle text-center text-sm-start" style="max-width: 560px;">
+                    <div class="col-4">
+                        <h4 class="fw-extrabold text-primary mb-0 fs-22">Desde 2022</h4>
+                        <small class="text-secondary font-medium fs-12">Experiência no setor</small>
+                    </div>
+                    <div class="col-4">
+                        <h4 class="fw-extrabold text-warning mb-0 fs-22">Tempo real</h4>
+                        <small class="text-secondary font-medium fs-12">Localização e alertas</small>
+                    </div>
+                    <div class="col-4">
+                        <h4 class="fw-extrabold text-success mb-0 fs-22">App + Portal</h4>
+                        <small class="text-secondary font-medium fs-12">Acesso onde estiver</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Seção: Planos e Preços (#vaiderastrek) -->
+<section id="planos" class="py-5 bg-white border-top border-light-subtle">
+    <div class="container py-lg-4">
+        <div class="text-center max-w-700 mx-auto mb-5">
+            <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold text-uppercase mb-2">#gpsparaiba</span>
+            <h2 class="display-6 fw-bold text-dark">Planos de Rastreamento Veicular + Assistência</h2>
+            <p class="text-secondary fs-16">Escolha o plano ideal para o seu carro, moto ou frota comercial com pagamento mensal.</p>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+            {% for plan in landing_plans %}
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 rounded-4 p-4 hover-top transition d-flex flex-column {{ 'border border-warning shadow-lg bg-white position-relative' if plan.destaque else 'border-0 shadow-sm bg-light' }}">
+                    {% if plan.destaque %}<span class="position-absolute top-0 end-0 m-3 badge bg-warning text-dark fw-bold px-3 py-1 rounded-pill">MAIS VENDIDO</span>{% endif %}
+                    <div class="badge bg-primary-subtle text-primary align-self-start px-3 py-1 rounded-pill fw-bold fs-12 mb-2">{{ plan.badge or plan.tipoVeiculo|upper }}</div>
+                    <h5 class="fw-bold text-dark mb-1">{{ plan.nome }}</h5>
+                    <p class="small text-secondary mb-2">{{ plan.descricao or plan.cobertura }}</p>
+                    <div class="my-3">
+                        <span class="fs-14 text-secondary">R$</span>
+                        <span class="display-5 fw-extrabold text-primary">{{ '%.2f'|format(plan.mensalidade)|replace('.', ',') }}</span>
+                        <span class="text-secondary fs-14">/mês</span>
+                    </div>
+                    <ul class="list-unstyled text-secondary fs-14 d-grid gap-2 mb-4">
+                        {% for benefit in plan.beneficios %}<li><i class="ri-check-line text-success fw-bold me-1"></i> {{ benefit }}</li>{% endfor %}
+                    </ul>
+                    <a href="{{ plan.whatsappUrl }}" target="_blank" rel="noopener noreferrer" class="btn {{ 'btn-warning text-dark' if plan.destaque else 'btn-outline-primary' }} rounded-pill fw-bold py-2 mt-auto">
+                        <i class="ri-whatsapp-line me-1"></i> Contratar este Plano
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+            {% if false %}
+            <!-- Plano 1: Qualquer Veículo - R$ 62,00 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border-0 shadow-sm rounded-4 p-4 bg-light hover-top transition d-flex flex-column">
+                    <div class="badge bg-secondary-subtle text-dark align-self-start px-3 py-1 rounded-pill fw-bold fs-12 mb-2">QUALQUER VEÍCULO</div>
+                    <h5 class="fw-bold text-dark mb-1">Rastreamento + Assistência</h5>
+                    <p class="small text-secondary mb-2">Para qualquer automóvel ou moto</p>
+                    <div class="my-3">
+                        <span class="fs-14 text-secondary">R$</span>
+                        <span class="display-5 fw-extrabold text-primary">62</span>
+                        <span class="fs-18 fw-bold text-primary">,00</span>
+                        <span class="text-secondary fs-14">/mês</span>
+                    </div>
+                    <ul class="list-unstyled text-secondary fs-14 d-grid gap-2 mb-4">
+                        <li><i class="ri-check-line text-success fw-bold me-1"></i> Sem cobertura FIPE</li>
+                        <li><i class="ri-check-line text-success fw-bold me-1"></i> Suporte 24h Roubo / Furto</li>
+                        <li><i class="ri-check-line text-success fw-bold me-1"></i> Central 0800 24 Horas</li>
+                        <li><i class="ri-check-line text-success fw-bold me-1"></i> Rastreamento + Bloqueio Remoto</li>
+                        <li><i class="ri-check-line text-success fw-bold me-1"></i> Equipe de Recuperação Veicular</li>
+                    </ul>
+                    <a href="https://api.whatsapp.com/send?phone=5583991386279&text=Ol%C3%A1!%20Quero%20contratar%20o%20Plano%20de%20R%24%2062%20da%20GPS%20Para%C3%ADba."
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="btn btn-outline-primary rounded-pill fw-bold py-2 mt-auto">
+                        <i class="ri-whatsapp-line me-1"></i> Contratar este Plano
+                    </a>
+                </div>
+            </div>
+
+            <!-- Plano 2: Moto Garantida - R$ 78,00 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border border-info border-opacity-30 shadow-sm rounded-4 p-4 bg-light hover-top transition d-flex flex-column">
+                    <div class="badge bg-info-subtle text-info align-self-start px-3 py-1 rounded-pill fw-bold fs-12 mb-2">MOTO</div>
+                    <h5 class="fw-bold text-dark mb-1">Moto Garantida + Assistência</h5>
+                    <p class="small text-secondary mb-2">Para motocicletas de até R$ 15 mil FIPE</p>
+                    <div class="my-3">
+                        <span class="fs-14 text-secondary">R$</span>
+                        <span class="display-5 fw-extrabold text-info">78</span>
+                        <span class="fs-18 fw-bold text-info">,00</span>
+                        <span class="text-secondary fs-14">/mês</span>
+                    </div>
+                    <ul class="list-unstyled text-secondary fs-14 d-grid gap-2 mb-4">
+                        <li><i class="ri-shield-fill text-warning me-1"></i> <b>Garantia FIPE de até R$ 15.000</b></li>
+                        <li><i class="ri-check-line text-success fw-bold me-1"></i> Suporte Roubo e Furto</li>
+                        <li><i class="ri-check-line text-success fw-bold me-1"></i> Central 0800 & Monitoramento 24h</li>
+                        <li><i class="ri-check-line text-success fw-bold me-1"></i> Reboque até 200km (Brasil)</li>
+                        <li><i class="ri-check-line text-success fw-bold me-1"></i> Chaveiro & Socorro Pane Seca</li>
+                        <li><i class="ri-battery-charge-fill text-success me-1"></i> <b>Bateria Nova por nossa conta</b></li>
+                    </ul>
+                    <a href="https://api.whatsapp.com/send?phone=5583991386279&text=Ol%C3%A1!%20Quero%20contratar%20o%20Plano%20Moto%20R%24%2078%20da%20GPS%20Para%C3%ADba."
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="btn btn-outline-info rounded-pill fw-bold py-2 mt-auto">
+                        <i class="ri-whatsapp-line me-1"></i> Contratar este Plano
+                    </a>
+                </div>
+            </div>
+
+            <!-- Plano 3: Moto Top - R$ 100,00 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border border-success border-opacity-40 shadow-sm rounded-4 p-4 bg-light hover-top transition d-flex flex-column">
+                    <div class="badge bg-success text-white align-self-start px-3 py-1 rounded-pill fw-bold fs-12 mb-2">MOTO TOP</div>
+                    <h5 class="fw-bold text-dark mb-1">Moto Garantida + Assistência</h5>
+                    <p class="small text-secondary mb-2">Para motocicletas de até R$ 30 mil FIPE</p>
+                    <div class="my-3">
+                        <span class="fs-14 text-secondary">R$</span>
+                        <span class="display-5 fw-extrabold text-success">100</span>
+                        <span class="fs-18 fw-bold text-success">,00</span>
+                        <span class="text-secondary fs-14">/mês</span>
+                    </div>
+                    <ul class="list-unstyled text-secondary fs-14 d-grid gap-2 mb-4">
+                        <li><i class="ri-shield-fill text-warning me-1"></i> <b>Garantia FIPE de até R$ 30.000</b></li>
+                        <li><i class="ri-check-line text-success fw-bold me-1"></i> Suporte Roubo e Furto</li>
+                        <li><i class="ri-check-line text-success fw-bold me-1"></i> Central 0800 & Monitoramento 24h</li>
+                        <li><i class="ri-check-line text-success fw-bold me-1"></i> Reboque até 200km (Brasil)</li>
+                        <li><i class="ri-check-line text-success fw-bold me-1"></i> Chaveiro & Socorro Pane Seca</li>
+                        <li><i class="ri-battery-charge-fill text-success me-1"></i> <b>Bateria Nova por nossa conta</b></li>
+                    </ul>
+                    <a href="https://api.whatsapp.com/send?phone=5583991386279&text=Ol%C3%A1!%20Quero%20contratar%20o%20Plano%20Moto%20R%24%20100%20da%20GPS%20Para%C3%ADba."
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="btn btn-success rounded-pill fw-bold py-2 mt-auto" style="background-color: #25d366; border: none;">
+                        <i class="ri-whatsapp-line me-1"></i> Contratar este Plano
+                    </a>
+                </div>
+            </div>
+
+            <!-- Plano 4: Carro Rastreamento - R$ 120,00 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border border-primary border-opacity-30 shadow-sm rounded-4 p-4 bg-light hover-top transition d-flex flex-column">
+                    <div class="badge bg-primary text-white align-self-start px-3 py-1 rounded-pill fw-bold fs-12 mb-2">CARRO</div>
+                    <h5 class="fw-bold text-dark mb-1">Carro Garantido + Assistência</h5>
+                    <p class="small text-secondary mb-2">Para veículos de passeio de até R$ 30 mil FIPE</p>
+                    <div class="my-3">
+                        <span class="fs-14 text-secondary">R$</span>
+                        <span class="display-5 fw-extrabold text-primary">120</span>
+                        <span class="fs-18 fw-bold text-primary">,00</span>
+                        <span class="text-secondary fs-14">/mês</span>
+                    </div>
+                    <ul class="list-unstyled text-secondary fs-14 d-grid gap-2 mb-4">
+                        <li><i class="ri-shield-fill text-warning me-1"></i> <b>Garantia FIPE de até R$ 30.000</b></li>
+                        <li><i class="ri-check-line text-success fw-bold me-1"></i> Suporte Roubo e Furto</li>
+                        <li><i class="ri-check-line text-success fw-bold me-1"></i> Central 0800 & Monitoramento 24h</li>
+                        <li><i class="ri-check-line text-success fw-bold me-1"></i> Reboque até 200km (Brasil)</li>
+                        <li><i class="ri-check-line text-success fw-bold me-1"></i> Socorro Chaveiro & Gasolina</li>
+                    </ul>
+                    <a href="https://api.whatsapp.com/send?phone=5583991386279&text=Ol%C3%A1!%20Quero%20contratar%20o%20Plano%20Carro%20R%24%20120%20da%20GPS%20Para%C3%ADba."
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="btn btn-outline-primary rounded-pill fw-bold py-2 mt-auto">
+                        <i class="ri-whatsapp-line me-1"></i> Contratar este Plano
+                    </a>
+                </div>
+            </div>
+
+            <!-- Plano 5: Carro VIP (DESTAQUE POPULAR) - R$ 150,00 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 border border-warning shadow-lg rounded-4 p-4 bg-white hover-top transition position-relative d-flex flex-column" style="border-width: 2px !important;">
+                    <span class="position-absolute top-0 end-0 m-3 badge bg-warning text-dark fw-bold px-3 py-1 rounded-pill">MAIS VENDIDO</span>
+                    <div class="badge bg-warning text-dark align-self-start px-3 py-1 rounded-pill fw-bold fs-12 mb-2">CARRO VIP</div>
+                    <h5 class="fw-bold text-dark mb-1">Carro VIP Garantido + Assistência</h5>
+                    <p class="small text-secondary mb-2">Para veículos de passeio de até R$ 60 mil FIPE</p>
+                    <div class="my-3">
+                        <span class="fs-14 text-secondary">R$</span>
+                        <span class="display-5 fw-extrabold text-dark">150</span>
+                        <span class="fs-18 fw-bold text-dark">,00</span>
+                        <span class="text-secondary fs-14">/mês</span>
+                    </div>
+                    <ul class="list-unstyled text-secondary fs-14 d-grid gap-2 mb-4">
+                        <li><i class="ri-shield-fill text-warning me-1"></i> <b>Garantia FIPE de até R$ 60.000</b></li>
+                        <li><i class="ri-check-line text-success fw-bold me-1"></i> Suporte Roubo e Furto</li>
+                        <li><i class="ri-check-line text-success fw-bold me-1"></i> Central 0800 & Monitoramento 24h</li>
+                        <li><i class="ri-check-line text-success fw-bold me-1"></i> Reboque até 200km (Brasil)</li>
+                        <li><i class="ri-check-line text-success fw-bold me-1"></i> Socorro Chaveiro & Gasolina</li>
+                    </ul>
+                    <a href="https://api.whatsapp.com/send?phone=5583991386279&text=Ol%C3%A1!%20Quero%20contratar%20o%20Plano%20Carro%20VIP%20R%24%20150%20da%20GPS%20Para%C3%ADba."
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="btn btn-warning rounded-pill fw-bold py-2.5 mt-auto text-dark shadow-sm">
+                        <i class="ri-whatsapp-line me-1"></i> Contratar este Plano
+                    </a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Seção: Quem Somos, Missão, Visão e Valores -->
+<section id="quemsomos" class="py-5 bg-light border-top border-light-subtle">
+    <div class="container py-lg-4">
+        <div class="row align-items-center gy-4 mb-5">
+            <div class="col-lg-6">
+                <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill fw-bold text-uppercase mb-2">Quem Somos</span>
+                <h2 class="display-6 fw-bold text-dark mb-3">Tecnologia e cuidado para proteger o que importa</h2>
+                <p class="text-secondary fs-16 mb-3">
+                    A <b>GPS Paraíba</b> atua no segmento de rastreamento veicular e telemetria <b>desde 2022</b>, oferecendo soluções para motocicletas, carros, utilitários e frotas. Nosso trabalho combina tecnologia, atendimento próximo e planos adaptados a diferentes necessidades.
+                </p>
+                <p class="text-secondary fs-16 mb-3">
+                    Evoluindo lado a lado com a tecnologia, oferecemos equipamentos de ponta para a logística, gestão de frotas e segurança do seu patrimônio.
+                </p>
+                <div class="d-flex flex-wrap gap-2">
+                    <span class="badge bg-white text-primary border border-primary-subtle rounded-pill px-3 py-2"><i class="ri-map-pin-user-line me-1"></i>Atendimento próximo</span>
+                    <span class="badge bg-white text-primary border border-primary-subtle rounded-pill px-3 py-2"><i class="ri-smartphone-line me-1"></i>Acesso pelo aplicativo</span>
+                    <span class="badge bg-white text-primary border border-primary-subtle rounded-pill px-3 py-2"><i class="ri-route-line me-1"></i>Gestão em tempo real</span>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card border-0 shadow-sm bg-white p-4 rounded-4 border-start border-warning border-5">
+                    <h5 class="fw-bold text-dark mb-3"><i class="ri-shield-user-fill text-warning me-2"></i>Por que escolher a GPS Paraíba?</h5>
+                    <ul class="list-unstyled mb-0 d-grid gap-2 text-secondary fs-15">
+                        <li class="d-flex align-items-center gap-2"><i class="ri-checkbox-circle-fill text-success fs-18"></i> Central 0800 dedicada 24 horas por dia</li>
+                        <li class="d-flex align-items-center gap-2"><i class="ri-checkbox-circle-fill text-success fs-18"></i> Equipe especializada para pronta localização e recuperação</li>
+                        <li class="d-flex align-items-center gap-2"><i class="ri-checkbox-circle-fill text-success fs-18"></i> Reboque guincho até 200km em todo o Brasil</li>
+                        <li class="d-flex align-items-center gap-2"><i class="ri-checkbox-circle-fill text-success fs-18"></i> Socorro chaveiro, pane seca e bateria nova</li>
+                        <li class="d-flex align-items-center gap-2"><i class="ri-checkbox-circle-fill text-success fs-18"></i> Acompanhamento pelo aplicativo e Portal do Cliente</li>
+                        <li class="d-flex align-items-center gap-2"><i class="ri-checkbox-circle-fill text-success fs-18"></i> Histórico de localização e alertas conforme o plano contratado</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Missão, Visão e Valores -->
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border border-light-subtle shadow-sm rounded-4 p-4 bg-white">
+                    <div class="avatar-lg bg-primary bg-opacity-10 text-primary rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 56px; height: 56px;">
+                        <i class="ri-rocket-2-fill fs-28"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark">MISSÃO</h5>
+                    <p class="text-secondary fs-14 mb-0">
+                        Prestar as melhores soluções em rastreamento com qualidade, rapidez, tecnologia e ética profissional, através da especialização contínua de nossos recursos humanos e serviços.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 border border-light-subtle shadow-sm rounded-4 p-4 bg-white">
+                    <div class="avatar-lg bg-success bg-opacity-10 text-success rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 56px; height: 56px;">
+                        <i class="ri-eye-fill fs-28"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark">VISÃO</h5>
+                    <p class="text-secondary fs-14 mb-0">
+                        Manter-se uma organização sólida e sustentável a longo prazo, com foco na performance dos serviços e na satisfação total de nossos clientes.
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card h-100 border border-light-subtle shadow-sm rounded-4 p-4 bg-white">
+                    <div class="avatar-lg bg-warning bg-opacity-10 text-warning rounded-circle d-flex align-items-center justify-content-center mb-3" style="width: 56px; height: 56px;">
+                        <i class="ri-shield-star-fill fs-28"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark">VALORES</h5>
+                    <ul class="list-unstyled text-secondary fs-14 mb-0 d-grid gap-1">
+                        <li>&bull; Valorização humana</li>
+                        <li>&bull; Comprometimento com o cliente</li>
+                        <li>&bull; Qualidade máxima nos serviços</li>
+                        <li>&bull; Aperfeiçoamento tecnológico</li>
+                        <li>&bull; Agilidade efetiva</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Seção: Avaliações de Clientes (Google Reviews Style Carousel) -->
+<section id="avaliacoes" class="py-5 bg-white border-top border-light-subtle">
+    <div class="container py-lg-4">
+        <div class="text-center max-w-700 mx-auto mb-5">
+            <span class="badge bg-primary-subtle text-primary px-3 py-2 rounded-pill fw-bold text-uppercase mb-2">Avaliações</span>
+            <h2 class="display-6 fw-bold text-dark mt-2">O que dizem nossos clientes no Google</h2>
+            <p class="text-secondary fs-16">
+                Veja o depoimento de quem já protege o seu veículo com a GPS Paraíba e conta com suporte 24h.
+            </p>
+        </div>
+
+        <div id="reviewsCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="6000">
+            <!-- Carousel Indicators -->
+            <div class="carousel-indicators" style="bottom: -45px;">
+                {% for review in reviews %}
+                <button type="button" data-bs-target="#reviewsCarousel" data-bs-slide-to="{{ loop.index0 }}" class="{% if loop.first %}active{% endif %} bg-primary" aria-current="{% if loop.first %}true{% endif %}" aria-label="Avaliação {{ loop.index }}" style="width: 24px; height: 4px; border-radius: 2px;"></button>
+                {% endfor %}
+            </div>
+
+            <!-- Carousel Items -->
+            <div class="carousel-inner px-lg-5 mb-3">
+                {% for review in reviews %}
+                <div class="carousel-item {% if loop.first %}active{% endif %}">
+                    <div class="row justify-content-center">
+                        <div class="col-11 col-md-9 col-lg-7">
+                            <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-light position-relative hover-lift border-top border-primary border-3 text-center">
+                                <div class="position-absolute top-0 end-0 m-3 text-muted opacity-25">
+                                    <i class="ri-google-fill fs-30"></i>
+                                </div>
+                                <div class="d-flex flex-column align-items-center mb-3">
+                                    <img src="{{ config.ASSETS_ROOT }}/images/users/{{ review.avatar_filename or 'dummy-avatar.jpg' }}" class="rounded-circle mb-3" style="width: 64px; height: 64px; object-fit: cover;" alt="Foto {{ review.client_name }}">
+                                    <div>
+                                        <h5 class="fw-bold text-dark mb-0">{{ review.client_name }}</h5>
+                                        <small class="text-muted fs-13">{{ review.client_role }}</small>
+                                    </div>
+                                </div>
+                                <div class="stars-color mb-3 fs-18">
+                                    {% for _ in range(review.rating) %}<i class="ri-star-fill"></i>{% endfor %}
+                                    {% for _ in range(5 - review.rating) %}<i class="ri-star-line"></i>{% endfor %}
+                                </div>
+                                <p class="text-secondary fs-15 mb-0 italic px-md-3">
+                                    "{{ review.review_text }}"
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <!-- Controls -->
+            <button class="carousel-control-prev" type="button" data-bs-target="#reviewsCarousel" data-bs-slide="prev" style="width: 60px;">
+                <span class="d-inline-flex align-items-center justify-content-center bg-white border border-light-subtle shadow-sm rounded-circle text-primary" style="width: 44px; height: 44px; transition: all 0.2s;">
+                    <i class="ri-arrow-left-s-line fs-22"></i>
+                </span>
+                <span class="visually-hidden">Anterior</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#reviewsCarousel" data-bs-slide="next" style="width: 60px;">
+                <span class="d-inline-flex align-items-center justify-content-center bg-white border border-light-subtle shadow-sm rounded-circle text-primary" style="width: 44px; height: 44px; transition: all 0.2s;">
+                    <i class="ri-arrow-right-s-line fs-22"></i>
+                </span>
+                <span class="visually-hidden">Próximo</span>
+            </button>
+        </div>
+    </div>
+</section>
+
+<!-- Seção: Perguntas Frequentes (FAQ Accordion) -->
+<section id="faq" class="py-5 bg-white border-top border-light-subtle">
+    <div class="container py-lg-4">
+        <div class="text-center max-w-700 mx-auto mb-5">
+            <span class="badge bg-warning text-dark px-3 py-2 rounded-pill fw-bold text-uppercase">Dúvidas Frequentes</span>
+            <h2 class="display-6 fw-bold text-dark mt-2">Perguntas Frequentes sobre a GPS Paraíba</h2>
+            <p class="text-secondary fs-16">Tire todas as suas dúvidas sobre a contratação e funcionamento do rastreamento.</p>
+        </div>
+
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="accordion accordion-flush d-grid gap-3" id="faqAccordion">
+
+                    <!-- FAQ Item 1 -->
+                    <div class="accordion-item border border-light-subtle rounded-3 overflow-hidden shadow-sm">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button fw-bold text-dark bg-light shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                <i class="ri-question-line text-primary me-2 fs-18"></i> Preciso passar por análise de perfil ou consulta ao SPC/Serasa?
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body text-secondary fs-15 bg-light">
+                                Não! Na GPS Paraíba a aprovação é imediata. Não realizamos análise de perfil por idade, condutor ou consulta nos órgãos de proteção ao crédito (SPC/Serasa).
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ Item 2 -->
+                    <div class="accordion-item border border-light-subtle rounded-3 overflow-hidden shadow-sm">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed fw-bold text-dark bg-light shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                <i class="ri-question-line text-primary me-2 fs-18"></i> Como funciona o bloqueio remoto em caso de roubo ou furto?
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body text-secondary fs-15 bg-light">
+                                Em situação de emergência, você pode acionar o bloqueio pelo seu aplicativo no celular ou ligando para a nossa Central 0800 com atendimento 24h.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ Item 3 -->
+                    <div class="accordion-item border border-light-subtle rounded-3 overflow-hidden shadow-sm">
+                        <h2 class="accordion-header" id="headingThree">
+                            <button class="accordion-button collapsed fw-bold text-dark bg-light shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                <i class="ri-question-line text-primary me-2 fs-18"></i> O rastreador descarrega a bateria do meu carro ou moto?
+                            </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body text-secondary fs-15 bg-light">
+                                Não. Os equipamentos da GPS Paraíba possuem tecnologia de consumo ultrabaixo com modo de repouso automático (sleep mode) quando o veículo está desligado. Além disso, para motos, oferecemos planos com reposição de bateria nova sem custo adicional!
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ Item 4 -->
+                    <div class="accordion-item border border-light-subtle rounded-3 overflow-hidden shadow-sm">
+                        <h2 class="accordion-header" id="headingFour">
+                            <button class="accordion-button collapsed fw-bold text-dark bg-light shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                <i class="ri-question-line text-primary me-2 fs-18"></i> Como funciona a assistência de Reboque 200km?
+                            </button>
+                        </h2>
+                        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body text-secondary fs-15 bg-light">
+                                Em caso de pane mecânica ou elétrica, basta acionar a central para solicitar o guincho com limite de até 200km de percurso em qualquer rodovia do Brasil.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- FAQ Item 5 -->
+                    <div class="accordion-item border border-light-subtle rounded-3 overflow-hidden shadow-sm">
+                        <h2 class="accordion-header" id="headingFive">
+                            <button class="accordion-button collapsed fw-bold text-dark bg-light shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                <i class="ri-question-line text-primary me-2 fs-18"></i> Onde é realizada a instalação do rastreador?
+                            </button>
+                        </h2>
+                        <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#faqAccordion">
+                            <div class="accordion-body text-secondary fs-15 bg-light">
+                                A instalação é rápida e pode ser agendada em nossa unidade física em Cajazeiras-PB ou através do nosso serviço de atendimento técnico móvel em toda a região.
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer id="rodape" class="site-footer py-5 border-top">
+    <div class="container">
+        <div class="row g-5 pb-4">
+            <div class="col-lg-5">
+                <div class="footer-brand-lockup align-items-center gap-2 mb-3 flex-wrap">
+                    <img src="{{ config.ASSETS_ROOT }}/images/logo-gps-profissional-v1.png?v=20260802a" alt="GPS Paraíba" class="me-2" style="height:58px;width:auto">
+                    <a class="footer-app-link" href="https://www.instagram.com/rastrekparaiba/" target="_blank" rel="noopener noreferrer" title="Instagram"><i class="ri-instagram-line fs-19"></i></a>
+                    <a class="footer-app-link" href="https://apps.apple.com/br/app/lion-rastreamento/id6745529989" target="_blank" rel="noopener noreferrer" title="Aplicativo para iPhone"><i class="ri-apple-fill fs-19"></i></a>
+                    <a class="footer-app-link" href="https://play.google.com/store/apps/details?id=br.com.rs.lionras" target="_blank" rel="noopener noreferrer" title="Aplicativo para Android"><i class="ri-google-play-fill fs-19"></i></a>
+                </div>
+                <p class="mb-3" style="max-width:460px">Rastreamento veicular e telemetria com atendimento próximo, tecnologia em tempo real e soluções para motos, carros e frotas.</p>
+                <div class="small text-secondary d-grid gap-1">
+                    <span><strong>CNPJ 47.279.670/0001-52</strong> · GPS Paraíba</span>
+                    <span>&copy; <script>document.write(new Date().getFullYear())</script> Todos os direitos reservados.</span>
+                </div>
+            </div>
+            <div class="col-6 col-lg-3">
+                <h6 class="mb-3">Navegação</h6>
+                <nav class="d-grid gap-2 small"><a href="#inicio">Início</a><a href="#planos">Planos</a><a href="#quemsomos">Quem somos</a><a href="#avaliacoes">Avaliações</a><a href="#faq">Dúvidas frequentes</a><a href="https://lionras.rastrosystem.com.br/acl/login/?next=/pessoa/" target="_blank" rel="noopener noreferrer">Portal do Cliente</a></nav>
+            </div>
+            <div class="col-lg-4">
+                <h6 class="mb-2">Atendimento</h6>
+                <div class="footer-contact-item"><span class="footer-contact-icon"><i class="ri-whatsapp-line"></i></span><div><small class="d-block text-secondary">WhatsApp</small><a class="fw-bold" href="https://api.whatsapp.com/send?phone=5583991386279" target="_blank" rel="noopener noreferrer">(83) 99138-6279</a></div></div>
+                <div class="footer-contact-item"><span class="footer-contact-icon"><i class="ri-mail-line"></i></span><div><small class="d-block text-secondary">E-mail</small><a class="fw-bold" href="mailto:contato@gpsparaiba.com.br">contato@gpsparaiba.com.br</a></div></div>
+                <div class="footer-contact-item"><span class="footer-contact-icon"><i class="ri-map-pin-line"></i></span><div><small class="d-block text-secondary">Cajazeiras, Paraíba</small><a class="fw-bold" href="https://maps.app.goo.gl/PEXJxwDcbZ3SoAmv7" target="_blank" rel="noopener noreferrer">Terminal Rodoviário Clóvis Rolim <i class="ri-external-link-line ms-1"></i></a></div></div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script>
+    (() => {
+        const toggle = document.getElementById('landing-theme-toggle');
+        const moonIcon = document.getElementById('landing-theme-moon');
+        const sunIcon = document.getElementById('landing-theme-sun');
+        function updateLandingThemeButton() {
+            const dark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+            moonIcon.classList.toggle('d-none', dark);
+            sunIcon.classList.toggle('d-none', !dark);
+            toggle.title = dark ? 'Ativar tema claro' : 'Ativar tema escuro';
+            toggle.setAttribute('aria-pressed', dark ? 'true' : 'false');
+        }
+        toggle.addEventListener('click', () => {
+            const nextTheme = document.documentElement.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-bs-theme', nextTheme);
+            localStorage.setItem('gps_landing_theme', nextTheme);
+            updateLandingThemeButton();
+        });
+        updateLandingThemeButton();
+
+        const paletteOptions = [...document.querySelectorAll('.landing-palette-option')];
+        function updateLandingPalette() {
+            const currentAccent = document.documentElement.getAttribute('data-landing-accent') || 'blue';
+            paletteOptions.forEach(option => classListToggle(option, option.dataset.accent === currentAccent));
+        }
+        function classListToggle(option, active) {
+            option.classList.toggle('active', active);
+            option.setAttribute('aria-pressed', active ? 'true' : 'false');
+        }
+        paletteOptions.forEach(option => option.addEventListener('click', () => {
+            document.documentElement.setAttribute('data-landing-accent', option.dataset.accent);
+            localStorage.setItem('gps_landing_accent', option.dataset.accent);
+            localStorage.setItem('gps_color_palette', option.dataset.accent);
+            updateLandingPalette();
+        }));
+        updateLandingPalette();
+
+        // Google Reviews Carousel Auto-Rotation
+        const track = document.getElementById('reviewsTrack');
+        if (track) {
+            let currentIndex = 0;
+            const items = track.querySelectorAll('.review-item');
+            const itemCount = items.length;
+            setInterval(() => {
+                currentIndex = (currentIndex + 1) % itemCount;
+                track.style.transform = `translateY(-${currentIndex * 20}px)`;
+            }, 4000);
+        }
+    })();
+</script>
+
+{% endblock content %}

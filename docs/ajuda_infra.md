@@ -25,3 +25,21 @@ git graph
 git pull origin main
 git push origin main
 ```
+
+---
+
+## 3. Comandos Rápidos da Aplicação
+
+```bash
+# Executar em modo desenvolvimento:
+python3 run.py
+
+# Executar com Gunicorn (Produção):
+gunicorn --config gunicorn-cfg.py run:app
+
+# Verificar compilação sintática de arquivos Python:
+python3 -m py_compile run.py create_user.py apps/__init__.py apps/config.py apps/pages/models.py apps/pages/routes.py
+
+# Criar usuário administrador:
+python3 create_user.py
+```
