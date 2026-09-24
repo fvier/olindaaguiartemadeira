@@ -394,11 +394,17 @@
                     <!-- Coluna 1: A Obra -->
                     <div class="col-lg-4">
                         <div class="p-3.5 rounded-4 bg-light border border-light-subtle h-100">
-                            <h6 class="fw-bold text-dark text-uppercase tracking-wider fs-12 mb-2 d-flex align-items-center gap-1.5">
+                            <h6 class="fw-bold text-dark text-uppercase tracking-wider fs-12 mb-3 d-flex align-items-center gap-1.5">
                                 <i class="ri-ancient-gate-fill text-warning fs-16"></i>
                                 Especificações da Obra
                             </h6>
-                            <h5 class="fw-bold text-dark mb-2 fs-15" id="orderItemTitle">-</h5>
+                            <div class="d-flex align-items-center gap-3 mb-3 p-2 rounded-3 bg-white border border-light-subtle">
+                                <img id="orderItemImg" src="/static/images/mesa-jantar-peroba-rosa-demolicao-1.png" alt="Obra em produção" class="rounded-3 border shadow-sm" style="width: 64px; height: 64px; object-fit: cover; flex-shrink: 0;">
+                                <div>
+                                    <h5 class="fw-bold text-dark mb-1 fs-14 lh-sm" id="orderItemTitle">-</h5>
+                                    <span class="badge bg-light text-secondary border fs-10 px-2 py-0.5 rounded-pill">Peça Autoral</span>
+                                </div>
+                            </div>
                             <ul class="list-unstyled text-secondary fs-13 mb-0 d-grid gap-1.5">
                                 <li><strong>Madeira:</strong> <span id="orderWoodType">-</span></li>
                                 <li><strong>Dimensões:</strong> <span id="orderDimensions">-</span></li>
@@ -617,6 +623,9 @@
 
         // Dados da Obra
         document.getElementById('orderItemTitle').innerText = order.item_title;
+        if (order.item_image) {
+            document.getElementById('orderItemImg').src = order.item_image;
+        }
         document.getElementById('orderWoodType').innerText = order.wood_type;
         document.getElementById('orderDimensions').innerText = order.dimensions || 'Conforme projeto';
         if (order.notes) {

@@ -304,6 +304,20 @@ class WoodworkOrder(db.Model):
         step_names = ['Pedido', 'Sinal financeiro', 'Elaboração da peça', 'Pagamento', 'Entrega']
         cur_name = step_names[min(max(self.current_step - 1, 0), 4)]
 
+        img_map = {
+            'mesa': 'mesa-jantar-peroba-rosa-demolicao-1.png',
+            'escultura': 'carrinho-bar-colonial-madeira.png',
+            'painel': 'armarios-cozinha-jatoba-lambri-demolicao-1.png',
+            'bancada': 'bancada-madeira-demolicao-verniz-pu-1.png',
+            'aparador': 'comoda-balcao-gaveteiro-demolicao.png'
+        }
+        item_img = 'mesa-jantar-peroba-rosa-demolicao-1.png'
+        t_low = (self.item_title or '').lower()
+        for k, v in img_map.items():
+            if k in t_low:
+                item_img = v
+                break
+
         return {
             'id': self.id,
             'order_number': self.order_number,
@@ -312,6 +326,7 @@ class WoodworkOrder(db.Model):
             'cpf': self.formatted_cpf,
             'clean_cpf': self.clean_cpf,
             'item_title': self.item_title,
+            'item_image': f"/static/images/{item_img}",
             'wood_type': self.wood_type,
             'dimensions': self.dimensions,
             'current_step': self.current_step,
