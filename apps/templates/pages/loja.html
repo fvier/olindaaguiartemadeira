@@ -50,57 +50,6 @@
     </div>
   </section>
 
-  <!-- SEÇÃO MAR DE TAGS (FILTRAGEM VISUAL & INSPIRAÇÕES) -->
-  <section class="container store-tag-sea-section" aria-label="Mar de Tags">
-    <div class="store-tag-sea-card">
-      <div class="store-tag-sea-header">
-        <div class="store-tag-sea-title-wrap">
-          <span class="store-tag-sea-wave-icon" aria-hidden="true">🌊</span>
-          <div>
-            <div class="store-tag-sea-badge">NAVEGAÇÃO VISUAL</div>
-            <h2 class="store-tag-sea-title">Mar de Tags & Inspirações</h2>
-            <p class="store-tag-sea-subtitle">Explore o acervo filtrando por madeiras centenárias, técnicas artesanais, móveis e ambientes</p>
-          </div>
-        </div>
-        <div class="store-tag-sea-actions">
-          <span class="store-tag-active-indicator" id="activeTagPillIndicator" style="display:none;"></span>
-          <button type="button" id="clearTagSelectionBtn" class="store-tag-reset-btn" style="display:none;" title="Limpar tag selecionada">
-            <i class="ri-close-circle-line"></i> Limpar Tag
-          </button>
-        </div>
-      </div>
-
-      <!-- Abas de Grupos do Mar de Tags -->
-      <div class="store-tag-groups-nav" id="storeTagGroupsNav" role="tablist">
-        {% for grp in store_tag_groups %}
-        <button type="button" 
-                class="store-tag-group-btn {% if loop.first %}active{% endif %}" 
-                data-group-filter="{{ grp.id }}"
-                role="tab"
-                aria-selected="{% if loop.first %}true{% else %}false{% endif %}">
-          <span>{{ grp.icon }}</span> {{ grp.name }}
-        </button>
-        {% endfor %}
-      </div>
-
-      <!-- O Mar de Tags (Cloud fluido de pills com contadores) -->
-      <div class="store-tag-cloud" id="storeTagCloud" role="region" aria-label="Nuvem de tags">
-        {% for tag in store_tags %}
-        <button type="button" 
-                class="store-tag-pill" 
-                data-tag-slug="{{ tag.slug }}" 
-                data-tag-group="{{ tag.group }}"
-                data-tag-name="{{ tag.name }}"
-                title="Filtrar por #{{ tag.name }} ({{ tag.count }} peças)">
-          <span class="tag-emoji" aria-hidden="true">{{ tag.icon }}</span>
-          <span class="tag-hash">#</span><span class="tag-text">{{ tag.name }}</span>
-          <span class="tag-count-badge">{{ tag.count }}</span>
-        </button>
-        {% endfor %}
-      </div>
-    </div>
-  </section>
-
   <!-- LAYOUT PRINCIPAL: SIDEBAR DE FILTROS + CATÁLOGO -->
   <section class="container store-layout">
     <aside class="store-filter-panel">
@@ -137,14 +86,88 @@
         {% endfor %}
       </fieldset>
 
-      <!-- Filtro por Faixa de Preço -->
-      <fieldset class="store-filter-group">
-        <legend>Faixa de Investimento</legend>
-        <label><input type="radio" name="price" value="all" checked> Todos os valores</label>
-        <label><input type="radio" name="price" value="0-1500"> Até R$ 1.500</label>
-        <label><input type="radio" name="price" value="1500-3000"> R$ 1.500 a R$ 3.000</label>
-        <label><input type="radio" name="price" value="3000-6000"> R$ 3.000 a R$ 6.000</label>
-        <label><input type="radio" name="price" value="6000-99999"> Acima de R$ 6.000</label>
+      <!-- Filtro por Faixa de Investimento (Slider / Slace de Preço) -->
+      <fieldset class="store-filter-group store-price-filter-group">
+        <legend class="d-flex align-items-center justify-content-between mb-1">
+          <span>Faixa de Investimento</span>
+          <span class="store-price-slider-badge" id="priceSliderBadge">Todos os valores</span>
+        </legend>
+
+        <div class="store-price-readout">
+          <span class="readout-label">Investimento até:</span>
+          <strong class="readout-val" id="priceSliderDisplay">R$ 10.000+</strong>
+        </div>
+
+        <div class="store-slider-track-wrap">
+          <input type="range" 
+                 id="storePriceSlider" 
+                 class="store-price-slider" 
+                 min="500" 
+                 max="10000" 
+                 step="250" 
+                 value="10000" 
+                 aria-label="Filtrar por valor máximo de investimento">
+        </div>
+
+        <div class="store-price-scale">
+          <span>R$ 500</span>
+          <span>R$ 5.000</span>
+          <span>R$ 10.000+</span>
+        </div>
+
+        <div class="store-price-quick-chips">
+          <button type="button" class="store-chip-btn" data-chip-price="2500">Até 2.5k</button>
+          <button type="button" class="store-chip-btn" data-chip-price="5000">Até 5k</button>
+          <button type="button" class="store-chip-btn" data-chip-price="7500">Até 7.5k</button>
+          <button type="button" class="store-chip-btn active" data-chip-price="all">Todos</button>
+        </div>
+      </fieldset>
+
+      <!-- Mar de Tags (Logo em baixo de Faixa de Investimento) -->
+      <fieldset class="store-filter-group store-tags-filter-group store-tag-sea-card" aria-label="Mar de Tags">
+        <legend class="d-flex align-items-center justify-content-between mb-1">
+          <span class="d-flex align-items-center gap-1.5">
+            <span aria-hidden="true" class="store-tag-sea-wave-icon" style="font-size: 1.15rem;">🌊</span>
+            <span class="store-tag-sea-title" style="font-size: 0.95rem; font-weight: 800;">Mar de Tags</span>
+          </span>
+          <button type="button" id="clearTagSelectionBtn" class="store-tag-reset-link" style="display:none;" title="Limpar tag selecionada">
+            <i class="ri-close-circle-line"></i> Limpar
+          </button>
+        </legend>
+
+        <p class="store-tag-sidebar-sub">Inspirações por madeiras, técnicas e ambientes:</p>
+
+        <!-- Indicador de tag ativa selecionada -->
+        <div id="activeTagPillIndicator" class="store-tag-active-indicator mb-2" style="display:none;"></div>
+
+        <!-- Abas de Grupos do Mar de Tags -->
+        <div class="store-tag-groups-nav store-tag-groups-sidebar" id="storeTagGroupsNav" role="tablist">
+          {% for grp in store_tag_groups %}
+          <button type="button" 
+                  class="store-tag-group-btn {% if loop.first %}active{% endif %}" 
+                  data-group-filter="{{ grp.id }}"
+                  role="tab"
+                  aria-selected="{% if loop.first %}true{% else %}false{% endif %}">
+            <span>{{ grp.icon }}</span> {{ grp.name }}
+          </button>
+          {% endfor %}
+        </div>
+
+        <!-- Nuvem de Tags (Pills interativas com contadores) -->
+        <div class="store-tag-cloud store-tag-cloud-sidebar" id="storeTagCloud" role="region" aria-label="Nuvem de tags">
+          {% for tag in store_tags %}
+          <button type="button" 
+                  class="store-tag-pill" 
+                  data-tag-slug="{{ tag.slug }}" 
+                  data-tag-group="{{ tag.group }}"
+                  data-tag-name="{{ tag.name }}"
+                  title="Filtrar por #{{ tag.name }} ({{ tag.count }} peças)">
+            <span class="tag-emoji" aria-hidden="true">{{ tag.icon }}</span>
+            <span class="tag-hash">#</span><span class="tag-text">{{ tag.name }}</span>
+            <span class="tag-count-badge">{{ tag.count }}</span>
+          </button>
+          {% endfor %}
+        </div>
       </fieldset>
     </aside>
 

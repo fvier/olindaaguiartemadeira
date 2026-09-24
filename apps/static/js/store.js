@@ -16,6 +16,13 @@
   const interestCount = document.getElementById('interestCount');
   const storageKey = 'olinda-woodwork-store-interest';
 
+  // Elementos do Slider de Preço (Slace de Preço)
+  const priceSlider = document.getElementById('storePriceSlider');
+  const priceSliderDisplay = document.getElementById('priceSliderDisplay');
+  const priceSliderBadge = document.getElementById('priceSliderBadge');
+  const priceChips = [...document.querySelectorAll('.store-chip-btn')];
+  const maxPriceCeiling = 10000;
+
   // Elementos do Mar de Tags
   const tagPills = [...document.querySelectorAll('.store-tag-pill')];
   const tagGroupBtns = [...document.querySelectorAll('.store-tag-group-btn')];
@@ -39,15 +46,15 @@
     return document.querySelector(`input[name="${name}"]:checked`)?.value || 'all';
   }
 
-  function matchesPrice(price, range) {
-    if (range === 'all') return true;
-    const [min, max] = range.split('-').map(Number);
-    return price >= min && price < max;
+  function matchesPrice(price) {
+    if (!priceSlider) return true;
+    const maxVal = Number(priceSlider.value);
+    if (isNaN(maxVal) || maxVal >= maxPriceCeiling) return true;
+    return price <= maxVal;
   }
 
   function applyFilters() {
     const wood = selectedValue('wood');
-    const price = selectedValue('price');
     const term = search ? search.value.trim().toLocaleLowerCase('pt-BR') : '';
     const categories = new Set([...document.querySelectorAll('.category-filter:checked')].map(input => input.value));
 
@@ -57,7 +64,7 @@
       const matchesTag = !activeTag || cardTags.includes(activeTag.toLowerCase());
       const show = (wood === 'all' || card.dataset.wood === wood)
         && (!categories.size || categories.has(card.dataset.category))
-        && matchesPrice(Number(card.dataset.price), price)
+        && matchesPrice(Number(card.dataset.price))
         && matchesTag
         && (!term || searchable.includes(term));
       card.classList.toggle('hidden', !show);
@@ -87,7 +94,7 @@
       if (activeTag) {
         const found = tagPills.find(p => p.dataset.tagSlug?.toLowerCase() === activeTag.toLowerCase());
         const tagName = found ? found.dataset.tagName : activeTag.replace(/-/g, ' ');
-        activeTagIndicator.textContent = `Tag ativa: #${tagName}`;
+        activeTagIndicator.innerHTML = `<span>Tag: #${tagName}</span>`;
         activeTagIndicator.style.display = 'inline-flex';
       } else {
         activeTagIndicator.style.display = 'none';
@@ -109,7 +116,9 @@
     };
     if (wood !== 'all') labels.push(woodNames[wood] || wood);
     if (categories.size) labels.push([...categories].join(', '));
-    if (price !== 'all') labels.push('faixa de investimento');
+    if (priceSlider && Number(priceSlider.value) < maxPriceCeiling) {
+      labels.push(`investimento: até ${money(priceSlider.value)}`);
+    }
     if (activeTag) {
       const found = tagPills.find(p => p.dataset.tagSlug?.toLowerCase() === activeTag.toLowerCase());
       const tagName = found ? found.dataset.tagName : activeTag.replace(/-/g, ' ');
@@ -508,7 +517,48 @@
   // -------------------------------------------------------------
   // 4. EVENTOS DE FILTROS & AÇÕES
   // -------------------------------------------------------------
-  document.querySelectorAll('input[name="wood"], input[name="price"], .category-filter').forEach(input => {
+  function updateSliderVisuals(val) {
+    if (!priceSlider) return;
+    const min = Number(priceSlider.min) || 500;
+    const max = Number(priceSlider.max) || maxPriceCeiling;
+    const numericVal = Number(val);
+    const pct = Math.max(0, Math.min(100, ((numericVal - min) / (max - min)) * 100));
+    priceSlider.style.background = `linear-gradient(to right, #c85a17 0%, #c85a17 ${pct}%, #e2e8f0 ${pct}%, #e2e8f0 100%)`;
+
+    if (numericVal >= max) {
+      if (priceSliderDisplay) priceSliderDisplay.textContent = 'R$ 10.000+';
+      if (priceSliderBadge) priceSliderBadge.textContent = 'Todos os valores';
+    } else {
+      if (priceSliderDisplay) priceSliderDisplay.textContent = money(numericVal);
+      if (priceSliderBadge) priceSliderBadge.textContent = `Até ${money(numericVal)}`;
+    }
+
+    priceChips.forEach(btn => {
+      const chipPrice = btn.dataset.chipPrice;
+      const isCurrent = (chipPrice === 'all' && numericVal >= max) || Number(chipPrice) === numericVal;
+      btn.classList.toggle('active', isCurrent);
+    });
+  }
+
+  if (priceSlider) {
+    updateSliderVisuals(priceSlider.value);
+    priceSlider.addEventListener('input', () => {
+      updateSliderVisuals(priceSlider.value);
+      applyFilters();
+    });
+  }
+
+  priceChips.forEach(btn => {
+    btn.addEventListener('click', () => {
+      if (!priceSlider) return;
+      const chipPrice = btn.dataset.chipPrice;
+      priceSlider.value = chipPrice === 'all' ? priceSlider.max : chipPrice;
+      updateSliderVisuals(priceSlider.value);
+      applyFilters();
+    });
+  });
+
+  document.querySelectorAll('input[name="wood"], .category-filter').forEach(input => {
     input.addEventListener('change', applyFilters);
   });
   if (search) search.addEventListener('input', applyFilters);
@@ -570,10 +620,12 @@
   if (clearBtn) {
     clearBtn.addEventListener('click', () => {
       activeTag = null;
+      if (priceSlider) {
+        priceSlider.value = priceSlider.max;
+        updateSliderVisuals(priceSlider.max);
+      }
       const woodAll = document.querySelector('input[name="wood"][value="all"]');
-      const priceAll = document.querySelector('input[name="price"][value="all"]');
       if (woodAll) woodAll.checked = true;
-      if (priceAll) priceAll.checked = true;
       document.querySelectorAll('.category-filter').forEach(input => { input.checked = false; });
       document.querySelectorAll('[data-quick-filter]').forEach(b => b.classList.remove('active'));
       document.querySelector('[data-quick-filter="all"]')?.classList.add('active');

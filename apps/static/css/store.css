@@ -375,7 +375,7 @@
 /* Layout Geral: Sidebar + Catálogo */
 .store-layout {
   display: grid;
-  grid-template-columns: 270px minmax(0, 1fr);
+  grid-template-columns: 285px minmax(0, 1fr);
   gap: 28px;
   align-items: start;
   margin-top: 36px;
@@ -383,11 +383,21 @@
 .store-filter-panel {
   position: sticky;
   top: 92px;
+  max-height: calc(100vh - 105px);
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(200, 90, 23, 0.25) transparent;
   border-radius: 16px;
   background: var(--store-panel-bg);
   border: 1px solid var(--store-panel-border);
-  overflow: hidden;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.03);
+}
+.store-filter-panel::-webkit-scrollbar {
+  width: 5px;
+}
+.store-filter-panel::-webkit-scrollbar-thumb {
+  background: rgba(200, 90, 23, 0.25);
+  border-radius: 999px;
 }
 .store-filter-title {
   display: flex;
@@ -490,6 +500,252 @@
 }
 .store-filter-group input {
   accent-color: var(--store-terracotta);
+}
+
+/* ==========================================================================
+   FAIXA DE INVESTIMENTO — SLIDER DE PREÇO (SLACE DE PREÇO)
+   ========================================================================== */
+.store-price-filter-group {
+  padding-bottom: 18px;
+}
+
+.store-price-slider-badge {
+  font-size: 0.72rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--store-terracotta-soft);
+  color: var(--store-terracotta);
+  border: 1px solid rgba(200, 90, 23, 0.25);
+  transition: all 0.2s ease;
+}
+
+.store-price-readout {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-top: 2px;
+  margin-bottom: 8px;
+}
+
+.store-price-readout .readout-label {
+  font-size: 0.78rem;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.store-price-readout .readout-val {
+  font-size: 1.12rem;
+  font-weight: 800;
+  color: var(--store-terracotta);
+  font-family: var(--font-heading);
+}
+
+.store-slider-track-wrap {
+  position: relative;
+  width: 100%;
+  margin-bottom: 6px;
+}
+
+.store-price-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  outline: none;
+  margin: 8px 0;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.store-price-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--store-terracotta);
+  border: 3px solid #ffffff;
+  box-shadow: 0 2px 6px rgba(200, 90, 23, 0.4);
+  cursor: grab;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.store-price-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.18);
+  box-shadow: 0 3px 8px rgba(200, 90, 23, 0.55);
+}
+.store-price-slider::-webkit-slider-thumb:active {
+  cursor: grabbing;
+  transform: scale(1.25);
+  box-shadow: 0 0 0 5px rgba(200, 90, 23, 0.22);
+}
+
+.store-price-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--store-terracotta);
+  border: 3px solid #ffffff;
+  box-shadow: 0 2px 6px rgba(200, 90, 23, 0.4);
+  cursor: grab;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.store-price-slider::-moz-range-thumb:hover {
+  transform: scale(1.18);
+}
+.store-price-slider::-moz-range-thumb:active {
+  cursor: grabbing;
+  transform: scale(1.25);
+  box-shadow: 0 0 0 5px rgba(200, 90, 23, 0.22);
+}
+
+.store-price-scale {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  color: #94a3b8;
+  font-weight: 600;
+  margin-bottom: 10px;
+}
+
+.store-price-quick-chips {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+}
+
+.store-chip-btn {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  color: #475569;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 4px 1px;
+  border-radius: 7px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s ease;
+}
+
+.store-chip-btn:hover {
+  border-color: var(--store-terracotta);
+  color: var(--store-terracotta);
+  background: var(--store-terracotta-soft);
+}
+
+.store-chip-btn.active {
+  background: var(--store-terracotta);
+  border-color: var(--store-terracotta);
+  color: #ffffff;
+}
+
+/* ==========================================================================
+   MAR DE TAGS NA SIDEBAR (LOGO EM BAIXO DE FAIXA DE INVESTIMENTO)
+   ========================================================================== */
+.store-filter-panel .store-tags-filter-group {
+  background: transparent;
+  border: 0;
+  border-top: 1px solid var(--store-panel-border);
+  border-radius: 0;
+  padding: 16px 20px 20px;
+  box-shadow: none;
+}
+
+.store-filter-panel .store-tags-filter-group::before {
+  display: none;
+}
+
+.store-tag-sidebar-sub {
+  margin: 0 0 8px;
+  font-size: 0.74rem;
+  color: #64748b;
+  line-height: 1.35;
+}
+
+.store-tag-reset-link {
+  background: none;
+  border: 0;
+  color: #ef4444;
+  font-size: 0.74rem;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+.store-tag-reset-link:hover {
+  text-decoration: underline;
+}
+
+.store-tag-groups-sidebar {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding-bottom: 6px;
+  margin-bottom: 8px;
+}
+.store-tag-groups-sidebar::-webkit-scrollbar {
+  display: none;
+}
+.store-tag-groups-sidebar .store-tag-group-btn {
+  font-size: 0.7rem;
+  padding: 4px 8px;
+  white-space: nowrap;
+  flex-shrink: 0;
+  border-radius: 7px;
+}
+
+.store-tag-cloud-sidebar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  max-height: 230px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(200, 90, 23, 0.25) transparent;
+  padding-right: 2px;
+}
+.store-tag-cloud-sidebar::-webkit-scrollbar {
+  width: 4px;
+}
+.store-tag-cloud-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(200, 90, 23, 0.25);
+  border-radius: 999px;
+}
+
+.store-tag-cloud-sidebar .store-tag-pill {
+  font-size: 0.73rem;
+  padding: 3px 7px;
+  border-radius: 7px;
+}
+
+/* Dark Mode Adjustments */
+html[data-bs-theme="dark"] .store-price-slider {
+  background: #334155;
+}
+html[data-bs-theme="dark"] .store-price-slider::-webkit-slider-thumb {
+  border-color: #0f172a;
+}
+html[data-bs-theme="dark"] .store-price-slider::-moz-range-thumb {
+  border-color: #0f172a;
+}
+html[data-bs-theme="dark"] .store-chip-btn {
+  background: #1e293b;
+  border-color: #334155;
+  color: #94a3b8;
+}
+html[data-bs-theme="dark"] .store-chip-btn:hover {
+  background: rgba(200, 90, 23, 0.15);
+  color: #fdba74;
+}
+html[data-bs-theme="dark"] .store-chip-btn.active {
+  background: var(--store-terracotta);
+  border-color: var(--store-terracotta);
+  color: #ffffff;
 }
 
 /* Toolbar */

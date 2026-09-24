@@ -161,6 +161,20 @@ class WoodworkOrderTimelineTests(unittest.TestCase):
         self.assertIn(b'store-card-tags', response.data)
         self.assertIn(b'modalTagsBlock', response.data)
 
+        # Verifica a nova Faixa de Investimento com slider de preço (slace de preço)
+        self.assertIn(b'storePriceSlider', response.data)
+        self.assertIn(b'store-price-slider', response.data)
+        self.assertIn(b'priceSliderBadge', response.data)
+        self.assertIn(b'store-chip-btn', response.data)
+
+        # Valida que o Mar de Tags está posicionado exatamente abaixo da Faixa de Investimento
+        html_content = response.data.decode('utf-8')
+        pos_price = html_content.find('store-price-filter-group')
+        pos_tags = html_content.find('store-tags-filter-group')
+        self.assertNotEqual(pos_price, -1, 'Faixa de investimento (slider) deve existir na página')
+        self.assertNotEqual(pos_tags, -1, 'Mar de tags deve existir na página')
+        self.assertLess(pos_price, pos_tags, 'O Mar de Tags deve estar posicionado abaixo da Faixa de Investimento')
+
     def test_api_loja_produtos_contains_tags(self):
         response = self.client.get('/api/loja/produtos')
         self.assertEqual(response.status_code, 200)
