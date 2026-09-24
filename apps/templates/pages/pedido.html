@@ -250,7 +250,7 @@
 <!-- HERO ULTRA-MINIMALISTA & BUSCA (Inspirado no estilo editorial) -->
 <header class="pedido-hero py-2 py-md-3 bg-white border-bottom shadow-2xs">
     <div class="container">
-        <!-- Linha 1: Título + Descrição Inline à esquerda, Busca por CPF à direita -->
+        <!-- Linha 1: Título + Descrição Inline à esquerda, Busca por CPF + Solicitar Orçamento à direita -->
         <div class="d-flex flex-column flex-lg-row align-items-start align-items-lg-center justify-content-between gap-3 mb-2">
             <div class="d-flex flex-wrap align-items-baseline gap-2">
                 <h1 class="fw-bold text-dark mb-0 fs-5" style="letter-spacing: -0.01em;">
@@ -259,24 +259,34 @@
                 <span class="text-secondary fs-13">Acompanhe o processo artesanal da sua peça única em madeira de demolição, da triagem das toras à entrega final.</span>
             </div>
 
-            <!-- Barra de Busca Minimalista por CPF -->
-            <form id="formConsultaCPF" onsubmit="buscarPedidoCPF(event)" class="flex-shrink-0 style-search-form" style="min-width: 310px; max-width: 420px; width: 100%;">
-                <div class="input-group input-group-sm rounded-pill border bg-light shadow-2xs overflow-hidden" style="padding: 2px 3px 2px 10px;">
-                    <span class="input-group-text bg-transparent border-0 pe-1 text-muted">
-                        <i class="ri-search-2-line fs-16" style="color: #c85a17;"></i>
-                    </span>
-                    <input id="inputCpf" type="text" class="form-control bg-transparent border-0 fs-13 fw-semibold ps-1 shadow-none" placeholder="Digite seu CPF (ex: 123.456.789-00)" maxlength="14" value="{{ search_cpf or '' }}" autocomplete="off" required>
-                    <button id="btnConsultar" class="btn btn-sm btn-warning fw-bold px-3 rounded-pill text-white border-0" type="submit" style="background:#c85a17;">
-                        <span>Consultar</span>
-                    </button>
-                </div>
-            </form>
+            <!-- Bloco de Ações na direita: Busca por CPF e Botão Solicitar Orçamento -->
+            <div class="d-flex align-items-center gap-2 flex-wrap flex-sm-nowrap flex-shrink-0" style="min-width: 320px;">
+                <!-- Barra de Busca Minimalista por CPF -->
+                <form id="formConsultaCPF" onsubmit="buscarPedidoCPF(event)" class="style-search-form flex-grow-1" style="max-width: 380px;">
+                    <div class="input-group input-group-sm rounded-pill border bg-light shadow-2xs overflow-hidden" style="padding: 2px 3px 2px 10px;">
+                        <span class="input-group-text bg-transparent border-0 pe-1 text-muted">
+                            <i class="ri-search-2-line fs-16" style="color: #c85a17;"></i>
+                        </span>
+                        <input id="inputCpf" type="text" class="form-control bg-transparent border-0 fs-13 fw-semibold ps-1 shadow-none" placeholder="Digite seu CPF (ex: 123.456...)" maxlength="14" value="{{ search_cpf or '' }}" autocomplete="off" required>
+                        <button id="btnConsultar" class="btn btn-sm btn-warning fw-bold px-3 rounded-pill text-white border-0" type="submit" style="background:#c85a17;">
+                            <span>Consultar</span>
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Botão Solicitar Orçamento estilo minimalista -->
+                <button type="button" class="btn btn-sm btn-outline-dark rounded-pill px-3 py-1.5 fw-semibold fs-13 d-inline-flex align-items-center gap-1.5 text-nowrap shadow-2xs hover-lift" data-bs-toggle="collapse" data-bs-target="#collapseEncomenda" aria-expanded="false" aria-controls="collapseEncomenda">
+                    <i class="ri-pencil-ruler-2-line" style="color: #c85a17;"></i>
+                    <span>Solicitar Orçamento</span>
+                </button>
+            </div>
         </div>
 
-        <!-- Linha 2: Exemplos de Teste (Pílulas de navegação rápida) -->
+        <!-- Linha 2: Exemplos de Teste (Com 'Sem Exemplo' em primeiro) -->
         <div class="d-flex align-items-center gap-2 overflow-x-auto pb-1" style="scrollbar-width: none;">
             <span class="text-uppercase fw-bold text-muted me-1" style="font-size: 0.68rem; letter-spacing: 0.08em; flex-shrink: 0;">EXEMPLOS</span>
-            <button type="button" class="btn btn-sm rounded-pill px-3 py-1.5 fw-bold text-white border-0 demo-chip-btn" data-cpf="123.456.789-00" style="background:#c85a17; font-size: 0.75rem; flex-shrink:0;">Mariana (Em Produção)</button>
+            <button type="button" class="btn btn-sm rounded-pill px-3 py-1.5 fw-semibold border demo-chip-btn {% if not search_cpf and not initial_order %}bg-warning text-white border-0{% else %}bg-white text-dark border-secondary-subtle{% endif %}" data-cpf="" style="{% if not search_cpf and not initial_order %}background:#c85a17!important; color:#ffffff!important;{% else %}background:#ffffff; color:#334155;{% endif %} font-size: 0.75rem; flex-shrink:0;">Sem Exemplo</button>
+            <button type="button" class="btn btn-sm rounded-pill px-3 py-1.5 fw-semibold border demo-chip-btn {% if (search_cpf == '123.456.789-00') or (initial_order and initial_order.cpf == '123.456.789-00') %}bg-warning text-white border-0{% else %}bg-white text-dark border-secondary-subtle{% endif %}" data-cpf="123.456.789-00" style="{% if (search_cpf == '123.456.789-00') or (initial_order and initial_order.cpf == '123.456.789-00') %}background:#c85a17!important; color:#ffffff!important;{% else %}background:#ffffff; color:#334155;{% endif %} font-size: 0.75rem; flex-shrink:0;">Mariana (Em Produção)</button>
             <button type="button" class="btn btn-sm rounded-pill px-3 py-1.5 fw-semibold border text-dark bg-white demo-chip-btn" data-cpf="987.654.321-00" style="font-size: 0.75rem; flex-shrink:0;">Rodrigo (Pagamento)</button>
             <button type="button" class="btn btn-sm rounded-pill px-3 py-1.5 fw-semibold border text-dark bg-white demo-chip-btn" data-cpf="111.222.333-44" style="font-size: 0.75rem; flex-shrink:0;">Cecília (Sinal Confirmado)</button>
             <button type="button" class="btn btn-sm rounded-pill px-3 py-1.5 fw-semibold border text-dark bg-white demo-chip-btn" data-cpf="555.666.777-88" style="font-size: 0.75rem; flex-shrink:0;">Carlos (Entregue)</button>
@@ -562,12 +572,39 @@
         });
     }
 
-    // Atalhos dos CPFs de exemplo
+    // Atalhos dos CPFs de exemplo (incluindo 'Sem Exemplo')
     document.querySelectorAll('.demo-chip-btn').forEach(btn => {
         btn.addEventListener('click', () => {
+            document.querySelectorAll('.demo-chip-btn').forEach(b => {
+                b.classList.remove('bg-warning', 'text-white', 'border-0');
+                b.classList.add('bg-white', 'text-dark', 'border-secondary-subtle');
+                b.style.background = '#ffffff';
+                b.style.color = '#334155';
+            });
+            btn.classList.remove('bg-white', 'text-dark', 'border-secondary-subtle');
+            btn.classList.add('bg-warning', 'text-white', 'border-0');
+            btn.style.background = '#c85a17';
+            btn.style.color = '#ffffff';
+
             const cpf = btn.getAttribute('data-cpf');
-            inputCpf.value = cpf;
-            executarConsulta(cpf);
+            if (!cpf) {
+                limparConsulta();
+            } else {
+                inputCpf.value = cpf;
+                executarConsulta(cpf);
+            }
+        });
+    });
+
+    // Rolagem suave ao clicar no botão Solicitar Orçamento no topo
+    document.querySelectorAll('[data-bs-target="#collapseEncomenda"]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            setTimeout(() => {
+                const collapseElem = document.getElementById('collapseEncomenda');
+                if (collapseElem && collapseElem.classList.contains('show')) {
+                    collapseElem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+            }, 250);
         });
     });
 
@@ -696,6 +733,20 @@
         document.getElementById('orderNotFound').classList.add('d-none');
         inputCpf.value = '';
         inputCpf.focus();
+
+        document.querySelectorAll('.demo-chip-btn').forEach(b => {
+            b.classList.remove('bg-warning', 'text-white', 'border-0');
+            b.classList.add('bg-white', 'text-dark', 'border-secondary-subtle');
+            b.style.background = '#ffffff';
+            b.style.color = '#334155';
+        });
+        const semExemploBtn = document.querySelector('.demo-chip-btn[data-cpf=""]');
+        if (semExemploBtn) {
+            semExemploBtn.classList.remove('bg-white', 'text-dark', 'border-secondary-subtle');
+            semExemploBtn.classList.add('bg-warning', 'text-white', 'border-0');
+            semExemploBtn.style.background = '#c85a17';
+            semExemploBtn.style.color = '#ffffff';
+        }
     }
 
     function enviarEncomendaCustomizada(e) {
