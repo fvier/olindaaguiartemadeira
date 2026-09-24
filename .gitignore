@@ -17,6 +17,8 @@ instance/
 *.db
 *.sqlite
 *.sqlite3
+.~*
+~$*
 
 # Variáveis de Ambiente & Segredos
 .env

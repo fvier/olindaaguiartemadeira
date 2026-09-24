@@ -59,6 +59,166 @@ WOODWORK_PRODUCTS = [
         ]
     },
     {
+        'id': 'OLA-B10',
+        'wood_type': 'peroba-rosa',
+        'category': 'Linha Gourmet & Utilitários',
+        'name': 'Carrinho Bar Gourmet Colonial com Porta-Taças e Rodízios',
+        'price': 2850.00,
+        'old_price': 3200.00,
+        'icon': '🍷',
+        'image': 'carrinho-bar-colonial-madeira.png',
+        'images': ['carrinho-bar-colonial-madeira.png'],
+        'badge': 'Pronta-Entrega',
+        'sizes': ['0,95m x 0,55m x 1,60m altura'],
+        'description': 'Móvel bar volante confeccionado em peroba rosa de demolição. Possui prateleira superior com trilhos ranhurados para taças invertidas, bandeja intermediária com bordas de contenção para garrafas e rodízios reforçados em madeira e ferro para movimentação suave em áreas gourmets e varandas.',
+        'colors': [
+            {
+                'id': 'carnauba-natural',
+                'name': 'Cera de Carnaúba & Óleo Botânico',
+                'hex': '#9e5828',
+                'price': 2850.00,
+                'old_price': 3200.00,
+                'badge': 'Pronta-Entrega'
+            },
+            {
+                'id': 'patina-colonial',
+                'name': 'Pátina Colonial Envelhecida',
+                'hex': '#472813',
+                'price': 2980.00,
+                'old_price': 3350.00,
+                'badge': 'Rústico Nobre'
+            }
+        ]
+    },
+    {
+        'id': 'OLA-A11',
+        'wood_type': 'jacaranda',
+        'category': 'Aparadores & Consoles',
+        'name': 'Cômoda Balcão Colonial com 4 Gavetas e Portas Duplas',
+        'price': 3450.00,
+        'old_price': 3900.00,
+        'icon': '🗄️',
+        'image': 'comoda-balcao-gaveteiro-demolicao.png',
+        'images': ['comoda-balcao-gaveteiro-demolicao.png'],
+        'badge': 'Peça Única',
+        'sizes': ['1,10m x 0,45m x 1,15m altura'],
+        'description': 'Móvel de armazenamento robusto com 4 gavetas superiores de corrediças em madeira e portas inferiores de folha dupla em prancha maciça centenária. Tampo liso encerado com borda chanfrada e pés elevados, ideal para salas de jantar, recepções ou quartos.',
+        'colors': [
+            {
+                'id': 'mel-dourado',
+                'name': 'Mel Dourado Tradicional',
+                'hex': '#b86d29',
+                'price': 3450.00,
+                'old_price': 3900.00,
+                'badge': 'Mais Procurado'
+            },
+            {
+                'id': 'envelhecido',
+                'name': 'Envelhecido Colonial em Cera',
+                'hex': '#4f2c14',
+                'price': 3650.00,
+                'old_price': 4100.00,
+                'badge': 'Acabamento Clássico'
+            }
+        ]
+    },
+    {
+        'id': 'OLA-E12',
+        'wood_type': 'canela-preta',
+        'category': 'Esculturas & Painéis',
+        'name': 'Espelho Colonial de Corpo Inteiro com Moldura Maciça',
+        'price': 1950.00,
+        'old_price': 2300.00,
+        'icon': '🪞',
+        'image': 'espelho-corpo-inteiro-moldura-macica.png',
+        'images': ['espelho-corpo-inteiro-moldura-macica.png'],
+        'badge': 'Destaque Ateliê',
+        'sizes': ['0,90m x 2,10m x 0,08m (moldura)'],
+        'description': 'Espelho amplo de piso ou parede com moldura estruturada em vigas maciças resgatadas de casarão colonial. Divisão arquitetônica com travessa central anatômica e cantos com encaixes de respiga e cavilhas expostas em madeira escura.',
+        'colors': [
+            {
+                'id': 'castanho-natural',
+                'name': 'Castanho Natural com Cera',
+                'hex': '#8a491f',
+                'price': 1950.00,
+                'old_price': 2300.00,
+                'badge': 'Exclusiva'
+            },
+            {
+                'id': 'canela-escura',
+                'name': 'Canela Escura Acetinada',
+                'hex': '#4d2912',
+                'price': 2100.00,
+                'old_price': 2450.00,
+                'badge': 'Edição Limitada'
+            }
+        ]
+    },
+    {
+        'id': 'OLA-C13',
+        'wood_type': 'brauna',
+        'category': 'Cristaleiras & Armários',
+        'name': 'Estante Expositora Colonial de Parede com Cristaleira Central',
+        'price': 7800.00,
+        'old_price': 8900.00,
+        'icon': '🏺',
+        'image': 'estante-expositora-cristaleira-casarao.png',
+        'images': ['estante-expositora-cristaleira-casarao.png'],
+        'badge': 'Sob Medida • Projeto Especial',
+        'sizes': ['2,60m x 0,45m x 2,40m altura', '3,20m x 0,50m x 2,60m altura'],
+        'description': 'Imponente armário expositor de parede inteira desenvolvido para acomodar louçarias, vinhos, coleções e vestuário. Conta com nichos abertos com cabideiros em latão, vitrine central envidraçada com portas de correr, gaveteiro e armários com portas maciças na base.',
+        'colors': [
+            {
+                'id': 'colonial-encerada',
+                'name': 'Peroba Rosa Colonial Encerada',
+                'hex': '#985627',
+                'price': 7800.00,
+                'old_price': 8900.00,
+                'badge': 'Obra Autoral Byll'
+            },
+            {
+                'id': 'patina-rustica',
+                'name': 'Pátina Rústica Envelhecida',
+                'hex': '#532f17',
+                'price': 8200.00,
+                'old_price': 9400.00,
+                'badge': 'Peça Nobre'
+            }
+        ]
+    },
+    {
+        'id': 'OLA-L14',
+        'wood_type': 'cumaru',
+        'category': 'Linha Gourmet & Utilitários',
+        'name': 'Conjunto Lavabo Colonial: Gabinete Maciço com Espelho Redondo',
+        'price': 3100.00,
+        'old_price': 3600.00,
+        'icon': '🚰',
+        'image': 'conjunto-lavatorio-gabinete-espelho-redondo.png',
+        'images': ['conjunto-lavatorio-gabinete-espelho-redondo.png'],
+        'badge': 'Exclusiva',
+        'sizes': ['Gabinete: 0,80m x 0,55m x 0,85m | Espelho: Ø 0,70m'],
+        'description': 'Conjunto sob medida para lavabos e banheiros requintados. Gabinete suspenso com portas duplas em madeira tratada resistente a umidade, ferragens e dobradiças rústicas aparentes em ferro forjado, acompanhado de espelho circular bisotado com aro largo em madeira torneada.',
+        'colors': [
+            {
+                'id': 'cumaru-impermeabilizado',
+                'name': 'Cumaru Natural Impermeabilizado',
+                'hex': '#9a5423',
+                'price': 3100.00,
+                'old_price': 3600.00,
+                'badge': 'Resistente à Umidade'
+            },
+            {
+                'id': 'cera-maritima',
+                'name': 'Cera Marítima Protetora',
+                'hex': '#6e3916',
+                'price': 3250.00,
+                'old_price': 3780.00,
+                'badge': 'Alta Durabilidade'
+            }
+        ]
+    },
+    {
         'id': 'OLA-M01',
         'wood_type': 'peroba-rosa',
         'category': 'Mesas & Pranchas',
