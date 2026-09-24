@@ -17,19 +17,19 @@
     .hover-lift { transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease; }
     .hover-lift:hover { transform: translateY(-4px); box-shadow: 0 16px 36px rgba(15, 23, 42, 0.14) !important; }
 
-    /* Minia Blog Grid Styles */
+    /* Minia Blog Grid Styles (Compacto) */
     .blog-header-hero {
         background: linear-gradient(180deg, #ffffff 0%, #fdf8f4 100%);
         border-bottom: 1px solid #f1f5f9;
-        padding: 40px 0 30px 0;
+        padding: 16px 0 14px 0;
     }
     .blog-nav-tab {
         border: 1px solid #e2e8f0;
         background: #ffffff;
         color: #475569;
         font-weight: 600;
-        font-size: 0.82rem;
-        padding: 6px 16px;
+        font-size: 0.76rem;
+        padding: 4px 12px;
         border-radius: 999px;
         transition: all 0.2s ease;
         cursor: pointer;
@@ -142,25 +142,25 @@
 {% include 'partials/public-reviews-bar.html' %}
 {% include 'partials/public-navbar.html' %}
 
-<!-- HERO DO BLOG (MINIA BLOG HEADER) -->
+<!-- HERO DO BLOG (MINIMALISTA & COMPACTO) -->
 <header class="blog-header-hero">
     <div class="container text-center">
-        <span class="badge px-3 py-1.5 rounded-pill fw-bold text-uppercase mb-2" style="background:#ffedd5;color:#c85a17;font-size:11px;">
+        <span class="badge px-2.5 py-1 rounded-pill fw-bold text-uppercase mb-1" style="background:#ffedd5;color:#c85a17;font-size:10px;">
             📜 Crônicas & Processo Criativo
         </span>
-        <h1 class="h2 fw-extrabold text-dark mb-2">Histórias do Ateliê & A Arte em Madeira</h1>
-        <p class="text-secondary fs-15 max-w-700 mx-auto mb-4" style="max-width: 660px;">
-            Acompanhe nossas reflexões sobre o resgate da madeira de demolição centenária, técnicas artesanais do casarão histórico e o design autoral.
+        <h1 class="h4 fw-bold text-dark mb-1">Histórias do Ateliê & A Arte em Madeira</h1>
+        <p class="text-secondary fs-13 mb-2 mx-auto" style="max-width: 560px;">
+            Reflexões sobre marcenaria artesanal, resgate de madeira de demolição e design autoral.
         </p>
 
-        <!-- Barra de Busca & Navegação por Categorias (Grid Navbar) -->
-        <div class="d-flex flex-column align-items-center gap-3">
-            <div class="position-relative w-100" style="max-width: 480px;">
-                <input type="text" id="blogSearchInput" class="form-control rounded-pill ps-4 pe-5 py-2.5 fs-14 border border-2 border-warning-subtle shadow-sm" placeholder="Buscar artigos, madeiras, técnicas..." oninput="filtrarArtigos()">
-                <i class="ri-search-line position-absolute top-50 end-0 translate-middle-y me-3 text-muted fs-18"></i>
+        <!-- Barra de Busca & Navegação por Categorias (Compacta) -->
+        <div class="d-flex flex-column align-items-center gap-2">
+            <div class="position-relative w-100" style="max-width: 400px;">
+                <input type="text" id="blogSearchInput" class="form-control rounded-pill ps-4 pe-5 py-1.5 fs-13 border border-2 border-warning-subtle shadow-sm" placeholder="Buscar artigos, madeiras, técnicas..." oninput="filtrarArtigos()">
+                <i class="ri-search-line position-absolute top-50 end-0 translate-middle-y me-3 text-muted fs-16"></i>
             </div>
 
-            <div class="d-flex flex-wrap justify-content-center gap-2 mt-1" id="blogCategoriesNav">
+            <div class="d-flex flex-wrap justify-content-center gap-1.5 mt-0.5" id="blogCategoriesNav">
                 <button type="button" class="blog-nav-tab active" data-category="all" onclick="selecionarCategoria('all', this)">Todos</button>
                 <button type="button" class="blog-nav-tab" data-category="Sustentabilidade" onclick="selecionarCategoria('Sustentabilidade', this)">Sustentabilidade</button>
                 <button type="button" class="blog-nav-tab" data-category="Técnicas Artesanais" onclick="selecionarCategoria('Técnicas Artesanais', this)">Técnicas Artesanais</button>
