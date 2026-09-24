@@ -182,7 +182,8 @@
                 <div class="photo-frame">
                     <img src="{{ config.ASSETS_ROOT }}/images/byll-e-olinda-aguiar.png" 
                          alt="Byll e Olinda Aguiar abraçados e sorrindo" 
-                         style="max-height: 420px; object-position: center top;">
+                         width="400" height="380"
+                         style="max-height: 420px; min-height: 320px; width: 100%; object-fit: cover; object-position: center top; background-color: #f1f5f9;">
                     <div class="photo-caption">
                         <i class="ri-double-quotes-l text-warning me-1"></i>
                         Pai e Filha: cumplicidade, ensinamentos de vida e a semente de um sonho compartilhado na marcenaria.
@@ -193,7 +194,7 @@
     </div>
 </header>
 
-<main class="py-5 bg-light" id="historia" style="scroll-margin-top: 90px;">
+<main class="py-5 bg-light" id="historia" style="scroll-margin-top: 100px;">
     <div class="container py-lg-3">
 
         <!-- Seção: A Herança da Vontade e da Administração -->
@@ -203,7 +204,8 @@
                 <div class="photo-frame mx-auto" style="max-width: 320px;">
                     <img src="{{ config.ASSETS_ROOT }}/images/byll-mestre-artesao.png" 
                          alt="Mestre Byll, o patriarca e artesão de Olinda Arte em Madeira" 
-                         style="max-height: 380px;">
+                         width="300" height="360"
+                         style="max-height: 380px; min-height: 300px; width: 100%; object-fit: cover; background-color: #f1f5f9;">
                     <div class="photo-caption">
                         <strong>Mestre Byll</strong><br>
                         O patriarca, coração da oficina e eterna inspiração criativa.
@@ -356,7 +358,16 @@
         if (e) e.preventDefault();
         const el = document.getElementById('historia');
         if (el) {
-            el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            const navbar = document.querySelector('.navbar');
+            const reviewsBar = document.querySelector('.google-reviews-bar');
+            const navHeight = (navbar ? navbar.offsetHeight : 60) + (reviewsBar ? reviewsBar.offsetHeight : 30);
+            const targetY = el.getBoundingClientRect().top + window.pageYOffset - navHeight - 15;
+            
+            window.scrollTo({
+                top: Math.max(0, targetY),
+                behavior: 'smooth'
+            });
+
             if (window.history && window.history.pushState) {
                 window.history.pushState(null, null, '#historia');
             }
@@ -369,9 +380,13 @@
             btn.addEventListener('click', scrollToHistoria);
         }
         if (window.location.hash === '#historia') {
-            setTimeout(() => {
-                scrollToHistoria();
-            }, 150);
+            setTimeout(scrollToHistoria, 150);
+        }
+    });
+
+    window.addEventListener('load', () => {
+        if (window.location.hash === '#historia') {
+            setTimeout(scrollToHistoria, 100);
         }
     });
 </script>
