@@ -181,7 +181,8 @@ class WoodworkOrderTimelineTests(unittest.TestCase):
         data = response.get_json()
         self.assertTrue(data['success'])
         self.assertIn('tags', data)
-        self.assertGreaterEqual(len(data['tags']), 30)
+        self.assertGreaterEqual(len(data['tags']), 10)
+        self.assertLessEqual(len(data['tags']), 20)
 
         # Check tag structure
         sample_tag = data['tags'][0]
@@ -207,8 +208,9 @@ class WoodworkOrderTimelineTests(unittest.TestCase):
         tags = get_store_tags()
         groups = get_store_tag_groups()
 
-        self.assertGreater(len(tags), 30)
-        self.assertEqual(len(groups), 6)
+        self.assertGreaterEqual(len(tags), 10)
+        self.assertLessEqual(len(tags), 20)
+        self.assertEqual(len(groups), 5)
         group_ids = [g['id'] for g in groups]
         self.assertIn('all', group_ids)
         self.assertIn('madeiras', group_ids)

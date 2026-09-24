@@ -86,7 +86,7 @@
         {% endfor %}
       </fieldset>
 
-      <!-- Filtro por Faixa de Investimento (Slider / Slace de Preço) -->
+      <!-- Filtro por Faixa de Investimento (Slider de Preço com 2 Pontos / Dual-Range) -->
       <fieldset class="store-filter-group store-price-filter-group">
         <legend class="d-flex align-items-center justify-content-between mb-1">
           <span>Faixa de Investimento</span>
@@ -94,32 +94,42 @@
         </legend>
 
         <div class="store-price-readout">
-          <span class="readout-label">Investimento até:</span>
-          <strong class="readout-val" id="priceSliderDisplay">R$ 10.000+</strong>
+          <span class="readout-label">Intervalo de valor:</span>
+          <strong class="readout-val" id="priceSliderDisplay">R$ 0 — R$ 10.000+</strong>
         </div>
 
-        <div class="store-slider-track-wrap">
+        <div class="store-dual-slider-container">
+          <div class="store-dual-track-bg"></div>
+          <div class="store-dual-track-range" id="dualSliderRangeBar"></div>
           <input type="range" 
-                 id="storePriceSlider" 
-                 class="store-price-slider" 
-                 min="500" 
+                 id="storePriceSliderMin" 
+                 class="store-dual-range min-range" 
+                 min="0" 
+                 max="10000" 
+                 step="250" 
+                 value="0" 
+                 aria-label="Preço mínimo de investimento">
+          <input type="range" 
+                 id="storePriceSliderMax" 
+                 class="store-dual-range max-range" 
+                 min="0" 
                  max="10000" 
                  step="250" 
                  value="10000" 
-                 aria-label="Filtrar por valor máximo de investimento">
+                 aria-label="Preço máximo de investimento">
         </div>
 
         <div class="store-price-scale">
-          <span>R$ 500</span>
+          <span>R$ 0</span>
           <span>R$ 5.000</span>
           <span>R$ 10.000+</span>
         </div>
 
         <div class="store-price-quick-chips">
-          <button type="button" class="store-chip-btn" data-chip-price="2500">Até 2.5k</button>
-          <button type="button" class="store-chip-btn" data-chip-price="5000">Até 5k</button>
-          <button type="button" class="store-chip-btn" data-chip-price="7500">Até 7.5k</button>
-          <button type="button" class="store-chip-btn active" data-chip-price="all">Todos</button>
+          <button type="button" class="store-chip-btn" data-chip-min="0" data-chip-max="2500">Até 2.5k</button>
+          <button type="button" class="store-chip-btn" data-chip-min="1500" data-chip-max="4500">1.5k–4.5k</button>
+          <button type="button" class="store-chip-btn" data-chip-min="4500" data-chip-max="10000">4.5k+</button>
+          <button type="button" class="store-chip-btn active" data-chip-min="0" data-chip-max="10000">Todos</button>
         </div>
       </fieldset>
 

@@ -16,11 +16,14 @@
   const interestCount = document.getElementById('interestCount');
   const storageKey = 'olinda-woodwork-store-interest';
 
-  // Elementos do Slider de Preço (Slace de Preço)
-  const priceSlider = document.getElementById('storePriceSlider');
+  // Elementos do Slider de Preço com 2 Pontos (Dual-Range)
+  const sliderMin = document.getElementById('storePriceSliderMin');
+  const sliderMax = document.getElementById('storePriceSliderMax');
+  const dualRangeBar = document.getElementById('dualSliderRangeBar');
   const priceSliderDisplay = document.getElementById('priceSliderDisplay');
   const priceSliderBadge = document.getElementById('priceSliderBadge');
   const priceChips = [...document.querySelectorAll('.store-chip-btn')];
+  const minPriceCeiling = 0;
   const maxPriceCeiling = 10000;
 
   // Elementos do Mar de Tags
@@ -47,10 +50,11 @@
   }
 
   function matchesPrice(price) {
-    if (!priceSlider) return true;
-    const maxVal = Number(priceSlider.value);
-    if (isNaN(maxVal) || maxVal >= maxPriceCeiling) return true;
-    return price <= maxVal;
+    if (!sliderMin || !sliderMax) return true;
+    const minVal = Number(sliderMin.value) || minPriceCeiling;
+    const maxVal = Number(sliderMax.value) || maxPriceCeiling;
+    if (minVal <= minPriceCeiling && maxVal >= maxPriceCeiling) return true;
+    return price >= minVal && price <= maxVal;
   }
 
   function applyFilters() {
@@ -116,8 +120,14 @@
     };
     if (wood !== 'all') labels.push(woodNames[wood] || wood);
     if (categories.size) labels.push([...categories].join(', '));
-    if (priceSlider && Number(priceSlider.value) < maxPriceCeiling) {
-      labels.push(`investimento: até ${money(priceSlider.value)}`);
+    if (sliderMin && sliderMax) {
+      const minVal = Number(sliderMin.value);
+      const maxVal = Number(sliderMax.value);
+      if (minVal > minPriceCeiling || maxVal < maxPriceCeiling) {
+        const minStr = minVal <= minPriceCeiling ? 'R$ 0' : money(minVal);
+        const maxStr = maxVal >= maxPriceCeiling ? 'R$ 10k+' : money(maxVal);
+        labels.push(`faixa de investimento: ${minStr} a ${maxStr}`);
+      }
     }
     if (activeTag) {
       const found = tagPills.find(p => p.dataset.tagSlug?.toLowerCase() === activeTag.toLowerCase());
@@ -517,43 +527,80 @@
   // -------------------------------------------------------------
   // 4. EVENTOS DE FILTROS & AÇÕES
   // -------------------------------------------------------------
-  function updateSliderVisuals(val) {
-    if (!priceSlider) return;
-    const min = Number(priceSlider.min) || 500;
-    const max = Number(priceSlider.max) || maxPriceCeiling;
-    const numericVal = Number(val);
-    const pct = Math.max(0, Math.min(100, ((numericVal - min) / (max - min)) * 100));
-    priceSlider.style.background = `linear-gradient(to right, #c85a17 0%, #c85a17 ${pct}%, #e2e8f0 ${pct}%, #e2e8f0 100%)`;
+  function updateDualSliderVisuals(source) {
+    if (!sliderMin || !sliderMax) return;
+    let minVal = Number(sliderMin.value);
+    let maxVal = Number(sliderMax.value);
 
-    if (numericVal >= max) {
-      if (priceSliderDisplay) priceSliderDisplay.textContent = 'R$ 10.000+';
-      if (priceSliderBadge) priceSliderBadge.textContent = 'Todos os valores';
-    } else {
-      if (priceSliderDisplay) priceSliderDisplay.textContent = money(numericVal);
-      if (priceSliderBadge) priceSliderBadge.textContent = `Até ${money(numericVal)}`;
+    if (minVal > maxVal - 250) {
+      if (source === 'min') {
+        minVal = maxVal - 250;
+        sliderMin.value = minVal;
+      } else {
+        maxVal = minVal + 250;
+        sliderMax.value = maxVal;
+      }
+    }
+
+    const minPct = Math.max(0, Math.min(100, ((minVal - minPriceCeiling) / (maxPriceCeiling - minPriceCeiling)) * 100));
+    const maxPct = Math.max(0, Math.min(100, ((maxVal - minPriceCeiling) / (maxPriceCeiling - minPriceCeiling)) * 100));
+
+    if (dualRangeBar) {
+      dualRangeBar.style.left = minPct + '%';
+      dualRangeBar.style.width = Math.max(0, maxPct - minPct) + '%';
+    }
+
+    const isAllMin = minVal <= minPriceCeiling;
+    const isAllMax = maxVal >= maxPriceCeiling;
+
+    if (priceSliderDisplay) {
+      if (isAllMin && isAllMax) {
+        priceSliderDisplay.textContent = 'Todos os valores';
+      } else {
+        const minStr = isAllMin ? 'R$ 0' : money(minVal);
+        const maxStr = isAllMax ? 'R$ 10.000+' : money(maxVal);
+        priceSliderDisplay.textContent = `${minStr} — ${maxStr}`;
+      }
+    }
+
+    if (priceSliderBadge) {
+      if (isAllMin && isAllMax) {
+        priceSliderBadge.textContent = 'Todos os valores';
+      } else {
+        const minBadgeStr = isAllMin ? 'R$ 0' : money(minVal);
+        const maxBadgeStr = isAllMax ? 'R$ 10k+' : money(maxVal);
+        priceSliderBadge.textContent = `${minBadgeStr} a ${maxBadgeStr}`;
+      }
     }
 
     priceChips.forEach(btn => {
-      const chipPrice = btn.dataset.chipPrice;
-      const isCurrent = (chipPrice === 'all' && numericVal >= max) || Number(chipPrice) === numericVal;
+      const chipMin = Number(btn.dataset.chipMin);
+      const chipMax = Number(btn.dataset.chipMax);
+      const isCurrent = minVal === chipMin && maxVal === chipMax;
       btn.classList.toggle('active', isCurrent);
     });
   }
 
-  if (priceSlider) {
-    updateSliderVisuals(priceSlider.value);
-    priceSlider.addEventListener('input', () => {
-      updateSliderVisuals(priceSlider.value);
+  if (sliderMin && sliderMax) {
+    updateDualSliderVisuals();
+    sliderMin.addEventListener('input', () => {
+      updateDualSliderVisuals('min');
+      applyFilters();
+    });
+    sliderMax.addEventListener('input', () => {
+      updateDualSliderVisuals('max');
       applyFilters();
     });
   }
 
   priceChips.forEach(btn => {
     btn.addEventListener('click', () => {
-      if (!priceSlider) return;
-      const chipPrice = btn.dataset.chipPrice;
-      priceSlider.value = chipPrice === 'all' ? priceSlider.max : chipPrice;
-      updateSliderVisuals(priceSlider.value);
+      if (!sliderMin || !sliderMax) return;
+      const chipMin = Number(btn.dataset.chipMin);
+      const chipMax = Number(btn.dataset.chipMax);
+      sliderMin.value = chipMin;
+      sliderMax.value = chipMax;
+      updateDualSliderVisuals();
       applyFilters();
     });
   });
@@ -620,9 +667,10 @@
   if (clearBtn) {
     clearBtn.addEventListener('click', () => {
       activeTag = null;
-      if (priceSlider) {
-        priceSlider.value = priceSlider.max;
-        updateSliderVisuals(priceSlider.max);
+      if (sliderMin && sliderMax) {
+        sliderMin.value = minPriceCeiling;
+        sliderMax.value = maxPriceCeiling;
+        updateDualSliderVisuals();
       }
       const woodAll = document.querySelector('input[name="wood"][value="all"]');
       if (woodAll) woodAll.checked = true;

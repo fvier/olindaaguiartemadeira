@@ -574,68 +574,36 @@ def get_store_wood_types():
     return list(STORE_WOOD_TYPES)
 
 STORE_TAG_GROUPS = [
-    {'id': 'all', 'name': 'Todas as Tags', 'icon': '🌊'},
+    {'id': 'all', 'name': 'Todas', 'icon': '🌊'},
     {'id': 'madeiras', 'name': 'Madeiras', 'icon': '🪵'},
-    {'id': 'tecnicas', 'name': 'Técnicas & Acabamentos', 'icon': '✨'},
+    {'id': 'tecnicas', 'name': 'Acabamentos', 'icon': '✨'},
     {'id': 'ambientes', 'name': 'Ambientes', 'icon': '🏡'},
-    {'id': 'tipos', 'name': 'Tipologias', 'icon': '🪑'},
-    {'id': 'selos', 'name': 'Selos & Exclusividade', 'icon': '⭐'},
+    {'id': 'selos', 'name': 'Destaques', 'icon': '⭐'},
 ]
 
 STORE_TAGS_META = {
-    # Madeiras
+    # Madeiras Nobres
     'peroba-rosa': {'name': 'Peroba Rosa', 'icon': '🪵', 'group': 'madeiras'},
     'jatoba': {'name': 'Jatobá', 'icon': '🌳', 'group': 'madeiras'},
-    'jacaranda': {'name': 'Jacarandá', 'icon': '🌿', 'group': 'madeiras'},
     'cumaru': {'name': 'Cumaru', 'icon': '⚓', 'group': 'madeiras'},
-    'brauna': {'name': 'Braúna', 'icon': '🪵', 'group': 'madeiras'},
-    'canela-preta': {'name': 'Canela Preta', 'icon': '🛤️', 'group': 'madeiras'},
+    'jacaranda': {'name': 'Jacarandá', 'icon': '🌿', 'group': 'madeiras'},
 
-    # Tipologias
-    'mesas': {'name': 'Mesas', 'icon': '🪵', 'group': 'tipos'},
-    'bancadas': {'name': 'Bancadas', 'icon': '📐', 'group': 'tipos'},
-    'armarios': {'name': 'Armários', 'icon': '🗄️', 'group': 'tipos'},
-    'cristaleiras': {'name': 'Cristaleiras', 'icon': '🚪', 'group': 'tipos'},
-    'cadeiras': {'name': 'Cadeiras', 'icon': '🪑', 'group': 'tipos'},
-    'bancos': {'name': 'Bancos', 'icon': '🪵', 'group': 'tipos'},
-    'aparadores': {'name': 'Aparadores', 'icon': '🛋️', 'group': 'tipos'},
-    'bares': {'name': 'Bares & Volantes', 'icon': '🍹', 'group': 'tipos'},
-    'espelhos': {'name': 'Espelhos', 'icon': '🪞', 'group': 'tipos'},
-    'paineis': {'name': 'Painéis', 'icon': '🖼️', 'group': 'tipos'},
-    'esculturas': {'name': 'Esculturas', 'icon': '🗿', 'group': 'tipos'},
-
-    # Técnicas & Acabamentos
+    # Técnicas & Acabamentos Nobres
     'verniz-pu': {'name': 'Verniz PU', 'icon': '🛡️', 'group': 'tecnicas'},
-    'lambri': {'name': 'Lambri', 'icon': '🪵', 'group': 'tecnicas'},
-    'empalhado-a-mao': {'name': 'Empalhado à Mão', 'icon': '🌾', 'group': 'tecnicas'},
-    'palhinha-natural': {'name': 'Palhinha Natural', 'icon': '🌾', 'group': 'tecnicas'},
-    'tampo-de-vidro': {'name': 'Tampo de Vidro', 'icon': '💎', 'group': 'tecnicas'},
-    'portas-envidracadas': {'name': 'Portas Envidraçadas', 'icon': '🚪', 'group': 'tecnicas'},
-    'pranchas-macicas': {'name': 'Pranchas Maciças', 'icon': '🪵', 'group': 'tecnicas'},
-    'borda-organica': {'name': 'Borda Orgânica', 'icon': '🌿', 'group': 'tecnicas'},
     'cera-de-carnauba': {'name': 'Cera de Carnaúba', 'icon': '🍯', 'group': 'tecnicas'},
-    'oleo-botanico': {'name': 'Óleo Botânico', 'icon': '🌿', 'group': 'tecnicas'},
-    'patina-colonial': {'name': 'Pátina Colonial', 'icon': '🏛️', 'group': 'tecnicas'},
-    'vidro-canelado': {'name': 'Vidro Canelado', 'icon': '🪟', 'group': 'tecnicas'},
+    'lambri': {'name': 'Lambri de Demolição', 'icon': '🪵', 'group': 'tecnicas'},
+    'empalhado-a-mao': {'name': 'Empalhado à Mão', 'icon': '🌾', 'group': 'tecnicas'},
 
-    # Ambientes & Usos
+    # Ambientes Principais
     'area-gourmet': {'name': 'Área Gourmet', 'icon': '🍷', 'group': 'ambientes'},
-    'cozinha': {'name': 'Cozinha', 'icon': '🍳', 'group': 'ambientes'},
-    'cozinha-planejada': {'name': 'Cozinha Planejada', 'icon': '🍳', 'group': 'ambientes'},
     'sala-de-jantar': {'name': 'Sala de Jantar', 'icon': '🍽️', 'group': 'ambientes'},
+    'cozinha': {'name': 'Cozinha', 'icon': '🍳', 'group': 'ambientes'},
     'praia-e-resort': {'name': 'Praia & Resort', 'icon': '🏖️', 'group': 'ambientes'},
-    'varanda': {'name': 'Varanda', 'icon': '🌿', 'group': 'ambientes'},
-    'lavabo': {'name': 'Lavabo & Banho', 'icon': '🛁', 'group': 'ambientes'},
-    'living': {'name': 'Living & Sala', 'icon': '🛋️', 'group': 'ambientes'},
-    'hall-e-recepcao': {'name': 'Hall & Recepção', 'icon': '🚪', 'group': 'ambientes'},
 
-    # Exclusividades & Selos
-    'sob-medida': {'name': 'Sob Medida', 'icon': '📐', 'group': 'selos'},
+    # Selos & Exclusividades
     'peca-unica': {'name': 'Peça Única', 'icon': '⭐', 'group': 'selos'},
-    'pronta-entrega': {'name': 'Pronta-Entrega', 'icon': '⚡', 'group': 'selos'},
+    'sob-medida': {'name': 'Sob Medida', 'icon': '📐', 'group': 'selos'},
     'destaque-atelie': {'name': 'Destaque Ateliê', 'icon': '✨', 'group': 'selos'},
-    'resistente-a-umidade': {'name': 'Resistente à Umidade', 'icon': '💧', 'group': 'selos'},
-    'protecao-uv': {'name': 'Proteção UV & Maresia', 'icon': '☀️', 'group': 'selos'},
 }
 
 
