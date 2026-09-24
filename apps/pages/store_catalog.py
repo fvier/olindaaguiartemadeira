@@ -25,6 +25,7 @@ STORE_CATEGORIES = [
 WOODWORK_PRODUCTS = [
     {
         'id': 'OLA-M00',
+        'tags': ['peroba-rosa', 'mesas', 'tampo-de-vidro', 'peca-unica', 'sala-de-jantar', 'oleo-botanico', 'living'],
         'wood_type': 'peroba-rosa',
         'category': 'Mesas & Pranchas',
         'name': 'Mesa Escultural com Tampo de Vidro e Base em Madeira de Demolição',
@@ -61,6 +62,7 @@ WOODWORK_PRODUCTS = [
     },
     {
         'id': 'OLA-B15',
+        'tags': ['peroba-rosa', 'bancadas', 'verniz-pu', 'sob-medida', 'area-gourmet', 'cozinha', 'pranchas-macicas', 'borda-organica', 'peca-unica'],
         'wood_type': 'peroba-rosa',
         'category': 'Mesas & Pranchas',
         'name': 'Bancada em Madeira de Demolição com Acabamento em Verniz PU',
@@ -109,6 +111,7 @@ WOODWORK_PRODUCTS = [
     },
     {
         'id': 'OLA-A16',
+        'tags': ['jatoba', 'armarios', 'lambri', 'cozinha-planejada', 'cozinha', 'sob-medida', 'resistente-a-umidade'],
         'wood_type': 'jatoba',
         'category': 'Cristaleiras & Armários',
         'name': 'Armários em Jatobá com Madeira e Lambri de Demolição',
@@ -158,6 +161,7 @@ WOODWORK_PRODUCTS = [
     },
     {
         'id': 'OLA-B17',
+        'tags': ['jatoba', 'bares', 'lambri', 'praia-e-resort', 'area-gourmet', 'varanda', 'protecao-uv', 'sob-medida'],
         'wood_type': 'jatoba',
         'category': 'Linha Gourmet & Utilitários',
         'name': 'Bar de Praia e Varanda Gourmet todo em Lambri de Jatobá',
@@ -202,6 +206,7 @@ WOODWORK_PRODUCTS = [
     },
     {
         'id': 'OLA-C18',
+        'tags': ['peroba-rosa', 'cadeiras', 'empalhado-a-mao', 'palhinha-natural', 'sala-de-jantar', 'varanda'],
         'wood_type': 'peroba-rosa',
         'category': 'Bancos & Banquetas',
         'name': 'Cadeira em Madeira de Demolição com Encosto Empalhado à Mão',
@@ -247,6 +252,7 @@ WOODWORK_PRODUCTS = [
     },
     {
         'id': 'OLA-C19',
+        'tags': ['peroba-rosa', 'cristaleiras', 'portas-envidracadas', 'peca-unica', 'sala-de-jantar', 'cera-de-carnauba'],
         'wood_type': 'peroba-rosa',
         'category': 'Cristaleiras & Armários',
         'name': 'Cristaleira Colonial com Portas Envidraçadas em Peroba Rosa',
@@ -291,6 +297,7 @@ WOODWORK_PRODUCTS = [
     },
     {
         'id': 'OLA-B10',
+        'tags': ['peroba-rosa', 'bares', 'area-gourmet', 'pronta-entrega', 'cera-de-carnauba', 'varanda'],
         'wood_type': 'peroba-rosa',
         'category': 'Linha Gourmet & Utilitários',
         'name': 'Carrinho Bar Gourmet Colonial com Porta-Taças e Rodízios',
@@ -323,6 +330,7 @@ WOODWORK_PRODUCTS = [
     },
     {
         'id': 'OLA-A11',
+        'tags': ['jacaranda', 'aparadores', 'peca-unica', 'living', 'cera-de-carnauba'],
         'wood_type': 'jacaranda',
         'category': 'Aparadores & Consoles',
         'name': 'Cômoda Balcão Colonial com 4 Gavetas e Portas Duplas',
@@ -355,6 +363,7 @@ WOODWORK_PRODUCTS = [
     },
     {
         'id': 'OLA-E12',
+        'tags': ['canela-preta', 'espelhos', 'destaque-atelie', 'cera-de-carnauba'],
         'wood_type': 'canela-preta',
         'category': 'Esculturas & Painéis',
         'name': 'Espelho Colonial de Corpo Inteiro com Moldura Maciça',
@@ -387,6 +396,7 @@ WOODWORK_PRODUCTS = [
     },
     {
         'id': 'OLA-C13',
+        'tags': ['brauna', 'cristaleiras', 'armarios', 'sob-medida', 'sala-de-jantar'],
         'wood_type': 'brauna',
         'category': 'Cristaleiras & Armários',
         'name': 'Estante Expositora Colonial de Parede com Cristaleira Central',
@@ -419,6 +429,7 @@ WOODWORK_PRODUCTS = [
     },
     {
         'id': 'OLA-L14',
+        'tags': ['cumaru', 'lavabo', 'espelhos', 'resistente-a-umidade', 'peca-unica'],
         'wood_type': 'cumaru',
         'category': 'Linha Gourmet & Utilitários',
         'name': 'Conjunto Lavabo Colonial: Gabinete Maciço com Espelho Redondo',
@@ -451,6 +462,7 @@ WOODWORK_PRODUCTS = [
     },
     {
         'id': 'OLA-M01',
+        'tags': ['peroba-rosa', 'mesas', 'borda-organica', 'pranchas-macicas', 'peca-unica', 'sala-de-jantar'],
         'wood_type': 'peroba-rosa',
         'category': 'Mesas & Pranchas',
         'name': 'Mesa Orgânica com Borda Natural em Peroba Rosa',
@@ -490,6 +502,7 @@ WOODWORK_PRODUCTS = [
     },
     {
         'id': 'OLA-A02',
+        'tags': ['jacaranda', 'aparadores', 'patina-colonial', 'hall-e-recepcao', 'destaque-atelie'],
         'wood_type': 'jacaranda',
         'category': 'Aparadores & Consoles',
         'name': 'Aparador Colonial Rústico em Jacarandá da Bahia',
@@ -521,6 +534,7 @@ WOODWORK_PRODUCTS = [
     },
     {
         'id': 'OLA-B03',
+        'tags': ['cumaru', 'bancos', 'varanda', 'pronta-entrega'],
         'wood_type': 'cumaru',
         'category': 'Bancos & Banquetas',
         'name': 'Banco Ripado Contemporâneo em Cumaru de Demolição',
@@ -552,6 +566,7 @@ WOODWORK_PRODUCTS = [
     },
     {
         'id': 'OLA-E04',
+        'tags': ['brauna', 'esculturas', 'peca-unica', 'living'],
         'wood_type': 'brauna',
         'category': 'Esculturas & Painéis',
         'name': 'Escultura Orgânica em Raiz Centenária de Braúna',
@@ -575,6 +590,7 @@ WOODWORK_PRODUCTS = [
     },
     {
         'id': 'OLA-C05',
+        'tags': ['peroba-rosa', 'cristaleiras', 'vidro-canelado', 'sob-medida', 'sala-de-jantar'],
         'wood_type': 'peroba-rosa',
         'category': 'Cristaleiras & Armários',
         'name': 'Cristaleira Colonial com Vidros Canelados Vintage',
@@ -606,6 +622,7 @@ WOODWORK_PRODUCTS = [
     },
     {
         'id': 'OLA-P06',
+        'tags': ['canela-preta', 'paineis', 'sob-medida', 'living'],
         'wood_type': 'canela-preta',
         'category': 'Esculturas & Painéis',
         'name': 'Painel Ripado em Dormentes de Canela Preta',
@@ -637,6 +654,7 @@ WOODWORK_PRODUCTS = [
     },
     {
         'id': 'OLA-G07',
+        'tags': ['cumaru', 'area-gourmet', 'pronta-entrega'],
         'wood_type': 'cumaru',
         'category': 'Linha Gourmet & Utilitários',
         'name': 'Tábua de Corte Gourmet em Cumaru & Resina Âmbar',
@@ -660,6 +678,7 @@ WOODWORK_PRODUCTS = [
     },
     {
         'id': 'OLA-M08',
+        'tags': ['jacaranda', 'mesas', 'living', 'peca-unica'],
         'wood_type': 'jacaranda',
         'category': 'Mesas & Pranchas',
         'name': 'Mesa Lateral Tora Maciça com Fissuras Naturais',
@@ -683,6 +702,7 @@ WOODWORK_PRODUCTS = [
     },
     {
         'id': 'OLA-A09',
+        'tags': ['brauna', 'aparadores', 'sob-medida', 'hall-e-recepcao'],
         'wood_type': 'brauna',
         'category': 'Aparadores & Consoles',
         'name': 'Console Minimalista Suspenso em Braúna Maciça',
@@ -729,3 +749,97 @@ def get_store_categories():
 def get_store_wood_types():
     """Return list of distinct wood types / collections."""
     return list(STORE_WOOD_TYPES)
+
+STORE_TAG_GROUPS = [
+    {'id': 'all', 'name': 'Todas as Tags', 'icon': '🌊'},
+    {'id': 'madeiras', 'name': 'Madeiras', 'icon': '🪵'},
+    {'id': 'tecnicas', 'name': 'Técnicas & Acabamentos', 'icon': '✨'},
+    {'id': 'ambientes', 'name': 'Ambientes', 'icon': '🏡'},
+    {'id': 'tipos', 'name': 'Tipologias', 'icon': '🪑'},
+    {'id': 'selos', 'name': 'Selos & Exclusividade', 'icon': '⭐'},
+]
+
+STORE_TAGS_META = {
+    # Madeiras
+    'peroba-rosa': {'name': 'Peroba Rosa', 'icon': '🪵', 'group': 'madeiras'},
+    'jatoba': {'name': 'Jatobá', 'icon': '🌳', 'group': 'madeiras'},
+    'jacaranda': {'name': 'Jacarandá', 'icon': '🌿', 'group': 'madeiras'},
+    'cumaru': {'name': 'Cumaru', 'icon': '⚓', 'group': 'madeiras'},
+    'brauna': {'name': 'Braúna', 'icon': '🪵', 'group': 'madeiras'},
+    'canela-preta': {'name': 'Canela Preta', 'icon': '🛤️', 'group': 'madeiras'},
+
+    # Tipologias
+    'mesas': {'name': 'Mesas', 'icon': '🪵', 'group': 'tipos'},
+    'bancadas': {'name': 'Bancadas', 'icon': '📐', 'group': 'tipos'},
+    'armarios': {'name': 'Armários', 'icon': '🗄️', 'group': 'tipos'},
+    'cristaleiras': {'name': 'Cristaleiras', 'icon': '🚪', 'group': 'tipos'},
+    'cadeiras': {'name': 'Cadeiras', 'icon': '🪑', 'group': 'tipos'},
+    'bancos': {'name': 'Bancos', 'icon': '🪵', 'group': 'tipos'},
+    'aparadores': {'name': 'Aparadores', 'icon': '🛋️', 'group': 'tipos'},
+    'bares': {'name': 'Bares & Volantes', 'icon': '🍹', 'group': 'tipos'},
+    'espelhos': {'name': 'Espelhos', 'icon': '🪞', 'group': 'tipos'},
+    'paineis': {'name': 'Painéis', 'icon': '🖼️', 'group': 'tipos'},
+    'esculturas': {'name': 'Esculturas', 'icon': '🗿', 'group': 'tipos'},
+
+    # Técnicas & Acabamentos
+    'verniz-pu': {'name': 'Verniz PU', 'icon': '🛡️', 'group': 'tecnicas'},
+    'lambri': {'name': 'Lambri', 'icon': '🪵', 'group': 'tecnicas'},
+    'empalhado-a-mao': {'name': 'Empalhado à Mão', 'icon': '🌾', 'group': 'tecnicas'},
+    'palhinha-natural': {'name': 'Palhinha Natural', 'icon': '🌾', 'group': 'tecnicas'},
+    'tampo-de-vidro': {'name': 'Tampo de Vidro', 'icon': '💎', 'group': 'tecnicas'},
+    'portas-envidracadas': {'name': 'Portas Envidraçadas', 'icon': '🚪', 'group': 'tecnicas'},
+    'pranchas-macicas': {'name': 'Pranchas Maciças', 'icon': '🪵', 'group': 'tecnicas'},
+    'borda-organica': {'name': 'Borda Orgânica', 'icon': '🌿', 'group': 'tecnicas'},
+    'cera-de-carnauba': {'name': 'Cera de Carnaúba', 'icon': '🍯', 'group': 'tecnicas'},
+    'oleo-botanico': {'name': 'Óleo Botânico', 'icon': '🌿', 'group': 'tecnicas'},
+    'patina-colonial': {'name': 'Pátina Colonial', 'icon': '🏛️', 'group': 'tecnicas'},
+    'vidro-canelado': {'name': 'Vidro Canelado', 'icon': '🪟', 'group': 'tecnicas'},
+
+    # Ambientes & Usos
+    'area-gourmet': {'name': 'Área Gourmet', 'icon': '🍷', 'group': 'ambientes'},
+    'cozinha': {'name': 'Cozinha', 'icon': '🍳', 'group': 'ambientes'},
+    'cozinha-planejada': {'name': 'Cozinha Planejada', 'icon': '🍳', 'group': 'ambientes'},
+    'sala-de-jantar': {'name': 'Sala de Jantar', 'icon': '🍽️', 'group': 'ambientes'},
+    'praia-e-resort': {'name': 'Praia & Resort', 'icon': '🏖️', 'group': 'ambientes'},
+    'varanda': {'name': 'Varanda', 'icon': '🌿', 'group': 'ambientes'},
+    'lavabo': {'name': 'Lavabo & Banho', 'icon': '🛁', 'group': 'ambientes'},
+    'living': {'name': 'Living & Sala', 'icon': '🛋️', 'group': 'ambientes'},
+    'hall-e-recepcao': {'name': 'Hall & Recepção', 'icon': '🚪', 'group': 'ambientes'},
+
+    # Exclusividades & Selos
+    'sob-medida': {'name': 'Sob Medida', 'icon': '📐', 'group': 'selos'},
+    'peca-unica': {'name': 'Peça Única', 'icon': '⭐', 'group': 'selos'},
+    'pronta-entrega': {'name': 'Pronta-Entrega', 'icon': '⚡', 'group': 'selos'},
+    'destaque-atelie': {'name': 'Destaque Ateliê', 'icon': '✨', 'group': 'selos'},
+    'resistente-a-umidade': {'name': 'Resistente à Umidade', 'icon': '💧', 'group': 'selos'},
+    'protecao-uv': {'name': 'Proteção UV & Maresia', 'icon': '☀️', 'group': 'selos'},
+}
+
+
+def get_store_tags():
+    """Return all active catalog tags with icons, counts, and groups."""
+    from collections import Counter
+    counts = Counter()
+    for p in WOODWORK_PRODUCTS:
+        for t in p.get('tags', []):
+            counts[t] += 1
+
+    tags = []
+    for slug, meta in STORE_TAGS_META.items():
+        count = counts.get(slug, 0)
+        if count > 0:
+            tags.append({
+                'slug': slug,
+                'name': meta['name'],
+                'icon': meta['icon'],
+                'group': meta['group'],
+                'count': count
+            })
+    group_order = {'madeiras': 1, 'tipos': 2, 'tecnicas': 3, 'ambientes': 4, 'selos': 5}
+    tags.sort(key=lambda t: (group_order.get(t['group'], 9), -t['count'], t['name']))
+    return tags
+
+
+def get_store_tag_groups():
+    """Return available tag category filters."""
+    return list(STORE_TAG_GROUPS)

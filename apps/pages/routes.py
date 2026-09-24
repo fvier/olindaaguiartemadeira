@@ -3,7 +3,8 @@ from apps.pages.models import (User, CarouselImage, CommercialPlan, PlanVersion,
                                LandingCard, FinancialCategory, FinancialEntry, AuditLog, FinancialCompany,
                                IntegratedSale, ClientReview, WoodworkOrder)
 from apps.pages.store_catalog import (get_woodwork_products, get_store_categories,
-                                      get_store_wood_types)
+                                      get_store_wood_types, get_store_tags,
+                                      get_store_tag_groups)
 from apps import db, csrf, limiter
 from flask import render_template, request, redirect, url_for, session, flash, current_app, jsonify, send_from_directory
 from werkzeug.utils import secure_filename
@@ -355,12 +356,16 @@ def loja():
     products = get_woodwork_products()
     store_categories = get_store_categories()
     store_wood_types = get_store_wood_types()
+    store_tags = get_store_tags()
+    store_tag_groups = get_store_tag_groups()
     return render_template(
         'pages/loja.html',
         segment='loja',
         products=products,
         store_categories=store_categories,
-        store_wood_types=store_wood_types
+        store_wood_types=store_wood_types,
+        store_tags=store_tags,
+        store_tag_groups=store_tag_groups
     )
 
 
@@ -368,7 +373,8 @@ def loja():
 def api_loja_produtos():
     """Return JSON list of woodwork catalog products."""
     products = get_woodwork_products()
-    return jsonify({'success': True, 'products': products})
+    store_tags = get_store_tags()
+    return jsonify({'success': True, 'products': products, 'tags': store_tags})
 
 
 def ensure_woodwork_orders():

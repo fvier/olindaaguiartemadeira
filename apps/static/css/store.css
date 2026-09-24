@@ -1254,3 +1254,385 @@ html[data-bs-theme="dark"] .launch-banner-content p {
     display: none;
   }
 }
+
+/* ==========================================================================
+   MAR DE TAGS & FILTRAGEM VISUAL DO ATELIÊ
+   ========================================================================== */
+.store-tag-sea-section {
+  margin-top: 14px;
+  margin-bottom: 32px;
+}
+
+.store-tag-sea-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.98) 0%, rgba(252, 249, 245, 0.96) 100%);
+  border: 1px solid rgba(190, 110, 50, 0.18);
+  border-radius: 20px;
+  padding: 24px 28px;
+  box-shadow: 0 10px 30px rgba(43, 24, 16, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.store-tag-sea-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #c85a17, #d97706, #a45a2a, #c85a17);
+  background-size: 200% 100%;
+}
+
+.store-tag-sea-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px dashed rgba(200, 90, 23, 0.18);
+}
+
+.store-tag-sea-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.store-tag-sea-wave-icon {
+  font-size: 2rem;
+  line-height: 1;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.1));
+}
+
+.store-tag-sea-badge {
+  display: inline-block;
+  font: 800 0.65rem var(--font-heading);
+  letter-spacing: 1px;
+  color: var(--store-terracotta);
+  text-transform: uppercase;
+  margin-bottom: 2px;
+}
+
+.store-tag-sea-title {
+  margin: 0;
+  font: 800 1.35rem var(--font-heading);
+  color: #1e1b18;
+  letter-spacing: -0.02em;
+}
+
+.store-tag-sea-subtitle {
+  margin: 3px 0 0;
+  font-size: 0.85rem;
+  color: #64748b;
+  line-height: 1.4;
+}
+
+.store-tag-sea-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.store-tag-active-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: var(--store-terracotta-soft);
+  color: var(--store-terracotta);
+  border: 1px solid rgba(200, 90, 23, 0.3);
+}
+
+.store-tag-reset-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.store-tag-reset-btn:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+  transform: translateY(-1px);
+}
+
+/* Abas de Categorias do Mar de Tags */
+.store-tag-groups-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 12px;
+  margin-bottom: 16px;
+  scrollbar-width: thin;
+}
+
+.store-tag-group-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  background: #f8fafc;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.store-tag-group-btn:hover {
+  background: #f1f5f9;
+  color: #1e293b;
+  border-color: #cbd5e1;
+}
+
+.store-tag-group-btn.active {
+  background: #1e1b18;
+  color: #ffffff;
+  border-color: #1e1b18;
+  box-shadow: 0 4px 12px rgba(30, 27, 24, 0.2);
+}
+
+/* Cloud de Tags Fluido (O Mar de Tags) */
+.store-tag-cloud {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 10px;
+  align-items: center;
+}
+
+.store-tag-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  background: #ffffff;
+  color: #334155;
+  border: 1px solid rgba(203, 213, 225, 0.8);
+  cursor: pointer;
+  transition: all 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+  user-select: none;
+}
+
+.store-tag-pill:hover {
+  border-color: var(--store-terracotta);
+  color: var(--store-terracotta);
+  background: #fffaf5;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 12px rgba(200, 90, 23, 0.12);
+}
+
+.store-tag-pill.is-active {
+  background: linear-gradient(135deg, #c85a17 0%, #9e460f 100%) !important;
+  color: #ffffff !important;
+  border-color: #9e460f !important;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(200, 90, 23, 0.35);
+}
+
+.store-tag-pill .tag-emoji {
+  font-size: 0.95rem;
+  line-height: 1;
+}
+
+.store-tag-pill .tag-hash {
+  opacity: 0.55;
+  font-weight: 800;
+}
+
+.store-tag-pill.is-active .tag-hash {
+  opacity: 0.9;
+  color: #fde68a;
+}
+
+.store-tag-pill .tag-text {
+  font-weight: 600;
+}
+
+.store-tag-pill .tag-count-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 10px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: #f1f5f9;
+  color: #64748b;
+  margin-left: 2px;
+  transition: all 0.2s ease;
+}
+
+.store-tag-pill:hover .tag-count-badge {
+  background: #fed7aa;
+  color: #9a3412;
+}
+
+.store-tag-pill.is-active .tag-count-badge {
+  background: rgba(255, 255, 255, 0.25) !important;
+  color: #ffffff !important;
+}
+
+/* Mini-tags no Card de Produto */
+.store-card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 5px;
+  margin: 8px 0 10px;
+}
+
+.store-card-tag-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: #64748b;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.store-card-tag-pill:hover {
+  color: var(--store-terracotta);
+  border-color: var(--store-terracotta);
+  background: #fff7ed;
+  transform: translateY(-1px);
+}
+
+.store-card-tag-more {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 6px;
+  border-radius: 6px;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: #94a3b8;
+  background: transparent;
+}
+
+/* Tags no Modal Quick-View */
+.modal-tags-block {
+  margin: 18px 0;
+  padding: 14px 16px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+}
+
+.modal-tags-block h4 {
+  margin: 0 0 10px;
+  font: 700 0.85rem var(--font-heading);
+  color: #334155;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.modal-tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.modal-tag-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 11px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  background: #ffffff;
+  color: #475569;
+  border: 1px solid #cbd5e1;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.modal-tag-pill:hover {
+  background: var(--store-terracotta-soft);
+  color: var(--store-terracotta);
+  border-color: var(--store-terracotta);
+  transform: translateY(-1px);
+}
+
+/* Modo Escuro para o Mar de Tags */
+html[data-bs-theme="dark"] .store-tag-sea-card {
+  background: #111827 !important;
+  border-color: #263449 !important;
+}
+
+html[data-bs-theme="dark"] .store-tag-sea-title {
+  color: #f8fafc !important;
+}
+
+html[data-bs-theme="dark"] .store-tag-sea-subtitle {
+  color: #94a3b8 !important;
+}
+
+html[data-bs-theme="dark"] .store-tag-group-btn {
+  background: #1a2436 !important;
+  border-color: #263449 !important;
+  color: #cbd5e1 !important;
+}
+
+html[data-bs-theme="dark"] .store-tag-group-btn.active {
+  background: var(--store-terracotta) !important;
+  border-color: var(--store-terracotta) !important;
+  color: #ffffff !important;
+}
+
+html[data-bs-theme="dark"] .store-tag-pill {
+  background: #1a2436 !important;
+  border-color: #263449 !important;
+  color: #cbd5e1 !important;
+}
+
+html[data-bs-theme="dark"] .store-tag-pill .tag-count-badge {
+  background: #0f172a !important;
+  color: #94a3b8 !important;
+}
+
+html[data-bs-theme="dark"] .store-tag-pill:hover {
+  background: #243048 !important;
+  color: #fdba74 !important;
+}
+
+html[data-bs-theme="dark"] .store-tag-pill.is-active {
+  background: linear-gradient(135deg, #c85a17 0%, #9e460f 100%) !important;
+  color: #ffffff !important;
+}
+
+html[data-bs-theme="dark"] .store-card-tag-pill,
+html[data-bs-theme="dark"] .modal-tags-block,
+html[data-bs-theme="dark"] .modal-tag-pill {
+  background: #1a2436 !important;
+  border-color: #263449 !important;
+  color: #cbd5e1 !important;
+}

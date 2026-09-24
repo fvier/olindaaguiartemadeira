@@ -15,6 +15,13 @@
   const empty = document.getElementById('storeEmpty');
   const interestCount = document.getElementById('interestCount');
   const storageKey = 'olinda-woodwork-store-interest';
+
+  // Elementos do Mar de Tags
+  const tagPills = [...document.querySelectorAll('.store-tag-pill')];
+  const tagGroupBtns = [...document.querySelectorAll('.store-tag-group-btn')];
+  const clearTagBtn = document.getElementById('clearTagSelectionBtn');
+  const activeTagIndicator = document.getElementById('activeTagPillIndicator');
+  let activeTag = null;
   
   let interests = new Set();
   try {
@@ -45,10 +52,13 @@
     const categories = new Set([...document.querySelectorAll('.category-filter:checked')].map(input => input.value));
 
     const visible = cards.filter(card => {
-      const searchable = `${card.dataset.name} ${card.dataset.category} ${card.dataset.wood}`.toLocaleLowerCase('pt-BR');
+      const cardTags = (card.dataset.tags || '').split(',').map(t => t.trim().toLowerCase()).filter(Boolean);
+      const searchable = `${card.dataset.name} ${card.dataset.category} ${card.dataset.wood} ${(card.dataset.tags || '').replace(/,/g, ' ')}`.toLocaleLowerCase('pt-BR');
+      const matchesTag = !activeTag || cardTags.includes(activeTag.toLowerCase());
       const show = (wood === 'all' || card.dataset.wood === wood)
         && (!categories.size || categories.has(card.dataset.category))
         && matchesPrice(Number(card.dataset.price), price)
+        && matchesTag
         && (!term || searchable.includes(term));
       card.classList.toggle('hidden', !show);
       return show;
@@ -66,6 +76,28 @@
     if (count) count.textContent = visible.length;
     if (empty) empty.classList.toggle('hidden', visible.length !== 0);
 
+    // Atualiza estado visual das pílulas no Mar de Tags
+    tagPills.forEach(pill => {
+      const isActive = Boolean(activeTag && pill.dataset.tagSlug?.toLowerCase() === activeTag.toLowerCase());
+      pill.classList.toggle('is-active', isActive);
+      pill.setAttribute('aria-pressed', String(isActive));
+    });
+
+    if (activeTagIndicator) {
+      if (activeTag) {
+        const found = tagPills.find(p => p.dataset.tagSlug?.toLowerCase() === activeTag.toLowerCase());
+        const tagName = found ? found.dataset.tagName : activeTag.replace(/-/g, ' ');
+        activeTagIndicator.textContent = `Tag ativa: #${tagName}`;
+        activeTagIndicator.style.display = 'inline-flex';
+      } else {
+        activeTagIndicator.style.display = 'none';
+      }
+    }
+
+    if (clearTagBtn) {
+      clearTagBtn.style.display = activeTag ? 'inline-flex' : 'none';
+    }
+
     const labels = [];
     const woodNames = {
       'peroba-rosa': 'Peroba Rosa Centenária',
@@ -78,8 +110,26 @@
     if (wood !== 'all') labels.push(woodNames[wood] || wood);
     if (categories.size) labels.push([...categories].join(', '));
     if (price !== 'all') labels.push('faixa de investimento');
+    if (activeTag) {
+      const found = tagPills.find(p => p.dataset.tagSlug?.toLowerCase() === activeTag.toLowerCase());
+      const tagName = found ? found.dataset.tagName : activeTag.replace(/-/g, ' ');
+      labels.push(`tag: #${tagName}`);
+    }
     if (term) labels.push(`busca: “${search.value.trim()}”`);
     if (activeLabel) activeLabel.textContent = labels.length ? labels.join(' • ') : 'Todas as madeiras e categorias';
+  }
+
+  function setActiveTag(slug, shouldScroll = false) {
+    if (activeTag && slug && activeTag.toLowerCase() === slug.toLowerCase()) {
+      activeTag = null;
+    } else {
+      activeTag = slug || null;
+    }
+    applyFilters();
+    if (shouldScroll && activeTag) {
+      const target = document.querySelector('.store-layout') || grid;
+      target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 
   function updateInterestButtons() {
@@ -196,6 +246,8 @@
   const modalThumbsRow = document.getElementById('modalThumbsRow');
   const modalPrevImgBtn = document.getElementById('modalPrevImgBtn');
   const modalNextImgBtn = document.getElementById('modalNextImgBtn');
+  const modalTagsBlock = document.getElementById('modalTagsBlock');
+  const modalTagsRow = document.getElementById('modalTagsRow');
 
   let currentProduct = null;
   let selectedColor = null;
@@ -369,6 +421,33 @@
       modalInterestBtn.classList.toggle('active', isInterested);
     }
 
+    // Tags da Peça no Modal Quick-View
+    if (modalTagsBlock && modalTagsRow) {
+      modalTagsRow.innerHTML = '';
+      const prodTags = currentProduct.tags || [];
+      if (prodTags.length > 0) {
+        modalTagsBlock.style.display = 'block';
+        prodTags.forEach(tagSlug => {
+          const pill = document.querySelector(`.store-tag-pill[data-tag-slug="${tagSlug}"]`);
+          const tagName = pill ? pill.dataset.tagName : tagSlug.replace(/-/g, ' ');
+          const icon = pill ? pill.querySelector('.tag-emoji')?.textContent || '🏷️' : '🏷️';
+
+          const tagBtn = document.createElement('button');
+          tagBtn.type = 'button';
+          tagBtn.className = 'modal-tag-pill';
+          tagBtn.innerHTML = `<span>${icon}</span> <span>#${tagName}</span>`;
+          tagBtn.title = `Filtrar catálogo por #${tagName}`;
+          tagBtn.addEventListener('click', () => {
+            closeModal();
+            setActiveTag(tagSlug, true);
+          });
+          modalTagsRow.appendChild(tagBtn);
+        });
+      } else {
+        modalTagsBlock.style.display = 'none';
+      }
+    }
+
     updateZapLink();
     updateInterestButtons();
     modal.classList.remove('hidden');
@@ -384,13 +463,23 @@
     applyFilters();
   }
 
-  // Delegação de cliques para abrir modal
+  // Delegação de cliques para abrir modal (ignora tags, compartilhamento e carrossel)
   document.addEventListener('click', e => {
-    if (e.target.closest('[data-interest], [data-share-product], .store-card-carousel-nav, .store-card-carousel-dots')) return;
+    if (e.target.closest('[data-interest], [data-share-product], .store-card-carousel-nav, .store-card-carousel-dots, [data-card-tag], .store-card-tags')) return;
     const trigger = e.target.closest('[data-open-modal]');
     if (trigger) {
       const card = trigger.closest('.store-product-card');
       if (card) openModalForProduct(card);
+    }
+  });
+
+  // Clique em mini-tag no card filtra o catálogo
+  document.addEventListener('click', e => {
+    const cardTagBtn = e.target.closest('[data-card-tag]');
+    if (cardTagBtn) {
+      e.stopPropagation();
+      const slug = cardTagBtn.dataset.cardTag;
+      setActiveTag(slug, true);
     }
   });
 
@@ -448,9 +537,39 @@
     });
   });
 
+  // Eventos do Mar de Tags
+  tagGroupBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const grp = btn.dataset.groupFilter;
+      tagGroupBtns.forEach(b => {
+        const isCurrent = b === btn;
+        b.classList.toggle('active', isCurrent);
+        b.setAttribute('aria-selected', String(isCurrent));
+      });
+      tagPills.forEach(pill => {
+        const matchesGroup = grp === 'all' || pill.dataset.tagGroup === grp;
+        pill.style.display = matchesGroup ? 'inline-flex' : 'none';
+      });
+    });
+  });
+
+  tagPills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      const slug = pill.dataset.tagSlug;
+      setActiveTag(activeTag === slug ? null : slug, true);
+    });
+  });
+
+  if (clearTagBtn) {
+    clearTagBtn.addEventListener('click', () => {
+      setActiveTag(null);
+    });
+  }
+
   const clearBtn = document.getElementById('clearStoreFilters');
   if (clearBtn) {
     clearBtn.addEventListener('click', () => {
+      activeTag = null;
       const woodAll = document.querySelector('input[name="wood"][value="all"]');
       const priceAll = document.querySelector('input[name="price"][value="all"]');
       if (woodAll) woodAll.checked = true;
@@ -526,8 +645,12 @@
     shareProduct(currentCard, event.currentTarget);
   });
 
-  // Deep linking: abre produto solicitado na URL
+  // Deep linking: abre produto solicitado na URL ou aplica filtro por tag
   const requested = new URLSearchParams(window.location.search);
+  const requestedTag = requested.get('tag');
+  if (requestedTag) {
+    setActiveTag(requestedTag, false);
+  }
   const requestedId = requested.get('produto');
   if (requestedId) {
     const linkedCard = cards.find(card => card.dataset.id === requestedId);

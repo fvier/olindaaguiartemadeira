@@ -50,6 +50,57 @@
     </div>
   </section>
 
+  <!-- SEÇÃO MAR DE TAGS (FILTRAGEM VISUAL & INSPIRAÇÕES) -->
+  <section class="container store-tag-sea-section" aria-label="Mar de Tags">
+    <div class="store-tag-sea-card">
+      <div class="store-tag-sea-header">
+        <div class="store-tag-sea-title-wrap">
+          <span class="store-tag-sea-wave-icon" aria-hidden="true">🌊</span>
+          <div>
+            <div class="store-tag-sea-badge">NAVEGAÇÃO VISUAL</div>
+            <h2 class="store-tag-sea-title">Mar de Tags & Inspirações</h2>
+            <p class="store-tag-sea-subtitle">Explore o acervo filtrando por madeiras centenárias, técnicas artesanais, móveis e ambientes</p>
+          </div>
+        </div>
+        <div class="store-tag-sea-actions">
+          <span class="store-tag-active-indicator" id="activeTagPillIndicator" style="display:none;"></span>
+          <button type="button" id="clearTagSelectionBtn" class="store-tag-reset-btn" style="display:none;" title="Limpar tag selecionada">
+            <i class="ri-close-circle-line"></i> Limpar Tag
+          </button>
+        </div>
+      </div>
+
+      <!-- Abas de Grupos do Mar de Tags -->
+      <div class="store-tag-groups-nav" id="storeTagGroupsNav" role="tablist">
+        {% for grp in store_tag_groups %}
+        <button type="button" 
+                class="store-tag-group-btn {% if loop.first %}active{% endif %}" 
+                data-group-filter="{{ grp.id }}"
+                role="tab"
+                aria-selected="{% if loop.first %}true{% else %}false{% endif %}">
+          <span>{{ grp.icon }}</span> {{ grp.name }}
+        </button>
+        {% endfor %}
+      </div>
+
+      <!-- O Mar de Tags (Cloud fluido de pills com contadores) -->
+      <div class="store-tag-cloud" id="storeTagCloud" role="region" aria-label="Nuvem de tags">
+        {% for tag in store_tags %}
+        <button type="button" 
+                class="store-tag-pill" 
+                data-tag-slug="{{ tag.slug }}" 
+                data-tag-group="{{ tag.group }}"
+                data-tag-name="{{ tag.name }}"
+                title="Filtrar por #{{ tag.name }} ({{ tag.count }} peças)">
+          <span class="tag-emoji" aria-hidden="true">{{ tag.icon }}</span>
+          <span class="tag-hash">#</span><span class="tag-text">{{ tag.name }}</span>
+          <span class="tag-count-badge">{{ tag.count }}</span>
+        </button>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
   <!-- LAYOUT PRINCIPAL: SIDEBAR DE FILTROS + CATÁLOGO -->
   <section class="container store-layout">
     <aside class="store-filter-panel">
@@ -127,6 +178,7 @@
                  data-category="{{ product.category }}" 
                  data-price="{{ display.get('price', product.price) }}"
                  data-name="{{ product.name|lower }}"
+                 data-tags="{{ (product.tags or [])|join(',') }}"
                  data-json='{{ product|tojson|forceescape }}'>
           
           <div class="store-product-media" data-open-modal="{{ product.id }}">
@@ -170,6 +222,20 @@
             </div>
 
             <h3 class="card-title-clickable" data-open-modal="{{ product.id }}">{{ product.name }}</h3>
+
+            <!-- Mini-tags da Peça -->
+            {% if product.tags %}
+            <div class="store-card-tags">
+              {% for tag_slug in product.tags[:3] %}
+              <button type="button" class="store-card-tag-pill" data-card-tag="{{ tag_slug }}" title="Filtrar por #{{ tag_slug }}">
+                #{{ tag_slug.replace('-', ' ') }}
+              </button>
+              {% endfor %}
+              {% if product.tags|length > 3 %}
+              <span class="store-card-tag-more" title="{{ product.tags[3:]|join(', ') }}">+{{ product.tags|length - 3 }}</span>
+              {% endif %}
+            </div>
+            {% endif %}
 
             <!-- Amostras de Acabamento / Tonalidade -->
             {% if product.colors and product.colors|length > 0 %}
@@ -316,6 +382,12 @@
         <div class="modal-desc-block">
           <h4>Origem & Características Artesanais:</h4>
           <p id="modalDescription"></p>
+        </div>
+
+        <!-- Tags da Peça no Modal -->
+        <div class="modal-tags-block" id="modalTagsBlock">
+          <h4>Tags & Conceitos da Peça:</h4>
+          <div class="modal-tags-row" id="modalTagsRow"></div>
         </div>
 
         <!-- Botões de Ação -->

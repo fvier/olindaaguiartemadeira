@@ -149,6 +149,56 @@ class WoodworkOrderTimelineTests(unittest.TestCase):
         data = response.get_json()
         self.assertFalse(data['success'])
 
+    def test_loja_page_renders_mar_de_tags(self):
+        response = self.client.get('/loja')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'store-tag-sea-card', response.data)
+        self.assertIn(b'Mar de Tags', response.data)
+        self.assertIn(b'storeTagGroupsNav', response.data)
+        self.assertIn(b'store-tag-pill', response.data)
+        self.assertIn(b'store-card-tags', response.data)
+        self.assertIn(b'modalTagsBlock', response.data)
+
+    def test_api_loja_produtos_contains_tags(self):
+        response = self.client.get('/api/loja/produtos')
+        self.assertEqual(response.status_code, 200)
+        data = response.get_json()
+        self.assertTrue(data['success'])
+        self.assertIn('tags', data)
+        self.assertGreaterEqual(len(data['tags']), 30)
+
+        # Check tag structure
+        sample_tag = data['tags'][0]
+        self.assertIn('slug', sample_tag)
+        self.assertIn('name', sample_tag)
+        self.assertIn('icon', sample_tag)
+        self.assertIn('group', sample_tag)
+        self.assertIn('count', sample_tag)
+        self.assertGreater(sample_tag['count'], 0)
+
+        # Check tags on specific products
+        bancada = next((p for p in data['products'] if p['id'] == 'OLA-B15'), None)
+        self.assertIsNotNone(bancada)
+        self.assertIn('tags', bancada)
+        self.assertIn('verniz-pu', bancada['tags'])
+
+        chair = next((p for p in data['products'] if p['id'] == 'OLA-C18'), None)
+        self.assertIsNotNone(chair)
+        self.assertIn('empalhado-a-mao', chair['tags'])
+
+    def test_store_tags_module_functions(self):
+        from apps.pages.store_catalog import get_store_tags, get_store_tag_groups
+        tags = get_store_tags()
+        groups = get_store_tag_groups()
+
+        self.assertGreater(len(tags), 30)
+        self.assertEqual(len(groups), 6)
+        group_ids = [g['id'] for g in groups]
+        self.assertIn('all', group_ids)
+        self.assertIn('madeiras', group_ids)
+        self.assertIn('tecnicas', group_ids)
+        self.assertIn('ambientes', group_ids)
+
 
 if __name__ == '__main__':
     unittest.main()
