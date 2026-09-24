@@ -278,16 +278,14 @@
 
             <h3 class="card-title-clickable" data-open-modal="{{ product.id }}">{{ product.name }}</h3>
 
-            <!-- Mini-tags da Peça -->
-            {% if product.tags %}
-            <div class="store-card-tags">
-              {% for tag_slug in product.tags[:3] %}
-              <button type="button" class="store-card-tag-pill" data-card-tag="{{ tag_slug }}" title="Filtrar por #{{ tag_slug }}">
-                #{{ tag_slug.replace('-', ' ') }}
-              </button>
-              {% endfor %}
-              {% if product.tags|length > 3 %}
-              <span class="store-card-tag-more" title="{{ product.tags[3:]|join(', ') }}">+{{ product.tags|length - 3 }}</span>
+            <!-- Indicador Minimalista de Tamanho / Opções da Peça -->
+            {% if product.sizes %}
+            <div class="store-card-size-indicator" data-open-modal="{{ product.id }}" title="Clique para ver os {{ product.sizes|length }} tamanhos e detalhes da peça">
+              <i class="ri-ruler-2-line"></i>
+              {% if product.sizes|length > 1 %}
+                <span>{{ product.sizes|length }} tamanhos disponíveis</span>
+              {% else %}
+                <span>{{ product.sizes[0] }}</span>
               {% endif %}
             </div>
             {% endif %}
@@ -310,17 +308,6 @@
               </div>
             </div>
             {% endif %}
-
-            <!-- Dimensões da Peça -->
-            <div class="store-card-sizes">
-              {% if product.sizes %}
-                <div class="store-size-pills-row">
-                  {% for sz in product.sizes %}
-                  <span class="store-size-pill">{{ sz }}</span>
-                  {% endfor %}
-                </div>
-              {% endif %}
-            </div>
 
             <div class="store-product-footer">
               <div class="store-price">

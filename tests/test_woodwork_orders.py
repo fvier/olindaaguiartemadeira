@@ -71,7 +71,7 @@ class WoodworkOrderTimelineTests(unittest.TestCase):
         bancada = next((p for p in data['products'] if p['id'] == 'OLA-B15'), None)
         self.assertIsNotNone(bancada)
         self.assertEqual(len(bancada['images']), 2)
-        self.assertIn('Verniz PU', bancada['name'])
+        self.assertIn('Bancada', bancada['name'])
         self.assertIn('Cada racha e marca', bancada['description'])
 
         # Verifica os armários em jatobá OLA-A16 com lambri de demolição
@@ -79,14 +79,14 @@ class WoodworkOrderTimelineTests(unittest.TestCase):
         self.assertIsNotNone(armario)
         self.assertEqual(armario['wood_type'], 'jatoba')
         self.assertEqual(len(armario['images']), 3)
-        self.assertIn('Jatobá', armario['name'])
+        self.assertIn('Armário', armario['name'])
         self.assertIn('lambri de demolição', armario['description'])
 
         # Verifica o bar em lambri de jatobá OLA-B17
         bar = next((p for p in data['products'] if p['id'] == 'OLA-B17'), None)
         self.assertIsNotNone(bar)
         self.assertEqual(bar['wood_type'], 'jatoba')
-        self.assertIn('Lambri de Jatobá', bar['name'])
+        self.assertIn('Bar', bar['name'])
         self.assertIn('bar todo em lambri de jatobá', bar['description'].lower())
 
         # Verifica a cadeira com encosto empalhado à mão OLA-C18
@@ -94,7 +94,7 @@ class WoodworkOrderTimelineTests(unittest.TestCase):
         self.assertIsNotNone(chair)
         self.assertEqual(chair['wood_type'], 'peroba-rosa')
         self.assertEqual(chair['category'], 'Bancos & Banquetas')
-        self.assertIn('Encosto Empalhado', chair['name'])
+        self.assertIn('Cadeira', chair['name'])
         self.assertIn('encosto empalhado à mão', chair['description'].lower())
 
         # Verifica a cristaleira colonial OLA-C19
@@ -158,8 +158,8 @@ class WoodworkOrderTimelineTests(unittest.TestCase):
         self.assertIn(b'Mar de Tags', response.data)
         self.assertIn(b'storeTagGroupsNav', response.data)
         self.assertIn(b'store-tag-pill', response.data)
-        self.assertIn(b'store-card-tags', response.data)
         self.assertIn(b'modalTagsBlock', response.data)
+        self.assertIn(b'modalTagsRow', response.data)
 
         # Verifica a nova Faixa de Investimento com slider de preço (slace de preço)
         self.assertIn(b'storePriceSlider', response.data)

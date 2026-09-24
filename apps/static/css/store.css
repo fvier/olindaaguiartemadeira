@@ -1004,6 +1004,34 @@ html[data-bs-theme="dark"] .store-chip-btn.active {
   box-shadow: 0 0 0 2px var(--store-terracotta);
 }
 
+/* Indicador Minimalista de Tamanho no Card */
+.store-card-size-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 5.5px;
+  margin-top: 6px;
+  margin-bottom: 12px;
+  padding: 4px 10px;
+  background: #fdf8f4;
+  border: 1px solid rgba(200, 90, 23, 0.22);
+  border-radius: 20px;
+  color: #78350f;
+  font-size: 0.74rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.store-card-size-indicator:hover {
+  background: rgba(200, 90, 23, 0.12);
+  border-color: rgba(200, 90, 23, 0.4);
+  color: var(--store-terracotta);
+  transform: translateY(-1px);
+}
+.store-card-size-indicator i {
+  font-size: 0.88rem;
+  color: var(--store-terracotta);
+}
+
 /* Dimensões / Medidas */
 .store-card-sizes {
   margin-bottom: 12px;
