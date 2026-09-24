@@ -1,0 +1,177 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Byll & Olinda Aguiar | O Ateliê, História e Manifesto{% endblock title %}
+
+{% block html_attribute %}data-bs-theme="light"{% endblock html_attribute %}
+{% block body_attribute %}class="landing-page bg-light text-dark"{% endblock body_attribute %}
+
+{% block content %}
+<style>
+    .landing-page { --landing-accent:#c85a17;--landing-accent-rgb:200,90,23;--landing-accent-soft:#ffedd5; }
+    .hover-terracotta { transition: color 0.15s ease; }
+    .hover-terracotta:hover { color: #c85a17 !important; }
+    .landing-page .text-primary { color:var(--landing-accent)!important; }
+    .landing-page .bg-primary { background-color:var(--landing-accent)!important; }
+    .landing-page .bg-primary-subtle { background-color:var(--landing-accent-soft)!important; }
+    .landing-page .btn-primary { --bs-btn-bg:var(--landing-accent);--bs-btn-border-color:var(--landing-accent);--bs-btn-hover-bg:var(--landing-accent);--bs-btn-hover-border-color:var(--landing-accent); }
+    .hover-lift { transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease; }
+    .hover-lift:hover { transform: translateY(-4px); box-shadow: 0 16px 36px rgba(15, 23, 42, 0.14) !important; }
+    .manifesto-box { border-left: 6px solid #c85a17; background: #fff; padding: 2.5rem; border-radius: 1.25rem; box-shadow: 0 10px 30px rgba(0,0,0,0.06); }
+    .gallery-img { height: 260px; object-fit: cover; width: 100%; border-radius: 1rem; transition: transform 0.3s ease; }
+    .gallery-img:hover { transform: scale(1.02); }
+    .site-footer { background:#f8fafc;color:#475569; }
+    .site-footer h5,.site-footer h6 { color:#0f172a;font-weight:800; }
+    .site-footer a { color:#475569;transition:color .2s ease; }
+    .site-footer a:hover { color:var(--landing-accent); }
+    .footer-contact-item { display:flex;align-items:flex-start;gap:10px;padding:9px 0; }
+    .footer-contact-icon { width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--landing-accent-soft);color:var(--landing-accent);flex:0 0 auto; }
+    .footer-app-link { width:38px;height:38px;border-radius:11px;display:inline-grid;place-items:center;background:#fff;border:1px solid #dbe3ef;color:#0f172a!important; }
+    html[data-bs-theme="dark"] body.landing-page { background:#080e1a!important;color:#e5edf8!important; }
+    html[data-bs-theme="dark"] .landing-page .navbar { background:rgba(8,14,26,.94)!important;border-color:#263449!important; }
+    html[data-bs-theme="dark"] .landing-page .bg-white { background-color:#111827!important; }
+    html[data-bs-theme="dark"] .landing-page .bg-light { background-color:#0f172a!important; }
+    html[data-bs-theme="dark"] .landing-page .card { background-color:#111827!important;color:#dbe6f3!important;border-color:#263449!important; }
+    html[data-bs-theme="dark"] .landing-page .manifesto-box { background-color:#111827!important;color:#dbe6f3!important; }
+    html[data-bs-theme="dark"] .landing-page .site-footer { background:#080e1a;color:#aebdd0;border-color:#263449!important; }
+</style>
+
+<!-- Floating WhatsApp Button -->
+<a href="https://api.whatsapp.com/send?phone=5581994522504&text=Ol%C3%A1!%20Li%20a%20hist%C3%B3ria%20de%20Byll%20e%20Olinda%20Aguiar%20e%20gostaria%20de%20conversar."
+   target="_blank" rel="noopener noreferrer"
+   class="position-fixed bottom-0 end-0 m-4 z-3 btn btn-success rounded-circle shadow-lg p-3 d-flex align-items-center justify-content-center border-0 hover-lift"
+   style="width: 58px; height: 58px; background-color: #25d366;" title="Falar no WhatsApp com Olinda Aguiar">
+    <i class="ri-whatsapp-fill fs-30 text-white"></i>
+</a>
+
+{% include 'partials/public-reviews-bar.html' %}
+{% include 'partials/public-navbar.html' %}
+
+<!-- Header da Página Byll -->
+<header class="py-5 bg-white border-bottom border-light-subtle">
+    <div class="container text-center py-lg-3">
+        <span class="badge px-3 py-2 rounded-pill fw-bold text-uppercase mb-3" style="background:#ffedd5;color:#c85a17;">Mestres & Ateliê</span>
+        <h1 class="display-5 fw-extrabold text-dark mb-3">Byll & Olinda Aguiar</h1>
+        <p class="text-secondary fs-17 max-w-700 mx-auto" style="max-width: 680px;">
+            A harmonia entre uma liderança feminina inspiradora e uma equipe talentosa de artesãos homens que transformam madeira de demolição em arte sustentável e atemporal.
+        </p>
+    </div>
+</header>
+
+<main class="py-5 bg-light">
+    <div class="container py-lg-3">
+        
+        <!-- Manifesto Oficial em Destaque -->
+        <div class="manifesto-box mb-5">
+            <div class="d-flex align-items-center gap-3 mb-4">
+                <span class="rounded-circle d-flex align-items-center justify-content-center" style="width:54px;height:54px;background:#ffedd5;color:#c85a17;">
+                    <i class="ri-quill-pen-fill fs-26"></i>
+                </span>
+                <div>
+                    <h3 class="fw-bold text-dark mb-0">Manifesto Olinda Arte em Madeira</h3>
+                    <small class="text-secondary">Nossa razão de existir, valores e compromisso com o planeta</small>
+                </div>
+            </div>
+
+            <p class="fs-18 text-dark lh-lg mb-3">
+                "Na <strong>Olinda Arte em Madeira</strong>, estamos orgulhosos de trabalhar com <strong>madeira de demolição</strong> para criar peças únicas e sustentáveis para nossos clientes. Além disso, estamos igualmente orgulhosos de ser uma <strong>empresa liderada por uma mulher</strong>, com uma <strong>equipe talentosa de funcionários homens</strong>."
+            </p>
+            <p class="fs-18 text-dark lh-lg mb-3">
+                "Nossa proprietária, <strong>Olinda Aguiar</strong>, é uma líder inspiradora que trabalha incansavelmente para manter nossa empresa em movimento, oferecendo aos nossos clientes produtos que combinam beleza e sustentabilidade. Seu compromisso com a qualidade, a inovação e o respeito ao meio ambiente é a base de tudo que fazemos aqui na Olinda Arte em Madeira."
+            </p>
+            <p class="fs-18 text-dark lh-lg mb-4">
+                "Trabalhamos duro para criar produtos que são verdadeiramente únicos e estamos comprometidos em fazer a diferença no mundo, através do uso da madeira de demolição e da sustentabilidade."
+            </p>
+
+            <div class="d-flex flex-wrap gap-2 pt-3 border-top border-light-subtle">
+                <span class="badge bg-light text-dark border px-3 py-2 rounded-pill"><i class="ri-women-fill text-warning me-1"></i>Liderança Feminina</span>
+                <span class="badge bg-light text-dark border px-3 py-2 rounded-pill"><i class="ri-leaf-fill text-success me-1"></i>100% Madeira de Demolição</span>
+                <span class="badge bg-light text-dark border px-3 py-2 rounded-pill"><i class="ri-hammer-fill me-1" style="color:#c85a17;"></i>Equipe Talentosa de Artesãos</span>
+                <span class="badge bg-light text-dark border px-3 py-2 rounded-pill"><i class="ri-heart-fill text-danger me-1"></i>Olinda - PE</span>
+            </div>
+        </div>
+
+        <!-- Dupla Força: Olinda Aguiar & Byll com a Equipe -->
+        <div class="row g-4 mb-5">
+            <!-- Card Olinda Aguiar -->
+            <div class="col-lg-6">
+                <div class="card h-100 rounded-4 border-0 shadow-sm p-4 p-md-5 bg-white">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <span class="rounded-circle d-flex align-items-center justify-content-center" style="width:48px;height:48px;background:#fef3c7;color:#d97706;">
+                            <i class="ri-women-line fs-24"></i>
+                        </span>
+                        <div>
+                            <h4 class="fw-bold text-dark mb-0">Olinda Aguiar</h4>
+                            <small class="text-secondary">Proprietária & Líder Inspiradora</small>
+                        </div>
+                    </div>
+                    <p class="text-secondary fs-15 lh-base mb-3">
+                        À frente do ateliê, Olinda Aguiar é o coração e a mente que impulsionam o projeto. Com sensibilidade artística singular e firme compromisso ambiental, ela seleciona cada lote de madeira histórica, acompanha a criação das peças e garante uma relação de proximidade com clientes, arquitetos e colecionadores.
+                    </p>
+                    <p class="text-secondary fs-15 lh-base mb-0">
+                        Sua liderança valoriza o talento individual de cada membro da equipe, criando um ambiente colaborativo onde o respeito e a busca incessante pela excelência se refletem em cada escultura ou mesa que sai do casarão.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Card Byll & Equipe de Artesãos -->
+            <div class="col-lg-6">
+                <div class="card h-100 rounded-4 border-0 shadow-sm p-4 p-md-5 bg-white">
+                    <div class="d-flex align-items-center gap-3 mb-3">
+                        <span class="rounded-circle d-flex align-items-center justify-content-center" style="width:48px;height:48px;background:#ffedd5;color:#c85a17;">
+                            <i class="ri-hammer-line fs-24"></i>
+                        </span>
+                        <div>
+                            <h4 class="fw-bold text-dark mb-0">Byll & Equipe de Mestres</h4>
+                            <small class="text-secondary">Marcenaria Artística & Entalhe Manual</small>
+                        </div>
+                    </div>
+                    <p class="text-secondary fs-15 lh-base mb-3">
+                        O mestre <strong>Byll</strong> e os talentosos marceneiros do ateliê dominam a arte de ler a madeira. Diante de uma viga centenária ou de um dormente com marcas do tempo, a equipe esculpe sem agredir, deixando que os nós, as ranhuras naturais e os tons profundos da madeira guiem a forma final da obra.
+                    </p>
+                    <p class="text-secondary fs-15 lh-base mb-0">
+                        Cada corte manual com goiva e cada hora dedicada ao lixamento e enceramento artesanal transformam o que seria descarte em relíquias de alta nobreza para residências e galerias.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Galeria do Casarão Histórico de Olinda -->
+        <div class="card rounded-4 border-0 shadow-sm p-4 p-md-5 bg-white mb-5">
+            <div class="text-center max-w-700 mx-auto mb-4">
+                <span class="badge px-3 py-1 rounded-pill fw-bold text-uppercase mb-2" style="background:#ffedd5;color:#c85a17;">Onde a Arte Acontece</span>
+                <h3 class="fw-bold text-dark">O Casarão Histórico no Carmo</h3>
+                <p class="text-secondary fs-15">
+                    Localizado na <strong>478 R. Cel. Joaquim Cavalcante, Carmo, Olinda - PE</strong>, nosso casarão colonial é um ateliê vivo aberto para visitação.
+                </p>
+            </div>
+
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <img src="{{ config.ASSETS_ROOT }}/images/hero-fachada-luz-dourada.png" class="gallery-img shadow-sm" alt="Fachada sob luz dourada">
+                    <small class="text-center d-block text-secondary mt-2 fw-semibold">Sob a Luz Dourada de Olinda</small>
+                </div>
+                <div class="col-md-4">
+                    <img src="{{ config.ASSETS_ROOT }}/images/hero-fachada-noite-azul.png" class="gallery-img shadow-sm" alt="Fachada na noite azul">
+                    <small class="text-center d-block text-secondary mt-2 fw-semibold">Noite Azul e Iluminação Quente</small>
+                </div>
+                <div class="col-md-4">
+                    <img src="{{ config.ASSETS_ROOT }}/images/hero-fachada-coral-entardecer.png" class="gallery-img shadow-sm" alt="Fachada coral ao entardecer">
+                    <small class="text-center d-block text-secondary mt-2 fw-semibold">Fachada Coral ao Entardecer</small>
+                </div>
+            </div>
+
+            <div class="text-center mt-4 pt-3 border-top border-light-subtle">
+                <a href="https://www.google.com/maps?q=-8.0122,-34.8543&z=17&hl=pt-BR" target="_blank" rel="noopener noreferrer" class="btn btn-outline-dark rounded-pill px-4 py-2.5 fw-semibold d-inline-flex align-items-center gap-2 me-2">
+                    <i class="ri-map-pin-2-fill text-danger fs-18"></i> Abrir no Google Maps
+                </a>
+                <a href="https://api.whatsapp.com/send?phone=5581994522504&text=Ol%C3%A1!%20Gostaria%20de%20agendar%20uma%20visita%20ao%20casar%C3%A3o%20em%20Olinda." target="_blank" rel="noopener noreferrer" class="btn btn-success rounded-pill px-4 py-2.5 fw-bold d-inline-flex align-items-center gap-2 text-white border-0 shadow-sm" style="background:#25d366;">
+                    <i class="ri-whatsapp-line fs-18"></i> Avisar Visita no WhatsApp
+                </a>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+{% include 'partials/public-footer.html' %}
+{% endblock content %}

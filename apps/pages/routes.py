@@ -17,6 +17,10 @@ from jinja2 import TemplateNotFound
 # Public pages that do not require authentication
 PUBLIC_PAGES = [
     'landing', 'landing.html',
+    'loja', 'loja.html',
+    'pedido', 'pedido.html',
+    'blog', 'blog.html',
+    'byll', 'byll.html',
     'index', 'index.html',
     'links', 'links.html',
     'auth-signin', 'auth-signin.html',
@@ -338,6 +342,40 @@ def home():
     reviews = ClientReview.query.filter_by(active=True).order_by(ClientReview.sort_order.asc(), ClientReview.id.asc()).limit(max_reviews).all()
     return render_template('pages/landing.html', segment='landing', carousel_images=active_carousel_images(),
                            landing_plans=active_plans(), reviews=reviews)
+
+
+@blueprint.route('/loja')
+@blueprint.route('/loja.html')
+def loja():
+    """Render dedicated store and woodwork catalog page."""
+    ensure_default_user()
+    ensure_commercial_content()
+    plans = active_plans()
+    return render_template('pages/loja.html', segment='loja', plans=plans)
+
+
+@blueprint.route('/pedido')
+@blueprint.route('/pedido.html')
+def pedido():
+    """Render dedicated order consultation and custom commission page."""
+    ensure_default_user()
+    return render_template('pages/pedido.html', segment='pedido')
+
+
+@blueprint.route('/blog')
+@blueprint.route('/blog.html')
+def blog():
+    """Render dedicated blog and stories page."""
+    ensure_default_user()
+    return render_template('pages/blog.html', segment='blog')
+
+
+@blueprint.route('/byll')
+@blueprint.route('/byll.html')
+def byll():
+    """Render dedicated Byll & Olinda Aguiar history and manifesto page."""
+    ensure_default_user()
+    return render_template('pages/byll.html', segment='byll')
 
 
 @blueprint.route('/login', methods=['GET', 'POST'])

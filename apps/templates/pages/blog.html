@@ -1,0 +1,171 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Blog & Histórias do Ateliê | Olinda Arte em Madeira{% endblock title %}
+
+{% block html_attribute %}data-bs-theme="light"{% endblock html_attribute %}
+{% block body_attribute %}class="landing-page bg-light text-dark"{% endblock body_attribute %}
+
+{% block content %}
+<style>
+    .landing-page { --landing-accent:#c85a17;--landing-accent-rgb:200,90,23;--landing-accent-soft:#ffedd5; }
+    .hover-terracotta { transition: color 0.15s ease; }
+    .hover-terracotta:hover { color: #c85a17 !important; }
+    .landing-page .text-primary { color:var(--landing-accent)!important; }
+    .landing-page .bg-primary { background-color:var(--landing-accent)!important; }
+    .landing-page .bg-primary-subtle { background-color:var(--landing-accent-soft)!important; }
+    .landing-page .btn-primary { --bs-btn-bg:var(--landing-accent);--bs-btn-border-color:var(--landing-accent);--bs-btn-hover-bg:var(--landing-accent);--bs-btn-hover-border-color:var(--landing-accent); }
+    .hover-lift { transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease; }
+    .hover-lift:hover { transform: translateY(-4px); box-shadow: 0 16px 36px rgba(15, 23, 42, 0.14) !important; }
+    .blog-cover-img { height: 230px; object-fit: cover; width: 100%; }
+    .site-footer { background:#f8fafc;color:#475569; }
+    .site-footer h5,.site-footer h6 { color:#0f172a;font-weight:800; }
+    .site-footer a { color:#475569;transition:color .2s ease; }
+    .site-footer a:hover { color:var(--landing-accent); }
+    .footer-contact-item { display:flex;align-items:flex-start;gap:10px;padding:9px 0; }
+    .footer-contact-icon { width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--landing-accent-soft);color:var(--landing-accent);flex:0 0 auto; }
+    .footer-app-link { width:38px;height:38px;border-radius:11px;display:inline-grid;place-items:center;background:#fff;border:1px solid #dbe3ef;color:#0f172a!important; }
+    html[data-bs-theme="dark"] body.landing-page { background:#080e1a!important;color:#e5edf8!important; }
+    html[data-bs-theme="dark"] .landing-page .navbar { background:rgba(8,14,26,.94)!important;border-color:#263449!important; }
+    html[data-bs-theme="dark"] .landing-page .bg-white { background-color:#111827!important; }
+    html[data-bs-theme="dark"] .landing-page .bg-light { background-color:#0f172a!important; }
+    html[data-bs-theme="dark"] .landing-page .card { background-color:#111827!important;color:#dbe6f3!important;border-color:#263449!important; }
+    html[data-bs-theme="dark"] .landing-page .site-footer { background:#080e1a;color:#aebdd0;border-color:#263449!important; }
+</style>
+
+<!-- Floating WhatsApp Button -->
+<a href="https://api.whatsapp.com/send?phone=5581994522504&text=Ol%C3%A1!%20Li%20o%20blog%20da%20Olinda%20Arte%20em%20Madeira%20e%20gostaria%20de%20conversar%20sobre%20as%20pe%C3%A7as."
+   target="_blank" rel="noopener noreferrer"
+   class="position-fixed bottom-0 end-0 m-4 z-3 btn btn-success rounded-circle shadow-lg p-3 d-flex align-items-center justify-content-center border-0 hover-lift"
+   style="width: 58px; height: 58px; background-color: #25d366;" title="Falar no WhatsApp com Olinda Aguiar">
+    <i class="ri-whatsapp-fill fs-30 text-white"></i>
+</a>
+
+{% include 'partials/public-reviews-bar.html' %}
+{% include 'partials/public-navbar.html' %}
+
+<!-- Header do Blog -->
+<header class="py-5 bg-white border-bottom border-light-subtle">
+    <div class="container text-center py-lg-3">
+        <span class="badge px-3 py-2 rounded-pill fw-bold text-uppercase mb-3" style="background:#ffedd5;color:#c85a17;">Crônicas & Processo Criativo</span>
+        <h1 class="display-5 fw-extrabold text-dark mb-3">Histórias do Ateliê & A Arte em Madeira</h1>
+        <p class="text-secondary fs-17 max-w-700 mx-auto" style="max-width: 680px;">
+            Acompanhe nossas reflexões sobre o resgate da madeira de demolição, a força da liderança feminina, os bastidores do casarão histórico e as técnicas da marcenaria artesanal.
+        </p>
+    </div>
+</header>
+
+<main class="py-5 bg-light">
+    <div class="container py-lg-3">
+        
+        <!-- Artigo em Destaque Principal -->
+        <div class="card rounded-4 border-0 shadow-sm overflow-hidden mb-5 bg-white hover-lift">
+            <div class="row g-0 align-items-center">
+                <div class="col-lg-7">
+                    <img src="{{ config.ASSETS_ROOT }}/images/hero-fachada-luz-dourada.png" class="img-fluid w-100 h-100" style="min-height: 340px; max-height: 440px; object-fit: cover;" alt="Fachada histórica do ateliê sob luz dourada">
+                </div>
+                <div class="col-lg-5 p-4 p-md-5">
+                    <div class="d-flex align-items-center gap-2 mb-3">
+                        <span class="badge px-3 py-1 rounded-pill fw-bold fs-12 text-uppercase" style="background:#ffedd5;color:#c85a17;">Destaque Editorial</span>
+                        <small class="text-muted"><i class="ri-calendar-line me-1"></i>Setembro, 2026</small>
+                    </div>
+                    <h2 class="fw-bold text-dark mb-3 fs-26">O Resgate das Madeiras Centenárias: Vida Nova com Respeito Ecológico</h2>
+                    <p class="text-secondary fs-15 mb-4">
+                        Como casarões antigos e estruturas desativadas fornecem toras com veios raros e densidade que não existem mais em madeiras novas. Entenda nosso processo de triagem, expurgo natural e preservação de memória.
+                    </p>
+                    <div class="d-flex align-items-center justify-content-between pt-3 border-top border-light-subtle">
+                        <span class="small fw-semibold text-dark"><i class="ri-user-line me-1 text-primary"></i>Por Olinda Aguiar</span>
+                        <a href="https://api.whatsapp.com/send?phone=5581994522504&text=Ol%C3%A1!%20Gostaria%20de%20conversar%20sobre%20as%20madeiras%20centen%C3%A1rias%20do%20ateli%C3%AA." target="_blank" rel="noopener noreferrer" class="btn btn-outline-primary btn-sm rounded-pill px-3 fw-bold">
+                            Tirar Dúvidas no WhatsApp <i class="ri-arrow-right-line ms-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Grade de Artigos -->
+        <div class="row g-4">
+            
+            <!-- Card Artigo 1 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 rounded-4 border-0 shadow-sm overflow-hidden bg-white hover-lift d-flex flex-column">
+                    <img src="{{ config.ASSETS_ROOT }}/images/hero-fachada-noite-azul.png" class="blog-cover-img" alt="Casarão na noite azul">
+                    <div class="p-4 d-flex flex-column flex-grow-1">
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <span class="badge bg-primary-subtle text-primary px-2.5 py-1 rounded-pill fw-bold fs-11">Liderança & Propósito</span>
+                            <small class="text-muted fs-12">5 min de leitura</small>
+                        </div>
+                        <h5 class="fw-bold text-dark mb-2">Liderança Feminina na Marcenaria: A Força de Olinda Aguiar</h5>
+                        <p class="text-secondary fs-14 flex-grow-1">
+                            Como a visão inspiradora de uma mulher liderando uma equipe talentosa de artesãos homens revoluciona o mercado de arte e sustentabilidade em Pernambuco.
+                        </p>
+                        <a href="https://www.instagram.com/olindaaguiartemadeira/" target="_blank" rel="noopener noreferrer" class="fw-bold text-decoration-none d-inline-flex align-items-center gap-1 mt-3" style="color:#c85a17;">
+                            Ver mais no Instagram <i class="ri-instagram-line"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Artigo 2 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 rounded-4 border-0 shadow-sm overflow-hidden bg-white hover-lift d-flex flex-column">
+                    <img src="{{ config.ASSETS_ROOT }}/images/hero-fachada-coral-entardecer.png" class="blog-cover-img" alt="Fachada coral ao entardecer">
+                    <div class="p-4 d-flex flex-column flex-grow-1">
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <span class="badge bg-success bg-opacity-10 text-success px-2.5 py-1 rounded-pill fw-bold fs-11">Técnicas & Acabamentos</span>
+                            <small class="text-muted fs-12">4 min de leitura</small>
+                        </div>
+                        <h5 class="fw-bold text-dark mb-2">Ceras de Abelha e Óleos Nobres: O Segredo do Toque Aveludado</h5>
+                        <p class="text-secondary fs-14 flex-grow-1">
+                            Por que banimos vernizes sintéticos em favor de fórmulas naturais que deixam a madeira de demolição respirar e revelam seus veios de forma orgânica.
+                        </p>
+                        <a href="https://www.facebook.com/BylleOlinda" target="_blank" rel="noopener noreferrer" class="fw-bold text-decoration-none d-inline-flex align-items-center gap-1 mt-3" style="color:#c85a17;">
+                            Ver fotos na Galeria <i class="ri-facebook-circle-fill"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Artigo 3 -->
+            <div class="col-md-6 col-lg-4">
+                <div class="card h-100 rounded-4 border-0 shadow-sm overflow-hidden bg-white hover-lift d-flex flex-column">
+                    <img src="{{ config.ASSETS_ROOT }}/images/hero-fachada-luz-dourada.png" class="blog-cover-img" alt="Luz dourada no casarão">
+                    <div class="p-4 d-flex flex-column flex-grow-1">
+                        <div class="d-flex align-items-center gap-2 mb-2">
+                            <span class="badge bg-warning bg-opacity-15 text-warning px-2.5 py-1 rounded-pill fw-bold fs-11">Patrimônio Colonial</span>
+                            <small class="text-muted fs-12">6 min de leitura</small>
+                        </div>
+                        <h5 class="fw-bold text-dark mb-2">O Casarão da Rua Cel. Joaquim Cavalcante no Carmo</h5>
+                        <p class="text-secondary fs-14 flex-grow-1">
+                            Conheça as histórias das paredes centenárias que hoje abrigam os formões, plainas, lixadeiras e o showroom de arte mais aconchegante de Olinda.
+                        </p>
+                        <a href="https://www.google.com/maps?q=-8.0122,-34.8543&z=17&hl=pt-BR" target="_blank" rel="noopener noreferrer" class="fw-bold text-decoration-none d-inline-flex align-items-center gap-1 mt-3" style="color:#c85a17;">
+                            Como Visitar o Ateliê <i class="ri-map-pin-line"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Box de Conexão com Redes Sociais -->
+        <div class="card rounded-4 border-0 shadow-sm mt-5 p-4 p-md-5 text-center bg-white">
+            <span class="badge px-3 py-1 rounded-pill fw-bold text-uppercase mb-2 mx-auto" style="background:#ffedd5;color:#c85a17;">Acompanhe o Dia a Dia</span>
+            <h3 class="fw-bold text-dark mb-3">Quer ver o processo de escultura e acabamento ao vivo?</h3>
+            <p class="text-secondary fs-15 max-w-700 mx-auto mb-4" style="max-width: 600px;">
+                Publicamos vídeos da seleção das toras, entalhe de Byll e expedição de peças nos perfis oficiais do ateliê.
+            </p>
+            <div class="d-flex flex-wrap justify-content-center gap-3">
+                <a href="https://www.instagram.com/olindaaguiartemadeira/" target="_blank" rel="noopener noreferrer" class="btn btn-danger rounded-pill px-4 py-2.5 fw-bold d-inline-flex align-items-center gap-2 shadow-sm">
+                    <i class="ri-instagram-line fs-20"></i> Seguir @olindaaguiartemadeira
+                </a>
+                <a href="https://www.facebook.com/BylleOlinda" target="_blank" rel="noopener noreferrer" class="btn btn-primary rounded-pill px-4 py-2.5 fw-bold d-inline-flex align-items-center gap-2 shadow-sm" style="background:#1877f2;border-color:#1877f2;">
+                    <i class="ri-facebook-circle-fill fs-20"></i> Curtir Página no Facebook
+                </a>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+{% include 'partials/public-footer.html' %}
+{% endblock content %}

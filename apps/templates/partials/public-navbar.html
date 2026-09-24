@@ -1,0 +1,97 @@
+<!-- Header Navigation (Navbar Público Olinda Arte em Madeira) -->
+<nav class="navbar navbar-expand-lg navbar-light bg-white py-2 sticky-top border-bottom border-light-subtle shadow-sm z-3">
+    <div class="container">
+        <!-- Logo Image & Brand Name -->
+        <a class="navbar-brand landing-navbar-brand d-flex align-items-center py-0 text-decoration-none" href="/">
+            <img src="{{ config.ASSETS_ROOT }}/images/logo-icon-wood.png" alt="Olinda Aguiar" style="height:44px;width:auto;object-fit:contain" class="landing-brand-mark me-2">
+            <span class="landing-brand-name d-flex flex-column justify-content-center">
+                <strong style="color: #1e293b; font-size: 1.25rem; font-weight: 800; letter-spacing: -0.01em; line-height: 1.1;">Olinda Aguiar</strong>
+                <small style="color: #64748b; font-size: 0.65rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; margin-top: 2px;">ARTES EM MADEIRA</small>
+            </span>
+        </a>
+
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarContent">
+            <ul class="navbar-nav me-auto ms-lg-4 mb-2 mb-lg-0 fw-semibold fs-15 d-flex align-items-center gap-lg-3">
+                <li class="nav-item">
+                    <a class="nav-link px-2 {% if segment in ['landing', 'inicio'] %}active fw-bold text-primary{% else %}text-dark hover-terracotta{% endif %}" href="/" {% if segment in ['landing', 'inicio'] %}style="color: #c85a17 !important;"{% endif %}>Início</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link d-inline-flex align-items-center gap-1 px-2 {% if segment == 'loja' %}active fw-bold text-primary{% else %}text-dark hover-terracotta{% endif %}" href="/loja" {% if segment == 'loja' %}style="color: #c85a17 !important;"{% endif %}>
+                        <i class="ri-store-2-line" style="color: #c85a17; font-size: 1.15rem;"></i>
+                        <span class="fw-semibold">Loja</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link d-inline-flex align-items-center gap-1 px-2 {% if segment == 'pedido' %}active fw-bold text-primary{% else %}text-dark hover-terracotta{% endif %}" href="/pedido" {% if segment == 'pedido' %}style="color: #c85a17 !important;"{% endif %}>
+                        <i class="ri-search-line" style="color: #c85a17; font-size: 1.15rem;"></i>
+                        <span class="fw-semibold">Pedido</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link d-inline-flex align-items-center gap-1 px-2 {% if segment == 'blog' %}active fw-bold text-primary{% else %}text-dark hover-terracotta{% endif %}" href="/blog" {% if segment == 'blog' %}style="color: #c85a17 !important;"{% endif %}>
+                        <i class="ri-newspaper-line" style="color: #c85a17; font-size: 1.15rem;"></i>
+                        <span class="fw-semibold">Blog</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link d-inline-flex align-items-center gap-1 px-2 {% if segment == 'byll' %}active fw-bold text-primary{% else %}text-dark hover-terracotta{% endif %}" href="/byll" {% if segment == 'byll' %}style="color: #c85a17 !important;"{% endif %}>
+                        <i class="ri-heart-fill" style="color: #c85a17; font-size: 1.1rem;"></i>
+                        <span class="fw-semibold">Byll</span>
+                    </a>
+                </li>
+            </ul>
+
+            <!-- Header Right: Social Icons & Theme Toggles (Sem botões de login) -->
+            <div class="d-flex align-items-center gap-2">
+                <button id="landing-theme-toggle" type="button" class="btn btn-light btn-sm rounded-circle p-0 d-inline-flex align-items-center justify-content-center border shadow-sm" style="width:36px;height:36px" title="Ativar tema escuro" aria-label="Alternar tema claro e escuro">
+                    <i id="landing-theme-moon" class="ri-moon-line fs-18"></i>
+                    <i id="landing-theme-sun" class="ri-sun-line fs-18 d-none"></i>
+                </button>
+                <div class="dropdown">
+                    <button id="landing-palette-toggle" type="button" class="btn btn-light btn-sm rounded-circle p-0 d-inline-flex align-items-center justify-content-center border shadow-sm" style="width:36px;height:36px" data-bs-toggle="dropdown" aria-expanded="false" title="Escolher cor do tema" aria-label="Escolher cor do tema"><i class="ri-palette-line fs-18"></i></button>
+                    <div class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-3 p-2" style="min-width:190px">
+                        <small class="text-secondary text-uppercase fw-bold px-2 d-block mb-1" style="font-size:9px;letter-spacing:.1em">Cor do tema</small>
+                        <button type="button" class="dropdown-item rounded-2 landing-palette-option d-flex align-items-center gap-2" data-accent="gold"><span class="landing-palette-swatch" style="background:#d97706"></span>Terracota / Dourado</button>
+                        <button type="button" class="dropdown-item rounded-2 landing-palette-option d-flex align-items-center gap-2" data-accent="blue"><span class="landing-palette-swatch" style="background:#2563eb"></span>Azul Colonial</button>
+                        <button type="button" class="dropdown-item rounded-2 landing-palette-option d-flex align-items-center gap-2" data-accent="green"><span class="landing-palette-swatch" style="background:#15803d"></span>Verde</button>
+                        <button type="button" class="dropdown-item rounded-2 landing-palette-option d-flex align-items-center gap-2" data-accent="purple"><span class="landing-palette-swatch" style="background:#7c3aed"></span>Roxo</button>
+                        <button type="button" class="dropdown-item rounded-2 landing-palette-option d-flex align-items-center gap-2" data-accent="graphite"><span class="landing-palette-swatch" style="background:#475569"></span>Grafite</button>
+                    </div>
+                </div>
+                <!-- Instagram -->
+                <a href="https://www.instagram.com/olindaaguiartemadeira/"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="btn btn-light btn-sm rounded-circle p-0 d-inline-flex align-items-center justify-content-center text-danger border shadow-sm"
+                   style="width: 36px; height: 36px;"
+                   title="Instagram @olindaaguiartemadeira">
+                    <i class="ri-instagram-line fs-18"></i>
+                </a>
+
+                <!-- Facebook -->
+                <a href="https://www.facebook.com/BylleOlinda"
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="btn btn-light btn-sm rounded-circle p-0 d-inline-flex align-items-center justify-content-center text-primary border shadow-sm"
+                   style="width: 36px; height: 36px;"
+                   title="Facebook Olinda Aguiar">
+                    <i class="ri-facebook-circle-fill fs-18"></i>
+                </a>
+
+                <!-- WhatsApp -->
+                <a href="https://api.whatsapp.com/send?phone=5581994522504&text=Ol%C3%A1!%20Gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20as%20pe%C3%A7as%20da%20Olinda%20Aguiar."
+                   target="_blank"
+                   rel="noopener noreferrer"
+                   class="btn btn-success btn-sm rounded-circle p-0 d-inline-flex align-items-center justify-content-center text-white border-0 shadow-sm"
+                   style="width: 36px; height: 36px; background-color: #25d366;"
+                   title="WhatsApp (81) 9 9452-2504">
+                    <i class="ri-whatsapp-line fs-18"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+</nav>

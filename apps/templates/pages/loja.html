@@ -1,0 +1,166 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Loja & Catálogo de Obras | Olinda Arte em Madeira{% endblock title %}
+
+{% block html_attribute %}data-bs-theme="light"{% endblock html_attribute %}
+{% block body_attribute %}class="landing-page bg-light text-dark"{% endblock body_attribute %}
+
+{% block content %}
+<style>
+    .landing-page { --landing-accent:#c85a17;--landing-accent-rgb:200,90,23;--landing-accent-soft:#ffedd5; }
+    .hover-terracotta { transition: color 0.15s ease; }
+    .hover-terracotta:hover { color: #c85a17 !important; }
+    .landing-page .text-primary { color:var(--landing-accent)!important; }
+    .landing-page .bg-primary { background-color:var(--landing-accent)!important; }
+    .landing-page .bg-primary-subtle { background-color:var(--landing-accent-soft)!important; }
+    .landing-page .btn-primary { --bs-btn-bg:var(--landing-accent);--bs-btn-border-color:var(--landing-accent);--bs-btn-hover-bg:var(--landing-accent);--bs-btn-hover-border-color:var(--landing-accent); }
+    .landing-page .btn-outline-primary { --bs-btn-color:var(--landing-accent);--bs-btn-border-color:var(--landing-accent);--bs-btn-hover-bg:var(--landing-accent);--bs-btn-hover-border-color:var(--landing-accent); }
+    .hover-lift { transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease; }
+    .hover-lift:hover { transform: translateY(-4px); box-shadow: 0 16px 36px rgba(15, 23, 42, 0.14) !important; }
+    .category-filter-btn.active { background-color: var(--landing-accent) !important; color: #fff !important; border-color: var(--landing-accent) !important; }
+    .site-footer { background:#f8fafc;color:#475569; }
+    .site-footer h5,.site-footer h6 { color:#0f172a;font-weight:800; }
+    .site-footer a { color:#475569;transition:color .2s ease; }
+    .site-footer a:hover { color:var(--landing-accent); }
+    .footer-contact-item { display:flex;align-items:flex-start;gap:10px;padding:9px 0; }
+    .footer-contact-icon { width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--landing-accent-soft);color:var(--landing-accent);flex:0 0 auto; }
+    .footer-app-link { width:38px;height:38px;border-radius:11px;display:inline-grid;place-items:center;background:#fff;border:1px solid #dbe3ef;color:#0f172a!important; }
+    html[data-bs-theme="dark"] body.landing-page { background:#080e1a!important;color:#e5edf8!important; }
+    html[data-bs-theme="dark"] .landing-page .navbar { background:rgba(8,14,26,.94)!important;border-color:#263449!important; }
+    html[data-bs-theme="dark"] .landing-page .bg-white { background-color:#111827!important; }
+    html[data-bs-theme="dark"] .landing-page .bg-light { background-color:#0f172a!important; }
+    html[data-bs-theme="dark"] .landing-page .card { background-color:#111827!important;color:#dbe6f3!important;border-color:#263449!important; }
+    html[data-bs-theme="dark"] .landing-page .site-footer { background:#080e1a;color:#aebdd0;border-color:#263449!important; }
+</style>
+
+<!-- Floating WhatsApp Button -->
+<a href="https://api.whatsapp.com/send?phone=5581994522504&text=Ol%C3%A1!%20Vim%20pela%20Loja%20da%20Olinda%20Arte%20em%20Madeira%20e%20gostaria%20de%20tirar%20d%C3%BAvidas."
+   target="_blank" rel="noopener noreferrer"
+   class="position-fixed bottom-0 end-0 m-4 z-3 btn btn-success rounded-circle shadow-lg p-3 d-flex align-items-center justify-content-center border-0 hover-lift"
+   style="width: 58px; height: 58px; background-color: #25d366;" title="Falar no WhatsApp com Olinda Aguiar">
+    <i class="ri-whatsapp-fill fs-30 text-white"></i>
+</a>
+
+{% include 'partials/public-reviews-bar.html' %}
+{% include 'partials/public-navbar.html' %}
+
+<!-- Header da Loja -->
+<header class="py-5 bg-white border-bottom border-light-subtle">
+    <div class="container text-center py-lg-3">
+        <span class="badge px-3 py-2 rounded-pill fw-bold text-uppercase mb-3" style="background:#ffedd5;color:#c85a17;">Ateliê & Galeria Colonial</span>
+        <h1 class="display-5 fw-extrabold text-dark mb-3">Loja & Catálogo de Obras</h1>
+        <p class="text-secondary fs-17 max-w-700 mx-auto mb-4" style="max-width: 680px;">
+            Peças únicas e sustentáveis criadas a partir de <strong>madeira de demolição</strong> no Casarão Histórico de Olinda - PE. Liderança inspiradora de <strong>Olinda Aguiar</strong> com uma talentosa equipe de artesãos.
+        </p>
+
+        <!-- Filtros Rápidos -->
+        <div class="d-flex flex-wrap justify-content-center gap-2 mt-4" id="lojaFilters">
+            <button class="btn btn-outline-dark rounded-pill px-3 py-1.5 fw-semibold category-filter-btn active" data-filter="all">Todas as Peças</button>
+            <button class="btn btn-outline-dark rounded-pill px-3 py-1.5 fw-semibold category-filter-btn" data-filter="ESCULTURAS">Esculturas</button>
+            <button class="btn btn-outline-dark rounded-pill px-3 py-1.5 fw-semibold category-filter-btn" data-filter="MÓVEIS">Mesas & Móveis</button>
+            <button class="btn btn-outline-dark rounded-pill px-3 py-1.5 fw-semibold category-filter-btn" data-filter="PAINÉIS">Painéis Rústicos</button>
+            <button class="btn btn-outline-dark rounded-pill px-3 py-1.5 fw-semibold category-filter-btn" data-filter="UTILITÁRIOS">Linha Gourmet</button>
+            <button class="btn btn-outline-dark rounded-pill px-3 py-1.5 fw-semibold category-filter-btn" data-filter="SOB MEDIDA">Sob Medida</button>
+        </div>
+    </div>
+</header>
+
+<!-- Catálogo Grid -->
+<main class="py-5 bg-light">
+    <div class="container py-lg-2">
+        <div class="row g-4" id="productsGrid">
+            {% for plan in plans %}
+            <div class="col-md-6 col-lg-4 product-card-col" data-category="{{ plan.badge or plan.tipoVeiculo|upper }}">
+                <div class="card h-100 rounded-4 p-4 hover-lift transition d-flex flex-column {{ 'border border-warning shadow-lg bg-white position-relative' if plan.destaque else 'border-0 shadow-sm bg-white' }}">
+                    {% if plan.destaque %}
+                    <span class="position-absolute top-0 end-0 m-3 badge bg-warning text-dark fw-bold px-3 py-1 rounded-pill">DESTAQUE ATELIÊ</span>
+                    {% endif %}
+
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <span class="badge px-3 py-1 rounded-pill fw-bold fs-12" style="background:#ffedd5;color:#c85a17;">
+                            {{ plan.badge or plan.tipoVeiculo|upper }}
+                        </span>
+                        <small class="text-success fw-bold d-inline-flex align-items-center gap-1">
+                            <i class="ri-leaf-fill"></i> Madeira de Demolição
+                        </small>
+                    </div>
+
+                    <h4 class="fw-bold text-dark mb-2">{{ plan.nome }}</h4>
+                    <p class="text-secondary fs-14 mb-3">{{ plan.descricao or plan.cobertura }}</p>
+
+                    <div class="p-3 rounded-3 bg-light mb-3 border border-light-subtle">
+                        <small class="text-secondary d-block">Investimento estimado</small>
+                        <div class="d-flex align-items-baseline gap-1">
+                            <span class="fs-14 text-secondary">A partir de R$</span>
+                            <span class="display-6 fw-extrabold text-primary" style="color:#c85a17!important;">{{ '%.2f'|format(plan.mensalidade)|replace('.', ',') }}</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4 flex-grow-1">
+                        <h6 class="fw-bold text-dark fs-13 text-uppercase tracking-wider mb-2">Características & Garantias</h6>
+                        <ul class="list-unstyled text-secondary fs-13 d-grid gap-2 mb-0">
+                            {% for benefit in plan.beneficios %}
+                            <li class="d-flex align-items-start gap-2">
+                                <i class="ri-checkbox-circle-fill text-success fs-16 flex-shrink-0 mt-0.5"></i>
+                                <span>{{ benefit }}</span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    <div class="d-grid gap-2 mt-auto">
+                        <a href="{{ plan.whatsappUrl }}" target="_blank" rel="noopener noreferrer" class="btn btn-success rounded-pill fw-bold py-2.5 d-inline-flex align-items-center justify-content-center gap-2 shadow-sm border-0" style="background:#25d366;">
+                            <i class="ri-whatsapp-line fs-19"></i>
+                            <span>Encomendar no WhatsApp</span>
+                        </a>
+                        <a href="/pedido" class="btn btn-outline-dark rounded-pill fw-semibold py-2 fs-13">
+                            <i class="ri-ruler-2-line me-1"></i> Orçar com Medidas Customizadas
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Banner de Projetos Sob Medida -->
+        <div class="card rounded-4 border-0 shadow-sm mt-5 p-4 p-md-5 overflow-hidden position-relative" style="background: linear-gradient(135deg, #2a1810 0%, #170d08 100%); color: #fff;">
+            <div class="row align-items-center position-relative z-1">
+                <div class="col-lg-8">
+                    <span class="badge px-3 py-1 rounded-pill fw-bold text-uppercase mb-3" style="background: rgba(200,90,23,0.3); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3);">Consultoria Especializada</span>
+                    <h2 class="display-6 fw-bold mb-3 text-white">É arquiteto, designer ou procura uma peça sob medida?</h2>
+                    <p class="text-white text-opacity-80 fs-16 mb-4 mb-lg-0" style="max-width: 600px;">
+                        A proprietária <strong>Olinda Aguiar</strong> atende diretamente para entender as dimensões do seu ambiente, selecionar toras com a tonalidade desejada e orientar a confecção do mobiliário dos seus sonhos.
+                    </p>
+                </div>
+                <div class="col-lg-4 text-lg-end">
+                    <a href="/pedido" class="btn btn-warning btn-lg rounded-pill px-4 py-3 fw-bold shadow hover-lift text-dark d-inline-flex align-items-center gap-2">
+                        <i class="ri-edit-line fs-20"></i>
+                        <span>Solicitar Projeto Especial</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+{% include 'partials/public-footer.html' %}
+
+<script>
+    // Client-side Category Filter
+    document.querySelectorAll('.category-filter-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('.category-filter-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const filter = btn.getAttribute('data-filter');
+            document.querySelectorAll('.product-card-col').forEach(card => {
+                const category = card.getAttribute('data-category') || '';
+                if (filter === 'all' || category.includes(filter)) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+    });
+</script>
+{% endblock content %}

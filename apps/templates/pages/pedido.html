@@ -1,0 +1,226 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Consulta de Pedidos & Encomendas Sob Medida | Olinda Arte em Madeira{% endblock title %}
+
+{% block html_attribute %}data-bs-theme="light"{% endblock html_attribute %}
+{% block body_attribute %}class="landing-page bg-light text-dark"{% endblock body_attribute %}
+
+{% block content %}
+<style>
+    .landing-page { --landing-accent:#c85a17;--landing-accent-rgb:200,90,23;--landing-accent-soft:#ffedd5; }
+    .hover-terracotta { transition: color 0.15s ease; }
+    .hover-terracotta:hover { color: #c85a17 !important; }
+    .landing-page .text-primary { color:var(--landing-accent)!important; }
+    .landing-page .bg-primary { background-color:var(--landing-accent)!important; }
+    .landing-page .bg-primary-subtle { background-color:var(--landing-accent-soft)!important; }
+    .landing-page .btn-primary { --bs-btn-bg:var(--landing-accent);--bs-btn-border-color:var(--landing-accent);--bs-btn-hover-bg:var(--landing-accent);--bs-btn-hover-border-color:var(--landing-accent); }
+    .hover-lift { transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease; }
+    .hover-lift:hover { transform: translateY(-4px); box-shadow: 0 16px 36px rgba(15, 23, 42, 0.14) !important; }
+    .site-footer { background:#f8fafc;color:#475569; }
+    .site-footer h5,.site-footer h6 { color:#0f172a;font-weight:800; }
+    .site-footer a { color:#475569;transition:color .2s ease; }
+    .site-footer a:hover { color:var(--landing-accent); }
+    .footer-contact-item { display:flex;align-items:flex-start;gap:10px;padding:9px 0; }
+    .footer-contact-icon { width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--landing-accent-soft);color:var(--landing-accent);flex:0 0 auto; }
+    .footer-app-link { width:38px;height:38px;border-radius:11px;display:inline-grid;place-items:center;background:#fff;border:1px solid #dbe3ef;color:#0f172a!important; }
+    html[data-bs-theme="dark"] body.landing-page { background:#080e1a!important;color:#e5edf8!important; }
+    html[data-bs-theme="dark"] .landing-page .navbar { background:rgba(8,14,26,.94)!important;border-color:#263449!important; }
+    html[data-bs-theme="dark"] .landing-page .bg-white { background-color:#111827!important; }
+    html[data-bs-theme="dark"] .landing-page .bg-light { background-color:#0f172a!important; }
+    html[data-bs-theme="dark"] .landing-page .card { background-color:#111827!important;color:#dbe6f3!important;border-color:#263449!important; }
+    html[data-bs-theme="dark"] .landing-page .site-footer { background:#080e1a;color:#aebdd0;border-color:#263449!important; }
+</style>
+
+<!-- Floating WhatsApp Button -->
+<a href="https://api.whatsapp.com/send?phone=5581994522504&text=Ol%C3%A1!%20Gostaria%20de%20consultar%20uma%20encomenda%20com%20o%20ateli%C3%AA."
+   target="_blank" rel="noopener noreferrer"
+   class="position-fixed bottom-0 end-0 m-4 z-3 btn btn-success rounded-circle shadow-lg p-3 d-flex align-items-center justify-content-center border-0 hover-lift"
+   style="width: 58px; height: 58px; background-color: #25d366;" title="Falar no WhatsApp com Olinda Aguiar">
+    <i class="ri-whatsapp-fill fs-30 text-white"></i>
+</a>
+
+{% include 'partials/public-reviews-bar.html' %}
+{% include 'partials/public-navbar.html' %}
+
+<!-- Header da Página de Pedidos -->
+<header class="py-5 bg-white border-bottom border-light-subtle">
+    <div class="container text-center py-lg-3">
+        <span class="badge px-3 py-2 rounded-pill fw-bold text-uppercase mb-3" style="background:#ffedd5;color:#c85a17;">Atendimento & Produção</span>
+        <h1 class="display-5 fw-extrabold text-dark mb-3">Consulta de Pedidos & Encomendas Sob Medida</h1>
+        <p class="text-secondary fs-17 max-w-700 mx-auto" style="max-width: 680px;">
+            Acompanhe a confecção da sua peça autoral ou solicite um projeto exclusivo desenhado sob a coordenação de <strong>Olinda Aguiar</strong> e esculpido por nossa equipe de mestres artesãos.
+        </p>
+    </div>
+</header>
+
+<main class="py-5 bg-light">
+    <div class="container py-lg-3">
+        <div class="row g-4 justify-content-center">
+            
+            <!-- Coluna 1: Consultar Pedido Existente -->
+            <div class="col-lg-5">
+                <div class="card h-100 rounded-4 p-4 p-md-5 border-0 shadow-sm bg-white">
+                    <div class="d-flex align-items-center gap-3 mb-4">
+                        <span class="rounded-circle d-flex align-items-center justify-content-center" style="width:52px;height:52px;background:#ffedd5;color:#c85a17;">
+                            <i class="ri-search-eye-line fs-26"></i>
+                        </span>
+                        <div>
+                            <h4 class="fw-bold text-dark mb-0">Consultar Encomenda</h4>
+                            <small class="text-secondary">Peças em produção ou transporte</small>
+                        </div>
+                    </div>
+
+                    <p class="text-secondary fs-14 mb-4">
+                        Se você já realizou uma encomenda no ateliê ou na galeria em Olinda, digite o número da sua encomenda ou o seu nome para consultar o andamento em tempo real com nossa equipe.
+                    </p>
+
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold text-dark fs-14">Número da Encomenda ou Seu Nome Completo</label>
+                        <input id="consultaInput" type="text" class="form-control form-control-lg rounded-3 fs-15" placeholder="Ex: ENCOMENDA-104 ou Mariana Silva">
+                    </div>
+
+                    <div class="mb-4 p-3 rounded-3 bg-light border border-light-subtle">
+                        <div class="d-flex align-items-start gap-2">
+                            <i class="ri-information-line text-warning fs-18 flex-shrink-0 mt-0.5"></i>
+                            <small class="text-secondary">
+                                As peças em <strong>madeira de demolição</strong> passam por processo minucioso de seleção de veios, cura com óleos vegetais e acabamento com ceras naturais de abelha/carnaúba.
+                            </small>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn btn-success btn-lg w-100 rounded-pill fw-bold py-3 text-white d-flex align-items-center justify-content-center gap-2 shadow-sm border-0 hover-lift mt-auto" style="background:#25d366;" onclick="consultarPedidoViaWhatsApp()">
+                        <i class="ri-whatsapp-line fs-22"></i>
+                        <span>Consultar Status no WhatsApp</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Coluna 2: Solicitar Projeto Sob Medida -->
+            <div class="col-lg-7">
+                <div class="card h-100 rounded-4 p-4 p-md-5 border-0 shadow-sm bg-white">
+                    <div class="d-flex align-items-center gap-3 mb-4">
+                        <span class="rounded-circle d-flex align-items-center justify-content-center" style="width:52px;height:52px;background:#e0f2fe;color:#0284c7;">
+                            <i class="ri-draft-line fs-26"></i>
+                        </span>
+                        <div>
+                            <h4 class="fw-bold text-dark mb-0">Solicitar Encomenda Sob Medida</h4>
+                            <small class="text-secondary">Mobiliário e obras customizadas</small>
+                        </div>
+                    </div>
+
+                    <form id="encomendaForm" onsubmit="enviarEncomendaCustomizada(event)">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold text-dark fs-14">Seu Nome Completo *</label>
+                                <input type="text" id="encNome" class="form-control rounded-3" placeholder="Ex: Rodrigo Albuquerque" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold text-dark fs-14">Seu WhatsApp com DDD *</label>
+                                <input type="text" id="encWhatsApp" class="form-control rounded-3" placeholder="Ex: (81) 98765-4321" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold text-dark fs-14">Cidade e Estado de Entrega *</label>
+                                <input type="text" id="encLocal" class="form-control rounded-3" placeholder="Ex: Recife - PE ou São Paulo - SP" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold text-dark fs-14">Tipo de Peça Desejada *</label>
+                                <select id="encTipo" class="form-select rounded-3" required>
+                                    <option value="" disabled selected>Selecione a categoria...</option>
+                                    <option value="Mesa Orgânica de Demolição">Mesa Orgânica (Jantar / Centro / Lateral)</option>
+                                    <option value="Escultura Autoral de Casarão">Escultura Autoral em Madeira</option>
+                                    <option value="Painel Decorativo de Parede">Painel Rústico / Revestimento</option>
+                                    <option value="Aparador ou Balcão">Aparador, Bancada ou Balcão Maciço</option>
+                                    <option value="Tábuas Nobres & Gamélas Gourmet">Linha Gourmet & Utilitários</option>
+                                    <option value="Projeto Especial para Arquitetura">Projeto Arquitetônico Sob Medida</option>
+                                </select>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-semibold text-dark fs-14">Dimensões Aproximadas (Comprimento x Largura x Altura)</label>
+                                <input type="text" id="encMedidas" class="form-control rounded-3" placeholder="Ex: 2,20m x 1,00m x 0,75m de altura">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-semibold text-dark fs-14">Detalhes e Preferências</label>
+                                <textarea id="encDetalhes" rows="3" class="form-control rounded-3" placeholder="Ex: Gostaria de borda orgânica viva, veios escuros marcados, acabamento fosco acetinado para ambiente interno..."></textarea>
+                            </div>
+                            <div class="col-12 pt-2">
+                                <button type="submit" class="btn btn-warning btn-lg w-100 rounded-pill fw-bold py-3 text-dark d-flex align-items-center justify-content-center gap-2 shadow-sm border-0 hover-lift">
+                                    <i class="ri-whatsapp-line fs-22 text-dark"></i>
+                                    <span>Enviar Pedido de Orçamento no WhatsApp</span>
+                                </button>
+                                <small class="text-secondary text-center d-block mt-2">
+                                    Nossa equipe responderá com opções de fotos de toras e estimativa de prazo.
+                                </small>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Pilares de Confiança -->
+        <div class="row g-4 mt-4">
+            <div class="col-md-4">
+                <div class="card h-100 rounded-4 border-0 shadow-sm p-4 bg-white text-center">
+                    <div class="avatar-lg mx-auto rounded-circle d-flex align-items-center justify-content-center mb-3" style="width:52px;height:52px;background:#ffedd5;color:#c85a17;">
+                        <i class="ri-leaf-fill fs-24"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark">100% Madeira de Demolição</h5>
+                    <p class="text-secondary fs-14 mb-0">Resgate ético de casarões coloniais e estruturas históricas, com impacto zero no desmatamento.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 rounded-4 border-0 shadow-sm p-4 bg-white text-center">
+                    <div class="avatar-lg mx-auto rounded-circle d-flex align-items-center justify-content-center mb-3" style="width:52px;height:52px;background:#e0f2fe;color:#0284c7;">
+                        <i class="ri-truck-fill fs-24"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark">Envio Seguro Todo o Brasil</h5>
+                    <p class="text-secondary fs-14 mb-0">Engradados reforçados de madeira fabricados sob medida para proteger cada detalhe no transporte.</p>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card h-100 rounded-4 border-0 shadow-sm p-4 bg-white text-center">
+                    <div class="avatar-lg mx-auto rounded-circle d-flex align-items-center justify-content-center mb-3" style="width:52px;height:52px;background:#fef3c7;color:#d97706;">
+                        <i class="ri-women-fill fs-24"></i>
+                    </div>
+                    <h5 class="fw-bold text-dark">Curadoria de Olinda Aguiar</h5>
+                    <p class="text-secondary fs-14 mb-0">Acompanhamento próximo em todas as etapas, desde a escolha da tora até a entrega final.</p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+{% include 'partials/public-footer.html' %}
+
+<script>
+function consultarPedidoViaWhatsApp() {
+    const input = document.getElementById('consultaInput');
+    const valor = encodeURIComponent((input && input.value.trim()) || 'minha encomenda');
+    window.open(`https://api.whatsapp.com/send?phone=5581994522504&text=Ol%C3%A1!%20Gostaria%20de%20consultar%20o%20status%20do%20meu%20pedido:%20${valor}`, '_blank');
+}
+
+function enviarEncomendaCustomizada(e) {
+    e.preventDefault();
+    const nome = document.getElementById('encNome').value.trim();
+    const whatsapp = document.getElementById('encWhatsApp').value.trim();
+    const local = document.getElementById('encLocal').value.trim();
+    const tipo = document.getElementById('encTipo').value;
+    const medidas = document.getElementById('encMedidas').value.trim() || 'A definir';
+    const detalhes = document.getElementById('encDetalhes').value.trim() || 'Sem observações adicionais';
+
+    const texto = `*NOVA SOLICITAÇÃO DE ENCOMENDA SOB MEDIDA*
+👤 *Nome:* ${nome}
+📱 *WhatsApp:* ${whatsapp}
+📍 *Cidade/UF:* ${local}
+🪵 *Tipo de Peça:* ${tipo}
+📐 *Medidas Estimadas:* ${medidas}
+📝 *Detalhes:* ${detalhes}
+
+_Vim pela página de Pedido do site da Olinda Arte em Madeira._`;
+
+    window.open(`https://api.whatsapp.com/send?phone=5581994522504&text=${encodeURIComponent(texto)}`, '_blank');
+}
+</script>
+{% endblock content %}
