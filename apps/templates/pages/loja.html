@@ -6,35 +6,10 @@
 {% block body_attribute %}class="landing-page bg-light text-dark"{% endblock body_attribute %}
 
 {% block content %}
-<style>
-    .landing-page { --landing-accent:#c85a17;--landing-accent-rgb:200,90,23;--landing-accent-soft:#ffedd5; }
-    .hover-terracotta { transition: color 0.15s ease; }
-    .hover-terracotta:hover { color: #c85a17 !important; }
-    .landing-page .text-primary { color:var(--landing-accent)!important; }
-    .landing-page .bg-primary { background-color:var(--landing-accent)!important; }
-    .landing-page .bg-primary-subtle { background-color:var(--landing-accent-soft)!important; }
-    .landing-page .btn-primary { --bs-btn-bg:var(--landing-accent);--bs-btn-border-color:var(--landing-accent);--bs-btn-hover-bg:var(--landing-accent);--bs-btn-hover-border-color:var(--landing-accent); }
-    .landing-page .btn-outline-primary { --bs-btn-color:var(--landing-accent);--bs-btn-border-color:var(--landing-accent);--bs-btn-hover-bg:var(--landing-accent);--bs-btn-hover-border-color:var(--landing-accent); }
-    .hover-lift { transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease; }
-    .hover-lift:hover { transform: translateY(-4px); box-shadow: 0 16px 36px rgba(15, 23, 42, 0.14) !important; }
-    .category-filter-btn.active { background-color: var(--landing-accent) !important; color: #fff !important; border-color: var(--landing-accent) !important; }
-    .site-footer { background:#f8fafc;color:#475569; }
-    .site-footer h5,.site-footer h6 { color:#0f172a;font-weight:800; }
-    .site-footer a { color:#475569;transition:color .2s ease; }
-    .site-footer a:hover { color:var(--landing-accent); }
-    .footer-contact-item { display:flex;align-items:flex-start;gap:10px;padding:9px 0; }
-    .footer-contact-icon { width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--landing-accent-soft);color:var(--landing-accent);flex:0 0 auto; }
-    .footer-app-link { width:38px;height:38px;border-radius:11px;display:inline-grid;place-items:center;background:#fff;border:1px solid #dbe3ef;color:#0f172a!important; }
-    html[data-bs-theme="dark"] body.landing-page { background:#080e1a!important;color:#e5edf8!important; }
-    html[data-bs-theme="dark"] .landing-page .navbar { background:rgba(8,14,26,.94)!important;border-color:#263449!important; }
-    html[data-bs-theme="dark"] .landing-page .bg-white { background-color:#111827!important; }
-    html[data-bs-theme="dark"] .landing-page .bg-light { background-color:#0f172a!important; }
-    html[data-bs-theme="dark"] .landing-page .card { background-color:#111827!important;color:#dbe6f3!important;border-color:#263449!important; }
-    html[data-bs-theme="dark"] .landing-page .site-footer { background:#080e1a;color:#aebdd0;border-color:#263449!important; }
-</style>
+<link rel="stylesheet" href="{{ config.ASSETS_ROOT }}/css/store.css?v=20260924_1">
 
 <!-- Floating WhatsApp Button -->
-<a href="https://api.whatsapp.com/send?phone=5581994522504&text=Ol%C3%A1!%20Vim%20pela%20Loja%20da%20Olinda%20Arte%20em%20Madeira%20e%20gostaria%20de%20tirar%20d%C3%BAvidas."
+<a href="https://api.whatsapp.com/send?phone=5581994522504&text=Ol%C3%A1!%20Vim%20pela%20Loja%20da%20Olinda%20Arte%20em%20Madeira%20e%20gostaria%20de%20consultar%20uma%20pe%C3%A7a."
    target="_blank" rel="noopener noreferrer"
    class="position-fixed bottom-0 end-0 m-4 z-3 btn btn-success rounded-circle shadow-lg p-3 d-flex align-items-center justify-content-center border-0 hover-lift"
    style="width: 58px; height: 58px; background-color: #25d366;" title="Falar no WhatsApp com Olinda Aguiar">
@@ -44,123 +19,353 @@
 {% include 'partials/public-reviews-bar.html' %}
 {% include 'partials/public-navbar.html' %}
 
-<!-- Header da Loja -->
-<header class="py-5 bg-white border-bottom border-light-subtle">
-    <div class="container text-center py-lg-3">
-        <span class="badge px-3 py-2 rounded-pill fw-bold text-uppercase mb-3" style="background:#ffedd5;color:#c85a17;">Ateliê & Galeria Colonial</span>
-        <h1 class="display-5 fw-extrabold text-dark mb-3">Loja & Catálogo de Obras</h1>
-        <p class="text-secondary fs-17 max-w-700 mx-auto mb-4" style="max-width: 680px;">
-            Peças únicas e sustentáveis criadas a partir de <strong>madeira de demolição</strong> no Casarão Histórico de Olinda - PE. Liderança inspiradora de <strong>Olinda Aguiar</strong> com uma talentosa equipe de artesãos.
-        </p>
-
-        <!-- Filtros Rápidos -->
-        <div class="d-flex flex-wrap justify-content-center gap-2 mt-4" id="lojaFilters">
-            <button class="btn btn-outline-dark rounded-pill px-3 py-1.5 fw-semibold category-filter-btn active" data-filter="all">Todas as Peças</button>
-            <button class="btn btn-outline-dark rounded-pill px-3 py-1.5 fw-semibold category-filter-btn" data-filter="ESCULTURAS">Esculturas</button>
-            <button class="btn btn-outline-dark rounded-pill px-3 py-1.5 fw-semibold category-filter-btn" data-filter="MÓVEIS">Mesas & Móveis</button>
-            <button class="btn btn-outline-dark rounded-pill px-3 py-1.5 fw-semibold category-filter-btn" data-filter="PAINÉIS">Painéis Rústicos</button>
-            <button class="btn btn-outline-dark rounded-pill px-3 py-1.5 fw-semibold category-filter-btn" data-filter="UTILITÁRIOS">Linha Gourmet</button>
-            <button class="btn btn-outline-dark rounded-pill px-3 py-1.5 fw-semibold category-filter-btn" data-filter="SOB MEDIDA">Sob Medida</button>
-        </div>
+<main class="store-page">
+  <!-- BANNER EM DESTAQUE: ATELIÊ & ENCOMENDAS -->
+  <aside class="container store-launch-banner-wrapper" role="status" aria-label="Aviso do ateliê">
+    <div class="store-launch-banner">
+      <div class="launch-banner-badge">
+        <span class="launch-pulse-dot"></span>
+        <i class="ri-medal-fill"></i> PEÇAS EXCLUSIVAS & SOB MEDIDA
+      </div>
+      <div class="launch-banner-content">
+        <strong>Ateliê Olinda Arte em Madeira — Casarão no Carmo, Olinda - PE</strong>
+        <p>Cada móvel e escultura é criado à mão a partir de <strong>madeira nobre de demolição centenária</strong>. Além das obras à pronta-entrega, produzimos projetos personalizados para residências, escritórios e galerias em todo o Brasil.</p>
+      </div>
     </div>
-</header>
+  </aside>
 
-<!-- Catálogo Grid -->
-<main class="py-5 bg-light">
-    <div class="container py-lg-2">
-        <div class="row g-4" id="productsGrid">
-            {% for plan in plans %}
-            <div class="col-md-6 col-lg-4 product-card-col" data-category="{{ plan.badge or plan.tipoVeiculo|upper }}">
-                <div class="card h-100 rounded-4 p-4 hover-lift transition d-flex flex-column {{ 'border border-warning shadow-lg bg-white position-relative' if plan.destaque else 'border-0 shadow-sm bg-white' }}">
-                    {% if plan.destaque %}
-                    <span class="position-absolute top-0 end-0 m-3 badge bg-warning text-dark fw-bold px-3 py-1 rounded-pill">DESTAQUE ATELIÊ</span>
-                    {% endif %}
-
-                    <div class="d-flex align-items-center justify-content-between mb-3">
-                        <span class="badge px-3 py-1 rounded-pill fw-bold fs-12" style="background:#ffedd5;color:#c85a17;">
-                            {{ plan.badge or plan.tipoVeiculo|upper }}
-                        </span>
-                        <small class="text-success fw-bold d-inline-flex align-items-center gap-1">
-                            <i class="ri-leaf-fill"></i> Madeira de Demolição
-                        </small>
-                    </div>
-
-                    <h4 class="fw-bold text-dark mb-2">{{ plan.nome }}</h4>
-                    <p class="text-secondary fs-14 mb-3">{{ plan.descricao or plan.cobertura }}</p>
-
-                    <div class="p-3 rounded-3 bg-light mb-3 border border-light-subtle">
-                        <small class="text-secondary d-block">Investimento estimado</small>
-                        <div class="d-flex align-items-baseline gap-1">
-                            <span class="fs-14 text-secondary">A partir de R$</span>
-                            <span class="display-6 fw-extrabold text-primary" style="color:#c85a17!important;">{{ '%.2f'|format(plan.mensalidade)|replace('.', ',') }}</span>
-                        </div>
-                    </div>
-
-                    <div class="mb-4 flex-grow-1">
-                        <h6 class="fw-bold text-dark fs-13 text-uppercase tracking-wider mb-2">Características & Garantias</h6>
-                        <ul class="list-unstyled text-secondary fs-13 d-grid gap-2 mb-0">
-                            {% for benefit in plan.beneficios %}
-                            <li class="d-flex align-items-start gap-2">
-                                <i class="ri-checkbox-circle-fill text-success fs-16 flex-shrink-0 mt-0.5"></i>
-                                <span>{{ benefit }}</span>
-                            </li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-
-                    <div class="d-grid gap-2 mt-auto">
-                        <a href="{{ plan.whatsappUrl }}" target="_blank" rel="noopener noreferrer" class="btn btn-success rounded-pill fw-bold py-2.5 d-inline-flex align-items-center justify-content-center gap-2 shadow-sm border-0" style="background:#25d366;">
-                            <i class="ri-whatsapp-line fs-19"></i>
-                            <span>Encomendar no WhatsApp</span>
-                        </a>
-                        <a href="/pedido" class="btn btn-outline-dark rounded-pill fw-semibold py-2 fs-13">
-                            <i class="ri-ruler-2-line me-1"></i> Orçar com Medidas Customizadas
-                        </a>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
+  <!-- HERO DA LOJA -->
+  <section class="store-hero">
+    <div class="container store-hero-grid">
+      <div>
+        <span class="store-eyebrow">
+          <i class="ri-leaf-fill"></i> 100% MADEIRA DE DEMOLIÇÃO • SUSTENTABILIDADE REGENERATIVA
+        </span>
+        <h1>Peças únicas para seu <span>ambiente</span></h1>
+        <p>Explore o catálogo de mesas orgânicas, aparadores coloniais, bancos ripados e esculturas autorais criadas a partir de vigas e dormentes centenários do Nordeste. Liderança de <strong>Olinda Aguiar</strong> com mestres marceneiros.</p>
+        <div class="store-hero-actions">
+          {% for wt in store_wood_types %}
+          <button class="store-outline-btn" data-quick-filter="{{ wt.id }}">{{ wt.name }}</button>
+          {% endfor %}
         </div>
-
-        <!-- Banner de Projetos Sob Medida -->
-        <div class="card rounded-4 border-0 shadow-sm mt-5 p-4 p-md-5 overflow-hidden position-relative" style="background: linear-gradient(135deg, #2a1810 0%, #170d08 100%); color: #fff;">
-            <div class="row align-items-center position-relative z-1">
-                <div class="col-lg-8">
-                    <span class="badge px-3 py-1 rounded-pill fw-bold text-uppercase mb-3" style="background: rgba(200,90,23,0.3); color: #fbbf24; border: 1px solid rgba(251,191,36,0.3);">Consultoria Especializada</span>
-                    <h2 class="display-6 fw-bold mb-3 text-white">É arquiteto, designer ou procura uma peça sob medida?</h2>
-                    <p class="text-white text-opacity-80 fs-16 mb-4 mb-lg-0" style="max-width: 600px;">
-                        A proprietária <strong>Olinda Aguiar</strong> atende diretamente para entender as dimensões do seu ambiente, selecionar toras com a tonalidade desejada e orientar a confecção do mobiliário dos seus sonhos.
-                    </p>
-                </div>
-                <div class="col-lg-4 text-lg-end">
-                    <a href="/pedido" class="btn btn-warning btn-lg rounded-pill px-4 py-3 fw-bold shadow hover-lift text-dark d-inline-flex align-items-center gap-2">
-                        <i class="ri-edit-line fs-20"></i>
-                        <span>Solicitar Projeto Especial</span>
-                    </a>
-                </div>
-            </div>
+      </div>
+      <div class="store-concept-card">
+        <div class="concept-icon">🪵</div>
+        <div>
+          <span class="store-card-tag"><span class="tag-pulse"></span> HERANÇA & MEMÓRIA</span>
+          <strong>Nobreza das Vigas Históricas</strong>
+          <span>Nenhuma árvore viva é derrubada. Resgatamos peroba rosa, jacarandá e braúna de antigos casarões coloniais para renascerem em peças que duram gerações.</span>
         </div>
+      </div>
     </div>
+  </section>
+
+  <!-- MÉTRICAS DO CATÁLOGO -->
+  <section class="container store-metrics" aria-label="Resumo do catálogo">
+    <div><span>{{ products|length }}</span><small>obras no catálogo</small></div>
+    <div><span>{{ store_wood_types|length }}</span><small>madeiras de demolição</small></div>
+    <div><span>{{ store_categories|length }}</span><small>categorias artesanais</small></div>
+    <div title="Clique para abrir sua lista de peças salvas" id="openWishlistMetric">
+      <span id="interestCount">0</span><small>na lista de interesse <i class="ri-arrow-right-up-line"></i></small>
+    </div>
+  </section>
+
+  <!-- LAYOUT PRINCIPAL: SIDEBAR DE FILTROS + CATÁLOGO -->
+  <section class="container store-layout">
+    <aside class="store-filter-panel">
+      <div class="store-filter-title">
+        <div><small>CATÁLOGO</small><h2>Filtros</h2></div>
+        <div class="store-filter-actions">
+          <button id="storeMobileFilterToggle" type="button">Abrir</button>
+          <button id="clearStoreFilters" type="button">Limpar</button>
+        </div>
+      </div>
+
+      <label class="store-search">
+        <i class="ri-search-line"></i>
+        <input id="storeSearch" type="search" placeholder="Buscar peça, madeira, medidas..." autocomplete="off">
+      </label>
+
+      <!-- Filtro por Tipo de Madeira de Demolição -->
+      <fieldset class="store-filter-group">
+        <legend>Madeira de Demolição</legend>
+        <label><input type="radio" name="wood" value="all" checked> Todas as Madeiras <span>{{ products|length }}</span></label>
+        {% for wt in store_wood_types %}
+        <label>
+          <input type="radio" name="wood" value="{{ wt.id }}"> {{ wt.name }}
+          <span>{{ products|selectattr('wood_type', 'equalto', wt.id)|list|length }}</span>
+        </label>
+        {% endfor %}
+      </fieldset>
+
+      <!-- Filtro por Categorias -->
+      <fieldset class="store-filter-group">
+        <legend>Categorias</legend>
+        {% for category in store_categories %}
+        <label><input class="category-filter" type="checkbox" value="{{ category }}"> {{ category }}</label>
+        {% endfor %}
+      </fieldset>
+
+      <!-- Filtro por Faixa de Preço -->
+      <fieldset class="store-filter-group">
+        <legend>Faixa de Investimento</legend>
+        <label><input type="radio" name="price" value="all" checked> Todos os valores</label>
+        <label><input type="radio" name="price" value="0-1500"> Até R$ 1.500</label>
+        <label><input type="radio" name="price" value="1500-3000"> R$ 1.500 a R$ 3.000</label>
+        <label><input type="radio" name="price" value="3000-6000"> R$ 3.000 a R$ 6.000</label>
+        <label><input type="radio" name="price" value="6000-99999"> Acima de R$ 6.000</label>
+      </fieldset>
+    </aside>
+
+    <div class="store-catalog">
+      <div class="store-toolbar">
+        <div>
+          <p><span id="visibleProductCount">{{ products|length }}</span> obras encontradas</p>
+          <small>Condições em até 12x ou 50% de sinal na encomenda</small>
+        </div>
+        <div class="store-toolbar-actions">
+          <label>Ordenar por
+            <select id="storeSort">
+              <option value="featured">Destaques do Ateliê</option>
+              <option value="name">Nome (A - Z)</option>
+              <option value="price-asc">Menor valor</option>
+              <option value="price-desc">Maior valor</option>
+            </select>
+          </label>
+        </div>
+      </div>
+
+      <div class="store-active-filter" id="activeStoreFilter">Todas as madeiras e categorias</div>
+
+      <!-- Grid de Obras -->
+      <div class="store-product-grid" id="storeProductGrid">
+        {% for product in products %}
+        {% set display = product.colors[0] if product.colors else product %}
+        <article class="store-product-card" 
+                 data-id="{{ product.id }}" 
+                 data-wood="{{ product.wood_type }}" 
+                 data-category="{{ product.category }}" 
+                 data-price="{{ display.get('price', product.price) }}"
+                 data-name="{{ product.name|lower }}"
+                 data-json='{{ product|tojson|forceescape }}'>
+          
+          <div class="store-product-media" data-open-modal="{{ product.id }}">
+            {% if product.badge %}
+            <span class="store-product-badge card-badge-element">{{ display.get('badge', product.badge) }}</span>
+            {% endif %}
+            <span class="store-product-code">{{ product.id }}</span>
+            
+            {% if product.image %}
+              <img src="{{ config.ASSETS_ROOT }}/images/{{ display.get('image', product.image) }}" 
+                   alt="{{ product.name }}" 
+                   class="store-product-img card-img-element" 
+                   loading="lazy">
+            {% else %}
+              <span class="store-product-icon" aria-hidden="true">{{ product.icon }}</span>
+            {% endif %}
+            
+            <button class="store-interest-btn" type="button" aria-label="Adicionar {{ product.name }} à lista de interesse" data-interest="{{ product.id }}">
+              <i class="ri-heart-line fs-18"></i>
+            </button>
+          </div>
+
+          <div class="store-product-body">
+            {% set wood_label_map = {'peroba-rosa': 'Peroba Rosa', 'jacaranda': 'Jacarandá', 'cumaru': 'Cumaru', 'brauna': 'Braúna', 'canela-preta': 'Canela Preta'} %}
+            <div class="store-product-meta">
+              <span>{{ wood_label_map.get(product.wood_type, product.wood_type|title) }}</span>
+              <span>{{ product.category }}</span>
+            </div>
+
+            <h3 class="card-title-clickable" data-open-modal="{{ product.id }}">{{ product.name }}</h3>
+
+            <!-- Amostras de Acabamento / Tonalidade -->
+            {% if product.colors and product.colors|length > 0 %}
+            <div class="store-card-colors">
+              <span class="store-colors-title">Acabamento:</span>
+              <div class="store-swatches-row">
+                {% for col in product.colors %}
+                {% set col_price = col.get('price', product.price) %}
+                <button type="button" 
+                        class="store-swatch-dot {% if loop.first %}active{% endif %}"
+                        aria-label="{{ col.name }}" aria-pressed="{{ 'true' if loop.first else 'false' }}"
+                        style="background-color: {{ col.hex }};"
+                        title="{{ col.name }} - R$ {{ '%.2f'|format(col_price)|replace('.', ',') }}"
+                        data-color-id="{{ col.id }}">
+                </button>
+                {% endfor %}
+              </div>
+            </div>
+            {% endif %}
+
+            <!-- Dimensões da Peça -->
+            <div class="store-card-sizes">
+              {% if product.sizes %}
+                <div class="store-size-pills-row">
+                  {% for sz in product.sizes %}
+                  <span class="store-size-pill">{{ sz }}</span>
+                  {% endfor %}
+                </div>
+              {% endif %}
+            </div>
+
+            <div class="store-product-footer">
+              <div class="store-price">
+                <del class="card-old-price">{% if display.get('old_price', product.old_price) %}R$ {{ '%.2f'|format(display.get('old_price', product.old_price))|replace('.', ',') }}{% endif %}</del>
+                <strong class="card-price">R$ {{ '%.2f'|format(display.get('price', product.price))|replace('.', ',') }}</strong>
+                <small>À vista ou 12x no cartão</small>
+              </div>
+              <div class="store-card-actions">
+                <button class="store-quickview-btn" type="button" data-open-modal="{{ product.id }}" title="Ver detalhes da peça">
+                  <i class="ri-eye-line fs-17"></i>
+                </button>
+                <button class="store-add-btn" type="button" data-interest="{{ product.id }}" title="Adicionar aos favoritos">
+                  <i class="ri-heart-line fs-18"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="store-share-area">
+              <button class="store-share-btn" type="button" data-share-product="{{ product.id }}" aria-label="Compartilhar {{ product.name }}">
+                <i class="ri-share-forward-line"></i> Compartilhar Peça
+              </button>
+              <p class="store-share-status" role="status" aria-live="polite"></p>
+              <label class="store-share-copy hidden">Copie o link desta peça
+                <input type="text" readonly aria-label="Link do produto para copiar">
+              </label>
+            </div>
+          </div>
+        </article>
+        {% endfor %}
+      </div>
+
+      <div class="store-empty hidden" id="storeEmpty">
+        <i class="ri-inbox-line"></i>
+        <h3>Nenhuma obra encontrada</h3>
+        <p>Tente remover filtros selecionados ou buscar por outro tipo de madeira ou categoria.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMO FUNCIONA / PRÓXIMOS PASSOS -->
+  <section class="container store-next-steps">
+    <div>
+      <span>01</span>
+      <strong>Escolha ou Personalize</strong>
+      <p>Navegue pelo catálogo de pronta-entrega ou traga a planta do seu projeto arquitetônico para criarmos sob medida.</p>
+    </div>
+    <div>
+      <span>02</span>
+      <strong>Alinhe com Olinda Aguiar</strong>
+      <p>Converse diretamente no WhatsApp oficial para definir dimensões, tipo de madeira centenária e acabamento desejado.</p>
+    </div>
+    <div>
+      <span>03</span>
+      <strong>Entrega com Seguro Especial</strong>
+      <p>Embalagem em engradado reforçado e transporte com seguro total para qualquer cidade do Brasil.</p>
+    </div>
+  </section>
 </main>
+
+<!-- MODAL QUICK-VIEW DE DETALHES DA OBRA -->
+<div class="store-modal-backdrop hidden" id="storeProductModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="store-modal-container">
+    <button class="store-modal-close" id="closeProductModal" type="button" aria-label="Fechar modal">&times;</button>
+    <div class="store-modal-grid">
+      
+      <!-- Coluna Visual / Imagem -->
+      <div class="store-modal-media-col">
+        <div class="store-modal-main-view">
+          <span class="store-product-badge" id="modalProductBadge">Peça Única</span>
+          <img id="modalMainImg" src="" alt="Obra de Arte" class="store-modal-main-img">
+        </div>
+      </div>
+
+      <!-- Coluna de Informações & Ações -->
+      <div class="store-modal-info-col">
+        <div class="store-product-meta">
+          <span id="modalWoodTag">Peroba Rosa Centenária</span>
+          <span id="modalCategoryTag">Mesas & Pranchas</span>
+        </div>
+        
+        <h2 id="modalTitle">Mesa Orgânica com Borda Natural</h2>
+
+        <div class="store-modal-price-card">
+          <div class="modal-price-row">
+            <del id="modalOldPrice"></del>
+            <strong id="modalPrice">R$ 4.800,00</strong>
+          </div>
+          <p class="modal-payment-note">⚡ Em até 12x no cartão de crédito ou 50% de entrada e saldo na entrega</p>
+        </div>
+
+        <div class="store-availability-badge">
+          <span class="dot-online"></span> Madeira de Demolição Autêntica • Certificada
+        </div>
+
+        <!-- Opções de Acabamento -->
+        <div class="modal-option-block" id="modalColorBlock">
+          <label class="modal-option-label">Acabamento Selecionado: <strong id="modalSelectedColorText">Cera de Carnaúba</strong></label>
+          <div class="modal-pills-row" id="modalColorPills"></div>
+        </div>
+
+        <!-- Opções de Dimensões -->
+        <div class="modal-option-block" id="modalSizeBlock">
+          <label class="modal-option-label">Dimensões Disponíveis: <strong id="modalSelectedSizeText">2,40m x 1,10m</strong></label>
+          <div class="modal-pills-row" id="modalSizePills"></div>
+        </div>
+
+        <!-- Descrição -->
+        <div class="modal-desc-block">
+          <h4>Origem & Características Artesanais:</h4>
+          <p id="modalDescription"></p>
+        </div>
+
+        <!-- Botões de Ação -->
+        <div class="modal-actions-row">
+          <button class="store-primary-btn modal-interest-btn" id="modalInterestBtn" type="button">
+            <i class="ri-heart-line"></i> <span id="modalInterestLabel">Salvar no Interesse</span>
+          </button>
+          <a class="store-zap-btn" id="modalZapLink" href="#" target="_blank" rel="noopener">
+            <i class="ri-whatsapp-line fs-20"></i> Encomendar no WhatsApp
+          </a>
+        </div>
+        
+        <div class="store-share-area mt-3">
+          <button class="store-share-btn" id="modalShareBtn" type="button">
+            <i class="ri-share-forward-line"></i> Compartilhar esta Obra
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- MODAL DA LISTA DE DESEJOS / INTERESSES -->
+<div class="store-modal-backdrop hidden" id="storeWishlistModal" role="dialog" aria-modal="true">
+  <div class="store-modal-container" style="max-width: 600px;">
+    <button class="store-modal-close" id="closeWishlistBtn" type="button" aria-label="Fechar">&times;</button>
+    <div class="d-flex align-items-center gap-2 mb-3">
+      <span class="rounded-circle d-flex align-items-center justify-content-center" style="width:42px;height:42px;background:#fee2e2;color:#ef4444;">
+        <i class="ri-heart-fill fs-22"></i>
+      </span>
+      <div>
+        <h3 class="fw-bold text-dark mb-0">Minhas Peças Selecionadas</h3>
+        <small class="text-secondary">Lista de interesse salva no seu navegador</small>
+      </div>
+    </div>
+    
+    <div id="wishlistContainer" class="py-2" style="max-height: 380px; overflow-y: auto;"></div>
+
+    <div class="d-flex flex-wrap gap-2 justify-content-end mt-4 pt-3 border-top border-light-subtle">
+      <a class="btn btn-success rounded-pill px-4 py-2.5 fw-bold d-inline-flex align-items-center gap-2 text-white border-0 shadow-sm"
+         id="sendWishlistZapBtn" href="#" target="_blank" rel="noopener" style="background:#25d366;">
+        <i class="ri-whatsapp-line fs-18"></i> Solicitar Orçamento de Todas no WhatsApp
+      </a>
+    </div>
+  </div>
+</div>
 
 {% include 'partials/public-footer.html' %}
 
-<script>
-    // Client-side Category Filter
-    document.querySelectorAll('.category-filter-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.category-filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            const filter = btn.getAttribute('data-filter');
-            document.querySelectorAll('.product-card-col').forEach(card => {
-                const category = card.getAttribute('data-category') || '';
-                if (filter === 'all' || category.includes(filter)) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        });
-    });
-</script>
+<script src="{{ config.ASSETS_ROOT }}/js/store.js?v=20260924_1"></script>
 {% endblock content %}

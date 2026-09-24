@@ -46,6 +46,25 @@ class WoodworkOrderTimelineTests(unittest.TestCase):
         self.assertIn(b'byll-mestre-artesao.png', response.data)
         self.assertIn(b'administra', response.data)
 
+    def test_loja_page_renders_catalog(self):
+        response = self.client.get('/loja')
+        self.assertEqual(response.status_code, 200)
+        self.assertIn(b'Mesa Org', response.data)
+        self.assertIn(b'Peroba Rosa', response.data)
+        self.assertIn(b'store-product-grid', response.data)
+        self.assertIn(b'storeProductModal', response.data)
+
+    def test_api_loja_produtos(self):
+        response = self.client.get('/api/loja/produtos')
+        self.assertEqual(response.status_code, 200)
+        data = response.get_json()
+        self.assertTrue(data['success'])
+        self.assertGreater(len(data['products']), 0)
+        first_product = data['products'][0]
+        self.assertIn('id', first_product)
+        self.assertIn('wood_type', first_product)
+        self.assertIn('price', first_product)
+
     def test_consultar_order_by_formatted_cpf(self):
         response = self.client.get('/api/pedido/consultar?cpf=123.456.789-00')
         self.assertEqual(response.status_code, 200)

@@ -2,6 +2,8 @@ from apps.pages import blueprint
 from apps.pages.models import (User, CarouselImage, CommercialPlan, PlanVersion, LinktreeLink,
                                LandingCard, FinancialCategory, FinancialEntry, AuditLog, FinancialCompany,
                                IntegratedSale, ClientReview, WoodworkOrder)
+from apps.pages.store_catalog import (get_woodwork_products, get_store_categories,
+                                      get_store_wood_types)
 from apps import db, csrf, limiter
 from flask import render_template, request, redirect, url_for, session, flash, current_app, jsonify, send_from_directory
 from werkzeug.utils import secure_filename
@@ -350,8 +352,23 @@ def loja():
     """Render dedicated store and woodwork catalog page."""
     ensure_default_user()
     ensure_commercial_content()
-    plans = active_plans()
-    return render_template('pages/loja.html', segment='loja', plans=plans)
+    products = get_woodwork_products()
+    store_categories = get_store_categories()
+    store_wood_types = get_store_wood_types()
+    return render_template(
+        'pages/loja.html',
+        segment='loja',
+        products=products,
+        store_categories=store_categories,
+        store_wood_types=store_wood_types
+    )
+
+
+@blueprint.route('/api/loja/produtos')
+def api_loja_produtos():
+    """Return JSON list of woodwork catalog products."""
+    products = get_woodwork_products()
+    return jsonify({'success': True, 'products': products})
 
 
 def ensure_woodwork_orders():
