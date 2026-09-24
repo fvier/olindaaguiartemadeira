@@ -5,6 +5,7 @@
 {% block html_attribute %}data-bs-theme="light"{% endblock html_attribute %}
 {% block body_attribute %}class="landing-page bg-light text-dark"{% endblock body_attribute %}
 
+{% block meta_description %}Histórias do ateliê, técnicas artesanais e inspiração para móveis em madeira de demolição. Conheça o processo criativo da Olinda Arte em Madeira.{% endblock %}
 {% block content %}
 <style>
     .landing-page { --landing-accent:#c85a17;--landing-accent-rgb:200,90,23;--landing-accent-soft:#ffedd5; }
@@ -17,19 +18,80 @@
     .hover-lift { transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease; }
     .hover-lift:hover { transform: translateY(-4px); box-shadow: 0 16px 36px rgba(15, 23, 42, 0.14) !important; }
 
-    /* Minia Blog Grid Styles (Compacto) */
+    /* Cabeçalho editorial: compacto e sem empurrar a grade para baixo. */
     .blog-header-hero {
-        background: linear-gradient(180deg, #ffffff 0%, #fdf8f4 100%);
-        border-bottom: 1px solid #f1f5f9;
-        padding: 16px 0 14px 0;
+        background: #fff;
+        border-bottom: 1px solid #e8edf3;
+        padding: 10px 0 8px;
+    }
+    .blog-header-main {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 8px;
+    }
+    .blog-header-copy {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        min-width: 0;
+    }
+    .blog-header-copy h1 {
+        margin: 0;
+        color: #172033;
+        font-size: 1.25rem;
+        line-height: 1.2;
+        white-space: nowrap;
+    }
+    .blog-header-copy p {
+        margin: 0;
+        overflow: hidden;
+        color: #64748b;
+        font-size: .78rem;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    .blog-search { position: relative; }
+    .blog-search .form-control {
+        height: 36px;
+        border: 1px solid #dbe3ec;
+        box-shadow: none;
+        font-size: .8rem;
+    }
+    .blog-search .form-control:focus {
+        border-color: var(--landing-accent);
+        box-shadow: 0 0 0 3px rgba(var(--landing-accent-rgb), .12);
+    }
+    .blog-categories-scroll {
+        display: flex;
+        gap: 6px;
+        overflow-x: auto;
+        padding: 1px 0 3px;
+        scrollbar-width: none;
+        white-space: nowrap;
+    }
+    .blog-categories-scroll::-webkit-scrollbar { display: none; }
+    .blog-categories-label {
+        display: inline-flex;
+        flex: 0 0 auto;
+        align-items: center;
+        padding-right: 4px;
+        color: #94a3b8;
+        font-size: .7rem;
+        font-weight: 800;
+        letter-spacing: .05em;
+        text-transform: uppercase;
     }
     .blog-nav-tab {
+        flex: 0 0 auto;
+        min-height: 30px;
         border: 1px solid #e2e8f0;
         background: #ffffff;
         color: #475569;
         font-weight: 600;
-        font-size: 0.76rem;
-        padding: 4px 12px;
+        font-size: .75rem;
+        padding: 3px 10px;
         border-radius: 999px;
         transition: all 0.2s ease;
         cursor: pointer;
@@ -69,39 +131,94 @@
         letter-spacing: 0.5px;
     }
     .blog-author-avatar {
-        width: 38px;
-        height: 38px;
+        width: 32px;
+        height: 32px;
         border-radius: 50%;
         object-fit: cover;
         border: 2px solid #ffffff;
         box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
-    /* Blog Detail Modal Styles (apps-blog-detail.html) */
-    .blog-detail-modal-dialog {
-        max-width: 860px;
+    .blog-main { padding: 8px 0 28px; }
+    .blog-result-count {
+        display: none;
+        margin: 0 0 8px;
+        color: #64748b;
+        font-size: .75rem;
     }
-    .blog-detail-hero-img {
+    .blog-filtered .blog-result-count { display: block; }
+    .blog-featured {
+        margin-bottom: 22px;
+        border: 1px solid #e8edf3 !important;
+        border-radius: 14px !important;
+        box-shadow: 0 5px 18px rgba(15, 23, 42, .06) !important;
+    }
+    .blog-featured-media,
+    .blog-featured-content { min-height: 220px; }
+    .blog-featured-media img {
         width: 100%;
-        max-height: 420px;
+        height: 220px;
         object-fit: cover;
-        border-radius: 16px;
     }
-    .blog-detail-quote {
-        border-left: 4px solid var(--landing-accent);
-        background: var(--landing-accent-soft);
-        padding: 18px 24px;
-        border-radius: 0 12px 12px 0;
-        font-style: italic;
-        color: #1e293b;
-        font-size: 1.05rem;
-        margin: 24px 0;
+    .blog-featured-content {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 20px 24px;
     }
+    .blog-featured-meta {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 6px;
+    }
+    .blog-featured-label {
+        color: var(--landing-accent);
+        font-size: .66rem;
+        font-weight: 800;
+        letter-spacing: .04em;
+        text-transform: uppercase;
+    }
+    .blog-featured h2 {
+        margin-bottom: 8px;
+        font-size: 1.25rem;
+        line-height: 1.12;
+    }
+    .blog-featured-excerpt {
+        display: -webkit-box;
+        overflow: hidden;
+        margin-bottom: 12px;
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 3;
+        color: #64748b;
+        font-size: .82rem;
+        line-height: 1.55;
+    }
+    .blog-featured-footer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        padding-top: 10px;
+        border-top: 1px solid #eef2f6;
+    }
+    .blog-featured-cta { white-space: nowrap; }
 
     /* Mobile adjustments */
     @media (max-width: 767.98px) {
         .blog-card-img-wrapper { height: 180px; }
-        .blog-header-hero h1 { font-size: 1.75rem !important; }
+        .blog-header-main { grid-template-columns: 1fr; gap: 8px; }
+        .blog-header-copy { display: block; }
+        .blog-header-copy h1 { font-size: 1.05rem; white-space: normal; }
+        .blog-header-copy p { display: none; }
+        .blog-search .form-control { height: 40px; }
+        .blog-nav-tab { min-height: 36px; }
+        .blog-featured-media,
+        .blog-featured-content { min-height: auto; }
+        .blog-featured-media img { height: 180px; }
+        .blog-featured-content { padding: 16px; }
+        .blog-featured h2 { font-size: 1.1rem; }
+        .blog-featured-excerpt { -webkit-line-clamp: 2; }
     }
     @media (max-width: 575.98px) {
         .floating-whatsapp-btn {
@@ -127,8 +244,12 @@
     html[data-bs-theme="dark"] .landing-page .bg-white { background-color:#111827!important; }
     html[data-bs-theme="dark"] .landing-page .bg-light { background-color:#0f172a!important; }
     html[data-bs-theme="dark"] .blog-header-hero { background:#0b1329!important; border-color:#1e293b!important; }
+    html[data-bs-theme="dark"] .blog-header-copy h1 { color:#f1f5f9; }
+    html[data-bs-theme="dark"] .blog-search .form-control { background:#111827; border-color:#334155; color:#e2e8f0; }
     html[data-bs-theme="dark"] .blog-nav-tab { background:#1e293b; border-color:#334155; color:#cbd5e1; }
     html[data-bs-theme="dark"] .site-footer { background:#080e1a;color:#aebdd0;border-color:#263449!important; }
+    .landing-page :focus-visible { outline:3px solid #9b4311; outline-offset:4px; }
+    @media (prefers-reduced-motion:reduce) { .hover-lift,.blog-card-img { transition:none; transform:none!important; } }
 </style>
 
 <!-- Floating WhatsApp Button -->
@@ -142,85 +263,99 @@
 {% include 'partials/public-reviews-bar.html' %}
 {% include 'partials/public-navbar.html' %}
 
-<!-- HERO DO BLOG (MINIMALISTA & COMPACTO) -->
+<!-- Cabeçalho do blog -->
 <header class="blog-header-hero">
-    <div class="container text-center">
-        <span class="badge px-2.5 py-1 rounded-pill fw-bold text-uppercase mb-1" style="background:#ffedd5;color:#c85a17;font-size:10px;">
-            📜 Crônicas & Processo Criativo
-        </span>
-        <h1 class="h4 fw-bold text-dark mb-1">Histórias do Ateliê & A Arte em Madeira</h1>
-        <p class="text-secondary fs-13 mb-2 mx-auto" style="max-width: 560px;">
-            Reflexões sobre marcenaria artesanal, resgate de madeira de demolição e design autoral.
-        </p>
+    <div class="container">
+        {% set is_admin = session.get('logged_in') and (session.get('user_role') in ['admin', 'gerente']) %}
+        {% if is_admin %}
+        <div class="alert alert-dark border-0 rounded-4 shadow-sm mb-3 py-2 px-3 d-flex align-items-center justify-content-between flex-wrap gap-2" style="background: linear-gradient(135deg, #1e1b18 0%, #2e2620 100%); color: #fff;">
+            <div class="d-flex align-items-center gap-2">
+                <span class="rounded-circle d-flex align-items-center justify-content-center text-white" style="width: 32px; height: 32px; background: #c85a17; font-size: 16px;">
+                    <i class="ri-shield-user-fill"></i>
+                </span>
+                <div>
+                    <strong class="d-block text-white fs-13">Modo Administrador Ativo</strong>
+                    <small class="text-white-50 fs-11">Você pode publicar novos artigos como páginas dedicadas no blog.</small>
+                </div>
+            </div>
+            <a href="/blog/novo" class="btn btn-warning btn-sm rounded-pill px-3.5 py-1.5 fw-bold text-dark border-0 shadow-sm d-inline-flex align-items-center gap-1.5 hover-lift" style="background:#c85a17; color:#fff!important;">
+                <i class="ri-add-circle-fill fs-17"></i>
+                <span>Criar Novo Post</span>
+            </a>
+        </div>
+        {% endif %}
 
-        <!-- Barra de Busca & Navegação por Categorias (Compacta) -->
-        <div class="d-flex flex-column align-items-center gap-2">
-            <div class="position-relative w-100" style="max-width: 400px;">
-                <input type="text" id="blogSearchInput" class="form-control rounded-pill ps-4 pe-5 py-1.5 fs-13 border border-2 border-warning-subtle shadow-sm" placeholder="Buscar artigos, madeiras, técnicas..." oninput="filtrarArtigos()">
+        <div class="blog-header-main">
+            <div class="blog-header-copy">
+                <h1>Histórias do Ateliê</h1>
+                <p>Madeira de demolição, técnicas artesanais e design autoral.</p>
+            </div>
+            <div class="blog-search">
+                <input type="search" id="blogSearchInput" class="form-control rounded-pill ps-3 pe-5" placeholder="Buscar no blog..." aria-label="Buscar artigos">
                 <i class="ri-search-line position-absolute top-50 end-0 translate-middle-y me-3 text-muted fs-16"></i>
             </div>
+        </div>
 
-            <div class="d-flex flex-wrap justify-content-center gap-1.5 mt-0.5" id="blogCategoriesNav">
-                <button type="button" class="blog-nav-tab active" data-category="all" onclick="selecionarCategoria('all', this)">Todos</button>
-                <button type="button" class="blog-nav-tab" data-category="Sustentabilidade" onclick="selecionarCategoria('Sustentabilidade', this)">Sustentabilidade</button>
-                <button type="button" class="blog-nav-tab" data-category="Técnicas Artesanais" onclick="selecionarCategoria('Técnicas Artesanais', this)">Técnicas Artesanais</button>
-                <button type="button" class="blog-nav-tab" data-category="Projetos Autorais" onclick="selecionarCategoria('Projetos Autorais', this)">Projetos Autorais</button>
-                <button type="button" class="blog-nav-tab" data-category="Marcenaria Colonial" onclick="selecionarCategoria('Marcenaria Colonial', this)">Marcenaria Colonial</button>
-                <button type="button" class="blog-nav-tab" data-category="Acabamentos & Ceras" onclick="selecionarCategoria('Acabamentos & Ceras', this)">Acabamentos & Ceras</button>
-            </div>
+        <div class="blog-categories-scroll" id="blogCategoriesNav" aria-label="Filtrar artigos por categoria">
+            <span class="blog-categories-label" aria-hidden="true">Temas</span>
+            <button type="button" class="blog-nav-tab active" data-category="all" aria-pressed="true">Todos</button>
+            {% for category in articles|map(attribute='category')|unique %}
+            <button type="button" class="blog-nav-tab" data-category="{{ category }}" aria-pressed="false">{{ category }}</button>
+            {% endfor %}
         </div>
     </div>
 </header>
 
-<main class="py-4 bg-light">
+<main class="blog-main bg-light">
     <div class="container">
-        
+
+        <p id="blogResultCount" role="status" aria-live="polite" class="blog-result-count">{{ articles|length }} artigos</p>
         {% if articles %}
         {% set featured = articles[0] %}
         <!-- ARTIGO EM DESTAQUE PRINCIPAL (DESTAQUE COM PÁGINA DEDICADA) -->
-        <div class="card rounded-4 border-0 shadow-sm overflow-hidden mb-5 bg-white hover-lift blog-article-item" data-id="{{ featured.id }}" data-category="{{ featured.category }}" data-title="{{ featured.title }}">
-            <div class="row g-0 align-items-center">
-                <div class="col-lg-7">
+        <article class="card overflow-hidden bg-white hover-lift blog-article-item blog-featured" data-id="{{ featured.id }}" data-category="{{ featured.category }}" data-title="{{ featured.title }}" data-search="{{ featured.excerpt }} {{ featured.content_paragraphs|join(' ') }}">
+            <div class="row g-0">
+                <div class="col-lg-5 blog-featured-media">
                     <a href="/blog/{{ featured.id }}">
-                        <img src="{{ config.ASSETS_ROOT }}/images/{{ featured.cover_image }}" class="img-fluid w-100 h-100" style="min-height: 320px; max-height: 420px; object-fit: cover;" alt="{{ featured.title }}">
+                        <img src="{{ config.ASSETS_ROOT }}/images/{{ featured.cover_image }}" alt="{{ featured.title }}">
                     </a>
                 </div>
-                <div class="col-lg-5 p-4 p-md-5">
-                    <div class="d-flex align-items-center gap-2 mb-2">
-                        <span class="badge px-3 py-1 rounded-pill fw-bold fs-11 text-uppercase" style="background:#ffedd5;color:#c85a17;">Destaque Editorial</span>
+                <div class="col-lg-7 blog-featured-content">
+                    <div class="blog-featured-meta">
+                        <span class="blog-featured-label">Em destaque</span>
                         <small class="text-muted fs-12"><i class="ri-time-line me-1"></i>{{ featured.read_time }}</small>
                     </div>
-                    <h2 class="fw-bold text-dark mb-3 fs-24">
+                    <h2 class="fw-bold text-dark">
                         <a href="/blog/{{ featured.id }}" class="text-dark text-decoration-none hover-terracotta">{{ featured.title }}</a>
                     </h2>
-                    <p class="text-secondary fs-14 mb-4">
+                    <p class="blog-featured-excerpt">
                         {{ featured.excerpt }}
                     </p>
-                    <div class="d-flex align-items-center justify-content-between pt-3 border-top border-light-subtle">
+                    <div class="blog-featured-footer">
                         <div class="d-flex align-items-center gap-2">
-                            <img src="{{ config.ASSETS_ROOT }}/images/{{ featured.author_avatar }}" class="blog-author-avatar" alt="Foto {{ featured.author_name }}">
+                            <img src="{{ config.ASSETS_ROOT }}/images/{{ featured.author_avatar }}" class="blog-author-avatar" loading="lazy" width="32" height="32" alt="Foto {{ featured.author_name }}">
                             <div>
                                 <strong class="d-block text-dark fs-13">{{ featured.author_name }}</strong>
                                 <small class="text-muted fs-11">{{ featured.date }}</small>
                             </div>
                         </div>
-                        <a href="/blog/{{ featured.id }}" class="btn btn-warning btn-sm rounded-pill px-3.5 fw-bold text-dark border-0 shadow-sm" style="background:#c85a17; color:#fff!important;">
-                            Ler Artigo Completo <i class="ri-arrow-right-line ms-1"></i>
+                        <a href="/blog/{{ featured.id }}" class="blog-featured-cta btn btn-primary btn-sm rounded-pill px-3 fw-bold">
+                            Ler artigo <i class="ri-arrow-right-line ms-1"></i>
                         </a>
                     </div>
                 </div>
             </div>
-        </div>
+        </article>
 
         <!-- GRADE DE ARTIGOS (MINIA BLOG GRID COM PÁGINAS DEDICADAS) -->
         <div class="row g-4" id="blogGridContainer">
             {% for art in articles[1:] %}
-            <div class="col-md-6 col-lg-4 blog-article-item" data-id="{{ art.id }}" data-category="{{ art.category }}" data-title="{{ art.title }}">
+            <div class="col-md-6 col-lg-4 blog-article-item" data-id="{{ art.id }}" data-category="{{ art.category }}" data-title="{{ art.title }}" data-search="{{ art.excerpt }} {{ art.content_paragraphs|join(' ') }}">
                 <div class="card h-100 rounded-4 border-0 shadow-sm overflow-hidden bg-white hover-lift blog-card d-flex flex-column">
                     <div class="blog-card-img-wrapper">
                         <span class="blog-card-category-badge">{{ art.category }}</span>
                         <a href="/blog/{{ art.id }}">
-                            <img src="{{ config.ASSETS_ROOT }}/images/{{ art.cover_image }}" class="blog-card-img" alt="{{ art.title }}">
+                            <img src="{{ config.ASSETS_ROOT }}/images/{{ art.cover_image }}" class="blog-card-img" loading="lazy" decoding="async" width="640" height="440" alt="{{ art.title }}">
                         </a>
                     </div>
                     <div class="p-4 d-flex flex-column flex-grow-1">
@@ -228,15 +363,15 @@
                             <small class="text-muted fs-12"><i class="ri-calendar-line me-1"></i>{{ art.date }}</small>
                             <small class="text-muted fs-12"><i class="ri-time-line me-1"></i>{{ art.read_time }}</small>
                         </div>
-                        <h5 class="fw-bold text-dark mb-2 fs-17">
+                        <h2 class="fw-bold text-dark mb-2 fs-17">
                             <a href="/blog/{{ art.id }}" class="text-dark text-decoration-none hover-terracotta">{{ art.title }}</a>
-                        </h5>
+                        </h2>
                         <p class="text-secondary fs-14 flex-grow-1">
                             {{ art.excerpt }}
                         </p>
                         <div class="d-flex align-items-center justify-content-between pt-3 border-top border-light-subtle mt-3">
                             <div class="d-flex align-items-center gap-2">
-                                <img src="{{ config.ASSETS_ROOT }}/images/{{ art.author_avatar }}" class="blog-author-avatar" alt="{{ art.author_name }}">
+                                <img src="{{ config.ASSETS_ROOT }}/images/{{ art.author_avatar }}" class="blog-author-avatar" loading="lazy" width="38" height="38" alt="{{ art.author_name }}">
                                 <span class="fs-12 fw-semibold text-dark">{{ art.author_name }}</span>
                             </div>
                             <a href="/blog/{{ art.id }}" class="btn btn-sm btn-outline-dark rounded-pill px-3 fw-bold">
@@ -250,37 +385,6 @@
         </div>
         {% endif %}
 
-            <!-- Card 6 -->
-            <div class="col-md-6 col-lg-4 blog-article-item" data-id="6" data-category="Acabamentos & Ceras" data-title="Ceras Naturais e Óleos Botânicos: Por Que Abolimos Vernizes Sintéticos">
-                <div class="card h-100 rounded-4 border-0 shadow-sm overflow-hidden bg-white hover-lift blog-card d-flex flex-column">
-                    <div class="blog-card-img-wrapper" style="cursor:pointer;" onclick="abrirDetalhesArtigo(6)">
-                        <span class="blog-card-category-badge">Acabamentos & Ceras</span>
-                        <img src="{{ config.ASSETS_ROOT }}/images/comoda-balcao-gaveteiro-demolicao.png" class="blog-card-img" alt="Móvel balcão encerado">
-                    </div>
-                    <div class="p-4 d-flex flex-column flex-grow-1">
-                        <div class="d-flex align-items-center justify-content-between mb-2">
-                            <small class="text-muted fs-12"><i class="ri-calendar-line me-1"></i>01 Set, 2026</small>
-                            <small class="text-muted fs-12"><i class="ri-time-line me-1"></i>4 min de leitura</small>
-                        </div>
-                        <h5 class="fw-bold text-dark mb-2 fs-17 card-title-clickable" style="cursor:pointer;" onclick="abrirDetalhesArtigo(6)">Ceras Naturais & Óleos: Por Que Abolimos Vernizes Sintéticos</h5>
-                        <p class="text-secondary fs-14 flex-grow-1">
-                            Fórmulas atóxicas e ecológicas que permitem à madeira centenária respirar, garantindo um toque aveludado e brilho acetinado duradouro.
-                        </p>
-                        <div class="d-flex align-items-center justify-content-between pt-3 border-top border-light-subtle mt-3">
-                            <div class="d-flex align-items-center gap-2">
-                                <img src="{{ config.ASSETS_ROOT }}/images/byll-mestre-artesao.png" class="blog-author-avatar" alt="Mestre Byll">
-                                <span class="fs-12 fw-semibold text-dark">Mestre Byll</span>
-                            </div>
-                            <button type="button" class="btn btn-sm btn-outline-dark rounded-pill px-3 fw-bold" onclick="abrirDetalhesArtigo(6)">
-                                Ler Artigo
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
         <!-- MENSAGEM SE NENHUM ARTIGO FOR ENCONTRADO NA BUSCA -->
         <div id="blogEmptyMessage" class="text-center py-5 d-none">
             <div class="rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 58px; height: 58px; background: #ffedd5; color: #c85a17;">
@@ -288,9 +392,14 @@
             </div>
             <h4 class="fw-bold text-dark mb-1">Nenhum artigo encontrado</h4>
             <p class="text-secondary fs-14 mb-3">Tente buscar por outros termos como "Peroba Rosa", "Demolição", "Palhinha" ou selecione "Todos".</p>
-            <button type="button" class="btn btn-outline-dark rounded-pill px-4 py-2 fw-semibold" onclick="limparFiltrosBlog()">Ver Todos os Artigos</button>
+            <button type="button" class="btn btn-outline-dark rounded-pill px-4 py-2 fw-semibold" id="clearBlogFilters">Ver Todos os Artigos</button>
         </div>
 
+        <section class="card rounded-4 border-0 p-4 mt-4" aria-labelledby="blogShopTitle">
+            <h2 id="blogShopTitle" class="h4">Da história da madeira à sua casa</h2>
+            <p>Conheça as peças do ateliê e encontre madeiras, técnicas e acabamentos que inspiram nossos artigos.</p>
+            <a href="/loja" class="btn btn-primary align-self-start">Explorar peças do ateliê</a>
+        </section>
         <!-- CONEXÃO COM REDES SOCIAIS -->
         <div class="card rounded-4 border-0 shadow-sm mt-5 p-4 p-md-5 text-center bg-white">
             <span class="badge px-3 py-1.5 rounded-pill fw-bold text-uppercase mb-2 mx-auto" style="background:#ffedd5;color:#c85a17;font-size:11px;">
@@ -313,113 +422,7 @@
     </div>
 </main>
 
-<!-- LEITOR DE ARTIGO COMPLETO (MINIA APPS-BLOG-DETAIL.HTML MODAL) -->
-<div class="modal fade" id="blogDetailModal" tabindex="-1" aria-labelledby="blogDetailTitle" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable blog-detail-modal-dialog">
-        <div class="modal-content rounded-4 border-0 shadow-lg">
-            <div class="modal-header border-bottom border-light-subtle pb-3">
-                <div class="d-flex align-items-center gap-2">
-                    <span class="badge bg-primary-subtle text-primary px-3 py-1 rounded-pill fw-bold fs-12" id="modalBlogCategory">Sustentabilidade</span>
-                    <small class="text-muted fs-12"><i class="ri-time-line me-1"></i><span id="modalBlogReadTime">5 min de leitura</span></small>
-                </div>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-            </div>
-            
-            <div class="modal-body p-4 p-md-5">
-                <!-- Imagem Principal de Capa -->
-                <img id="modalBlogCoverImg" src="" class="blog-detail-hero-img mb-4" alt="Capa do artigo">
-
-                <!-- Título e Subtítulo -->
-                <h2 id="blogDetailTitle" class="fw-extrabold text-dark mb-3 fs-26">---</h2>
-
-                <!-- Autor e Data -->
-                <div class="d-flex align-items-center justify-content-between pb-3 mb-4 border-bottom border-light-subtle flex-wrap gap-2">
-                    <div class="d-flex align-items-center gap-2.5">
-                        <img id="modalBlogAuthorAvatar" src="" class="blog-author-avatar" style="width: 44px; height: 44px;" alt="Avatar do Autor">
-                        <div>
-                            <strong class="d-block text-dark fs-14" id="modalBlogAuthorName">Olinda Aguiar</strong>
-                            <small class="text-muted fs-12"><i class="ri-calendar-event-line me-1"></i><span id="modalBlogDate">24 de Setembro, 2026</span></small>
-                        </div>
-                    </div>
-                    <div class="d-flex gap-2">
-                        <a id="modalBlogZapShare" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-success rounded-pill px-3 fw-bold d-inline-flex align-items-center gap-1.5" style="background:#25d366; border:0;">
-                            <i class="ri-whatsapp-line fs-16"></i> Compartilhar
-                        </a>
-                    </div>
-                </div>
-
-                <!-- Conteúdo Rico do Artigo (Formatado estilo apps-blog-detail.html) -->
-                <div id="modalBlogBodyContent" class="fs-15 text-secondary lh-lg">
-                    <!-- Preenchido via JavaScript -->
-                </div>
-
-                <!-- Citação em Destaque -->
-                <div class="blog-detail-quote" id="modalBlogQuoteBlock">
-                    <i class="ri-double-quotes-l fs-24 d-block mb-1 text-primary"></i>
-                    <span id="modalBlogQuoteText">"A madeira de demolição não é apenas matéria-prima; é a memória viva dos casarões coloniais que abrigaram gerações em Pernambuco."</span>
-                    <small class="d-block text-muted mt-2 font-monospace fs-12">— Olinda Aguiar & Mestre Byll</small>
-                </div>
-
-                <!-- Card do Autor no Rodapé do Leitor -->
-                <div class="rounded-4 p-3.5 bg-light border border-light-subtle mt-4 d-flex align-items-center gap-3">
-                    <img id="modalBlogAuthorAvatarFooter" src="" class="rounded-circle flex-shrink-0" style="width: 52px; height: 52px; object-fit: cover;" alt="Autor">
-                    <div>
-                        <strong class="d-block text-dark fs-14" id="modalBlogAuthorFooterName">Olinda Aguiar</strong>
-                        <small class="text-muted fs-13">Fundadora & Curadora da Olinda Arte em Madeira. Especialista em resgate de madeira de lei e marcenaria artística colonial.</small>
-                    </div>
-                </div>
-            </div>
-
-            <div class="modal-footer border-top border-light-subtle justify-content-between">
-                <button type="button" class="btn btn-outline-secondary rounded-pill px-4 fw-semibold" data-bs-dismiss="modal">Fechar Leitura</button>
-                <a id="modalBlogWhatsInquiry" href="#" target="_blank" rel="noopener noreferrer" class="btn btn-warning rounded-pill px-4 fw-bold text-dark border-0" style="background:#c85a17; color:#fff!important;">
-                    <i class="ri-whatsapp-line me-1"></i> Falar sobre este Artigo no WhatsApp
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
-
 {% include 'partials/public-footer.html' %}
 
-<script>
-    let categoriaAtual = 'all';
-
-    function selecionarCategoria(cat, btn) {
-        categoriaAtual = cat;
-        document.querySelectorAll('.blog-nav-tab').forEach(t => t.classList.remove('active'));
-        if (btn) btn.classList.add('active');
-        filtrarArtigos();
-    }
-
-    function filtrarArtigos() {
-        const termo = document.getElementById('blogSearchInput').value.trim().toLowerCase();
-        const artigos = document.querySelectorAll('.blog-article-item');
-        let visiveis = 0;
-
-        artigos.forEach(item => {
-            const cat = item.dataset.category;
-            const titulo = item.dataset.title.toLowerCase();
-            const bateCategoria = (categoriaAtual === 'all' || cat === categoriaAtual);
-            const bateBusca = (!termo || titulo.includes(termo) || cat.toLowerCase().includes(termo));
-
-            if (bateCategoria && bateBusca) {
-                item.classList.remove('d-none');
-                visiveis++;
-            } else {
-                item.classList.add('d-none');
-            }
-        });
-
-        const msgEmpty = document.getElementById('blogEmptyMessage');
-        if (msgEmpty) {
-            msgEmpty.classList.toggle('d-none', visiveis > 0);
-        }
-    }
-
-    function limparFiltrosBlog() {
-        document.getElementById('blogSearchInput').value = '';
-        selecionarCategoria('all', document.querySelector('.blog-nav-tab[data-category="all"]'));
-    }
-</script>
+<script src="{{ config.ASSETS_ROOT }}/js/blog.js?v=20260924_3" defer></script>
 {% endblock content %}

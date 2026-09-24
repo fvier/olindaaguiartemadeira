@@ -221,14 +221,14 @@ def ensure_commercial_content():
             db.session.add(LinktreeLink(title=title, subtitle=subtitle, url=url, icon=icon,
                                          color=color, active=True, sort_order=position * 10))
         changed = True
+    default_reviews = [
+        ("Mariana Albuquerque", "Arquiteta e designer de interiores", "avatar-3.jpg", 5, "A mesa em madeira maciça de demolição que a Olinda e sua equipe produziram para o meu projeto ficou espetacular. O cuidado com cada detalhe e a condução sensível de todo o processo tornaram o resultado ainda mais especial.", 10),
+        ("Helena Vasconcelos", "Colecionadora de arte contemporânea", "avatar-6.jpg", 5, "Visitei o casarão colonial no Carmo e fiquei encantada com a curadoria. Minha escultura chegou impecável, cuidadosamente embalada e preservando toda a beleza dos veios históricos da madeira.", 20),
+        ("Dra. Cecília Meireles", "Apreciadora de arte popular", "avatar-9.jpg", 5, "O ateliê da Olinda Aguiar une o charme da nossa história, sustentabilidade e acabamento primoroso. São peças únicas, com presença e alma, que transformam o ambiente.", 30),
+    ]
     has_old_reviews = any('veicular' in (r.review_text or '').lower() or 'rastreamento' in (r.review_text or '').lower() or 'paraíba' in (r.review_text or '').lower() for r in ClientReview.query.all())
     if ClientReview.query.count() == 0 or has_old_reviews:
         ClientReview.query.delete()
-        default_reviews = [
-            ("Mariana Albuquerque", "Arquiteta & Designer de Interiores", "avatar-2.jpg", 5, "A mesa em madeira maciça de demolição que a Olinda e sua equipe produziram para o meu projeto ficou espetacular. Saber que é uma empresa liderada por uma mulher visionária torna tudo ainda mais nobre e inspirador!", 10),
-            ("Rodrigo Vasconcelos", "Colecionador de Arte Contemporânea", "avatar-1.jpg", 5, "Visitei o casarão colonial no Carmo em Olinda e fiquei encantado. A escultura chegou impecável em São Paulo, embalada com máximo cuidado e respeitando todos os veios históricos da tora.", 20),
-            ("Dra. Cecília Meireles", "Apreciadora de Arte Popular", "avatar-4.jpg", 5, "O ateliê da Olinda Aguiar une o charme secular da nossa história, sustentabilidade real com madeira de demolição e alto acabamento. Peças únicas que têm alma.", 30),
-        ]
         for name, role, avatar, rating, text, order in default_reviews:
             db.session.add(ClientReview(
                 client_name=name,
@@ -240,6 +240,26 @@ def ensure_commercial_content():
                 active=True
             ))
         changed = True
+    else:
+        # Corrige somente o conjunto demonstrativo antigo. Depoimentos criados ou
+        # personalizados pelo painel administrativo permanecem intactos.
+        legacy_default_reviews = {
+            ("Mariana Albuquerque", "avatar-2.jpg"): default_reviews[0],
+            ("Rodrigo Vasconcelos", "avatar-1.jpg"): default_reviews[1],
+            ("Dra. Cecília Meireles", "avatar-4.jpg"): default_reviews[2],
+        }
+        for review in ClientReview.query.all():
+            replacement = legacy_default_reviews.get((review.client_name, review.avatar_filename))
+            if not replacement:
+                continue
+            name, role, avatar, rating, text, order = replacement
+            review.client_name = name
+            review.client_role = role
+            review.avatar_filename = avatar
+            review.rating = rating
+            review.review_text = text
+            review.sort_order = order
+            changed = True
     if changed:
         db.session.commit()
 
@@ -642,9 +662,11 @@ def api_consultar_pedido():
     })
 
 
+CUSTOM_BLOG_ARTICLES = []
+
 def get_blog_articles():
     """Return dictionary list of blog articles for grid and detail pages."""
-    return [
+    defaults = [
         {
             'id': 1,
             'slug': 'resgate-madeiras-centenarias',
@@ -767,6 +789,7 @@ def get_blog_articles():
             'gallery': ['comoda-balcao-gaveteiro-demolicao.png', 'conjunto-lavatorio-gabinete-espelho-redondo.png']
         }
     ]
+    return defaults + CUSTOM_BLOG_ARTICLES
 
 
 @blueprint.route('/blog')
@@ -776,6 +799,67 @@ def blog():
     ensure_default_user()
     articles = get_blog_articles()
     return render_template('pages/blog.html', segment='blog', articles=articles)
+
+
+@blueprint.route('/blog/novo', methods=['GET', 'POST'])
+@blueprint.route('/blog/criar', methods=['GET', 'POST'])
+def blog_novo():
+    """Render dedicated page to publish a new blog post (admin only)."""
+    ensure_default_user()
+    if not session.get('logged_in') or session.get('user_role') not in ['admin', 'gerente']:
+        flash('Acesso restrito a administradores do ateliê.', 'warning')
+        return redirect(url_for('pages.login'))
+
+    articles = get_blog_articles()
+
+    if request.method == 'POST':
+        title = request.form.get('title', '').strip()
+        category = request.form.get('category', '').strip() or 'Artigos Autorais'
+        author_name = request.form.get('author_name', '').strip() or 'Olinda Aguiar'
+        author_role = 'Fundadora e Curadora' if 'Olinda' in author_name else 'Mestre Artesão Entalhador'
+        read_time = request.form.get('read_time', '').strip() or '5 min de leitura'
+        cover_image = request.form.get('cover_image', '').strip() or 'hero-fachada-luz-dourada.png'
+        excerpt = request.form.get('excerpt', '').strip() or title
+        quote = request.form.get('quote', '').strip() or excerpt
+        content_raw = request.form.get('content', '').strip()
+
+        paragraphs = [p.strip() for p in content_raw.split('\n') if p.strip()]
+        if not paragraphs:
+            paragraphs = [excerpt]
+
+        all_ids = [a['id'] for a in articles]
+        new_id = (max(all_ids) if all_ids else 0) + 1
+
+        import re
+        slug = re.sub(r'[^a-z0-9]+', '-', title.lower()).strip('-') or f'artigo-{new_id}'
+
+        from datetime import datetime
+        months = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro']
+        now = datetime.now()
+        date_str = f"{now.day} de {months[now.month - 1]}, {now.year}"
+
+        new_art = {
+            'id': new_id,
+            'slug': slug,
+            'title': title,
+            'category': category,
+            'author_name': author_name,
+            'author_role': author_role,
+            'author_avatar': 'byll-e-olinda-aguiar.png' if 'Olinda' in author_name else 'byll-mestre-artesao.png',
+            'date': date_str,
+            'read_time': read_time,
+            'cover_image': cover_image,
+            'excerpt': excerpt,
+            'quote': quote,
+            'content_paragraphs': paragraphs,
+            'gallery': ['mesa-base-escultural-vidro-1.png', 'cadeiras-encosto-empalhado-madeira-demolicao.png']
+        }
+
+        CUSTOM_BLOG_ARTICLES.append(new_art)
+        flash('Novo artigo publicado com sucesso!', 'success')
+        return redirect(url_for('pages.blog_detail', article_id=new_id))
+
+    return render_template('pages/blog-novo.html', segment='blog', articles=articles)
 
 
 @blueprint.route('/blog/<int:article_id>')

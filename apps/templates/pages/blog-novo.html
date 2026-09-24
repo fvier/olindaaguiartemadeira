@@ -1,0 +1,162 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Criar Novo Post do Blog | Olinda Arte em Madeira{% endblock title %}
+
+{% block html_attribute %}data-bs-theme="light"{% endblock html_attribute %}
+{% block body_attribute %}class="landing-page bg-light text-dark"{% endblock body_attribute %}
+
+{% block content %}
+<style>
+    .landing-page { --landing-accent:#c85a17;--landing-accent-rgb:200,90,23;--landing-accent-soft:#ffedd5; }
+    .hover-terracotta { transition: color 0.15s ease; }
+    .hover-terracotta:hover { color: #c85a17 !important; }
+    .landing-page .text-primary { color:var(--landing-accent)!important; }
+    .landing-page .bg-primary { background-color:var(--landing-accent)!important; }
+    .landing-page .bg-primary-subtle { background-color:var(--landing-accent-soft)!important; }
+    .landing-page .btn-primary { --bs-btn-bg:var(--landing-accent);--bs-btn-border-color:var(--landing-accent);--bs-btn-hover-bg:var(--landing-accent);--bs-btn-hover-border-color:var(--landing-accent); }
+    .hover-lift { transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease; }
+    .hover-lift:hover { transform: translateY(-4px); box-shadow: 0 16px 36px rgba(15, 23, 42, 0.14) !important; }
+
+    .site-footer { background:#f8fafc;color:#475569; }
+    .site-footer h5,.site-footer h6 { color:#0f172a;font-weight:800; }
+    .site-footer a { color:#475569;transition:color .2s ease; }
+    .site-footer a:hover { color:var(--landing-accent); }
+    .footer-contact-item { display:flex;align-items:flex-start;gap:10px;padding:9px 0; }
+    .footer-contact-icon { width:34px;height:34px;border-radius:10px;display:grid;place-items:center;background:var(--landing-accent-soft);color:var(--landing-accent);flex:0 0 auto; }
+    .footer-app-link { width:38px;height:38px;border-radius:11px;display:inline-grid;place-items:center;background:#fff;border:1px solid #dbe3ef;color:#0f172a!important; }
+
+    html[data-bs-theme="dark"] body.landing-page { background:#080e1a!important;color:#e5edf8!important; }
+    html[data-bs-theme="dark"] .landing-page .card { background-color:#111827!important;color:#dbe6f3!important;border-color:#263449!important; }
+</style>
+
+<!-- Floating WhatsApp Button -->
+<a href="https://api.whatsapp.com/send?phone=5581994522504&text=Ol%C3%A1!%20Estou%20na%20p%C3%A1gina%20de%20cria%C3%A7%C3%A3o%20de%20post."
+   target="_blank" rel="noopener noreferrer"
+   class="position-fixed floating-whatsapp-btn z-3 btn btn-success rounded-circle shadow-lg d-flex align-items-center justify-content-center border-0 hover-lift"
+   style="bottom: 24px; right: 24px; width: 56px; height: 56px; background-color: #25d366;" title="Falar no WhatsApp com Olinda Aguiar">
+    <i class="ri-whatsapp-fill fs-28 text-white"></i>
+</a>
+
+{% include 'partials/public-reviews-bar.html' %}
+{% include 'partials/public-navbar.html' %}
+
+<main class="py-4 bg-light">
+    <div class="container" style="max-width: 920px;">
+
+        <!-- CABEÇALHO & BREADCRUMB MINIA -->
+        <div class="d-flex justify-content-between align-items-center mb-4 pb-2 border-bottom border-light-subtle">
+            <div>
+                <span class="badge px-3 py-1.5 rounded-pill fw-bold text-uppercase mb-1" style="background:#ffedd5;color:#c85a17;font-size:11px;">🛠️ Painel de Conteúdo do Administrador</span>
+                <h1 class="h3 fw-extrabold text-dark m-0">Criar Novo Post no Blog</h1>
+            </div>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb m-0 fs-13">
+                    <li class="breadcrumb-item"><a href="/blog" class="text-decoration-none text-muted">Blog</a></li>
+                    <li class="breadcrumb-item active text-dark fw-bold" aria-current="page">Novo Post</li>
+                </ol>
+            </nav>
+        </div>
+
+        <!-- CARD PRINCIPAL DO FORMULÁRIO EM PÁGINA DEDICADA -->
+        <div class="card border-0 shadow-sm rounded-4 p-4 p-md-5 bg-white mb-5">
+            <div class="d-flex align-items-center gap-3 mb-4 pb-3 border-bottom border-light-subtle">
+                <span class="rounded-circle d-flex align-items-center justify-content-center text-white flex-shrink-0" style="width: 44px; height: 44px; background: #c85a17; font-size: 20px;">
+                    <i class="ri-article-line"></i>
+                </span>
+                <div>
+                    <h5 class="fw-bold text-dark m-0">Publicação de Artigo Autoral</h5>
+                    <small class="text-muted fs-13">Preencha as informações do novo artigo. Ao publicar, ele se tornará uma página dedicada no catálogo de histórias.</small>
+                </div>
+            </div>
+
+            <form action="/blog/novo" method="post">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() if csrf_token else '' }}">
+
+                <div class="row g-3.5">
+                    
+                    <!-- Título do Artigo -->
+                    <div class="col-12">
+                        <label class="form-label fw-bold text-dark fs-14">Título Principal da Postagem *</label>
+                        <input type="text" name="title" class="form-control form-control-lg rounded-3 fs-15" placeholder="Ex: O Resgate das Madeiras Centenárias: Vida Nova no Ateliê" required>
+                    </div>
+
+                    <!-- Categoria e Tempo de Leitura -->
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold text-dark fs-14">Categoria / Tema *</label>
+                        <select name="category" class="form-select rounded-3 fs-14" required>
+                            <option value="Sustentabilidade">Sustentabilidade & Madeira</option>
+                            <option value="Técnicas Artesanais">Técnicas Artesanais</option>
+                            <option value="Projetos Autorais">Projetos Autorais</option>
+                            <option value="Marcenaria Colonial">Marcenaria Colonial</option>
+                            <option value="Liderança & Propósito">Liderança & Propósito</option>
+                            <option value="Acabamentos & Ceras">Acabamentos & Ceras</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold text-dark fs-14">Tempo de Leitura *</label>
+                        <input type="text" name="read_time" class="form-control rounded-3 fs-14" placeholder="Ex: 5 min de leitura" value="5 min de leitura" required>
+                    </div>
+
+                    <!-- Autor e Função -->
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold text-dark fs-14">Autor do Artigo *</label>
+                        <select name="author_name" class="form-select rounded-3 fs-14" required>
+                            <option value="Olinda Aguiar">Olinda Aguiar (Fundadora e Curadora)</option>
+                            <option value="Mestre Byll">Mestre Byll (Mestre Artesão Entalhador)</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold text-dark fs-14">Imagem de Capa *</label>
+                        <select name="cover_image" class="form-select rounded-3 fs-14" required>
+                            <option value="hero-fachada-luz-dourada.png">Fachada Luz Dourada</option>
+                            <option value="cadeiras-encosto-empalhado-madeira-demolicao.png">Cadeiras Empalhadas</option>
+                            <option value="bar-resort-lambri-jatoba.png">Bar em Lambri de Jatobá</option>
+                            <option value="cristaleira-colonial-portas-vidro-peroba.png">Cristaleira Colonial</option>
+                            <option value="hero-fachada-coral-entardecer.png">Fachada Coral Entardecer</option>
+                            <option value="comoda-balcao-gaveteiro-demolicao.png">CÔmoda Balcão Gaveteiro</option>
+                            <option value="mesa-jantar-peroba-rosa-demolicao-1.png">Mesa Jantar Peroba Rosa</option>
+                        </select>
+                    </div>
+
+                    <!-- Resumo (Excerpt) -->
+                    <div class="col-12">
+                        <label class="form-label fw-bold text-dark fs-14">Resumo em Destaque (Excerpt) *</label>
+                        <textarea name="excerpt" rows="2" class="form-control rounded-3 fs-14" placeholder="Breve resumo atraente que aparecerá no card do grid e no topo da página dedicada..." required></textarea>
+                    </div>
+
+                    <!-- Citação em Destaque (Quote) -->
+                    <div class="col-12">
+                        <label class="form-label fw-bold text-dark fs-14">Frase de Citação em Destaque (Quote)</label>
+                        <input type="text" name="quote" class="form-control rounded-3 fs-14" placeholder="Ex: A madeira de demolição traz a alma dos casarões coloniais para a vida contemporânea.">
+                    </div>
+
+                    <!-- Conteúdo em Parágrafos -->
+                    <div class="col-12">
+                        <label class="form-label fw-bold text-dark fs-14">Conteúdo do Artigo (Parágrafos) *</label>
+                        <textarea name="content" rows="8" class="form-control rounded-3 fs-14" placeholder="Escreva o texto completo do artigo. Separe cada parágrafo com uma quebra de linha..." required></textarea>
+                        <small class="text-muted fs-12">Dica: Cada linha em branco criará um novo parágrafo formatado no artigo final.</small>
+                    </div>
+
+                </div>
+
+                <!-- BOTÕES DE AÇÃO DO FORMULÁRIO -->
+                <div class="d-flex flex-wrap align-items-center justify-content-between gap-3 pt-4 mt-4 border-top border-light-subtle">
+                    <a href="/blog" class="btn btn-outline-secondary rounded-pill px-4 py-2 fw-semibold fs-14">
+                        <i class="ri-arrow-left-line me-1"></i> Cancelar e Voltar
+                    </a>
+                    <button type="submit" class="btn btn-warning rounded-pill px-5 py-2.5 fw-bold text-dark shadow-sm border-0 d-inline-flex align-items-center gap-2 hover-lift" style="background:#c85a17; color:#fff!important;">
+                        <i class="ri-send-plane-fill fs-18"></i>
+                        <span>Publicar Novo Artigo</span>
+                    </button>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+</main>
+
+{% include 'partials/public-footer.html' %}
+{% endblock content %}
