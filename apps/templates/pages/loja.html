@@ -6,7 +6,7 @@
 {% block body_attribute %}class="landing-page bg-light text-dark"{% endblock body_attribute %}
 
 {% block content %}
-<link rel="stylesheet" href="{{ config.ASSETS_ROOT }}/css/store.css?v=20260924_1">
+<link rel="stylesheet" href="{{ config.ASSETS_ROOT }}/css/store.css?v=20260924_2">
 
 <!-- Floating WhatsApp Button -->
 <a href="https://api.whatsapp.com/send?phone=5581994522504&text=Ol%C3%A1!%20Vim%20pela%20Loja%20da%20Olinda%20Arte%20em%20Madeira%20e%20gostaria%20de%20consultar%20uma%20pe%C3%A7a."
@@ -20,41 +20,21 @@
 {% include 'partials/public-navbar.html' %}
 
 <main class="store-page">
-  <!-- BANNER EM DESTAQUE: ATELIÊ & ENCOMENDAS -->
-  <aside class="container store-launch-banner-wrapper" role="status" aria-label="Aviso do ateliê">
-    <div class="store-launch-banner">
-      <div class="launch-banner-badge">
-        <span class="launch-pulse-dot"></span>
-        <i class="ri-medal-fill"></i> PEÇAS EXCLUSIVAS & SOB MEDIDA
-      </div>
-      <div class="launch-banner-content">
-        <strong>Ateliê Olinda Arte em Madeira — Casarão no Carmo, Olinda - PE</strong>
-        <p>Cada móvel e escultura é criado à mão a partir de <strong>madeira nobre de demolição centenária</strong>. Além das obras à pronta-entrega, produzimos projetos personalizados para residências, escritórios e galerias em todo o Brasil.</p>
-      </div>
-    </div>
-  </aside>
-
-  <!-- HERO DA LOJA -->
+  <!-- HERO DA LOJA MINIMALISTA -->
   <section class="store-hero">
-    <div class="container store-hero-grid">
-      <div>
+    <div class="container">
+      <div class="store-hero-minimal">
         <span class="store-eyebrow">
-          <i class="ri-leaf-fill"></i> 100% MADEIRA DE DEMOLIÇÃO • SUSTENTABILIDADE REGENERATIVA
+          <i class="ri-leaf-fill"></i> 100% Madeira de Demolição • Olinda - PE
         </span>
         <h1>Peças únicas para seu <span>ambiente</span></h1>
-        <p>Explore o catálogo de mesas orgânicas, aparadores coloniais, bancos ripados e esculturas autorais criadas a partir de vigas e dormentes centenários do Nordeste. Liderança de <strong>Olinda Aguiar</strong> com mestres marceneiros.</p>
+        <p>Mobiliário autoral e peças exclusivas sob medida no Casarão Histórico do Carmo. A força e história da madeira de demolição com leveza e sofisticação.</p>
+        
         <div class="store-hero-actions">
+          <button class="store-outline-btn active" data-quick-filter="all">Todas as Madeiras</button>
           {% for wt in store_wood_types %}
           <button class="store-outline-btn" data-quick-filter="{{ wt.id }}">{{ wt.name }}</button>
           {% endfor %}
-        </div>
-      </div>
-      <div class="store-concept-card">
-        <div class="concept-icon">🪵</div>
-        <div>
-          <span class="store-card-tag"><span class="tag-pulse"></span> HERANÇA & MEMÓRIA</span>
-          <strong>Nobreza das Vigas Históricas</strong>
-          <span>Nenhuma árvore viva é derrubada. Resgatamos peroba rosa, jacarandá e braúna de antigos casarões coloniais para renascerem em peças que duram gerações.</span>
         </div>
       </div>
     </div>
@@ -62,9 +42,9 @@
 
   <!-- MÉTRICAS DO CATÁLOGO -->
   <section class="container store-metrics" aria-label="Resumo do catálogo">
-    <div><span>{{ products|length }}</span><small>obras no catálogo</small></div>
+    <div><span>{{ products|length }}</span><small>obras no acervo</small></div>
     <div><span>{{ store_wood_types|length }}</span><small>madeiras de demolição</small></div>
-    <div><span>{{ store_categories|length }}</span><small>categorias artesanais</small></div>
+    <div><span>{{ store_categories|length }}</span><small>linhas artesanais</small></div>
     <div title="Clique para abrir sua lista de peças salvas" id="openWishlistMetric">
       <span id="interestCount">0</span><small>na lista de interesse <i class="ri-arrow-right-up-line"></i></small>
     </div>
@@ -163,6 +143,19 @@
             {% else %}
               <span class="store-product-icon" aria-hidden="true">{{ product.icon }}</span>
             {% endif %}
+
+            <!-- Carrossel de fotos no card (se houver mais de uma foto) -->
+            {% if product.images and product.images|length > 1 %}
+            <div class="store-card-carousel-nav">
+              <button type="button" class="store-carousel-btn prev" aria-label="Foto anterior" data-carousel-prev="{{ product.id }}">&#10094;</button>
+              <button type="button" class="store-carousel-btn next" aria-label="Próxima foto" data-carousel-next="{{ product.id }}">&#10095;</button>
+            </div>
+            <div class="store-card-carousel-dots">
+              {% for img in product.images %}
+              <span class="store-carousel-dot {% if loop.first %}active{% endif %}" data-img-idx="{{ loop.index0 }}" title="Foto {{ loop.index }} de {{ product.images|length }}"></span>
+              {% endfor %}
+            </div>
+            {% endif %}
             
             <button class="store-interest-btn" type="button" aria-label="Adicionar {{ product.name }} à lista de interesse" data-interest="{{ product.id }}">
               <i class="ri-heart-line fs-18"></i>
@@ -251,7 +244,7 @@
     <div>
       <span>01</span>
       <strong>Escolha ou Personalize</strong>
-      <p>Navegue pelo catálogo de pronta-entrega ou traga a planta do seu projeto arquitetônico para criarmos sob medida.</p>
+      <p>Navegue pelo catálogo de pronta-entrega ou traga seu projeto arquitetônico para criarmos sob medida.</p>
     </div>
     <div>
       <span>02</span>
@@ -272,12 +265,18 @@
     <button class="store-modal-close" id="closeProductModal" type="button" aria-label="Fechar modal">&times;</button>
     <div class="store-modal-grid">
       
-      <!-- Coluna Visual / Imagem -->
+      <!-- Coluna Visual / Imagem & Carrossel -->
       <div class="store-modal-media-col">
         <div class="store-modal-main-view">
           <span class="store-product-badge" id="modalProductBadge">Peça Única</span>
           <img id="modalMainImg" src="" alt="Obra de Arte" class="store-modal-main-img">
+          
+          <div class="modal-carousel-nav" id="modalCarouselNav" style="display:none;">
+            <button type="button" class="modal-carousel-btn prev" id="modalPrevImgBtn" aria-label="Foto anterior">&#10094;</button>
+            <button type="button" class="modal-carousel-btn next" id="modalNextImgBtn" aria-label="Próxima foto">&#10095;</button>
+          </div>
         </div>
+        <div class="store-modal-thumbs-row" id="modalThumbsRow"></div>
       </div>
 
       <!-- Coluna de Informações & Ações -->
@@ -287,12 +286,12 @@
           <span id="modalCategoryTag">Mesas & Pranchas</span>
         </div>
         
-        <h2 id="modalTitle">Mesa Orgânica com Borda Natural</h2>
+        <h2 id="modalTitle">Mesa Escultural com Tampo de Vidro</h2>
 
         <div class="store-modal-price-card">
           <div class="modal-price-row">
             <del id="modalOldPrice"></del>
-            <strong id="modalPrice">R$ 4.800,00</strong>
+            <strong id="modalPrice">R$ 6.200,00</strong>
           </div>
           <p class="modal-payment-note">⚡ Em até 12x no cartão de crédito ou 50% de entrada e saldo na entrega</p>
         </div>
@@ -303,13 +302,13 @@
 
         <!-- Opções de Acabamento -->
         <div class="modal-option-block" id="modalColorBlock">
-          <label class="modal-option-label">Acabamento Selecionado: <strong id="modalSelectedColorText">Cera de Carnaúba</strong></label>
+          <label class="modal-option-label">Acabamento Selecionado: <strong id="modalSelectedColorText">Madeira Natural com Óleo Botânico</strong></label>
           <div class="modal-pills-row" id="modalColorPills"></div>
         </div>
 
         <!-- Opções de Dimensões -->
         <div class="modal-option-block" id="modalSizeBlock">
-          <label class="modal-option-label">Dimensões Disponíveis: <strong id="modalSelectedSizeText">2,40m x 1,10m</strong></label>
+          <label class="modal-option-label">Dimensões Disponíveis: <strong id="modalSelectedSizeText">2,20m x 1,10m</strong></label>
           <div class="modal-pills-row" id="modalSizePills"></div>
         </div>
 
@@ -367,5 +366,5 @@
 
 {% include 'partials/public-footer.html' %}
 
-<script src="{{ config.ASSETS_ROOT }}/js/store.js?v=20260924_1"></script>
+<script src="{{ config.ASSETS_ROOT }}/js/store.js?v=20260924_2"></script>
 {% endblock content %}

@@ -92,7 +92,7 @@
   }
 
   // -------------------------------------------------------------
-  // 2. SELEÇÃO DE ACABAMENTO / TONALIDADE DO CARD
+  // 2. SELEÇÃO DE ACABAMENTO & CARROSSEL DO CARD
   // -------------------------------------------------------------
   function activateColor(card, colorId) {
     const product = productFor(card);
@@ -129,10 +129,48 @@
         applyFilters();
       });
     });
+
+    // Carrossel de fotos no card
+    const prod = productFor(card);
+    const prodImages = prod.images && prod.images.length > 0 ? prod.images : (prod.image ? [prod.image] : []);
+    if (prodImages.length > 1) {
+      let cardImgIdx = 0;
+      const cardImgEl = card.querySelector('.card-img-element');
+      const dots = card.querySelectorAll('.store-carousel-dot');
+
+      const setCardImage = (idx) => {
+        cardImgIdx = (idx + prodImages.length) % prodImages.length;
+        if (cardImgEl) cardImgEl.src = `/static/images/${prodImages[cardImgIdx]}`;
+        dots.forEach((dot, i) => {
+          dot.classList.toggle('active', i === cardImgIdx);
+        });
+      };
+
+      const prevBtn = card.querySelector('.store-carousel-btn.prev');
+      const nextBtn = card.querySelector('.store-carousel-btn.next');
+      if (prevBtn) {
+        prevBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          setCardImage(cardImgIdx - 1);
+        });
+      }
+      if (nextBtn) {
+        nextBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          setCardImage(cardImgIdx + 1);
+        });
+      }
+      dots.forEach((dot, i) => {
+        dot.addEventListener('click', (e) => {
+          e.stopPropagation();
+          setCardImage(i);
+        });
+      });
+    }
   });
 
   // -------------------------------------------------------------
-  // 3. MODAL DE VISUALIZAÇÃO RÁPIDA (QUICK-VIEW)
+  // 3. MODAL DE VISUALIZAÇÃO RÁPIDA (QUICK-VIEW COM CARROSSEL)
   // -------------------------------------------------------------
   const modal = document.getElementById('storeProductModal');
   const closeModalBtn = document.getElementById('closeProductModal');
@@ -153,12 +191,17 @@
   const modalZapLink = document.getElementById('modalZapLink');
   const modalInterestBtn = document.getElementById('modalInterestBtn');
   const modalInterestLabel = document.getElementById('modalInterestLabel');
+  const modalCarouselNav = document.getElementById('modalCarouselNav');
+  const modalThumbsRow = document.getElementById('modalThumbsRow');
+  const modalPrevImgBtn = document.getElementById('modalPrevImgBtn');
+  const modalNextImgBtn = document.getElementById('modalNextImgBtn');
 
   let currentProduct = null;
   let selectedColor = null;
   let selectedSize = null;
   let currentCard = null;
   let bodyOverflow = '';
+  let modalImgIdx = 0;
 
   function updateZapLink() {
     if (!currentProduct || !modalZapLink) return;
@@ -167,6 +210,20 @@
     const sizeStr = selectedSize ? ` (Dimensões: ${selectedSize})` : '';
     const text = encodeURIComponent(`Olá Olinda! Gostaria de consultar detalhes da peça *${currentProduct.name}* [Código: ${currentProduct.id}]${finishStr}${sizeStr} vista na Loja Virtual.`);
     modalZapLink.href = `https://api.whatsapp.com/send?phone=${phone}&text=${text}`;
+  }
+
+  function setModalImage(idx, modalImages) {
+    if (!modalImages || !modalImages.length) return;
+    modalImgIdx = (idx + modalImages.length) % modalImages.length;
+    if (modalMainImg) {
+      modalMainImg.src = `/static/images/${modalImages[modalImgIdx]}`;
+      modalMainImg.alt = `${currentProduct.name} - Foto ${modalImgIdx + 1}`;
+    }
+    if (modalThumbsRow) {
+      modalThumbsRow.querySelectorAll('.modal-thumb-btn').forEach((btn, i) => {
+        btn.classList.toggle('active', i === modalImgIdx);
+      });
+    }
   }
 
   function openModalForProduct(card) {
@@ -197,15 +254,42 @@
       modalOldPrice.textContent = currentProduct.old_price ? money(currentProduct.old_price) : '';
     }
 
-    // Imagem ou ícone
-    if (modalMainImg) {
-      if (currentProduct.image) {
-        modalMainImg.src = `/static/images/${currentProduct.image}`;
-        modalMainImg.alt = currentProduct.name;
-        modalMainImg.style.display = 'block';
-      } else {
-        modalMainImg.style.display = 'none';
+    // Carrossel e Galeria do Modal
+    const modalImages = currentProduct.images && currentProduct.images.length > 0 
+      ? currentProduct.images 
+      : (currentProduct.image ? [currentProduct.image] : []);
+
+    modalImgIdx = 0;
+    if (modalImages.length > 0) {
+      setModalImage(0, modalImages);
+      if (modalMainImg) modalMainImg.style.display = 'block';
+    } else {
+      if (modalMainImg) modalMainImg.style.display = 'none';
+    }
+
+    if (modalCarouselNav) {
+      modalCarouselNav.style.display = modalImages.length > 1 ? 'flex' : 'none';
+    }
+
+    if (modalThumbsRow) {
+      modalThumbsRow.innerHTML = '';
+      if (modalImages.length > 1) {
+        modalImages.forEach((imgSrc, idx) => {
+          const thumbBtn = document.createElement('button');
+          thumbBtn.type = 'button';
+          thumbBtn.className = `modal-thumb-btn ${idx === 0 ? 'active' : ''}`;
+          thumbBtn.innerHTML = `<img src="/static/images/${imgSrc}" alt="${currentProduct.name} miniatura ${idx + 1}">`;
+          thumbBtn.addEventListener('click', () => setModalImage(idx, modalImages));
+          modalThumbsRow.appendChild(thumbBtn);
+        });
       }
+    }
+
+    if (modalPrevImgBtn) {
+      modalPrevImgBtn.onclick = () => setModalImage(modalImgIdx - 1, modalImages);
+    }
+    if (modalNextImgBtn) {
+      modalNextImgBtn.onclick = () => setModalImage(modalImgIdx + 1, modalImages);
     }
 
     // Pílulas de Acabamento
@@ -300,7 +384,7 @@
 
   // Delegação de cliques para abrir modal
   document.addEventListener('click', e => {
-    if (e.target.closest('[data-interest], [data-share-product]')) return;
+    if (e.target.closest('[data-interest], [data-share-product], .store-card-carousel-nav, .store-card-carousel-dots')) return;
     const trigger = e.target.closest('[data-open-modal]');
     if (trigger) {
       const card = trigger.closest('.store-product-card');
@@ -342,6 +426,8 @@
   document.querySelectorAll('[data-quick-filter]').forEach(button => {
     button.addEventListener('click', () => {
       const val = button.dataset.quickFilter;
+      document.querySelectorAll('[data-quick-filter]').forEach(b => b.classList.remove('active'));
+      button.classList.add('active');
       const input = document.querySelector(`input[name="wood"][value="${val}"]`);
       if (input) {
         input.checked = true;
@@ -368,6 +454,8 @@
       if (woodAll) woodAll.checked = true;
       if (priceAll) priceAll.checked = true;
       document.querySelectorAll('.category-filter').forEach(input => { input.checked = false; });
+      document.querySelectorAll('[data-quick-filter]').forEach(b => b.classList.remove('active'));
+      document.querySelector('[data-quick-filter="all"]')?.classList.add('active');
       if (search) search.value = '';
       if (sort) sort.value = 'featured';
       applyFilters();

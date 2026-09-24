@@ -23,6 +23,42 @@ STORE_CATEGORIES = [
 
 WOODWORK_PRODUCTS = [
     {
+        'id': 'OLA-M00',
+        'wood_type': 'peroba-rosa',
+        'category': 'Mesas & Pranchas',
+        'name': 'Mesa Escultural com Tampo de Vidro e Base em Madeira de Demolição',
+        'price': 6200.00,
+        'old_price': 6900.00,
+        'icon': '🪵',
+        'image': 'mesa-base-escultural-vidro-1.png',
+        'images': [
+            'mesa-base-escultural-vidro-1.png',
+            'mesa-base-escultural-vidro-2.png',
+            'mesa-base-escultural-vidro-3.png',
+        ],
+        'badge': 'Destaque • Peça Única',
+        'sizes': ['2,20m x 1,10m x 0,76m', '2,60m x 1,20m x 0,76m'],
+        'description': 'A base é toda em madeira de demolição, cheia de história, e o tampo é de vidro, trazendo leveza e sofisticação. Estrutura escultural entalhada à mão com encaixes nobres que revelam os veios e a solidez da madeira sob a transparência límpida do cristal.',
+        'colors': [
+            {
+                'id': 'natural-oleo',
+                'name': 'Madeira de Demolição Natural com Óleo Botânico',
+                'hex': '#a45a2a',
+                'price': 6200.00,
+                'old_price': 6900.00,
+                'badge': 'Exclusiva'
+            },
+            {
+                'id': 'carnauba-acetinado',
+                'name': 'Enceramento Artesanal em Carnaúba',
+                'hex': '#7e3e18',
+                'price': 6400.00,
+                'old_price': 7100.00,
+                'badge': 'Acabamento Nobre'
+            }
+        ]
+    },
+    {
         'id': 'OLA-M01',
         'wood_type': 'peroba-rosa',
         'category': 'Mesas & Pranchas',
@@ -289,6 +325,8 @@ def get_woodwork_products(include_hidden=True):
         p.setdefault('is_hidden', False)
         p.setdefault('hide_price', False)
         p.setdefault('stock_quantity', 1)
+        if 'images' not in p or not p['images']:
+            p['images'] = [p['image']] if p.get('image') else []
     return products
 
 
