@@ -2475,6 +2475,28 @@ def delete_carousel_image(image_id):
     return redirect('/admin-carrossel')
 
 
+@blueprint.route('/api/newsletter/subscribe', methods=['POST'])
+@csrf.exempt
+def api_newsletter_subscribe():
+    data = request.get_json(silent=True) or request.form
+    email = (data.get('email') or '').strip().lower()
+
+    if not email or '@' not in email or '.' not in email:
+        return jsonify({'success': False, 'message': 'Por favor, informe um endereço de e-mail válido.'}), 400
+
+    existing = NewsletterSubscriber.query.filter_by(email=email).first()
+    if existing:
+        if not existing.active:
+            existing.active = True
+            db.session.commit()
+        return jsonify({'success': True, 'message': 'Seu e-mail já está cadastrado em nossa lista de novidades!'})
+
+    subscriber = NewsletterSubscriber(email=email, active=True)
+    db.session.add(subscriber)
+    db.session.commit()
+    return jsonify({'success': True, 'message': 'Inscrição realizada com sucesso! Você receberá nossas novidades em primeira mão.'})
+
+
 @blueprint.route('/<template>')
 def route_template(template):
     """Serve templates with authentication protection for internal areas."""
@@ -2886,26 +2908,4 @@ def delete_review(review_id):
         flash(f'Depoimento de {review.client_name} excluído com sucesso.', 'success')
     else:
         flash('Depoimento não encontrado.', 'warning')
-
-
-@blueprint.route('/api/newsletter/subscribe', methods=['POST'])
-def api_newsletter_subscribe():
-    data = request.get_json(silent=True) or request.form
-    email = (data.get('email') or '').strip().lower()
-
-    if not email or '@' not in email or '.' not in email:
-        return jsonify({'success': False, 'message': 'Por favor, informe um endereço de e-mail válido.'}), 400
-
-    existing = NewsletterSubscriber.query.filter_by(email=email).first()
-    if existing:
-        if not existing.active:
-            existing.active = True
-            db.session.commit()
-        return jsonify({'success': True, 'message': 'Seu e-mail já está cadastrado em nossa lista de novidades!'})
-
-    subscriber = NewsletterSubscriber(email=email, active=True)
-    db.session.add(subscriber)
-    db.session.commit()
-    return jsonify({'success': True, 'message': 'Inscrição realizada com sucesso! Você receberá nossas novidades em primeira mão.'})
-
     return redirect('/admin-depoimentos')
