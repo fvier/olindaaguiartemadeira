@@ -275,10 +275,10 @@
                 </form>
 
                 <!-- Botão Solicitar Orçamento estilo minimalista -->
-                <button type="button" class="btn btn-sm btn-outline-dark rounded-pill px-3 py-1.5 fw-semibold fs-13 d-inline-flex align-items-center gap-1.5 text-nowrap shadow-2xs hover-lift" data-bs-toggle="collapse" data-bs-target="#collapseEncomenda" aria-expanded="false" aria-controls="collapseEncomenda">
+                <a href="https://api.whatsapp.com/send?phone=5581994522504&text=Ol%C3%A1!%20Gostaria%20de%20solicitar%20um%20or%C3%A7amento%20de%20projeto%20sob%20medida%20em%20madeira%20de%20demoli%C3%A7%C3%A3o." target="_blank" rel="noopener noreferrer" class="btn btn-sm btn-outline-dark rounded-pill px-3 py-1.5 fw-semibold fs-13 d-inline-flex align-items-center gap-1.5 text-nowrap shadow-2xs hover-lift">
                     <i class="ri-pencil-ruler-2-line" style="color: #c85a17;"></i>
                     <span>Solicitar Orçamento</span>
-                </button>
+                </a>
             </div>
         </div>
 
@@ -482,71 +482,7 @@
             </div>
         </div>
 
-        <!-- SEÇÃO MINIMALISTA: SOLICITAR ORÇAMENTO SOB MEDIDA -->
-        <div class="row justify-content-center mt-4">
-            <div class="col-lg-10">
-                <div class="card border-0 shadow-sm rounded-4 p-4 bg-white">
-                    <div class="row align-items-center">
-                        <div class="col-md-8">
-                            <span class="badge px-3 py-1 rounded-pill fw-bold text-uppercase mb-2" style="background: rgba(200,90,23,0.12); color: #c85a17; font-size: 11px;">Projetos Autorais</span>
-                            <h4 class="fw-bold text-dark mb-1">Deseja um projeto sob medida?</h4>
-                            <p class="text-secondary fs-14 mb-0">Solicite um orçamento autoral assinado por Olinda Aguiar com as medidas exatas do seu ambiente.</p>
-                        </div>
-                        <div class="col-md-4 text-md-end mt-3 mt-md-0">
-                            <button class="btn btn-outline-dark rounded-pill px-4 py-2 fw-semibold" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEncomenda" aria-expanded="false" aria-controls="collapseEncomenda">
-                                <i class="ri-pencil-ruler-2-line me-1"></i> Solicitar Orçamento
-                            </button>
-                        </div>
-                    </div>
 
-                    <div class="collapse" id="collapseEncomenda">
-                        <hr class="my-3 border-light-subtle">
-                        <form id="encomendaForm" onsubmit="enviarEncomendaCustomizada(event)">
-                            <div class="row g-3">
-                                <div class="col-md-6">
-                                    <label class="form-label fw-semibold text-dark fs-13">Seu Nome Completo *</label>
-                                    <input type="text" id="encNome" class="form-control rounded-3 fs-14" placeholder="Ex: Mariana Silva" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label fw-semibold text-dark fs-13">Seu WhatsApp com DDD *</label>
-                                    <input type="text" id="encWhatsApp" class="form-control rounded-3 fs-14" placeholder="Ex: (81) 99876-5432" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label fw-semibold text-dark fs-13">Cidade e Estado de Entrega *</label>
-                                    <input type="text" id="encLocal" class="form-control rounded-3 fs-14" placeholder="Ex: Olinda - PE ou São Paulo - SP" required>
-                                </div>
-                                <div class="col-md-6">
-                                    <label class="form-label fw-semibold text-dark fs-13">Tipo de Peça Desejada *</label>
-                                    <select id="encTipo" class="form-select rounded-3 fs-14" required>
-                                        <option value="" disabled selected>Selecione a categoria...</option>
-                                        <option value="Mesa Orgânica de Demolição">Mesa Orgânica (Jantar / Centro / Lateral)</option>
-                                        <option value="Escultura Autoral de Casarão">Escultura Autoral em Madeira</option>
-                                        <option value="Painel Decorativo de Parede">Painel Rústico / Revestimento</option>
-                                        <option value="Aparador ou Balcão">Aparador, Bancada ou Balcão Maciço</option>
-                                        <option value="Linha Gourmet Nobre">Linha Gourmet & Utilitários</option>
-                                        <option value="Projeto Especial para Arquitetura">Projeto Arquitetônico Sob Medida</option>
-                                    </select>
-                                </div>
-                                <div class="col-12">
-                                    <label class="form-label fw-semibold text-dark fs-13">Dimensões Aproximadas (Comprimento x Largura x Altura)</label>
-                                    <input type="text" id="encMedidas" class="form-control rounded-3 fs-14" placeholder="Ex: 2,40m x 1,10m x 0,78m">
-                                </div>
-                                <div class="col-12">
-                                    <label class="form-label fw-semibold text-dark fs-13">Preferências de Madeira & Acabamento</label>
-                                    <textarea id="encDetalhes" rows="3" class="form-control rounded-3 fs-14" placeholder="Ex: Bordas orgânicas preservadas, Peroba Rosa, acabamento acetinado com cera natural de abelha..."></textarea>
-                                </div>
-                                <div class="col-12 pt-1">
-                                    <button type="submit" class="btn btn-warning btn-lg w-100 rounded-pill fw-bold py-2.5 text-dark d-flex align-items-center justify-content-center gap-2 shadow-sm border-0 hover-lift" style="background:#c85a17; color:#fff!important;">
-                                        <i class="ri-whatsapp-line fs-20"></i>
-                                        <span>Enviar Pedido de Orçamento no WhatsApp</span>
-                                    </button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
 
     </div>
 </main>
@@ -596,17 +532,7 @@
         });
     });
 
-    // Rolagem suave ao clicar no botão Solicitar Orçamento no topo
-    document.querySelectorAll('[data-bs-target="#collapseEncomenda"]').forEach(btn => {
-        btn.addEventListener('click', () => {
-            setTimeout(() => {
-                const collapseElem = document.getElementById('collapseEncomenda');
-                if (collapseElem && collapseElem.classList.contains('show')) {
-                    collapseElem.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                }
-            }, 250);
-        });
-    });
+
 
     // Submissão do formulário de busca
     function buscarPedidoCPF(e) {
