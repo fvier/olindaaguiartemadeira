@@ -1,6 +1,6 @@
 {% extends 'layouts/base.html' %}
 
-{% block title %}Links | GPS Paraíba{% endblock title %}
+{% block title %}Links | Olinda Aguiar — Artes em Madeira{% endblock title %}
 
 {% block body_attribute %}class="linktree-body"{% endblock body_attribute %}
 
@@ -28,12 +28,12 @@
 {% block content %}
 <main class="gps-links">
     <header class="gps-links-profile">
-        <img src="{{ url_for('static', filename='images/logo_fundo_preto.png') }}" alt="GPS Paraíba" class="gps-links-logo">
-        <h1>@gpsparaiba</h1>
-        <p>Segurança e rastreamento veicular ao seu alcance. Escolha abaixo como podemos ajudar.</p>
+        <img src="{{ url_for('static', filename='images/logo_fundo_preto.png') }}" alt="Olinda Aguiar" class="gps-links-logo">
+        <h1>@olindaaguiartemadeira</h1>
+        <p>Artes em Madeira nobre, esculturas e peças de design autoral em Olinda - PE.</p>
     </header>
 
-    <nav aria-label="Links da GPS Paraíba">
+    <nav aria-label="Links da Olinda Aguiar">
         {% for link in linktree_links %}
         <a class="gps-link-card" href="{{ link.url }}" {% if link.url.startswith('http') %}target="_blank" rel="noopener noreferrer"{% endif %}>
             <span class="gps-link-icon" style="--link-color:{{ link.cor }}"><i class="{{ link.icone }}"></i></span>
@@ -42,7 +42,7 @@
         </a>
         {% endfor %}
     </nav>
-    <footer class="gps-links-footer">© 2026 GPS Paraíba · Todos os direitos reservados</footer>
+    <footer class="gps-links-footer">© 2026 Olinda Aguiar — Artes em Madeira · Todos os direitos reservados</footer>
 </main>
 <div class="toast-container position-fixed bottom-0 start-50 translate-middle-x p-3"><div id="demo-link-toast" class="toast text-bg-dark border-0" role="status"><div class="d-flex"><div class="toast-body">Link demonstrativo. Envie o endereço oficial para ativá-lo.</div><button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button></div></div></div>
 {% endblock content %}

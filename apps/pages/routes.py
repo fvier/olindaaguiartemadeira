@@ -73,11 +73,11 @@ DEFAULT_PLANS = [
 ]
 
 DEFAULT_LINKS = [
-    ('Fale conosco pelo WhatsApp', '(83) 99138-6279 · Atendimento comercial', 'https://api.whatsapp.com/send?phone=5583991386279', 'ri-whatsapp-line', '#22c55e'),
-    ('Ligar agora', '(83) 99138-6279 · Ligação pela operadora', 'tel:+5583991386279', 'ri-phone-line', '#0ea5e9'),
-    ('Site / Planos', 'Conheça a GPS Paraíba e escolha seu plano', '/', 'ri-global-line', '#2563eb'),
-    ('Portal do Cliente', 'Acesse seu rastreamento e serviços', 'https://lionras.rastrosystem.com.br/acl/login/?next=/pessoa/', 'ri-user-settings-line', '#7c3aed'),
-    ('Localização e atendimento', 'Cajazeiras, Paraíba · Abrir no Google Maps', 'https://maps.app.goo.gl/PEXJxwDcbZ3SoAmv7', 'ri-map-pin-2-line', '#ef4444'),
+    ('Fale conosco pelo WhatsApp', '(81) 9 9452-2504 · Atendimento e encomendas', 'https://api.whatsapp.com/send?phone=5581994522504&text=Ol%C3%A1!%20Gostaria%20de%20informa%C3%A7%C3%B5es%20sobre%20as%20pe%C3%A7as%20em%20madeira.', 'ri-whatsapp-line', '#22c55e'),
+    ('Ligar agora', '(81) 9 9452-2504 · Atendimento direto', 'tel:+5581994522504', 'ri-phone-line', '#0ea5e9'),
+    ('Instagram do Ateliê', '@olindaaguiartemadeira · Galeria e peças autorais', 'https://www.instagram.com/olindaaguiartemadeira/', 'ri-instagram-line', '#e1306c'),
+    ('Facebook', 'Página Oficial no Facebook', 'https://www.facebook.com/BylleOlinda', 'ri-facebook-circle-line', '#1877f2'),
+    ('Localização do Ateliê', '478 R. Cel. Joaquim Cavalcante, Carmo, Olinda - PE', 'https://www.google.com/maps?q=-8.0122,-34.8543&z=17&hl=pt-BR', 'ri-map-pin-2-line', '#ef4444'),
 ]
 
 PERMISSION_MODULES = [
@@ -190,7 +190,7 @@ def ensure_commercial_content():
                 name=name, vehicle_type=vehicle_type, coverage=coverage,
                 monthly_price=price, installation_price=0, description=description,
                 benefits=benefits, badge=badge, featured=featured,
-                whatsapp_url=f'https://api.whatsapp.com/send?phone=5583991386279&text=Olá! Quero contratar o plano {name}.',
+                whatsapp_url=f'https://api.whatsapp.com/send?phone=5581994522504&text=Olá! Quero saber mais sobre {name}.',
                 active=True, sort_order=position * 10,
             ))
         changed = True
@@ -201,21 +201,14 @@ def ensure_commercial_content():
         for slot, plan in enumerate(plans, start=1):
             db.session.add(LandingCard(slot=slot, plan_id=plan.id, benefits=plan.benefits))
         changed = True
-    if LinktreeLink.query.count() == 0:
+    has_old_links = any('5583991386279' in (l.url or '') for l in LinktreeLink.query.all())
+    if LinktreeLink.query.count() == 0 or has_old_links:
+        LinktreeLink.query.delete()
         for position, item in enumerate(DEFAULT_LINKS, start=1):
             title, subtitle, url, icon, color = item
             db.session.add(LinktreeLink(title=title, subtitle=subtitle, url=url, icon=icon,
                                         color=color, active=True, sort_order=position * 10))
         changed = True
-    else:
-        old_urls = [
-            'https://www.google.com/maps/search/?api=1&query=GPS+Paraiba+Cajazeiras+PB',
-            'https://www.google.com/maps/place/RASTREK+CAJAZEIRAS+PB+RASTREAMENTO+E+ATENDIMENTO+24+HORAS/@-6.8874271,-38.5567211,17z'
-        ]
-        for old_url in old_urls:
-            for link in LinktreeLink.query.filter_by(url=old_url).all():
-                link.url = 'https://maps.app.goo.gl/PEXJxwDcbZ3SoAmv7'
-                changed = True
     if ClientReview.query.count() == 0:
         default_reviews = [
             ("Carlos Eduardo", "Cliente desde 2023", "avatar-1.jpg", 5, "Instalação muito rápida e limpa no carro. A precisão do aplicativo é excelente e o suporte é sempre prestativo e de prontidão.", 10),
@@ -245,7 +238,7 @@ def plan_view(plan):
         'instalacao': float(plan.installation_price or 0), 'descricao': plan.description,
         'beneficios': [line.strip() for line in (plan.benefits or '').splitlines() if line.strip()],
         'badge': plan.badge,
-        'whatsappUrl': f'https://api.whatsapp.com/send?phone=5583991386279&text={whatsapp_message}',
+        'whatsappUrl': f'https://api.whatsapp.com/send?phone=5581994522504&text={whatsapp_message}',
         'ativo': plan.active,
         'destaque': plan.featured, 'ordem': plan.sort_order,
         'atualizadoEm': plan.updated_at.isoformat() if plan.updated_at else None,
@@ -606,7 +599,7 @@ def plans_api():
                 benefits = benefits.splitlines()
             plan.benefits = '\n'.join(str(item).strip()[:180] for item in benefits if str(item).strip())
             plan.badge = str(data.get('badge', '')).strip()[:60]
-            plan.whatsapp_url = 'https://api.whatsapp.com/send?phone=5583991386279'
+            plan.whatsapp_url = 'https://api.whatsapp.com/send?phone=5581994522504'
             plan.active = bool(data.get('ativo', True))
             plan.featured = bool(data.get('destaque', False))
             plan.sort_order = position * 10
