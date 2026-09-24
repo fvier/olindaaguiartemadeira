@@ -37,20 +37,24 @@ class ThemeLayout {
           });
 
 
-          if (document.querySelector(".navbar-nav")) {
-               // Activate the menu in left side bar based on url
-               document.querySelectorAll(".navbar-nav a").forEach(function (link) {
+          if (document.querySelector(".main-nav .navbar-nav")) {
+               // Activate the menu in left side bar based on url (ignoring public navbar)
+               document.querySelectorAll(".main-nav .navbar-nav a").forEach(function (link) {
+                    if (link.closest("#navbarContent")) return;
                     var pageUrl = window.location.href.split(/[?#]/)[0];
 
                     if (link.href === pageUrl) {
                          link.classList.add("active");
-                         link.parentNode.classList.add("active");
+                         if (link.parentNode) link.parentNode.classList.add("active");
 
                          let parentCollapseDiv = link.closest(".collapse");
                          while (parentCollapseDiv) {
+                              if (parentCollapseDiv.id === "navbarContent") break;
                               parentCollapseDiv.classList.add("show");
-                              parentCollapseDiv.parentElement.children[0].classList.add("active");
-                              parentCollapseDiv.parentElement.children[0].setAttribute("aria-expanded", "true");
+                              if (parentCollapseDiv.parentElement && parentCollapseDiv.parentElement.children[0]) {
+                                   parentCollapseDiv.parentElement.children[0].classList.add("active");
+                                   parentCollapseDiv.parentElement.children[0].setAttribute("aria-expanded", "true");
+                              }
                               parentCollapseDiv = parentCollapseDiv.parentElement.closest(".collapse");
                          }
                     }

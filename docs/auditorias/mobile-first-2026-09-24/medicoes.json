@@ -1,0 +1,342 @@
+[
+  {
+    "route": "/",
+    "documentWidth": {
+      "360": 380,
+      "390": 410,
+      "320": 340,
+      "768": 768
+    },
+    "observation": "Menu aberto ocupa a primeira dobra; carrossel com indicadores pequenos; rodapé excede a tela."
+  },
+  {
+    "route": "/blog/1",
+    "documentWidth": {
+      "360": 380,
+      "390": 410,
+      "320": 340,
+      "768": 768
+    },
+    "observation": "Artigo em coluna única; campos de interação pequenos; rodapé excede a tela."
+  },
+  {
+    "route": "/blog/novo",
+    "documentWidth": {
+      "360": 380,
+      "390": 410,
+      "320": 340,
+      "768": 768
+    },
+    "observation": "Formulário empilhado; campos menores que 16 px; revisar barra de ferramentas com teclado aberto."
+  },
+  {
+    "route": "/blog/1/editar",
+    "documentWidth": {
+      "360": 380,
+      "390": 410,
+      "320": 340,
+      "768": 768
+    },
+    "observation": "Mesma estrutura de criação; título longo fica parcialmente visível dentro do campo."
+  },
+  {
+    "route": "/byll/historia",
+    "documentWidth": {
+      "360": 380,
+      "390": 410,
+      "320": 340,
+      "768": 768
+    },
+    "observation": "Conteúdo em coluna; categorias horizontais; rodapé excede a tela."
+  },
+  {
+    "route": "/admin-cadastrar",
+    "documentWidth": {
+      "360": 658,
+      "390": 668,
+      "320": 658,
+      "768": 801
+    },
+    "observation": "Cabeçalho cortado e aviso de senha sem quebra (atinge 396 px em tela de 390 px)."
+  },
+  {
+    "route": "/admin-carrossel",
+    "documentWidth": {
+      "360": 658,
+      "390": 668,
+      "320": 658,
+      "768": 801
+    },
+    "observation": "Upload empilhado; cabeçalho cortado; galeria e formulário longos."
+  },
+  {
+    "route": "/admin-depoimentos",
+    "documentWidth": {
+      "360": 658,
+      "390": 668,
+      "320": 658,
+      "768": 801
+    },
+    "observation": "Formulário empilhado; cabeçalho cortado; revisar ações da lista preenchida."
+  },
+  {
+    "route": "/admin-integracoes",
+    "documentWidth": {
+      "360": 658,
+      "390": 668,
+      "320": 658,
+      "768": 801
+    },
+    "observation": "Abas quebram em várias linhas; cabeçalho cortado; referências legadas a GPS Paraíba."
+  },
+  {
+    "route": "/admin-logs",
+    "documentWidth": {
+      "360": 658,
+      "390": 668,
+      "320": 658,
+      "768": 801
+    },
+    "observation": "Indicadores empilhados; filtros pequenos; cabeçalho cortado."
+  },
+  {
+    "route": "/admin-privilegios",
+    "documentWidth": {
+      "360": 658,
+      "390": 668,
+      "320": 658,
+      "768": 801
+    },
+    "observation": "Cartões empilhados; cabeçalho cortado; ações afastadas pela altura dos indicadores."
+  },
+  {
+    "route": "/alterar-senha",
+    "documentWidth": {
+      "360": 658,
+      "390": 668,
+      "320": 658,
+      "768": 801
+    },
+    "observation": "Formulário cabe na coluna; cabeçalho cortado; campos abaixo de 16 px."
+  },
+  {
+    "route": "/auth-lock-screen",
+    "documentWidth": {
+      "360": 360,
+      "390": 390,
+      "320": 320,
+      "768": 768
+    },
+    "observation": "Sem excesso horizontal; template em inglês e identidade de usuário demonstrativo."
+  },
+  {
+    "route": "/auth-logout",
+    "documentWidth": {
+      "360": 360,
+      "390": 390,
+      "320": 320,
+      "768": 768
+    },
+    "observation": "Sem excesso horizontal; ações principais visíveis."
+  },
+  {
+    "route": "/auth-password",
+    "documentWidth": {
+      "360": 360,
+      "390": 390,
+      "320": 320,
+      "768": 768
+    },
+    "observation": "Sem excesso horizontal; texto em inglês e campo pequeno; fluxo de recuperação não testado."
+  },
+  {
+    "route": "/auth-signin",
+    "documentWidth": {
+      "360": 360,
+      "390": 390,
+      "320": 320,
+      "768": 768
+    },
+    "observation": "Sem excesso horizontal; campos abaixo de 16 px e link de recuperação pequeno."
+  },
+  {
+    "route": "/auth-signup",
+    "documentWidth": {
+      "360": 360,
+      "390": 390,
+      "320": 320,
+      "768": 768
+    },
+    "observation": "Sem excesso horizontal; template em inglês; fluxo de cadastro não testado."
+  },
+  {
+    "route": "/comissionamento",
+    "documentWidth": {
+      "360": 658,
+      "390": 668,
+      "320": 658,
+      "768": 801
+    },
+    "observation": "Cabeçalho cortado; tabela densa e muitas ações compactas; escala horizontal."
+  },
+  {
+    "route": "/dashboard-sales",
+    "documentWidth": {
+      "360": 658,
+      "390": 668,
+      "320": 658,
+      "768": 801
+    },
+    "observation": "Cartões empilhados; cabeçalho cortado; indicadores ocupam várias dobras."
+  },
+  {
+    "route": "/financeiro-categorias",
+    "documentWidth": {
+      "360": 658,
+      "390": 668,
+      "320": 658,
+      "768": 801
+    },
+    "observation": "Cabeçalho cortado; empresas e categorias empilhadas; validar listas grandes."
+  },
+  {
+    "route": "/financeiro-lancamentos",
+    "documentWidth": {
+      "360": 658,
+      "390": 668,
+      "320": 658,
+      "768": 801
+    },
+    "observation": "Cabeçalho cortado; tabela com rolagem própria e texto denso; filtros compactos."
+  },
+  {
+    "route": "/financeiro",
+    "documentWidth": {
+      "360": 658,
+      "390": 668,
+      "320": 658,
+      "768": 801
+    },
+    "observation": "Cabeçalho cortado; filtros ocupam quase toda a primeira dobra; campos pequenos."
+  },
+  {
+    "route": "/index",
+    "documentWidth": {
+      "360": 658,
+      "390": 668,
+      "320": 658,
+      "768": 801
+    },
+    "observation": "Cabeçalho cortado; faixa de resumo também corta conteúdo à direita."
+  },
+  {
+    "route": "/links",
+    "documentWidth": {
+      "360": 360,
+      "390": 390,
+      "320": 320,
+      "768": 768
+    },
+    "observation": "Sem excesso horizontal; cartões grandes e empilhados; alguns subtítulos truncados."
+  },
+  {
+    "route": "/pages-404-alt",
+    "documentWidth": {
+      "360": 622,
+      "390": 632,
+      "320": 622,
+      "768": 768
+    },
+    "observation": "Cabeçalho cortado; mensagem de erro em inglês."
+  },
+  {
+    "route": "/pages-404",
+    "documentWidth": {
+      "360": 360,
+      "390": 390,
+      "320": 320,
+      "768": 768
+    },
+    "observation": "Sem excesso horizontal; mensagem de erro em inglês."
+  },
+  {
+    "route": "/planos",
+    "documentWidth": {
+      "360": 658,
+      "390": 668,
+      "320": 658,
+      "768": 801
+    },
+    "observation": "Cabeçalho cortado; ações e indicadores empilhados; conteúdo comercial legado."
+  },
+  {
+    "route": "/ranking",
+    "documentWidth": {
+      "360": 658,
+      "390": 668,
+      "320": 658,
+      "768": 801
+    },
+    "observation": "Cabeçalho cortado; seletores compactos; regras extensas antes do ranking."
+  },
+  {
+    "route": "/validacao-vendas",
+    "documentWidth": {
+      "360": 658,
+      "390": 668,
+      "320": 658,
+      "768": 801
+    },
+    "observation": "Cabeçalho cortado; tabela exige rolagem horizontal interna."
+  },
+  {
+    "route": "/vendas",
+    "documentWidth": {
+      "360": 658,
+      "390": 668,
+      "320": 658,
+      "768": 801
+    },
+    "observation": "Cabeçalho cortado; tabela densa e rolagem interna; contexto legado de rastreamento."
+  },
+  {
+    "route": "/loja",
+    "documentWidth": {
+      "360": 380,
+      "390": 410,
+      "320": 340,
+      "768": 768
+    },
+    "observation": "Menu aberto empurra catálogo; filtro de 28 px de altura; indicadores de fotos de 7 px."
+  },
+  {
+    "route": "/pedido",
+    "documentWidth": {
+      "360": 380,
+      "390": 410,
+      "320": 340,
+      "768": 768
+    },
+    "observation": "Busca com fonte de 13 px; exemplos com botões de 26–28 px; min-width de 320 px no grupo de busca."
+  },
+  {
+    "route": "/blog",
+    "documentWidth": {
+      "360": 380,
+      "390": 410,
+      "320": 340,
+      "768": 768
+    },
+    "observation": "Menu aberto empurra listagem; temas e busca compactos; rodapé excede a tela."
+  },
+  {
+    "route": "/byll",
+    "documentWidth": {
+      "360": 380,
+      "390": 410,
+      "320": 340,
+      "768": 768
+    },
+    "observation": "Menu aberto empurra apresentação; texto longo; rodapé excede a tela."
+  }
+]

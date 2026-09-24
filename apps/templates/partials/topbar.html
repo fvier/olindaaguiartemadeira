@@ -9,32 +9,32 @@
         <div class="container-fluid">
             <div class="navbar-header d-flex align-items-center justify-content-between">
                 <!-- Left: Sidebar Toggle Button & Brand Title -->
-                <div class="d-flex align-items-center gap-3 h-100">
-                    <div class="topbar-item">
+                <div class="d-flex align-items-center gap-2 h-100 min-w-0">
+                    <div class="topbar-item flex-shrink-0">
                         <button type="button" class="topbar-button button-toggle-menu" title="Alternar menu lateral">
                             <i class="ri-menu-2-line fs-22"></i>
                         </button>
                     </div>
 
-                    <div class="d-flex align-items-center gap-2">
-                        <span class="badge bg-primary rounded-pill px-2.5 py-1 fw-bold fs-12" style="background-color: #c85a17 !important;">Olinda Aguiar · Artes em Madeira</span>
-                        <a href="/links" target="_blank" class="btn btn-sm rounded-pill fw-bold text-white px-3 py-1 shadow-sm d-inline-flex align-items-center gap-1.5" title="Abrir Linktree Público em nova aba" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid #3b82f6;">
+                    <div class="d-flex align-items-center gap-2 min-w-0">
+                        <span class="badge bg-primary rounded-pill px-2.5 py-1 fw-bold fs-12 text-truncate" style="background-color: #c85a17 !important; max-width: 180px;">Olinda Aguiar</span>
+                        <a href="/links" target="_blank" class="btn btn-sm rounded-pill fw-bold text-white px-2.5 py-1 shadow-sm d-none d-md-inline-flex align-items-center gap-1.5 flex-shrink-0" title="Abrir Linktree Público em nova aba" style="background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); border: 1px solid #3b82f6;">
                             <i class="ri-links-line fs-15 text-warning"></i><span>Linktree</span><i class="ri-external-link-line fs-12 text-muted"></i>
                         </a>
                     </div>
                 </div>
 
                 <!-- Right: Site Home Link & User Profile Dropdown -->
-                <div class="d-flex align-items-center justify-content-center gap-1 h-100">
+                <div class="d-flex align-items-center justify-content-end gap-1 h-100 flex-shrink-0">
                     <div class="topbar-item">
                         <button type="button" class="topbar-button" id="light-dark-mode" title="Alternar tema claro/escuro">
-                            <i class="ri-moon-line fs-22 light-mode"></i>
-                            <i class="ri-sun-line fs-22 dark-mode"></i>
+                            <i class="ri-moon-line fs-20 light-mode"></i>
+                            <i class="ri-sun-line fs-20 dark-mode"></i>
                         </button>
                     </div>
 
-                    <div class="dropdown topbar-item">
-                        <button type="button" class="topbar-button" id="gps-erp-palette-toggle" data-bs-toggle="dropdown" aria-expanded="false" title="Escolher cor do tema" aria-label="Escolher cor do tema"><i class="ri-palette-line fs-22"></i></button>
+                    <div class="dropdown topbar-item d-none d-sm-flex">
+                        <button type="button" class="topbar-button" id="gps-erp-palette-toggle" data-bs-toggle="dropdown" aria-expanded="false" title="Escolher cor do tema" aria-label="Escolher cor do tema"><i class="ri-palette-line fs-20"></i></button>
                         <div class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-3 p-2" style="min-width:190px">
                             <small class="text-secondary text-uppercase fw-bold px-2 d-block mb-1" style="font-size:9px;letter-spacing:.1em">Cor do sistema</small>
                             <button type="button" class="dropdown-item rounded-2 gps-erp-palette-option d-flex align-items-center gap-2" data-accent="blue"><span class="rounded-circle" style="width:12px;height:12px;background:#2563eb"></span>Azul</button>
@@ -47,16 +47,16 @@
 
                     <div class="topbar-item d-none d-md-flex">
                         <button type="button" class="topbar-button" data-toggle="fullscreen" title="Tela cheia">
-                            <i class="ri-fullscreen-line fs-22 fullscreen"></i>
-                            <i class="ri-fullscreen-exit-line fs-22 quit-fullscreen"></i>
+                            <i class="ri-fullscreen-line fs-20 fullscreen"></i>
+                            <i class="ri-fullscreen-exit-line fs-20 quit-fullscreen"></i>
                         </button>
                     </div>
 
-                    <div class="topbar-item">
+                    <div class="topbar-item d-none d-sm-flex">
                         <button type="button" class="topbar-button" id="theme-settings-btn"
                                 data-bs-toggle="offcanvas" data-bs-target="#theme-settings-offcanvas"
                                 aria-controls="theme-settings-offcanvas" title="Personalizar painel">
-                            <i class="ri-settings-4-line fs-22"></i>
+                            <i class="ri-settings-4-line fs-20"></i>
                         </button>
                     </div>
 
@@ -64,25 +64,29 @@
                     <div class="topbar-item">
                         <a href="/" class="topbar-button d-flex align-items-center justify-content-center"
                            title="Ver site público" aria-label="Ver site público">
-                            <i class="ri-home-4-line fs-22"></i>
+                            <i class="ri-home-4-line fs-20"></i>
                         </a>
                     </div>
 
                     {% if session.get('logged_in') %}
                     <!-- User Profile Dropdown: exibido somente em áreas internas autenticadas -->
                     <div class="dropdown topbar-item">
-                        <button type="button" class="topbar-button account-topbar-button" id="page-header-user-dropdown"
+                        <button type="button" class="topbar-button account-topbar-button px-1" id="page-header-user-dropdown"
                                 data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
                                 title="Minha conta" aria-label="Abrir menu da conta">
-                            <img src="{{ user_avatar_url or config.ASSETS_ROOT ~ '/images/users/dummy-avatar.jpg' }}" alt="Foto do colaborador" width="32" height="32" class="rounded-circle object-fit-cover">
-                            <span class="fw-semibold small d-none d-sm-inline">{{ (user_display_name or user_email or 'Colaborador').split()[0] }}</span>
-                            <span id="user-category-indicator" class="rounded-circle border border-2 border-white shadow-sm" style="width: 11px; height: 11px; background: #f97316;" title="Categoria Orange"></span>
+                            <img src="{{ user_avatar_url or config.ASSETS_ROOT ~ '/images/users/dummy-avatar.jpg' }}" alt="Foto do colaborador" width="30" height="30" class="rounded-circle object-fit-cover">
+                            <span class="fw-semibold small d-none d-md-inline">{{ (user_display_name or user_email or 'Colaborador').split()[0] }}</span>
+                            <span id="user-category-indicator" class="rounded-circle border border-2 border-white shadow-sm" style="width: 10px; height: 10px; background: #f97316;" title="Categoria Orange"></span>
                         </button>
-                        <div class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-3 mt-2" style="min-width: 260px;">
+                        <div class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-3 mt-2" style="min-width: 240px;">
                             <div class="px-3 py-2">
                                 <small class="text-muted d-block">Conta conectada</small>
-                                <span class="text-dark fw-semibold small text-break">{{ user_email if user_email else 'Frotista' }}</span>
+                                <span class="text-dark fw-semibold small text-break">{{ user_email if user_email else 'Colaborador' }}</span>
                             </div>
+                            <div class="dropdown-divider my-1"></div>
+                            <a class="dropdown-item d-flex align-items-center gap-2 py-2 d-md-none" href="/links" target="_blank">
+                                <i class="ri-links-line text-warning fs-16"></i><span>Abrir Linktree</span>
+                            </a>
                             {% if session.get('logged_in') %}
                             <form id="profile-photo-form" method="POST" action="/perfil/foto" enctype="multipart/form-data">
                                 <input id="profile-photo-input" type="file" name="profile_photo" accept="image/jpeg,image/png,image/webp" class="d-none">

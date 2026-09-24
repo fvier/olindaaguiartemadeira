@@ -260,14 +260,14 @@
             </div>
 
             <!-- Bloco de Ações na direita: Busca por CPF e Botão Solicitar Orçamento -->
-            <div class="d-flex align-items-center gap-2 flex-wrap flex-sm-nowrap flex-shrink-0" style="min-width: 320px;">
+            <div class="d-flex align-items-center gap-2 flex-wrap flex-sm-nowrap w-100 style-actions-wrapper" style="max-width: 600px;">
                 <!-- Barra de Busca Minimalista por CPF -->
-                <form id="formConsultaCPF" onsubmit="buscarPedidoCPF(event)" class="style-search-form flex-grow-1" style="max-width: 380px;">
+                <form id="formConsultaCPF" onsubmit="buscarPedidoCPF(event)" class="style-search-form flex-grow-1" style="max-width: 380px; width: 100%;">
                     <div class="input-group input-group-sm rounded-pill border bg-light shadow-2xs overflow-hidden" style="padding: 2px 3px 2px 10px;">
                         <span class="input-group-text bg-transparent border-0 pe-1 text-muted">
                             <i class="ri-search-2-line fs-16" style="color: #c85a17;"></i>
                         </span>
-                        <input id="inputCpf" type="text" class="form-control bg-transparent border-0 fs-13 fw-semibold ps-1 shadow-none" placeholder="Digite seu CPF (ex: 123.456...)" maxlength="14" value="{{ search_cpf or '' }}" autocomplete="off" required>
+                        <input id="inputCpf" type="text" class="form-control bg-transparent border-0 fs-14 fw-semibold ps-1 shadow-none" placeholder="Digite seu CPF (ex: 123.456...)" maxlength="14" value="{{ search_cpf or '' }}" autocomplete="off" required>
                         <button id="btnConsultar" class="btn btn-sm btn-warning fw-bold px-3 rounded-pill text-white border-0" type="submit" style="background:#c85a17;">
                             <span>Consultar</span>
                         </button>
