@@ -297,5 +297,37 @@
             }));
             updatePaletteUI();
         }
+
+        // Auto-fechamento do menu sanduíche mobile ao rolar a página, clicar em links ou clicar fora
+        const navbarContent = document.getElementById('navbarContent');
+        const navbarToggler = document.querySelector('.navbar-toggler');
+
+        function fecharMenuMobile() {
+            if (!navbarContent || !navbarContent.classList.contains('show')) return;
+            if (window.bootstrap && window.bootstrap.Collapse) {
+                const bsCollapse = window.bootstrap.Collapse.getInstance(navbarContent) || new window.bootstrap.Collapse(navbarContent, { toggle: false });
+                bsCollapse.hide();
+            } else {
+                navbarContent.classList.remove('show');
+                if (navbarToggler) {
+                    navbarToggler.setAttribute('aria-expanded', 'false');
+                    navbarToggler.classList.add('collapsed');
+                }
+            }
+        }
+
+        window.addEventListener('scroll', fecharMenuMobile, { passive: true });
+
+        document.querySelectorAll('#navbarContent a').forEach(link => {
+            link.addEventListener('click', fecharMenuMobile);
+        });
+
+        document.addEventListener('click', (e) => {
+            if (navbarContent && navbarContent.classList.contains('show')) {
+                if (!navbarContent.contains(e.target) && (!navbarToggler || !navbarToggler.contains(e.target))) {
+                    fecharMenuMobile();
+                }
+            }
+        });
     })();
 </script>
