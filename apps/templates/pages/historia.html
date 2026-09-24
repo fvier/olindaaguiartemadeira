@@ -13,6 +13,9 @@
         --landing-accent-soft: #ffedd5;
         --landing-warm-gold: #d97706;
     }
+    .max-w-900 { max-width: 900px; }
+    .max-w-750 { max-width: 750px; }
+    .max-w-600 { max-width: 600px; }
     .hover-terracotta { transition: color 0.15s ease; }
     .hover-terracotta:hover { color: #c85a17 !important; }
     .landing-page .text-primary { color: var(--landing-accent) !important; }
@@ -21,18 +24,26 @@
     .hover-lift { transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease; }
     .hover-lift:hover { transform: translateY(-4px); box-shadow: 0 16px 36px rgba(15, 23, 42, 0.14) !important; }
     
+    .tribute-hero-section {
+        position: relative;
+        display: block;
+        background: linear-gradient(180deg, #ffffff 0%, #fffbf7 100%);
+        border-bottom: 1px solid rgba(200, 90, 23, 0.12);
+        z-index: 1;
+    }
+
     .photo-frame {
         position: relative;
         background: #fff;
-        padding: 12px;
+        padding: 10px;
         border-radius: 1.25rem;
-        box-shadow: 0 14px 34px rgba(0, 0, 0, 0.08);
-        border: 1px solid rgba(200, 90, 23, 0.15);
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+        border: 1px solid rgba(200, 90, 23, 0.14);
         transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
     .photo-frame:hover {
         transform: translateY(-3px);
-        box-shadow: 0 20px 40px rgba(200, 90, 23, 0.16);
+        box-shadow: 0 16px 36px rgba(200, 90, 23, 0.14);
     }
     .photo-frame img {
         width: 100%;
@@ -42,48 +53,45 @@
     }
     .photo-caption {
         padding-top: 10px;
-        font-size: 0.88rem;
+        font-size: 0.85rem;
         color: #64748b;
         text-align: center;
         font-style: italic;
     }
 
-    .tribute-hero {
-        background: linear-gradient(180deg, #ffffff 0%, #fffbf7 100%);
-        border-bottom: 1px solid rgba(200, 90, 23, 0.12);
-    }
     .manifesto-box {
-        border-left: 6px solid #c85a17;
+        border-left: 5px solid #c85a17;
         background: #ffffff;
-        padding: 2.5rem;
+        padding: 2.25rem;
         border-radius: 1.25rem;
-        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.04);
         border-top: 1px solid #f1f5f9;
         border-right: 1px solid #f1f5f9;
         border-bottom: 1px solid #f1f5f9;
     }
+
     .pillar-card {
         background: #ffffff;
         border-radius: 1.25rem;
         border: 1px solid #f1f5f9;
-        padding: 2rem;
-        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+        padding: 1.75rem;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
         transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
     .pillar-card:hover {
         transform: translateY(-3px);
-        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08);
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.07);
     }
     .pillar-icon {
-        width: 52px;
-        height: 52px;
-        border-radius: 14px;
+        width: 48px;
+        height: 48px;
+        border-radius: 12px;
         display: grid;
         place-items: center;
-        margin-bottom: 1.25rem;
+        margin-bottom: 1rem;
     }
     .gallery-img {
-        height: 260px;
+        height: 240px;
         object-fit: cover;
         width: 100%;
         border-radius: 1rem;
@@ -93,7 +101,7 @@
 
     /* Dark Mode */
     html[data-bs-theme="dark"] body.landing-page { background: #080e1a !important; color: #e5edf8 !important; }
-    html[data-bs-theme="dark"] .landing-page .tribute-hero { background: #0b1325 !important; border-color: #263449 !important; }
+    html[data-bs-theme="dark"] .tribute-hero-section { background: #0b1325 !important; border-color: #263449 !important; }
     html[data-bs-theme="dark"] .landing-page .bg-white { background-color: #111827 !important; }
     html[data-bs-theme="dark"] .landing-page .bg-light { background-color: #0f172a !important; }
     html[data-bs-theme="dark"] .landing-page .photo-frame { background-color: #111827 !important; border-color: #263449 !important; }
@@ -113,43 +121,44 @@
 {% include 'partials/public-reviews-bar.html' %}
 {% include 'partials/public-navbar.html' %}
 
-<!-- Banner da Página de História -->
-<header class="tribute-hero py-5">
+<!-- Banner Minimalista da Página de História -->
+<section class="tribute-hero-section py-5">
     <div class="container py-lg-4 text-center max-w-900 mx-auto">
-        <span class="badge px-3 py-2 rounded-pill fw-bold text-uppercase mb-3" style="background:#ffedd5;color:#c85a17;">
-            <i class="ri-book-open-fill me-1"></i> Nossa Trajetória & Tradição
+        <span class="badge px-3 py-1.5 rounded-pill fw-bold text-uppercase mb-3 d-inline-block" style="background:#ffedd5;color:#c85a17;font-size:0.75rem;letter-spacing:0.08em;">
+            <i class="ri-book-open-line me-1"></i> Nossa Trajetória & Tradição
         </span>
-        <h1 class="display-4 fw-extrabold text-dark mb-3">
+        <h1 class="display-5 fw-extrabold text-dark mb-3 lh-sm">
             A História de <span style="color:#c85a17;">Mestre Byll & Olinda Aguiar</span>
         </h1>
-        <p class="fs-18 text-secondary lh-lg mb-4 max-w-700 mx-auto">
-            Como os ensinamentos de um mestre entalhador se transformaram em uma liderança feminina inspiradora e em uma marca autêntica de arte em madeira de demolição.
+        <p class="fs-17 text-secondary lh-lg mb-4 max-w-750 mx-auto">
+            Da marcenaria artesanal de demolição à liderança feminina inspiradora no casarão colonial do Carmo, em Olinda.
         </p>
-        <div class="d-flex justify-content-center gap-2">
+        <div class="d-flex justify-content-center flex-wrap gap-2 pt-1">
             <a href="/byll" class="btn btn-outline-secondary rounded-pill px-4 py-2 fw-semibold d-inline-flex align-items-center gap-2">
-                <i class="ri-heart-line text-danger"></i> Voltar à Homenagem
+                <i class="ri-arrow-left-line"></i> Voltar à Homenagem
             </a>
-            <a href="https://api.whatsapp.com/send?phone=5581994522504&text=Ol%C3%A1!%20Gostaria%20de%20visitar%20o%20ateli%C3%AA%20em%20Olinda." 
+            <a href="https://api.whatsapp.com/send?phone=5581994522504&text=Ol%C3%A1!%20Li%20a%20hist%C3%B3ria%20do%20Mestre%20Byll%20e%20gostaria%20de%20visitar%20o%20ateli%C3%AA." 
                target="_blank" rel="noopener noreferrer"
                class="btn btn-success rounded-pill px-4 py-2 fw-bold d-inline-flex align-items-center gap-2 text-white border-0 shadow-sm" style="background:#25d366;">
                 <i class="ri-whatsapp-line fs-18"></i> Falar com Olinda
             </a>
         </div>
     </div>
-</header>
+</section>
 
-<main class="py-5 bg-light">
+<!-- Conteúdo Principal Minimalista -->
+<main class="py-5 bg-light position-relative" style="z-index: 2;">
     <div class="container py-lg-3">
 
         <!-- Seção: A Herança da Vontade e da Administração -->
-        <div class="row align-items-center g-5 mb-5 pb-lg-3">
+        <div class="row align-items-center g-5 mb-5 pb-lg-2">
             <!-- Foto Mestre Byll Solo -->
             <div class="col-lg-4 text-center">
-                <div class="photo-frame mx-auto" style="max-width: 320px;">
+                <div class="photo-frame mx-auto" style="max-width: 310px;">
                     <img src="{{ config.ASSETS_ROOT }}/images/byll-mestre-artesao.png" 
                          alt="Mestre Byll, o patriarca e artesão de Olinda Arte em Madeira" 
                          width="300" height="360"
-                         style="max-height: 380px; min-height: 300px; width: 100%; object-fit: cover; background-color: #f1f5f9;">
+                         style="max-height: 360px; min-height: 280px; width: 100%; object-fit: cover; background-color: #f1f5f9;">
                     <div class="photo-caption">
                         <strong>Mestre Byll</strong><br>
                         O patriarca, coração da oficina e eterna inspiração criativa.
@@ -160,19 +169,19 @@
             <!-- Narrativa Afetiva -->
             <div class="col-lg-8">
                 <div class="ps-lg-3">
-                    <span class="badge px-3 py-1 rounded-pill fw-bold text-uppercase mb-2" style="background:#fef3c7;color:#d97706;">
+                    <span class="badge px-3 py-1 rounded-pill fw-bold text-uppercase mb-2 d-inline-block" style="background:#fef3c7;color:#d97706;font-size:0.75rem;">
                         <i class="ri-seedling-fill me-1"></i> De Pai para Filha
                     </span>
                     <h2 class="display-6 fw-bold text-dark mb-3">
                         Onde a Vontade Encontrou a Liderança
                     </h2>
-                    <p class="fs-17 text-secondary lh-lg mb-3">
+                    <p class="fs-16 text-secondary lh-lg mb-3">
                         Na oficina de <strong>Byll</strong>, a madeira nunca foi apenas um material de construção; era uma testemunha viva da história do Brasil colonial. Ele ensinou à filha que <strong>tudo se transforma nas mãos certas</strong>: relíquias resgatadas de velhos casarões e peças que antes pareciam não ter valor algum guardavam uma alma própria, esperando a sensibilidade da marcenaria para renascerem como objetos de inestimável valor histórico.
                     </p>
-                    <p class="fs-17 text-secondary lh-lg mb-3">
+                    <p class="fs-16 text-secondary lh-lg mb-3">
                         Foi ao lado do pai, entre a poeira dourada da serra e o aroma inconfundível da peroba rosa e do jacarandá, que <strong>Olinda Aguiar</strong> herdou não apenas o encanto pelo ofício, mas uma <strong>vontade inabalável de criar</strong> e a maturidade para assumir a <strong>administração e a condução da oficina</strong>.
                     </p>
-                    <p class="fs-17 text-secondary lh-lg mb-0">
+                    <p class="fs-16 text-secondary lh-lg mb-0">
                         Olinda pegou a tocha do pai e deu a ela um horizonte ainda maior: uniu o saber artesanal tradicional ao conceito de sustentabilidade regenerativa, trazendo uma <strong>liderança feminina inspiradora</strong> à frente de uma equipe talentosa de artesãos homens que hoje preservam esse legado no coração do Carmo, em Olinda.
                     </p>
                 </div>
@@ -182,18 +191,18 @@
         <!-- Os 3 Pilares do Legado -->
         <div class="row g-4 mb-5">
             <div class="col-12 text-center mb-2">
-                <h3 class="fw-bold text-dark">O Que Byll Transmitiu para Olinda</h3>
-                <p class="text-secondary fs-16 max-w-600 mx-auto">Valores familiares que permanecem vivos em cada detalhe do nosso ateliê</p>
+                <h3 class="fw-bold text-dark mb-1">O Que Byll Transmitiu para Olinda</h3>
+                <p class="text-secondary fs-15 max-w-600 mx-auto">Valores familiares que permanecem vivos em cada detalhe do nosso ateliê</p>
             </div>
 
             <!-- Pilar 1 -->
             <div class="col-md-4">
                 <div class="pillar-card h-100">
                     <div class="pillar-icon" style="background:#ffedd5;color:#c85a17;">
-                        <i class="ri-fire-line fs-26"></i>
+                        <i class="ri-fire-line fs-24"></i>
                     </div>
-                    <h4 class="fw-bold text-dark fs-19 mb-2">A Vontade & A Paixão</h4>
-                    <p class="text-secondary fs-15 lh-base mb-0">
+                    <h4 class="fw-bold text-dark fs-18 mb-2">A Vontade & A Paixão</h4>
+                    <p class="text-secondary fs-14 lh-base mb-0">
                         A coragem de arregaçar as mangas, resgatar lotes históricos de demolição e nunca ter medo de projetos desafiadores. A paixão pelo ofício que começa nos olhos e guia as mãos.
                     </p>
                 </div>
@@ -203,10 +212,10 @@
             <div class="col-md-4">
                 <div class="pillar-card h-100">
                     <div class="pillar-icon" style="background:#fef3c7;color:#d97706;">
-                        <i class="ri-user-star-line fs-26"></i>
+                        <i class="ri-user-star-line fs-24"></i>
                     </div>
-                    <h4 class="fw-bold text-dark fs-19 mb-2">A Administração & Liderança</h4>
-                    <p class="text-secondary fs-15 lh-base mb-0">
+                    <h4 class="fw-bold text-dark fs-18 mb-2">A Administração & Liderança</h4>
+                    <p class="text-secondary fs-14 lh-base mb-0">
                         A gestão atenta e humanizada da marcenaria. Olinda assumiu os rumos do ateliê com determinação, garantindo prazos, transparência, respeito à equipe e atendimento próximo aos clientes.
                     </p>
                 </div>
@@ -216,10 +225,10 @@
             <div class="col-md-4">
                 <div class="pillar-card h-100">
                     <div class="pillar-icon" style="background:#dcfce7;color:#15803d;">
-                        <i class="ri-leaf-line fs-26"></i>
+                        <i class="ri-leaf-line fs-24"></i>
                     </div>
-                    <h4 class="fw-bold text-dark fs-19 mb-2">O Respeito à Madeira</h4>
-                    <p class="text-secondary fs-15 lh-base mb-0">
+                    <h4 class="fw-bold text-dark fs-18 mb-2">O Respeito à Madeira</h4>
+                    <p class="text-secondary fs-14 lh-base mb-0">
                         Nenhuma árvore viva é derrubada. Trabalhamos exclusivamente com madeira nobre de reaproveitamento, preservando os veios naturais, as marcas do tempo e o meio ambiente.
                     </p>
                 </div>
@@ -229,22 +238,22 @@
         <!-- Manifesto Oficial da Marca -->
         <div class="manifesto-box mb-5">
             <div class="d-flex align-items-center gap-3 mb-4">
-                <span class="rounded-circle d-flex align-items-center justify-content-center" style="width:54px;height:54px;background:#ffedd5;color:#c85a17;">
-                    <i class="ri-quill-pen-fill fs-26"></i>
+                <span class="rounded-circle d-flex align-items-center justify-content-center flex-shrink-0" style="width:48px;height:48px;background:#ffedd5;color:#c85a17;">
+                    <i class="ri-quill-pen-fill fs-24"></i>
                 </span>
                 <div>
                     <h3 class="fw-bold text-dark mb-0">Manifesto Olinda Arte em Madeira</h3>
-                    <small class="text-secondary">Nossa razão de existir, valores e compromisso com o planeta</small>
+                    <small class="text-secondary">Nossa razão de existir, valores e compromisso sustentável</small>
                 </div>
             </div>
 
-            <p class="fs-18 text-dark lh-lg mb-3">
+            <p class="fs-17 text-dark lh-lg mb-3">
                 "Na <strong>Olinda Arte em Madeira</strong>, estamos orgulhosos de trabalhar com <strong>madeira de demolição</strong> para criar peças únicas e sustentáveis para nossos clientes. Além disso, estamos igualmente orgulhosos de ser uma <strong>empresa liderada por uma mulher</strong>, com uma <strong>equipe talentosa de funcionários homens</strong>."
             </p>
-            <p class="fs-18 text-dark lh-lg mb-3">
+            <p class="fs-17 text-dark lh-lg mb-3">
                 "Nossa proprietária, <strong>Olinda Aguiar</strong>, é uma líder inspiradora que trabalha incansavelmente para manter nossa empresa em movimento, oferecendo aos nossos clientes produtos que combinam beleza e sustentabilidade. Seu compromisso com a qualidade, a inovação e o respeito ao meio ambiente é a base de tudo que fazemos aqui na Olinda Arte em Madeira."
             </p>
-            <p class="fs-18 text-dark lh-lg mb-4">
+            <p class="fs-17 text-dark lh-lg mb-4">
                 "Trabalhamos duro para criar produtos que são verdadeiramente únicos e estamos comprometidos em fazer a diferença no mundo, através do uso da madeira de demolição e da sustentabilidade."
             </p>
 
@@ -260,7 +269,7 @@
         <!-- O Casarão Histórico onde a Tradição Continua -->
         <div class="card rounded-4 border-0 shadow-sm p-4 p-md-5 bg-white mb-4">
             <div class="text-center max-w-700 mx-auto mb-4">
-                <span class="badge px-3 py-1 rounded-pill fw-bold text-uppercase mb-2" style="background:#ffedd5;color:#c85a17;">Onde o Legado Respira</span>
+                <span class="badge px-3 py-1 rounded-pill fw-bold text-uppercase mb-2 d-inline-block" style="background:#ffedd5;color:#c85a17;font-size:0.75rem;">Onde o Legado Respira</span>
                 <h3 class="fw-bold text-dark">O Ateliê no Carmo, Olinda</h3>
                 <p class="text-secondary fs-15">
                     Localizado na <strong>478 R. Cel. Joaquim Cavalcante, Carmo, Olinda - PE</strong>, nosso casarão colonial mantém as bancadas de trabalho, o som dos formões e a mesma acolhida calorosa que Byll sempre cultivou.
