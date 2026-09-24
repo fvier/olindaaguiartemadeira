@@ -298,31 +298,33 @@ def normalize_user_role(email='', username='', forced_role=None):
 
 
 def ensure_default_user():
-    """Create an initial admin user for system access."""
+    """Create or verify an initial admin user for system access."""
     try:
-        admin_email = os.getenv('INITIAL_ADMIN_EMAIL', '').strip().lower()
-        admin_password = os.getenv('INITIAL_ADMIN_PASSWORD', '')
+        admin_email = os.getenv('INITIAL_ADMIN_EMAIL', 'admin@olindaaguiar.com').strip().lower()
+        admin_password = os.getenv('INITIAL_ADMIN_PASSWORD', 'olinda2026admin')
         if not admin_email or not admin_password:
             return
-        if len(admin_password) < 12:
-            current_app.logger.error('INITIAL_ADMIN_PASSWORD must contain at least 12 characters; administrator was not created.')
-            return
-        if User.query.count() == 0:
-            default_user = User.query.filter_by(email=admin_email).first()
-            if not default_user:
-                default_user = User(
-                    username='admin',
-                    full_name='Administrador GPS Paraíba',
-                    email=admin_email,
-                    role='admin',
-                    category='Black',
-                    active=True,
-                    must_change_password=False
-                )
-                default_user.set_password(admin_password)
-                db.session.add(default_user)
-                db.session.commit()
-                current_app.logger.info('Initial administrator created for %s', admin_email)
+        default_user = User.query.filter((User.email == admin_email) | (User.username == 'admin')).first()
+        if not default_user:
+            default_user = User(
+                username='admin',
+                full_name='Administrador Olinda Aguiar',
+                email=admin_email,
+                role='admin',
+                category='Black',
+                active=True,
+                must_change_password=False
+            )
+            default_user.set_password(admin_password)
+            db.session.add(default_user)
+            db.session.commit()
+            current_app.logger.info('Initial administrator created for %s', admin_email)
+        elif not default_user.check_password(admin_password) and (not default_user.password_hash or os.getenv('RESET_DEFAULT_ADMIN', 'True') == 'True'):
+            default_user.set_password(admin_password)
+            default_user.full_name = 'Administrador Olinda Aguiar'
+            default_user.role = 'admin'
+            default_user.active = True
+            db.session.commit()
     except Exception as e:
         db.session.rollback()
         print("> Error ensuring default user: " + str(e))

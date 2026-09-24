@@ -2,16 +2,16 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
-  <title>Sessão Encerrada | GPS Paraíba</title>
+  <title>Sessão Encerrada | Olinda Aguiar</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="shortcut icon" href="/static/images/logo_fundo_preto.png" type="image/png">
+  <link rel="shortcut icon" href="/static/images/logo-icon-wood.png" type="image/png">
   <link href="/static/css/vendors.min.css" rel="stylesheet" type="text/css">
   <link href="/static/css/icons.min.css" rel="stylesheet" type="text/css">
   <link href="/static/css/app.min.css" rel="stylesheet" type="text/css">
   <style>
     .logout-card { max-width: 440px; }
     .logout-avatar { width: 72px; height: 72px; display: inline-flex; align-items: center; justify-content: center; border-radius: 50%; }
-    .logout-brand { height: 48px; width: auto; }
+    .logout-brand { height: 52px; width: auto; object-fit: contain; }
   </style>
 </head>
 <body class="authentication-bg d-flex align-items-center min-vh-100 py-4">
@@ -21,8 +21,10 @@
         <div class="card auth-card shadow-lg border-0 rounded-4 text-center">
           <div class="card-body p-4 p-sm-5">
             <div class="mb-4">
-              <a href="/" class="d-inline-block">
-                <img src="/static/images/logo_fundo_preto.png" alt="GPS Paraíba" class="logout-brand rounded-3 shadow-sm">
+              <a href="/" class="d-inline-flex flex-column align-items-center text-decoration-none">
+                <img src="/static/images/logo-icon-wood.png" alt="Olinda Aguiar" class="logout-brand mb-1">
+                <strong class="text-dark fs-16">Olinda Aguiar</strong>
+                <small class="text-secondary fw-bold text-uppercase fs-10">Artes em Madeira</small>
               </a>
             </div>
             
@@ -33,10 +35,10 @@
             </div>
 
             <h3 class="fw-bold text-dark mb-2">Até logo!</h3>
-            <p class="text-muted fs-14 mb-4">Sua sessão foi encerrada com segurança no painel ERP da GPS Paraíba. Esperamos ver você em breve!</p>
+            <p class="text-muted fs-14 mb-4">Sua sessão foi encerrada com segurança no painel de gestão de Olinda Aguiar. Esperamos ver você em breve!</p>
 
             <div class="d-grid gap-2">
-              <a href="/auth-signin.html" class="btn btn-primary py-2.5 fw-bold rounded-3">
+              <a href="/login" class="btn btn-primary py-2.5 fw-bold rounded-3 border-0 shadow-sm" style="background: #c85a17;">
                 <i class="ri-login-box-line me-1"></i> Fazer Login Novamente
               </a>
               <a href="/" class="btn btn-light py-2 fw-semibold rounded-3 text-secondary">

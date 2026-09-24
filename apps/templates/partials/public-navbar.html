@@ -11,6 +11,26 @@
     html[data-bs-theme="dark"] .navbar .nav-link.active,
     html[data-bs-theme="dark"] .navbar .nav-link:hover { color: var(--landing-accent, #c85a17) !important; }
     html[data-bs-theme="dark"] .navbar-toggler-icon { filter: invert(1) grayscale(1) brightness(1.8); }
+    .landing-login-btn {
+        border-color: #c85a17 !important;
+        color: #c85a17 !important;
+        background: transparent;
+        transition: all 0.2s ease;
+    }
+    .landing-login-btn:hover {
+        background: #c85a17 !important;
+        color: #ffffff !important;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(200, 90, 23, 0.25);
+    }
+    html[data-bs-theme="dark"] .landing-login-btn {
+        border-color: #c85a17 !important;
+        color: #fdba74 !important;
+    }
+    html[data-bs-theme="dark"] .landing-login-btn:hover {
+        background: #c85a17 !important;
+        color: #ffffff !important;
+    }
 </style>
 
 <nav class="navbar navbar-expand-lg navbar-light bg-white py-2 sticky-top border-bottom border-light-subtle shadow-sm z-3">
@@ -59,8 +79,8 @@
                 </li>
             </ul>
 
-            <!-- Header Right: Social Icons & Theme Toggles (Sem botões de login) -->
-            <div class="d-flex align-items-center gap-2">
+            <!-- Header Right: Social Icons, Theme Toggles & Botão Entrar -->
+            <div class="d-flex align-items-center gap-2 flex-wrap mt-2 mt-lg-0">
                 <button id="landing-theme-toggle" type="button" class="btn btn-light btn-sm rounded-circle p-0 d-inline-flex align-items-center justify-content-center border shadow-sm" style="width:36px;height:36px" title="Ativar tema escuro" aria-label="Alternar tema claro e escuro">
                     <i id="landing-theme-moon" class="ri-moon-line fs-18"></i>
                     <i id="landing-theme-sun" class="ri-sun-line fs-18 d-none"></i>
@@ -105,6 +125,54 @@
                    title="WhatsApp (81) 9 9452-2504">
                     <i class="ri-whatsapp-line fs-18"></i>
                 </a>
+
+                <!-- Botão Entrar / Painel -->
+                {% if session.get('logged_in') %}
+                <div class="dropdown ms-lg-1">
+                    <button class="btn btn-sm btn-primary rounded-pill px-3 py-1.5 fw-bold d-inline-flex align-items-center gap-1.5 shadow-sm"
+                            type="button" data-bs-toggle="dropdown" aria-expanded="false"
+                            style="background: #c85a17; border-color: #c85a17; height: 36px;">
+                        <i class="ri-dashboard-line fs-16"></i>
+                        <span>Painel</span>
+                        <i class="ri-arrow-down-s-line fs-14"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg rounded-3 p-2" style="min-width: 210px;">
+                        <li class="px-3 py-1.5 text-muted small border-bottom mb-1">
+                            <span class="d-block text-dark fw-bold text-truncate">{{ session.get('user_email') }}</span>
+                            <span class="badge bg-secondary-subtle text-secondary text-uppercase fs-10">{{ session.get('user_role', 'admin') }}</span>
+                        </li>
+                        <li>
+                            <a class="dropdown-item rounded-2 d-flex align-items-center gap-2 py-2" href="/index">
+                                <i class="ri-dashboard-line text-primary"></i> Painel Geral ERP
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item rounded-2 d-flex align-items-center gap-2 py-2" href="/admin-carrossel">
+                                <i class="ri-image-line text-primary"></i> Gerenciar Carrossel
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item rounded-2 d-flex align-items-center gap-2 py-2" href="/admin-depoimentos">
+                                <i class="ri-chat-1-line text-primary"></i> Gerenciar Depoimentos
+                            </a>
+                        </li>
+                        <li><hr class="dropdown-divider my-1"></li>
+                        <li>
+                            <a class="dropdown-item rounded-2 d-flex align-items-center gap-2 py-2 text-danger" href="/logout">
+                                <i class="ri-logout-box-r-line"></i> Sair do Painel
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                {% else %}
+                <a href="/login" 
+                   class="btn btn-sm btn-outline-primary rounded-pill px-3 fw-bold d-inline-flex align-items-center gap-1.5 shadow-sm ms-lg-1 landing-login-btn"
+                   style="height: 36px;"
+                   title="Entrar no Painel Administrativo">
+                    <i class="ri-user-line fs-16"></i>
+                    <span>Entrar</span>
+                </a>
+                {% endif %}
             </div>
         </div>
     </div>

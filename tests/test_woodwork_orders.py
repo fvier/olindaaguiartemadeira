@@ -199,6 +199,35 @@ class WoodworkOrderTimelineTests(unittest.TestCase):
         self.assertIn('tecnicas', group_ids)
         self.assertIn('ambientes', group_ids)
 
+    def test_navbar_renders_entrar_button_and_login_flow(self):
+        # 1. Usuário anônimo vê o botão 'Entrar' nas páginas públicas
+        res_home = self.client.get('/')
+        self.assertEqual(res_home.status_code, 200)
+        self.assertIn(b'Entrar', res_home.data)
+        self.assertIn(b'/login', res_home.data)
+
+        res_loja = self.client.get('/loja')
+        self.assertEqual(res_loja.status_code, 200)
+        self.assertIn(b'Entrar', res_loja.data)
+
+        # 2. Tela de login exibe identidade Olinda Aguiar
+        res_login = self.client.get('/login', follow_redirects=True)
+        self.assertEqual(res_login.status_code, 200)
+        self.assertIn(b'Olinda Aguiar', res_login.data)
+        self.assertIn(b'Entrar no Painel', res_login.data)
+
+        # 3. Usuário autenticado vê o botão 'Painel' e seu e-mail
+        with self.client.session_transaction() as sess:
+            sess['logged_in'] = True
+            sess['user_email'] = 'admin@olindaaguiar.com'
+            sess['user_role'] = 'admin'
+
+        res_logged = self.client.get('/')
+        self.assertEqual(res_logged.status_code, 200)
+        self.assertIn(b'Painel', res_logged.data)
+        self.assertIn(b'admin@olindaaguiar.com', res_logged.data)
+        self.assertIn(b'/logout', res_logged.data)
+
 
 if __name__ == '__main__':
     unittest.main()

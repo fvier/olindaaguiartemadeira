@@ -1,6 +1,6 @@
 {% extends 'layouts/base.html' %}
 
-{% block title %}Entrar no Painel | GPS Paraíba{% endblock title %}
+{% block title %}Entrar no Painel | Olinda Aguiar — Artes em Madeira{% endblock title %}
 
 {% block body_attribute %}class="authentication-bg"{% endblock body_attribute %}
 
@@ -9,7 +9,7 @@
     .login-panel { max-width: 420px; }
     .login-panel .card-body { padding: 2rem; }
     .login-panel .form-control { min-height: 42px; }
-    .login-brand { height: 44px; width: auto; }
+    .login-brand { height: 50px; width: auto; object-fit: contain; }
     @media (max-width: 575.98px) {
         .login-panel .card-body { padding: 1.5rem; }
         .account-pages { padding: 1rem 0 !important; }
@@ -25,12 +25,14 @@
                 <div class="card auth-card shadow-lg border-0 rounded-4">
                     <div class="card-body">
                         <div class="mx-auto mb-3 text-center auth-logo">
-                            <a href="/" class="d-inline-flex align-items-center justify-content-center text-decoration-none">
-                                <img src="{{ config.ASSETS_ROOT }}/images/logo_fundo_preto.png" alt="GPS Paraíba" class="login-brand rounded-2 shadow-sm">
+                            <a href="/" class="d-inline-flex flex-column align-items-center justify-content-center text-decoration-none">
+                                <img src="{{ config.ASSETS_ROOT }}/images/logo-icon-wood.png" alt="Olinda Aguiar" class="login-brand mb-1">
+                                <span class="fw-bold fs-16 text-dark" style="letter-spacing: -0.01em;">Olinda Aguiar</span>
+                                <small class="text-secondary fw-bold text-uppercase" style="font-size: 0.65rem; letter-spacing: 0.15em;">Artes em Madeira</small>
                             </a>
                         </div>
-                        <h1 class="fw-bold text-center fs-20 text-primary mb-1">Acessar GPS Paraíba</h1>
-                        <p class="text-muted text-center small mb-3">Informe seus dados para entrar no painel.</p>
+                        <h1 class="fw-bold text-center fs-20 text-dark mb-1">Acessar Painel</h1>
+                        <p class="text-muted text-center small mb-3">Informe suas credenciais para entrar no sistema de gestão.</p>
 
                         {% if request.args.get('msg') == 'login_required' %}
                         <div class="alert alert-warning alert-dismissible fade show rounded-3 fs-14 mb-4" role="alert">
@@ -54,6 +56,7 @@
 
                         <div>
                             <form action="/login{% if request.args.get('next') %}?next={{ request.args.get('next') }}{% endif %}" method="POST" class="authentication-form">
+                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
                                 <div class="mb-3">
                                     <label class="form-label fw-semibold" for="user-email">E-mail ou Usuário</label>
                                     <input class="form-control bg-light border-0"
@@ -78,8 +81,8 @@
                                     </div>
                                 </div>
                                 <div class="d-grid">
-                                    <button class="btn btn-primary py-2 fw-bold rounded-3" type="submit">
-                                        <i class="ri-login-box-line me-1"></i> Acessar Painel
+                                    <button class="btn btn-primary py-2.5 fw-bold rounded-3 shadow-sm border-0" type="submit" style="background: #c85a17;">
+                                        <i class="ri-login-box-line me-1"></i> Entrar no Painel
                                     </button>
                                 </div>
                             </form>
