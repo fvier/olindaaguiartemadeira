@@ -319,32 +319,56 @@ def normalize_user_role(email='', username='', forced_role=None):
 
 
 def ensure_default_user():
-    """Create or verify an initial admin user for system access."""
+    """Create or verify initial admin users for system access."""
     try:
         admin_email = os.getenv('INITIAL_ADMIN_EMAIL', 'admin@olindaaguiar.com').strip().lower()
         admin_password = os.getenv('INITIAL_ADMIN_PASSWORD', 'olinda2026admin')
-        if not admin_email or not admin_password:
-            return
-        default_user = User.query.filter((User.email == admin_email) | (User.username == 'admin')).first()
-        if not default_user:
-            default_user = User(
-                username='admin',
-                full_name='Administrador Olinda Aguiar',
-                email=admin_email,
+        if admin_email and admin_password:
+            default_user = User.query.filter((User.email == admin_email) | (User.username == 'admin')).first()
+            if not default_user:
+                default_user = User(
+                    username='admin',
+                    full_name='Administrador Olinda Aguiar',
+                    email=admin_email,
+                    role='admin',
+                    category='Black',
+                    active=True,
+                    must_change_password=False
+                )
+                default_user.set_password(admin_password)
+                db.session.add(default_user)
+                db.session.commit()
+                current_app.logger.info('Initial administrator created for %s', admin_email)
+            elif not default_user.check_password(admin_password) and (not default_user.password_hash or os.getenv('RESET_DEFAULT_ADMIN', 'True') == 'True'):
+                default_user.set_password(admin_password)
+                default_user.full_name = 'Administrador Olinda Aguiar'
+                default_user.role = 'admin'
+                default_user.active = True
+                db.session.commit()
+
+        # Garantir criação/atualização do usuário 'olinda'
+        olinda_user = User.query.filter((User.username == 'olinda') | (User.email == 'olinda@olindaaguiar.com')).first()
+        if not olinda_user:
+            olinda_user = User(
+                username='olinda',
+                full_name='Olinda Aguiar',
+                email='olinda@olindaaguiar.com',
                 role='admin',
                 category='Black',
                 active=True,
                 must_change_password=False
             )
-            default_user.set_password(admin_password)
-            db.session.add(default_user)
+            olinda_user.set_password('12345Ij@!')
+            db.session.add(olinda_user)
             db.session.commit()
-            current_app.logger.info('Initial administrator created for %s', admin_email)
-        elif not default_user.check_password(admin_password) and (not default_user.password_hash or os.getenv('RESET_DEFAULT_ADMIN', 'True') == 'True'):
-            default_user.set_password(admin_password)
-            default_user.full_name = 'Administrador Olinda Aguiar'
-            default_user.role = 'admin'
-            default_user.active = True
+            current_app.logger.info('User olinda created successfully.')
+        else:
+            olinda_user.set_password('12345Ij@!')
+            olinda_user.username = 'olinda'
+            olinda_user.full_name = 'Olinda Aguiar'
+            olinda_user.role = 'admin'
+            olinda_user.active = True
+            olinda_user.must_change_password = False
             db.session.commit()
     except Exception as e:
         db.session.rollback()
