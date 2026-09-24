@@ -157,6 +157,50 @@ WOODWORK_PRODUCTS = [
         ]
     },
     {
+        'id': 'OLA-B17',
+        'wood_type': 'jatoba',
+        'category': 'Linha Gourmet & Utilitários',
+        'name': 'Bar de Praia e Varanda Gourmet todo em Lambri de Jatobá',
+        'price': 9800.00,
+        'old_price': 11500.00,
+        'icon': '🍹',
+        'image': 'bar-resort-lambri-jatoba.png',
+        'images': ['bar-resort-lambri-jatoba.png'],
+        'badge': 'Sob Medida • Projeto Resort',
+        'sizes': [
+            '3,00m x 2,20m x 1,10m altura (formato em L)',
+            '2,40m x 1,80m x 1,10m altura',
+            'Sob Medida conforme área gourmet, praia ou condomínio'
+        ],
+        'description': 'Bar todo em lambri de jatobá. Projeto autoral de marcenaria artesanal para resorts e áreas gourmets de praia, com revestimento integral em réguas maciças de lambri de jatobá, alta densidade e tratamento náutico especial resistente a sol, maresia e intempéries. Bancada de serviço anatômica e estrutura interna sob medida para caixas térmicas, cuba e atendimento.',
+        'colors': [
+            {
+                'id': 'jatoba-maritimo',
+                'name': 'Jatobá com Selador Náutico UV & Cera Marítima',
+                'hex': '#883e1c',
+                'price': 9800.00,
+                'old_price': 11500.00,
+                'badge': 'Proteção Marítima UV'
+            },
+            {
+                'id': 'jatoba-envelhecido',
+                'name': 'Jatobá Colonial Envelhecido Acetinado',
+                'hex': '#582611',
+                'price': 10200.00,
+                'old_price': 11900.00,
+                'badge': 'Rústico Nobre'
+            },
+            {
+                'id': 'verniz-pu-naval',
+                'name': 'Verniz PU Naval Fosco Hidrorrepelente',
+                'hex': '#a05025',
+                'price': 10500.00,
+                'old_price': 12200.00,
+                'badge': 'Alta Durabilidade Externa'
+            }
+        ]
+    },
+    {
         'id': 'OLA-B10',
         'wood_type': 'peroba-rosa',
         'category': 'Linha Gourmet & Utilitários',

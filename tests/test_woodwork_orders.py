@@ -80,6 +80,13 @@ class WoodworkOrderTimelineTests(unittest.TestCase):
         self.assertIn('Jatobá', armario['name'])
         self.assertIn('lambri de demolição', armario['description'])
 
+        # Verifica o bar em lambri de jatobá OLA-B17
+        bar = next((p for p in data['products'] if p['id'] == 'OLA-B17'), None)
+        self.assertIsNotNone(bar)
+        self.assertEqual(bar['wood_type'], 'jatoba')
+        self.assertIn('Lambri de Jatobá', bar['name'])
+        self.assertIn('bar todo em lambri de jatobá', bar['description'].lower())
+
     def test_consultar_order_by_formatted_cpf(self):
         response = self.client.get('/api/pedido/consultar?cpf=123.456.789-00')
         self.assertEqual(response.status_code, 200)
