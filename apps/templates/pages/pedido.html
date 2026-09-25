@@ -62,9 +62,9 @@
     }
     .timeline-bar-bg {
         position: absolute;
-        top: 55px;
-        left: 8%;
-        right: 8%;
+        top: 50px;
+        left: 10%;
+        right: 10%;
         height: 6px;
         background: #e2e8f0;
         border-radius: 4px;
@@ -72,8 +72,9 @@
     }
     .timeline-bar-fill {
         position: absolute;
-        top: 55px;
-        left: 8%;
+        top: 50px;
+        left: 10%;
+        max-width: 80%;
         height: 6px;
         background: linear-gradient(90deg, #15803d 0%, #c85a17 100%);
         border-radius: 4px;
@@ -605,8 +606,8 @@
         document.getElementById('orderBalanceAmount').innerText = formatBRL(order.balance_amount);
 
         // Barra de progresso da timeline
-        // 5 etapas: 1 -> 0%, 2 -> 25%, 3 -> 50%, 4 -> 75%, 5 -> 100%
-        const progressPercentages = [0, 10, 32, 60, 82, 100];
+        // 5 etapas (centros em 10%, 30%, 50%, 70%, 90%): 1 -> 0%, 2 -> 20%, 3 -> 40%, 4 -> 60%, 5 -> 80%
+        const progressPercentages = [0, 0, 20, 40, 60, 80];
         const stepNum = Math.min(Math.max(order.current_step, 1), 5);
         const progressBar = document.getElementById('timelineProgressBar');
         if (progressBar) {
